@@ -160,7 +160,7 @@ export class ProductionChainView {
                             'amount': amount,
                             'factory': consumer,
                             'buildings': amount / consumer.tpmin / consumer.boost(),
-                            'children': consumer.inputDemands().map(d => traverse(d.factory(), amount))
+                            'children': consumer.inputDemands().map(d => traverse(d.factory(), amount)).filter(d => d)
                         }; 
                     }
 
@@ -195,7 +195,7 @@ export class ProductionChainView {
                         'amount': amount,
                         'factory': factory,
                         'buildings': inputAmount / factory.tpmin / factory.boost(),
-                        'children': factory.inputDemands().map(d => traverse(d.factory(), inputAmount))
+                        'children': factory.inputDemands().map(d => traverse(d.factory(), inputAmount * d.factor)).filter(d => d)
                     };           
 
             };
