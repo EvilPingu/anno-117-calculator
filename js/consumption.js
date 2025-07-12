@@ -5,21 +5,31 @@ import { ResidenceBuilding } from './population.js';
 
 var ko = require( "knockout" );
 
-
-
+/**
+ * Base class for all consumption needs in the game
+ * Extends Demand to provide consumption-specific functionality
+ */
 export class Need extends Demand {
+    /**
+     * Creates a new Need instance
+     * @param {Object} config - Configuration object for the need
+     * @param {Map} assetsMap - Map of all available assets
+     */
     constructor(config, assetsMap) {
         super(config, assetsMap);
         this.isNeed = true;
     }
-
 }
 
+/**
+ * Represents a need for a specific residence building
+ * Manages the relationship between a residence and its consumption needs
+ */
 export class ResidenceNeed {
     /**
-     * 
-     * @param {ResidenceBuilding} residence 
-     * @param {PopulationNeed} need 
+     * Creates a new ResidenceNeed instance
+     * @param {ResidenceBuilding} residence - The residence building this need belongs to
+     * @param {PopulationNeed} need - The population need this residence need represents
      */
     constructor(residence, need) {
         this.residence = residence;
@@ -57,6 +67,10 @@ export class ResidenceNeed {
         })
     }
 
+    /**
+     * Initializes dependencies and sets up subscriptions for this residence need
+     * @param {Map} residenceNeedsMap - Map of all residence needs for this residence
+     */
     initDependencies(residenceNeedsMap){
         this.residenceNeedsMap = residenceNeedsMap;
         this.substitutionSubscription = ko.computed(() => {
@@ -92,11 +106,20 @@ export class ResidenceNeed {
 
             this.fulfillment(suppliedByFulfillment);
         });
-
     }
 }
 
+/**
+ * Represents a need for a public building
+ * Extends Option to provide public building-specific functionality
+ */
 export class PublicBuildingNeed extends Option {
+    /**
+     * Creates a new PublicBuildingNeed instance
+     * @param {Object} config - Configuration object for the need
+     * @param {PopulationLevel} level - The population level this need belongs to
+     * @param {Map} assetsMap - Map of all available assets
+     */
     constructor(config, level, assetsMap) {
         super(config);
 
@@ -113,7 +136,17 @@ export class PublicBuildingNeed extends Option {
     }
 }
 
+/**
+ * Represents a need that doesn't require a factory to produce
+ * Used for goods that are obtained through other means (e.g., trade, special buildings)
+ */
 export class NoFactoryNeed extends PublicBuildingNeed {
+    /**
+     * Creates a new NoFactoryNeed instance
+     * @param {Object} config - Configuration object for the need
+     * @param {PopulationLevel} level - The population level this need belongs to
+     * @param {Map} assetsMap - Map of all available assets
+     */
     constructor(config, level, assetsMap) {
         super(config, level, assetsMap);
         this.level = level;
@@ -134,7 +167,17 @@ export class NoFactoryNeed extends PublicBuildingNeed {
     }
 }
 
+/**
+ * Represents a need for a specific population level
+ * Manages consumption requirements for different population tiers
+ */
 export class PopulationNeed extends Need {
+    /**
+     * Creates a new PopulationNeed instance
+     * @param {Object} config - Configuration object for the need
+     * @param {PopulationLevel} level - The population level this need belongs to
+     * @param {Map} assetsMap - Map of all available assets
+     */
     constructor(config, level, assetsMap) {
         super(config, assetsMap);
         this.level = level;
@@ -147,6 +190,10 @@ export class PopulationNeed extends Need {
         this.initAggregation(assetsMap);
     }
 
+    /**
+     * Initializes hidden state and residence relationships
+     * @param {Map} assetsMap - Map of all available assets
+     */
     initHidden(assetsMap){
         this.banned = ko.observable(false);
         this.isInactive = ko.observable(false);
@@ -185,6 +232,10 @@ export class PopulationNeed extends Need {
         });
     }
 
+    /**
+     * Initializes aggregation and computed observables
+     * @param {Map} assetsMap - Map of all available assets
+     */
     initAggregation(assetsMap) {
         this.region = this.level.region;        
 
@@ -200,10 +251,13 @@ export class PopulationNeed extends Need {
 
             this.amount(sum);
         });
-
-
     }
 
+    /**
+     * Initializes ban conditions and unlock requirements
+     * @param {PopulationLevel} level - The population level this need belongs to
+     * @param {Map} assetsMap - Map of all available assets
+     */
     initBans(level, assetsMap) {
         if (this.unlockCondition) {
             var config = this.unlockCondition;
@@ -243,13 +297,23 @@ export class PopulationNeed extends Need {
             var checked = this.checked();
             this.banned(!checked || this.locked && this.locked());
         });
-
     }
 
+    /**
+     * Updates the amount based on population changes
+     * @param {number} population - The current population count
+     */
     updateAmount(population) { }
 }
 
+/**
+ * Manages newspaper consumption effects and propaganda buffs
+ * Handles the selection and application of newspaper effects
+ */
 export class NewspaperNeedConsumption {
+    /**
+     * Creates a new NewspaperNeedConsumption instance
+     */
     constructor() {
         this.selectedEffects = ko.observableArray();
         this.allEffects = [];
@@ -276,6 +340,10 @@ export class NewspaperNeedConsumption {
         });
     }
 
+    /**
+     * Adds a newspaper effect to the available effects list
+     * @param {NewspaperNeedConsumptionEntry} effect - The effect to add
+     */
     add(effect) {
         this.allEffects.push(effect);
         effect.checked.subscribe(checked => {
@@ -290,6 +358,9 @@ export class NewspaperNeedConsumption {
         });
     }
 
+    /**
+     * Updates the available buff options based on selected effects
+     */
     updateBuff() {
         var influenceCosts = 0;
         for (var effect of this.selectedEffects()) {
@@ -315,12 +386,23 @@ export class NewspaperNeedConsumption {
             this.selectedBuff(selectedBuff);
     }
 
+    /**
+     * Applies the newspaper effects to the game state
+     */
     apply() {
         
     }
 }
 
+/**
+ * Represents a single newspaper consumption effect entry
+ * Extends Option to provide selectable newspaper effects
+ */
 export class NewspaperNeedConsumptionEntry extends Option {
+    /**
+     * Creates a new NewspaperNeedConsumptionEntry instance
+     * @param {Object} config - Configuration object for the effect
+     */
     constructor(config) {
         super(config);
 
@@ -332,7 +414,16 @@ export class NewspaperNeedConsumptionEntry extends Option {
     }
 }
 
+/**
+ * Represents a single residence effect entry
+ * Contains information about how a residence effect modifies consumption
+ */
 class ResidenceEffectEntry {
+    /**
+     * Creates a new ResidenceEffectEntry instance
+     * @param {Object} config - Configuration object for the effect entry
+     * @param {Map} assetsMap - Map of all available assets
+     */
     constructor(config, assetsMap) {
         this.guid = parseInt(config.guid);
         this.product = assetsMap.get(this.guid);
@@ -342,7 +433,16 @@ class ResidenceEffectEntry {
     }
 }
 
+/**
+ * Represents a residence effect that modifies consumption and population
+ * Contains multiple effect entries that apply to different products
+ */
 export class ResidenceEffect extends NamedElement {
+    /**
+     * Creates a new ResidenceEffect instance
+     * @param {Object} config - Configuration object for the effect
+     * @param {Map} assetsMap - Map of all available assets
+     */
     constructor(config, assetsMap) {
         super(config);
         this.entries = config.effects.map(e => new ResidenceEffectEntry(e, assetsMap));
@@ -361,9 +461,10 @@ export class ResidenceEffect extends NamedElement {
     }
 
     /**
-     * 
+     * Compares this residence effect with another for sorting
      * Expected usage: array.sort((a,b) => a.compare(b))
-     * @param {ResidenceEffect} other
+     * @param {ResidenceEffect} other - The other residence effect to compare with
+     * @returns {number} Comparison result for sorting
      */
     compare(other) {
         if (this.panoramaLevel != null && other.panoramaLevel != null)
@@ -379,10 +480,16 @@ export class ResidenceEffect extends NamedElement {
     }
 }
 
+/**
+ * Represents the coverage of a residence effect on a specific residence
+ * Manages the percentage of a residence that is affected by an effect
+ */
 export class ResidenceEffectCoverage {
     /**
-     * @param {ResidenceBuilding} residence
-     * @param {ResidenceEffect} residenceEffect
+     * Creates a new ResidenceEffectCoverage instance
+     * @param {ResidenceBuilding} residence - The residence building
+     * @param {ResidenceEffect} residenceEffect - The residence effect
+     * @param {number} coverage - The coverage percentage (0-1)
      */
     constructor(residence, residenceEffect, coverage = 1) {
         this.residence = residence;
@@ -391,22 +498,41 @@ export class ResidenceEffectCoverage {
     }
 }
 
+/**
+ * Represents the coverage of a specific residence effect entry
+ * Links a residence effect coverage with a specific effect entry
+ */
 export class ResidenceEffectEntryCoverage{
     /**
-     * @param {ResidenceEffectCoverage} residenceEffectCoverage
-     * @param {ResidenceEffectEntry} residenceEffectEntry
+     * Creates a new ResidenceEffectEntryCoverage instance
+     * @param {ResidenceEffectCoverage} residenceEffectCoverage - The residence effect coverage
+     * @param {ResidenceEffectEntry} residenceEffectEntry - The residence effect entry
      */
-        constructor(residenceEffectCoverage, residenceEffectEntry) {
+    constructor(residenceEffectCoverage, residenceEffectEntry) {
         this.residenceEffectCoverage = residenceEffectCoverage;
         this.residenceEffectEntry = residenceEffectEntry;
     }
 
+    /**
+     * Gets the number of residents affected by this effect entry
+     * @returns {number} Number of affected residents
+     */
     getResidents() {
         return this.residenceEffectCoverage.coverage() * this.residenceEffectEntry.residents;
     }
 }
 
+/**
+ * Manages a list of recipes for a specific building type
+ * Handles recipe selection and creation for buildings that can produce multiple goods
+ */
 export class RecipeList extends NamedElement {
+    /**
+     * Creates a new RecipeList instance
+     * @param {Object} list - Configuration object for the recipe list
+     * @param {Map} assetsMap - Map of all available assets
+     * @param {Island} island - The island this recipe list belongs to
+     */
     constructor(list, assetsMap, island) {
         super(list);
 
@@ -444,6 +570,9 @@ export class RecipeList extends NamedElement {
         });
     }
 
+    /**
+     * Creates a new recipe building instance
+     */
     create() {
         if (!this.canCreate())
             return;

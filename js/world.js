@@ -11,10 +11,14 @@ import {ResidenceEffectView} from './views.js'
 
 var ko = require("knockout");
 
+/**
+ * Manages persistent storage for island data
+ * Handles saving and loading of configuration data to/from localStorage
+ */
 class Storage {
     /**
-     * 
-     * @param {string} key
+     * Creates a new Storage instance
+     * @param {string} key - The localStorage key for this storage instance
      */
     constructor(key) {
         this.key = key;
@@ -31,6 +35,11 @@ class Storage {
         }
     }
 
+    /**
+     * Sets an item in the storage
+     * @param {string} itemKey - The key for the item
+     * @param {*} value - The value to store
+     */
     setItem(itemKey, value) {
         this.map.set(itemKey, value);
 
@@ -41,10 +50,19 @@ class Storage {
         this.save();
     }
 
+    /**
+     * Gets an item from the storage
+     * @param {string} itemKey - The key for the item
+     * @returns {*} The stored value
+     */
     getItem(itemKey) {
         return this.map.get(itemKey);
     }
 
+    /**
+     * Removes an item from the storage
+     * @param {string} itemKey - The key for the item to remove
+     */
     removeItem(itemKey) {
         this.map.delete(itemKey);
 
@@ -55,6 +73,11 @@ class Storage {
         this.save();
     }
 
+    /**
+     * Gets the key at the specified index
+     * @param {number} index - The index of the key to retrieve
+     * @returns {string|null} The key at the specified index or null
+     */
     key(index) {
         var i = 0;
         for (let attr in this.json)
@@ -65,8 +88,8 @@ class Storage {
     }
 
     /**
-     * 
-     * @param {string} key
+     * Updates the storage key and migrates data
+     * @param {string} key - The new key for this storage
      */
     updateKey(key) {
         localStorage.removeItem(this.key);
@@ -74,6 +97,9 @@ class Storage {
         this.save();
     }
 
+    /**
+     * Clears all data from the storage
+     */
     clear() {
         this.json = {}
         this.map = new Map();
@@ -81,6 +107,10 @@ class Storage {
         this.length = 0;
     }
 
+    /**
+     * Saves the current data to localStorage
+     * Uses debouncing to prevent excessive writes
+     */
     save() {
         if (this.savingScheduled)
             return;
@@ -93,8 +123,22 @@ class Storage {
     }
 }
 
+/**
+ * Represents a geographical region in the game
+ * Extends NamedElement to provide region-specific functionality
+ */
 export class Region extends NamedElement { }
+
+/**
+ * Represents a game session containing multiple islands
+ * Manages islands and workforce for a specific region
+ */
 export class Session extends NamedElement {
+    /**
+     * Creates a new Session instance
+     * @param {Object} config - Configuration object for the session
+     * @param {Map} assetsMap - Map of all available assets
+     */
     constructor(config, assetsMap) {
         super(config);
 
@@ -110,16 +154,35 @@ export class Session extends NamedElement {
         }
     }
 
+    /**
+     * Adds an island to this session
+     * @param {Island} isl - The island to add
+     */
     addIsland(isl) {
         this.islands.push(isl);
     }
 
+    /**
+     * Removes an island from this session
+     * @param {Island} isl - The island to remove
+     */
     deleteIsland(isl) {
         this.islands.remove(isl);
     }
 }
 
+/**
+ * Represents an island in the game world
+ * Manages all buildings, population, and production on a single island
+ */
 class Island {
+    /**
+     * Creates a new Island instance
+     * @param {Object} params - Configuration parameters for the island
+     * @param {Storage|Object} localStorage - Storage instance or localStorage object
+     * @param {boolean} isNew - Whether this is a newly created island
+     * @param {Session} session - The session this island belongs to
+     */
     constructor(params, localStorage, isNew, session) {
         if (localStorage instanceof Storage) {
             this.name = ko.observable(localStorage.key);
@@ -564,6 +627,10 @@ class Island {
         });
     }
 
+    /**
+     * Resets all island data to default values
+     * Clears all buildings, effects, and configurations
+     */
     reset() {
         if (this.commuterPier)
             this.commuterPier.checked(false);
@@ -642,12 +709,24 @@ class Island {
         }));
     }
 
+    /**
+     * Prepares the residence effect view for this island
+     */
     prepareResidenceEffectView() {
         view.selectedResidenceEffectView(new ResidenceEffectView(this.residenceBuildings));
     }
 }
 
+/**
+ * Manages the creation, deletion, and organization of islands
+ * Handles island naming, session management, and data persistence
+ */
 export class IslandManager {
+    /**
+     * Creates a new IslandManager instance
+     * @param {Object} params - Configuration parameters for islands
+     * @param {boolean} isFirstRun - Whether this is the first run of the application
+     */
     constructor(params, isFirstRun = false) {
         let islandKey = "islandName";
         let islandsKey = "islandNames";
@@ -719,6 +798,11 @@ export class IslandManager {
         });
     }
 
+    /**
+     * Creates a new island with the specified name and session
+     * @param {string} name - The name for the new island
+     * @param {Session} session - The session to create the island in
+     */
     create(name, session) {
         if (name == null) {
             if (this.islandExists())
@@ -748,6 +832,10 @@ export class IslandManager {
             this.islandNameInput(null);
     }
 
+    /**
+     * Deletes an island and cleans up associated data
+     * @param {Island} island - The island to delete
+     */
     delete(island) {
         if (island == null)
             island = view.island();
@@ -782,6 +870,11 @@ export class IslandManager {
         this.sortUnusedNames();
     }
 
+    /**
+     * Renames an island
+     * @param {Island} island - The island to rename
+     * @param {string} name - The new name for the island
+     */
     rename(island, name) {
         if (this.islandExists())
             return;
@@ -812,6 +905,10 @@ export class IslandManager {
         this.sortUnusedNames();
     }
 
+    /**
+     * Starts the rename process for an island
+     * @param {Island} island - The island to rename
+     */
     startRename(island) {
         if (island.isAllIslands())
             return;
@@ -821,15 +918,29 @@ export class IslandManager {
         $('#island-rename-dialog').modal("show");
     }
 
+    /**
+     * Deletes a candidate island name
+     * @param {Object} candidate - The candidate to delete
+     */
     deleteCandidate(candidate) {
         this.unusedNames.delete(candidate.name);
         this.islandCandidates.remove(candidate);
     }
 
+    /**
+     * Gets an island by name
+     * @param {string} name - The name of the island to find
+     * @returns {Island} The island with the specified name
+     */
     getByName(name) {
         return name == ALL_ISLANDS ? this.allIslands : this.serverNamesMap.get(name);
     }
 
+    /**
+     * Registers a name from the server
+     * @param {string} name - The name to register
+     * @param {Session} session - The session the name belongs to
+     */
     registerName(name, session) {
         if (name == ALL_ISLANDS || this.serverNamesMap.has(name))
             return;
@@ -861,6 +972,12 @@ export class IslandManager {
         this.sortUnusedNames();
     }
 
+    /**
+     * Compares two names and returns a similarity score
+     * @param {string} name1 - The first name to compare
+     * @param {string} name2 - The second name to compare
+     * @returns {number} A similarity score between 0 and 1, or NaN if not similar
+     */
     compareNames(name1, name2) {
         var totalLength = Math.max(name1.length, name2.length);
         var minLcsLength = totalLength - Math.round(-0.677 + 1.51 * Math.log(totalLength));
@@ -872,6 +989,9 @@ export class IslandManager {
             return NaN;
     }
 
+    /**
+     * Sorts the islands by session and name
+     */
     sortIslands() {
         view.islands.sort((a, b) => {
             if (a.isAllIslands() || a.name() == ALL_ISLANDS)
@@ -890,6 +1010,9 @@ export class IslandManager {
         });
     }
 
+    /**
+     * Sorts the unused names by session and name
+     */
     sortUnusedNames() {
         this.islandCandidates.sort((a, b) => {
             var sIdxA = view.sessions.indexOf(a.session);
@@ -903,9 +1026,13 @@ export class IslandManager {
         });
     }
 
-    // Function to find length of Longest Common Subsequence of substring
-    // X[0..m-1] and Y[0..n-1]
-    // From https://www.techiedelight.com/longest-common-subsequence/
+    /**
+     * Calculates the length of the longest common subsequence between two strings
+     * Used for fuzzy name matching
+     * @param {string} X - The first string
+     * @param {string} Y - The second string
+     * @returns {number} The length of the longest common subsequence
+     */
     lcsLength(X, Y) {
         var m = X.length, n = Y.length;
 

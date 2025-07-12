@@ -5,6 +5,10 @@ import { NumberInputHandler, EPSILON } from './util.js'
 
 var ko = require("knockout");
 
+/**
+ * Custom Knockout binding handler for applying properties to descendant elements
+ * Allows passing additional properties to child elements in the binding context
+ */
 ko.bindingHandlers.withProperties = {
     init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
         // Make a modified binding context, with a extra properties, and apply it to descendant elements
@@ -16,6 +20,10 @@ ko.bindingHandlers.withProperties = {
     }
 };
 
+/**
+ * Number input component with increment/decrement buttons
+ * Provides vertical buttons for adjusting numeric values with step increments
+ */
 ko.components.register('number-input-increment', {
     viewModel: {
         // - 'params' is an object whose key/value pairs are the parameters
@@ -34,6 +42,10 @@ ko.components.register('number-input-increment', {
                                                     </div>`
 });
 
+/**
+ * Notes section component for displaying and editing text notes
+ * Shows a textarea for entering notes when the data object has a notes property
+ */
 ko.components.register('notes-section', {
     template:
         `<div class="form-group notes-section" data-bind="if: $data != null && $data.notes != null">
@@ -41,6 +53,10 @@ ko.components.register('notes-section', {
         </div>`
 });
 
+/**
+ * Lock toggle component for switching between locked/unlocked states
+ * Displays different icons based on the checked state and allows toggling
+ */
 ko.components.register('lock-toggle', {
     template:
         `<div style="cursor: pointer" data-bind="click: () => {checked(!checked());}">
@@ -49,6 +65,11 @@ ko.components.register('lock-toggle', {
         </div>`
 });
 
+/**
+ * Asset icon component for displaying icons with fallback handling
+ * Shows an icon for an asset with proper alt text and title attributes
+ * @param {Object} asset - The asset object containing icon and name properties
+ */
 ko.components.register('asset-icon', {
     viewModel: function (asset) {
         this.asset = asset;
@@ -56,6 +77,13 @@ ko.components.register('asset-icon', {
     template: `<img class="icon-sm" src="" data-bind="attr: { src: asset.icon ? asset.icon : null, alt: asset.name, title: asset.name}">`
 });
 
+/**
+ * Factory header component for displaying factory information with optional configuration button
+ * Shows factory name, icon, region icon, and optionally a configuration button
+ * @param {Object} params - Component parameters
+ * @param {Object} params.data - The factory data object
+ * @param {boolean} params.button - Whether to show the configuration button
+ */
 ko.components.register('factory-header', {
     viewModel: function (params) {
         this.$data = params.data;
@@ -79,6 +107,11 @@ ko.components.register('factory-header', {
         </div>`
 })
 
+/**
+ * Residence label component for displaying residence information
+ * Shows population level icon, residence icon, and floor count
+ * @param {Object} residence - The residence building object
+ */
 ko.components.register('residence-label', {
     viewModel: function (residence) {
         this.residence = residence;
@@ -91,6 +124,13 @@ ko.components.register('residence-label', {
         </div>`
 })
 
+/**
+ * Residence effect entry component for displaying consumption effects
+ * Shows product icons with consumption modifiers, resident bonuses, and supply information
+ * @param {Object} params - Component parameters
+ * @param {Array} params.entries - Array of effect entries to display
+ * @param {Set} params.filter - Optional filter for products to show
+ */
 ko.components.register('residence-effect-entry', {
     viewModel: function (params) {
         this.entries = params.entries;
@@ -120,6 +160,13 @@ ko.components.register('residence-effect-entry', {
         `
 });
 
+/**
+ * Replacement component for showing input/output replacements
+ * Displays old and new items with a transition arrow between them
+ * @param {Object} params - Component parameters
+ * @param {Object} params.old - The old item being replaced
+ * @param {Object} params.new - The new item replacing the old one
+ */
 ko.components.register('replacement', {
     viewModel: function (params) {
         this.old = params.old;
@@ -140,6 +187,11 @@ ko.components.register('replacement', {
         </div>`
 });
 
+/**
+ * Existing buildings input component for setting building counts
+ * Provides a numeric input with increment/decrement buttons for existing building counts
+ * @param {Object} asset - The asset object to configure existing buildings for
+ */
 ko.components.register('existing-buildings-input', {
     viewModel: function (asset) {
         this.asset = asset;
@@ -158,6 +210,15 @@ ko.components.register('existing-buildings-input', {
         </div>`
 });
 
+/**
+ * Icon checkbox component for selectable items with icons
+ * Displays a checkbox with an icon and label for selecting items
+ * @param {Object} params - Component parameters
+ * @param {Object} params.asset - The asset object
+ * @param {ko.observable} params.checked - The checked state observable
+ * @param {string} params.id - Optional custom ID for the checkbox
+ * @param {string} params.title - Optional custom title
+ */
 ko.components.register('icon-checkbox', {
     viewModel: function (params) {
         this.asset = params.asset;
@@ -175,6 +236,12 @@ ko.components.register('icon-checkbox', {
         </div>`
 });
 
+/**
+ * Additional output component for displaying extra goods production
+ * Shows an icon and amount for additional goods produced by factories
+ * @param {Object} params - Component parameters
+ * @param {ko.observable} params.amount - The amount of additional goods
+ */
 ko.components.register('additional-output', {
     viewModel: function (params) {
         this.amount = params.amount;
@@ -186,6 +253,19 @@ ko.components.register('additional-output', {
         </div>`
 });
 
+/**
+ * Collapsible section component for expandable/collapsible content
+ * Provides a fieldset with a clickable legend that can show/hide content
+ * @param {Object} params - Component parameters
+ * @param {string} params.id - Unique ID for the collapsible section
+ * @param {string} params.heading - The heading text for the section
+ * @param {boolean} params.collapsed - Initial collapsed state
+ * @param {string} params.fieldsetClass - CSS class for the fieldset
+ * @param {Object} params.data - Data to pass to the template
+ * @param {ko.observable|Array} params.checkbox - Optional checkbox for selecting all items
+ * @param {ko.observable} params.summary - Optional summary value to display
+ * @param {boolean} params.colorSummary - Whether to color the summary based on value
+ */
 ko.components.register('collapsible', {
     viewModel: function (params) {
         this.target = '#' + params.id;
@@ -273,10 +353,19 @@ ko.components.register('collapsible', {
             `
 });
 
+/**
+ * Consumer unknown component for displaying unknown consumer types
+ * Fallback component when consumer type is not recognized
+ */
 ko.components.register('consumer-unknown', {
     template: `<span>?</span>`
 });
 
+/**
+ * Consumer population component for displaying population level consumers
+ * Shows population level icon and name, clickable to open population configuration
+ * @param {Object} demand - The population demand object
+ */
 ko.components.register('consumer-population', {
     template:
         `<div class="inline-list" style="cursor: pointer" data-dismiss="modal" data-bind="click: () => {setTimeout(() => { $root.selectedPopulationLevel($data.level); $('#population-level-config-dialog').modal('show')}, 500);}" >
@@ -285,6 +374,11 @@ ko.components.register('consumer-population', {
         </div>`
 });
 
+/**
+ * Consumer factory component for displaying factory consumers
+ * Shows factory icon and name, clickable to open factory configuration
+ * @param {Object} demand - The factory demand object
+ */
 ko.components.register('consumer-factory', {
     template:
         `<div class="inline-list" style="cursor: pointer" data-bind="click: () => {$root.selectedFactory($data.consumer);}" >
@@ -293,6 +387,11 @@ ko.components.register('consumer-factory', {
         </div>`
 });
 
+/**
+ * Consumer module component for displaying module consumers
+ * Shows factory icon, module icon, and combined name, clickable to open factory configuration
+ * @param {Object} demand - The module demand object
+ */
 ko.components.register('consumer-module', {
     template:
         `<div class="inline-list" style="cursor: pointer" data-bind="click: () => {$root.selectedFactory($data.consumer);}" >
@@ -302,6 +401,11 @@ ko.components.register('consumer-module', {
         </div>`
 });
 
+/**
+ * Consumer entry component for displaying different types of consumers
+ * Dynamically selects the appropriate consumer component based on demand type
+ * @param {Object} demand - The demand object to display
+ */
 ko.components.register('consumer-entry', {
     viewModel: function (demand) {
         this.demand = demand;
@@ -320,6 +424,12 @@ ko.components.register('consumer-entry', {
         `<div data-bind="component: { name: component, params: demand}"></div>`
 });
 
+/**
+ * Consumer view component for displaying a list of factory demands
+ * Shows a table of all demands for a factory with their amounts
+ * @param {Object} params - Component parameters
+ * @param {Factory} params.factory - The factory to display demands for
+ */
 ko.components.register('consumer-view', {
     viewModel: function (params) {
         this.factory = params.factory;

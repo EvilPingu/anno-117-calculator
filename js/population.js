@@ -6,7 +6,17 @@ import { ResidenceEffectView} from './views.js'
 
 var ko = require( "knockout" );
 
+/**
+ * Represents a residence building that houses population
+ * Manages population counts, effects, and consumption needs
+ */
 export class ResidenceBuilding extends NamedElement {
+    /**
+     * Creates a new ResidenceBuilding instance
+     * @param {Object} config - Configuration object for the residence building
+     * @param {Map} assetsMap - Map of all available assets
+     * @param {Island} island - The island this residence belongs to
+     */
     constructor(config, assetsMap, island) {
         super(config);
         this.island = island;
@@ -49,6 +59,10 @@ export class ResidenceBuilding extends NamedElement {
         this.residents = ko.observable(0);
     }
 
+    /**
+     * Initializes needs and sets up computed observables
+     * @param {Map} needsMap - Map of all needs for this residence
+     */
     initializeNeeds(needsMap){
         this.needsMap = needsMap;
         this.consumingLimit = ko.pureComputed(() => {
@@ -59,10 +73,8 @@ export class ResidenceBuilding extends NamedElement {
 
                 sum += this.existingBuildings() * (this.residentsPerNeed.get(n.guid) || 0);
                 
-
                 for (/** @type [ResidenceEffectEntryCoverage] */ const entry of this.getConsumptionEntries(n))
                     sum += this.existingBuildings() * entry.getResidents();
-
             }
 
             return sum;
@@ -88,24 +100,42 @@ export class ResidenceBuilding extends NamedElement {
         });
     }
 
+    /**
+     * Adds an effect to this residence
+     * @param {ResidenceEffect} effect - The effect to add
+     */
     addEffect(effect) {
         this.allEffects.set(effect.guid, effect);
     }
 
+    /**
+     * Adds effect coverage to this residence
+     * @param {ResidenceEffectCoverage} effectCoverage - The effect coverage to add
+     */
     addEffectCoverage(effectCoverage) {
         this.effectCoverage.push(effectCoverage);
         this.sortEffectCoverage();
     }
 
+    /**
+     * Removes effect coverage from this residence
+     * @param {ResidenceEffectCoverage} effectCoverage - The effect coverage to remove
+     */
     removeEffectCoverage(effectCoverage) {
         this.effectCoverage.remove(effectCoverage);
     }
 
+    /**
+     * Sorts effect coverage by priority
+     */
     sortEffectCoverage() {
         this.effectCoverage.sort((a, b) => a.residenceEffect.compare(b.residenceEffect));
     }
 
-
+    /**
+     * Gets the number of residents that don't consume goods
+     * @returns {number} Number of non-consuming residents
+     */
     getNoConsumptionResidents() {
         var residents = 0;
 
@@ -121,8 +151,9 @@ export class ResidenceBuilding extends NamedElement {
     }
 
     /**
-     * @param {Product|ResidenceNeed|Need } need
-     * @returns {[ResidenceEffectEntryCoverage]}
+     * Gets consumption entries for a specific need
+     * @param {Product|ResidenceNeed|Need} need - The need to get entries for
+     * @returns {[ResidenceEffectEntryCoverage]} Array of consumption entries
      */
     getConsumptionEntries(need) {
         if (!(need instanceof Product)) {
@@ -135,6 +166,10 @@ export class ResidenceBuilding extends NamedElement {
         return this.entryCoveragePerProduct().get(need) || [];
     }
 
+    /**
+     * Serializes effects to JSON for storage
+     * @returns {Object} Serialized effects data
+     */
     serializeEffects() {
         var coverageMap = {};
         for (var coverage of this.effectCoverage())
@@ -143,6 +178,10 @@ export class ResidenceBuilding extends NamedElement {
         return coverageMap;
     }
 
+    /**
+     * Applies effects from JSON data
+     * @param {Object} json - Serialized effects data
+     */
     applyEffects(json) {
         var coverage = [];
         for (var guid in json) {
@@ -158,12 +197,25 @@ export class ResidenceBuilding extends NamedElement {
         this.sortEffectCoverage();
     }
 
+    /**
+     * Prepares the residence effect view for this residence
+     */
     prepareResidenceEffectView() {
         view.selectedResidenceEffectView(new ResidenceEffectView([this], this.name));
     }
 }
 
+/**
+ * Represents a population level with specific needs and requirements
+ * Manages population counts, needs, and residence buildings
+ */
 export class PopulationLevel extends NamedElement {
+    /**
+     * Creates a new PopulationLevel instance
+     * @param {Object} config - Configuration object for the population level
+     * @param {Map} assetsMap - Map of all available assets
+     * @param {Island} island - The island this population level belongs to
+     */
     constructor(config, assetsMap, island) {
         super(config);
         this.island = island
@@ -207,8 +259,7 @@ export class PopulationLevel extends NamedElement {
             return true;
         });
 
-
-        this.existingBuildings = ko.pureComputed({
+        this.existingBuildings = ko.computed({
             read: () => {
                 var sum = 0;
                 for (var r of this.allResidences)
@@ -223,7 +274,7 @@ export class PopulationLevel extends NamedElement {
             }
         });
 
-        
+        // Set up needs
         config.needs.forEach(n => {
             var need;
             var product = assetsMap.get(n.guid);
@@ -316,7 +367,6 @@ export class PopulationLevel extends NamedElement {
 
             this.hasSkyscrapers = () => this.getFloorsSummedExistingBuildings() ;
 
- 
             this.canEditPerHouse = ko.pureComputed(() => {
                 return !this.hasSkyscrapers() && !(this.specialResidence && this.specialResidence.existingBuildings());
             });
@@ -343,11 +393,19 @@ export class PopulationLevel extends NamedElement {
         });
     }
 
+    /**
+     * Initializes ban conditions for all needs
+     * @param {Map} assetsMap - Map of all available assets
+     */
     initBans(assetsMap) {
         for (var n of this.needs.concat(this.buildingNeeds))
             n.initBans(this, assetsMap);
     }
 
+    /**
+     * Gets the number of residents that don't consume goods
+     * @returns {number} Number of non-consuming residents
+     */
     getNoConsumptionResidents() {
         var residents = 0;
         for (var r of this.allResidences)
@@ -356,14 +414,23 @@ export class PopulationLevel extends NamedElement {
         return residents;
     }
 
+    /**
+     * Increments the population amount
+     */
     incrementAmount() {
         this.residents(parseFloat(this.residents()) + 1);
     }
 
+    /**
+     * Decrements the population amount
+     */
     decrementAmount() {
         this.residents(parseFloat(this.residents()) - 1);
     }
 
+    /**
+     * Applies configuration globally to all islands
+     */
     applyConfigGlobally() {
         for (var isl of view.islands()) {
             // region is null for allIslands
@@ -378,10 +445,13 @@ export class PopulationLevel extends NamedElement {
 
             for (var guid of this.needsMap.keys())
                 other.needsMap.get(guid).checked(this.needsMap.get(guid).checked());
-
         }
     }
 
+    /**
+     * Prepares the residence effect view for this population level
+     * @param {PopulationNeed} need - Optional specific need to focus on
+     */
     prepareResidenceEffectView(need = null) {
         var heading = this.name;
         if (need)
@@ -390,7 +460,16 @@ export class PopulationLevel extends NamedElement {
     }
 }
 
+/**
+ * Represents commuter workforce that can work across multiple islands
+ * Manages workforce that travels between islands
+ */
 export class CommuterWorkforce extends NamedElement {
+    /**
+     * Creates a new CommuterWorkforce instance
+     * @param {Object} config - Configuration object for the commuter workforce
+     * @param {Session} session - The session this workforce belongs to
+     */
     constructor(config, session) {
         super(config);
 
@@ -416,7 +495,16 @@ export class CommuterWorkforce extends NamedElement {
     }
 }
 
+/**
+ * Represents a workforce type that can be assigned to buildings
+ * Manages workforce demands and availability
+ */
 export class Workforce extends NamedElement {
+    /**
+     * Creates a new Workforce instance
+     * @param {Object} config - Configuration object for the workforce
+     * @param {Map} assetsMap - Map of all available assets
+     */
     constructor(config, assetsMap) {
         super(config);
         this.demands = ko.observableArray([]);
@@ -437,18 +525,32 @@ export class Workforce extends NamedElement {
         });
     }
 
-
-
+    /**
+     * Adds a demand to this workforce
+     * @param {WorkforceDemand} demand - The demand to add
+     */
     add(demand) {
         this.demands.push(demand);
     }
 
+    /**
+     * Removes a demand from this workforce
+     * @param {WorkforceDemand} demand - The demand to remove
+     */
     remove(demand){
         this.demands.remove(demand);
     }
 }
 
+/**
+ * Represents a workforce demand for a specific building
+ * Manages the workforce requirements for individual buildings
+ */
 export class WorkforceDemand extends NamedElement {
+    /**
+     * Creates a new WorkforceDemand instance
+     * @param {Object} config - Configuration object for the workforce demand
+     */
     constructor(config) {
         super(config);
         this.buildings = 0;
@@ -463,12 +565,11 @@ export class WorkforceDemand extends NamedElement {
         this.workforce = ko.observable(config.workforce);
         this.defaultWorkforce = config.workforce;
         this.workforce().add(this);
-
     }
 
     /**
-     * 
-     * @param {Workforce|null} workforce 
+     * Updates the workforce type for this demand
+     * @param {Workforce|null} workforce - The new workforce type, or null to use default
      */
     updateWorkforce(workforce = null){
         if(workforce == null)
@@ -481,6 +582,10 @@ export class WorkforceDemand extends NamedElement {
         }
     }
 
+    /**
+     * Updates the amount based on the number of buildings
+     * @param {number} buildings - The number of buildings
+     */
     updateAmount(buildings) {
         this.buildings = buildings;
 

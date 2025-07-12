@@ -5,7 +5,15 @@ import { Factory } from './factories.js'
 
 var ko = require( "knockout" );
 
+/**
+ * Represents a trade route between two islands
+ * Manages the transportation of goods between factories on different islands
+ */
 class TradeRoute {
+    /**
+     * Creates a new TradeRoute instance
+     * @param {Object} config - Configuration object for the trade route
+     */
     constructor(config) {
         $.extend(this, config);
 
@@ -13,6 +21,11 @@ class TradeRoute {
         this.amount(config.amount);
     }
 
+    /**
+     * Gets the opposite island in this trade route
+     * @param {TradeList} list - The trade list to check against
+     * @returns {Island} The opposite island
+     */
     getOpposite(list) {
         if (list.island == this.from)
             return this.to;
@@ -20,6 +33,11 @@ class TradeRoute {
             return this.from;
     }
 
+    /**
+     * Gets the opposite factory in this trade route
+     * @param {Factory} factory - The factory to check against
+     * @returns {Factory} The opposite factory
+     */
     getOppositeFactory(factory) {
         if (this.fromFactory == factory)
             return this.toFactory;
@@ -27,22 +45,46 @@ class TradeRoute {
             return this.fromFactory;
     }
 
+    /**
+     * Checks if this route is an export from the given list's island
+     * @param {TradeList} list - The trade list to check
+     * @returns {boolean} True if this is an export route
+     */
     isExport(list) {
         return list.island == this.from;
     }
 
+    /**
+     * Deletes this trade route
+     */
     delete() {
         view.tradeManager.remove(this);
     }
 }
 
+/**
+ * Represents an NPC trader that provides goods
+ * Manages NPC trade routes and goods production
+ */
 export class NPCTrader extends NamedElement {
+    /**
+     * Creates a new NPCTrader instance
+     * @param {Object} config - Configuration object for the NPC trader
+     */
     constructor(config) {
         super(config);
     }
 }
 
+/**
+ * Represents an NPC trade route
+ * Manages automatic trade routes provided by NPC traders
+ */
 class NPCTradeRoute {
+    /**
+     * Creates a new NPCTradeRoute instance
+     * @param {Object} config - Configuration object for the NPC trade route
+     */
     constructor(config) {
         $.extend(this, config);
 
@@ -59,7 +101,16 @@ class NPCTradeRoute {
     }
 }
 
+/**
+ * Manages trade routes for a specific factory
+ * Handles the creation and management of trade routes for a factory's output
+ */
 export class TradeList {
+    /**
+     * Creates a new TradeList instance
+     * @param {Island} island - The island this trade list belongs to
+     * @param {Factory} factory - The factory this trade list manages
+     */
     constructor(island, factory) {
         this.island = island;
         this.factory = factory;
@@ -109,10 +160,17 @@ export class TradeList {
         });
     }
 
+    /**
+     * Checks if a new trade route can be created
+     * @returns {boolean} True if a route can be created
+     */
     canCreate() {
         return this.selectedIsland() && !this.selectedIsland().isAllIslands() && this.newAmount();
     }
 
+    /**
+     * Creates a new trade route
+     */
     create() {
         if (!this.canCreate())
             return;
@@ -152,6 +210,10 @@ export class TradeList {
         view.tradeManager.add(route);
     }
 
+    /**
+     * Called when the trade list dialog is shown
+     * Updates the available islands and default values
+     */
     onShow() {
         var usedIslands = new Set(this.routes().flatMap(r => [r.from, r.to]));
         var islands = view.islands().filter(i => !usedIslands.has(i) && i != this.island);
@@ -174,7 +236,14 @@ export class TradeList {
     }
 }
 
+/**
+ * Manages all trade routes in the application
+ * Handles persistence and global trade route management
+ */
 export class TradeManager {
+    /**
+     * Creates a new TradeManager instance
+     */
     constructor() {
         this.key = "tradeRoutes";
         this.npcKey = "npcTradeRoutes";
@@ -188,8 +257,6 @@ export class TradeManager {
             if (f.tradeList)
                 f.tradeList.onShow();
         });
-
-
 
         if (localStorage) {
             // trade routes
@@ -223,7 +290,6 @@ export class TradeManager {
                 config.fromFactory.tradeList.routes.push(route);
                 config.toFactory.tradeList.routes.push(route);
             }
-
 
             this.persistenceSubscription = ko.computed(() => {
                 var json = [];
@@ -263,7 +329,6 @@ export class TradeManager {
                 });
             }
 
-
             this.npcPersistenceSubscription = ko.computed(() => {
                 var json = [];
 
@@ -282,6 +347,10 @@ export class TradeManager {
         }
     }
 
+    /**
+     * Adds a route to the trade manager
+     * @param {TradeRoute|NPCTradeRoute} route - The route to add
+     */
     add(route) {
         if (route instanceof NPCTradeRoute)
             this.npcRoutes.push(route);
@@ -289,6 +358,10 @@ export class TradeManager {
             this.routes.push(route);
     }
 
+    /**
+     * Removes a route from the trade manager
+     * @param {TradeRoute|NPCTradeRoute} route - The route to remove
+     */
     remove(route) {
         if (route instanceof NPCTradeRoute) {
             this.npcRoutes.remove(route);
@@ -304,6 +377,10 @@ export class TradeManager {
         route.fromFactory.tradeList.unusedIslands.unshift(route.to);
     }
 
+    /**
+     * Handles island deletion by removing related routes
+     * @param {Island} island - The island being deleted
+     */
     islandDeleted(island) {
         {
             var deletedRoutes = this.routes().filter(r => r.to === island || r.from === island);
@@ -317,13 +394,29 @@ export class TradeManager {
     }
 }
 
+/**
+ * Represents a pier for trade routes
+ * Base class for trade infrastructure
+ */
 class Pier extends NamedElement {
+    /**
+     * Creates a new Pier instance
+     * @param {Object} config - Configuration object for the pier
+     */
     constructor(config) {
         super(config);
     }
 }
 
+/**
+ * Represents a trade contract between two factories
+ * Manages the exchange of goods between factories with specific ratios
+ */
 class TradeContract {
+    /**
+     * Creates a new TradeContract instance
+     * @param {Object} config - Configuration object for the trade contract
+     */
     constructor(config) {
         $.extend(this, config);
 
@@ -353,12 +446,24 @@ class TradeContract {
         this.fixed = ko.observable(this.fixed || false);
     }
 
+    /**
+     * Deletes this trade contract
+     */
     delete() {
         this.importFactory.island.contractManager.remove(this);
     }
 }
 
+/**
+ * Manages trade contracts for a specific factory
+ * Handles import and export contracts for a factory
+ */
 export class ContractList {
+    /**
+     * Creates a new ContractList instance
+     * @param {Island} island - The island this contract list belongs to
+     * @param {Factory} factory - The factory this contract list manages
+     */
     constructor(island, factory) {
         this.island = island;
         this.factory = factory;
@@ -388,7 +493,15 @@ export class ContractList {
     }
 }
 
+/**
+ * Manages all trade contracts for an island
+ * Handles contract creation, storage, and optimization
+ */
 export class ContractManager {
+    /**
+     * Creates a new ContractManager instance
+     * @param {Island} island - The island this contract manager belongs to
+     */
     constructor(island) {
         this.key = "tradingContracts";
         this.paramKey = "tradingContractParams";
@@ -425,7 +538,6 @@ export class ContractManager {
                 config.exportFactory.contractList.exports.push(contract);
             }
 
-
             this.persistenceSubscription = ko.computed(() => {
                 var json = [];
 
@@ -442,7 +554,6 @@ export class ContractManager {
 
                 return json;
             });
-
         }
 
         this.traderLoadingSpeed = createFloatInput(2, 1, 50);
@@ -529,7 +640,6 @@ export class ContractManager {
                     productToCount.set(guid, c.exportCount() + productToCount.get(guid));
                 else
                     productToCount.set(guid, c.exportCount());
-
             }
 
             if (!productToCount.size)
@@ -542,19 +652,30 @@ export class ContractManager {
 
             return m;
         });
-
     }
 
+    /**
+     * Adds a contract to this manager
+     * @param {TradeContract} contract - The contract to add
+     */
     add(contract) {
         this.contracts.push(contract);
     }
 
+    /**
+     * Removes a contract from this manager
+     * @param {TradeContract} contract - The contract to remove
+     */
     remove(contract) {
         contract.importFactory.contractList.imports.remove(contract);
         contract.exportFactory.contractList.exports.remove(contract);
         this.contracts.remove(contract);
     }
 
+    /**
+     * Handles island deletion by removing related contracts
+     * @param {Island} island - The island being deleted
+     */
     islandDeleted(island) {
         var dlc = view.dlcsMap.get("dlc7");
         if (dlc) {
@@ -562,6 +683,9 @@ export class ContractManager {
         }
     }
 
+    /**
+     * Sets the storage capacity based on current contracts
+     */
     setStorageCapacity() {
         if (!this.contracts().length)
             return;
@@ -673,17 +797,35 @@ export class ContractManager {
     }
 }
 
+/**
+ * Represents a contract upgrade that modifies exchange rates
+ * Provides bonuses to trade contract ratios
+ */
 class ContractUpgrade {
+    /**
+     * Creates a new ContractUpgrade instance
+     * @param {Object} config - Configuration object for the contract upgrade
+     */
     constructor(config) {
         $.extend(this, config);
     }
 
+    /**
+     * Deletes this contract upgrade
+     */
     delete() {
         view.contractUpgradeManager.upgrades.remove(this);
     }
 }
 
+/**
+ * Manages contract upgrades for the application
+ * Handles the creation and management of trade contract upgrades
+ */
 export class ContractUpgradeManager {
+    /**
+     * Creates a new ContractUpgradeManager instance
+     */
     constructor() {
         this.key = "contractUpgrades";
         this.upgrades = ko.observableArray();
@@ -694,9 +836,7 @@ export class ContractUpgradeManager {
             if (p.exchangeWeight)
                 this.productsMap.set(p.guid, new Product(p, assetsMap));
 
-
         if (localStorage) {
-
             var text = localStorage.getItem(this.key);
             var json = text ? JSON.parse(text) : {};
             for (var p in json) {
@@ -707,7 +847,6 @@ export class ContractUpgradeManager {
 
                 this.upgrades.push(new ContractUpgrade(config));
             }
-
 
             this.persistenceSubscription = ko.computed(() => {
                 var json = {};
@@ -720,7 +859,6 @@ export class ContractUpgradeManager {
 
                 return json;
             });
-
         }
 
         this.sortUpgrades();
@@ -755,6 +893,9 @@ export class ContractUpgradeManager {
         this.canCreate = ko.pureComputed(() => this.product() && this.factor());
     }
 
+    /**
+     * Creates a new contract upgrade
+     */
     create() {
         this.upgrades.push(new ContractUpgrade({
             product: this.product(),
@@ -764,6 +905,9 @@ export class ContractUpgradeManager {
         this.sortUpgrades();
     }
 
+    /**
+     * Sorts upgrades by factor and product name
+     */
     sortUpgrades() {
         this.upgrades.sort((a, b) => {
             if (a.factor != b.factor)
@@ -774,7 +918,14 @@ export class ContractUpgradeManager {
     }
 }
 
+/**
+ * Factory for creating trade contracts
+ * Provides interface for creating new trade contracts between factories
+ */
 export class ContractCreatorFactory {
+    /**
+     * Creates a new ContractCreatorFactory instance
+     */
     constructor() {
         // interface elements to create a new contract in factory config dialog
         this.export = ko.observable(false);
@@ -822,7 +973,6 @@ export class ContractCreatorFactory {
             else
                 list = this.exchangeProducts().flatMap(p => p.factories);
 
-
             return list.sort((a, b) => a.getRegionExtendedName().localeCompare(b.getRegionExtendedName()));
         });
         this.exchangeFactory = ko.observable();
@@ -853,7 +1003,6 @@ export class ContractCreatorFactory {
             var overProduction = f.overProduction();
             var outputAmount = f.substitutableOutputAmount();
 
-
             if (!f.contractList.island.isAllIslands() && f.contractList.exports().length) {
                 this.export(true);
                 this.newAmount(Math.max(0, overProduction));
@@ -874,10 +1023,17 @@ export class ContractCreatorFactory {
         });
     }
 
+    /**
+     * Checks if a new contract can be created
+     * @returns {boolean} True if a contract can be created
+     */
     canCreate() {
         return this.exchangeFactory() && this.newAmount() && (this.export() || this.canImport()) && this.exchangeFactory().getProduct().exchangeWeight && view.selectedFactory().getProduct().exchangeWeight;
     }
 
+    /**
+     * Creates a new trade contract
+     */
     create() {
         if (!this.canCreate())
             return;

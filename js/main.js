@@ -1,14 +1,12 @@
 import { ACCURACY, isPreview, formatNumber, formatPercentage, versionCalculator, NamedElement, Option, DLC } from './util.js'
 import { languageCodes, texts as locaTexts, options, serverOptions } from './i18n.js'
 
-
 import { PopulationLevel, ResidenceBuilding } from './population.js'
 import { NewspaperNeedConsumption, NewspaperNeedConsumptionEntry } from './consumption.js'
 import { Consumer } from './factories.js'
 import { NPCTrader, ContractUpgradeManager, TradeManager, ContractCreatorFactory } from './trade.js'
 import { Region, Session, IslandManager } from './world.js'
 import { DarkMode, ViewMode, Template, ProductionChainView, ResidenceEffectView, CollapsibleStates } from './views.js'
-
 
 import './components.js'
 import './params.js'
@@ -21,23 +19,37 @@ require("knockout-amd-helpers");
 var moduleContext = require.context(".", true);
 var templateContext = require.context("../templates", true);
 
+/**
+ * Custom module loader for Knockout AMD helpers
+ * @param {string} moduleName - Name of the module to load
+ * @param {Function} done - Callback function to execute when module is loaded
+ */
 ko.bindingHandlers.module.loader = function (moduleName, done) {
     var mod = moduleContext("./" + moduleName);
     done(mod);
 }
 
 ko.amdTemplateEngine.defaultSuffix = ".html";
+/**
+ * Custom template loader for Knockout AMD template engine
+ * @param {string} templateName - Name of the template to load
+ * @param {Function} done - Callback function to execute when template is loaded
+ */
 ko.amdTemplateEngine.loader = function (templateName, done) {
     var template = templateContext("./" + templateName + ko.amdTemplateEngine.defaultSuffix);
     done(template.default);
 }
 
+// Make utility functions globally available
 window.ACCURACY = ACCURACY;
 window.formatNumber = formatNumber;
 window.formatPercentage = formatPercentage;
 window.factoryReset = factoryReset;
 window.exportConfig = exportConfig;
 
+/**
+ * Global view object containing all application state
+ */
 window.view = {
     settings: {
         language: ko.observable("english"),
@@ -50,26 +62,42 @@ window.view = {
     dlcsMap: new Map()
 };
 
+// Set default language based on browser locale
 for (var code in languageCodes)
     if (navigator.language.startsWith(code))
         view.settings.language(languageCodes[code]);
 
-// called after initialization
-// checks if loaded config is old and applies upgrade
+/**
+ * Checks if loaded config is old and applies upgrade
+ * Called after initialization to handle version migrations
+ * @param {string} configVersion - The version of the loaded configuration
+ */
 function configUpgrade(configVersion) {
     if (configVersion == null)
         configVersion = "v1.0";
 
     try {
         configVersion = configVersion.replace(/[^.\d]/g, "").split(".").map(d => parseInt(d));
+        
+        /**
+         * Checks if a setting is enabled
+         * @param {string} settingName - Name of the setting to check
+         * @returns {boolean} True if the setting is enabled
+         */
         function isChecked(settingName) {
             var val = localStorage.getItem(`settings.${settingName}`);
             return val != null && parseInt(val);
         }
+        
+        /**
+         * Removes a setting from localStorage
+         * @param {string} settingName - Name of the setting to remove
+         */
         function remove(settingName) {
             localStorage.removeItem(`settings.${settingName}`);
         }
 
+        // Handle DLC7 (contracts) migration
         {
             let id = "contracts";
             if (isChecked(id)) {
@@ -80,6 +108,7 @@ function configUpgrade(configVersion) {
             remove(id);
         }
 
+        // Handle version 10 migration
         if (configVersion[0] < 10) {
             if (isChecked("noOptionalNeeds"))
                 for (var isl of view.islands())
@@ -105,11 +134,11 @@ function configUpgrade(configVersion) {
 
                     for (let n of l.needs)
                         isl.storage.removeItem(`${l.guid}[${n.guid}].percentBoost`);
-
                 }
             }
         }
 
+        // Handle version 11 migration
         if (configVersion[0] < 11) {
             for (var isl of view.islands()) {
                 for (var f of isl.factories) {
@@ -125,6 +154,9 @@ function configUpgrade(configVersion) {
     } catch (e) { console.warn(e); }
 }
 
+/**
+ * Resets the factory configuration by clearing localStorage and reloading
+ */
 function factoryReset() {
     if (localStorage)
         localStorage.clear();
@@ -132,10 +164,17 @@ function factoryReset() {
     location.reload();
 }
 
+/**
+ * Checks if the application is running locally
+ * @returns {boolean} True if running locally
+ */
 function isLocal() {
     return window.location.protocol == 'file:' || /localhost|127\.0\.0\.1/.test(window.location.hostname);
 }
 
+/**
+ * Exports the current configuration to a JSON file
+ */
 function exportConfig() {
     var saveData = (function () {
         var a = document.createElement("a");
@@ -154,6 +193,10 @@ function exportConfig() {
     saveData(localStorage, ("Anno1800CalculatorConfig") + ".json");
 }
 
+/**
+ * Checks for updates and shows notifications
+ * Compares current version with latest GitHub release
+ */
 function checkAndShowNotifications() {
     $.getJSON("https://api.github.com/repos/NiHoel/Anno1800Calculator/releases/latest").done((release) => {
         $('#download-calculator-button').attr("href", release.zipball_url);
@@ -187,10 +230,13 @@ function checkAndShowNotifications() {
 
             localStorage.setItem("versionCalculator", versionCalculator);
         }
-
     });
 }
 
+/**
+ * Installs event listener for importing configuration files
+ * Handles file selection and JSON parsing
+ */
 function installImportConfigListener() {
     if (localStorage) {
         $('#config-selector').on('change', event => {
@@ -209,7 +255,6 @@ function installImportConfigListener() {
                     let config = JSON.parse(text);
 
                     if (localStorage) {
-
                         localStorage.clear();
                         for (var a in config)
                             localStorage.setItem(a, config[a]);
@@ -224,11 +269,9 @@ function installImportConfigListener() {
                         }
                         
                         location.reload();
-
                     } else {
                         console.error("No local storage accessible to write result into.");
                     }
-
                 } catch (e) {
                     console.error(e);
                 }
@@ -242,8 +285,14 @@ function installImportConfigListener() {
     }
 }
 
+/**
+ * Manages population reading from the Anno server
+ * Handles communication with the game server for real-time data
+ */
 class PopulationReader {
-
+    /**
+     * Creates a new PopulationReader instance
+     */
     constructor() {
         this.url = 'http://localhost:8000/AnnoServer/Population';
         this.notificationShown = false;
@@ -262,6 +311,10 @@ class PopulationReader {
         }
     }
 
+    /**
+     * Handles responses from the Anno server
+     * Processes population data and updates the application state
+     */
     async handleResponse() {
         let host = window.view.settings.serverAddress();
         localStorage.setItem('serverAddress', host);
@@ -283,7 +336,6 @@ class PopulationReader {
                 this.checkVersion();
             }
 
-
             if (view.settings.proposeIslandNames.checked()) {
                 for (var isl of (json.islands || [])) {
                     view.islandManager.registerName(isl.name, view.assetsMap.get(isl.session));
@@ -301,7 +353,6 @@ class PopulationReader {
             if (view.settings.updateSelectedIslandOnly.checked() && island != view.island())
                 return;
 
-
             for (let key in json) {
                 let asset = island.assetsMap.get(parseInt(key));
                 if (asset instanceof PopulationLevel) {
@@ -312,8 +363,6 @@ class PopulationReader {
                     if (json[key].existingBuildings && view.settings.populationLevelExistingBuildings.checked()) {
                         asset.existingBuildings(json[key].existingBuildings);
                     }
-
-
                 } else if (asset instanceof Consumer) {
                     if (json[key].existingBuildings && view.settings.factoryExistingBuildings.checked())
                         asset.existingBuildings(parseInt(json[key].existingBuildings));
@@ -321,11 +370,9 @@ class PopulationReader {
                     if (view.settings.factoryPercentBoost.checked()) {
                         if (view.settings.optimalProductivity.checked()) {
                             if (asset.existingBuildings() && json[key].limit) {
-
                                 var limit = Math.max(0, json[key].limit - asset.extraGoodProductionList.amount());
 
                                 if (asset.getOutputs().length && asset.getOutputs()[0].product.producers.length > 1) {
-
                                     // in all islands view, multiple factories can be produce one good
                                     // the server stored the same values for all of these factories
                                     // we consider them together and sum their existing buildings
@@ -355,22 +402,23 @@ class PopulationReader {
                                         asset.percentBoost(percentBoost);
                                 }
                             }
-
                         }
                         else if (json[key].percentBoost)
                             asset.percentBoost(parseInt(json[key].percentBoost));
                     }
-
                 } else if (asset instanceof ResidenceBuilding) {
                     if (json[key].existingBuildings)
                         asset.existingBuildings(parseInt(json[key].existingBuildings));
                 }
-
             }
         } catch (e) {
         }
     }
 
+    /**
+     * Checks if the server version is up to date
+     * Shows notification if update is available
+     */
     checkVersion() {
         if (!this.notificationShown && this.recentVersion && this.currentVersion && this.recentVersion !== this.currentVersion) {
             this.notificationShown = true;
@@ -384,15 +432,18 @@ class PopulationReader {
             });
         }
     }
-
-
 }
 
-
-
+/**
+ * Initializes the application
+ * Sets up all components, DLCs, settings, and global state
+ * @param {boolean} isFirstRun - Whether this is the first time running the application
+ * @param {string} configVersion - The version of the loaded configuration
+ */
 function init(isFirstRun, configVersion) {
     view.darkMode = new DarkMode();
 
+    // Set up DLCs
     view.dlcs = [];
     view.dlcsMap = new Map();
     for (let dlc of (params.dlcs || [])) {
@@ -408,7 +459,7 @@ function init(isFirstRun, configVersion) {
         }
     }
 
-    // set up options
+    // Set up options
     view.settings.options = [];
     for (let attr in options) {
         let o = new Option(options[attr]);
@@ -427,6 +478,7 @@ function init(isFirstRun, configVersion) {
 
     view.settings.languages = params.languages;
 
+    // Set up server options
     view.settings.serverOptions = [];
     for (let attr in serverOptions) {
         let o = new Option(serverOptions[attr]);
@@ -447,6 +499,7 @@ function init(isFirstRun, configVersion) {
 
     view.assetsMap = new Map();
 
+    // Set up regions
     view.regions = [];
     for (let region of (params.regions || [])) {
         let r = new Region(region);
@@ -454,6 +507,7 @@ function init(isFirstRun, configVersion) {
         view.regions.push(r);
     }
 
+    // Set up sessions
     view.sessions = [];
     for (let session of (params.sessions || [])) {
         let s = new Session(session, view.assetsMap);
@@ -461,7 +515,7 @@ function init(isFirstRun, configVersion) {
         view.sessions.push(s);
     }
 
-    // set up newspaper
+    // Set up newspaper consumption
     view.newspaperConsumption = new NewspaperNeedConsumption();
     if (localStorage) {
         let id = "newspaperPropagandaBuff";
@@ -484,7 +538,7 @@ function init(isFirstRun, configVersion) {
         }
     }
 
-    // set up NPC traders
+    // Set up NPC traders
     view.productsToTraders = new Map();
     for (var t of (params.traders || [])) {
         var trader = new NPCTrader(t);
@@ -502,7 +556,7 @@ function init(isFirstRun, configVersion) {
         view.contractUpgradeManager = new ContractUpgradeManager();
     }
 
-    // set up island management
+    // Set up island management
     view.islandManager = new IslandManager(params, isFirstRun);
 
     if (localStorage) {
@@ -518,8 +572,7 @@ function init(isFirstRun, configVersion) {
     else
         localStorage.setItem("upgrade.bonusResidentsApplied", 1);
 
-
-    // set up modal dialogs
+    // Set up modal dialogs
     view.collapsibleStates = new CollapsibleStates();
     view.selectedFactory = ko.observable(view.island().factories[0]);
     view.selectedPopulationLevel = ko.observable(view.island().populationLevels[0]);
@@ -529,14 +582,13 @@ function init(isFirstRun, configVersion) {
     view.selectedContractManager = ko.observable(view.island().contractManager);
     view.selectedResidenceEffectView = ko.observable(new ResidenceEffectView([view.island().residenceBuildings[0]]));
 
-
-
     view.tradeManager = new TradeManager();
 
     if (params.tradeContracts) {
         view.contractCreatorFactory = new ContractCreatorFactory();
     }
 
+    // Set up templates
     var allIslands = view.islandManager.allIslands;
     var selectedIsland = view.island();
     var templates = [];
@@ -562,7 +614,7 @@ function init(isFirstRun, configVersion) {
 
     ko.applyBindings(view, $(document.body)[0]);
 
-    // events must be registered afte apply bindings since this adds dialogs to the html
+    // Set up modal event handlers
     $('#factory-choose-dialog').on('show.bs.modal',
         () => {
             view.selectedMultiFactoryProducts(view.island().multiFactoryProducts
@@ -590,13 +642,12 @@ function init(isFirstRun, configVersion) {
         }
     });
 
-
     if (view.viewMode)
         $('#view-mode-dialog').modal("show");
 
     view.island().name.subscribe(val => { window.document.title = val; });
 
-    // set up key bindings
+    // Set up key bindings
     var keyBindings = ko.computed(() => {
         var bindings = new Map();
 
@@ -643,19 +694,20 @@ function init(isFirstRun, configVersion) {
         }
     });
 
-
     if(!isPreview)
         // listen for the server providing the population count
         window.reader = new PopulationReader();
 }
 
-
-
+/**
+ * Document ready handler
+ * Initializes the application when the DOM is ready
+ */
 $(document).ready(function () {
     var configVersion = localStorage && localStorage.getItem("versionCalculator");
     var isFirstRun = !localStorage || localStorage.getItem("versionCalculator") == null;
 
-    // parse the parameters
+    // Parse the parameters
     for (let attr in locaTexts) {
         view.texts[attr] = new NamedElement({ name: attr, locaText: locaTexts[attr] });
     }
@@ -677,7 +729,7 @@ $(document).ready(function () {
             localStorage.setItem("versionCalculator", versionCalculator);
     }
 
-    //update links of download buttons
+    // Update links of download buttons
     $.getJSON("https://api.github.com/repos/NiHoel/Anno1800UXEnhancer/releases/latest").done((release) => {
         $('#download-calculator-server-button').attr("href", release.assets[0].browser_download_url);
     });

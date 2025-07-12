@@ -7,7 +7,15 @@ import { Consumer, Factory } from './factories.js'
 
 var ko = require( "knockout" );
 
+/**
+ * Manages dark mode functionality for the application
+ * Handles theme switching and CSS class management
+ */
 export class DarkMode {
+    /**
+     * Creates a new DarkMode instance
+     * Initializes dark mode state and loads saved preference
+     */
     constructor() {
         this.checked = ko.observable(false);
 
@@ -34,10 +42,16 @@ export class DarkMode {
         }
     }
 
+    /**
+     * Toggles the dark mode state
+     */
     toggle() {
         this.checked(!this.checked());
     }
 
+    /**
+     * Applies or removes dark mode CSS classes based on current state
+     */
     apply() {
         if (this.checked())
             Object.keys(this.classAdditions).forEach((key) => $(key).addClass(this.classAdditions[key]));
@@ -47,16 +61,31 @@ export class DarkMode {
     }
 }
 
+/**
+ * Manages different view modes for the application
+ * Provides preset configurations for different user scenarios
+ */
 export class ViewMode {
+    /**
+     * Creates a new ViewMode instance
+     */
     constructor() {
     }
 
+    /**
+     * Applies settings for the "Start" view mode
+     * Enables missing buildings highlight and other beginner-friendly features
+     */
     start() {
         view.settings.missingBuildingsHighlight.checked(true);
         view.settings.utilizeExistingFactories.checked(true);
         view.settings.needUnlockConditions.checked(true);
     }
 
+    /**
+     * Applies settings for the "Plan" view mode
+     * Enables decimal precision and configures DLC settings for planning
+     */
     plan() {
         view.settings.decimalsForBuildings.checked(true);
 
@@ -71,6 +100,10 @@ export class ViewMode {
         }
     }
 
+    /**
+     * Applies settings for the "Master" view mode
+     * Enables all options and DLCs for advanced users
+     */
     master() {
         for (var option of view.settings.options)
             option.checked(true);
@@ -83,7 +116,18 @@ export class ViewMode {
     }
 }
 
+/**
+ * Template system for creating hierarchical data structures
+ * Manages parent-child relationships between assets and their instances
+ */
 export class Template {
+    /**
+     * Creates a new Template instance
+     * @param {Object} asset - The asset to create a template for
+     * @param {Object} parentInstance - The parent instance
+     * @param {string} attributeName - The name of the attribute in the parent
+     * @param {number} index - The index of this template in the parent's array
+     */
     constructor(asset, parentInstance, attributeName, index) {
 
 
@@ -130,6 +174,11 @@ export class Template {
 
     }
 
+    /**
+     * Checks if an asset type is applicable for templating
+     * @param {Object} asset - The asset to check
+     * @returns {boolean} True if the asset can be templated
+     */
     applicable(asset) {
         return asset instanceof PopulationLevel ||
             asset instanceof Workforce ||
@@ -140,11 +189,15 @@ export class Template {
     }
 }
 
+/**
+ * Manages the display of production chains
+ * Creates hierarchical tree structures for visualizing factory dependencies
+ */
 export class ProductionChainView {
     /**
-     * 
-     * @param {KnockoutObservable<Factory|Consumer>} factory
-     * @param {KnockoutObservable<number>|null} amount
+     * Creates a new ProductionChainView instance
+     * @param {ko.observable<Factory|Consumer>} factory - The factory to create a chain for
+     * @param {ko.observable<number>|null} amount - Optional amount to base calculations on
      */
     constructor(factory, amount = null) {
         this.factory = factory;
@@ -220,12 +273,15 @@ export class ProductionChainView {
     }
 }
 
+/**
+ * Aggregates residence effect coverage data
+ * Manages multiple coverage instances for the same residence effect
+ */
 class ResidenceEffectAggregate {
     /**
-     * 
-     * @param {KnockoutObservable<number>} totalResidences
-     * @param {ResidenceBuilding} residence
-     * @param {ResidenceEffectCoverage} residenceEffectCoverage
+     * Creates a new ResidenceEffectAggregate instance
+     * @param {ko.observable<number>} totalResidences - Total number of residences
+     * @param {ResidenceEffectCoverage} residenceEffectCoverage - The initial coverage
      */
     constructor(totalResidences, residenceEffectCoverage) {
         this.totalResidences = totalResidences;
@@ -234,10 +290,17 @@ class ResidenceEffectAggregate {
         this.coverage = [residenceEffectCoverage];
     }
 
+    /**
+     * Adds another coverage instance to this aggregate
+     * @param {ResidenceEffectCoverage} residenceEffectCoverage - The coverage to add
+     */
     add(residenceEffectCoverage) {
         this.coverage.push(residenceEffectCoverage);
     }
 
+    /**
+     * Finalizes the aggregate by computing average coverage
+     */
     finishInitialization() {
         this.averageCoverage = ko.pureComputed(() => {
             var sum = 0;
@@ -248,11 +311,16 @@ class ResidenceEffectAggregate {
     }
 }
 
+/**
+ * Manages the display and editing of residence effects
+ * Provides interface for applying effects to residences
+ */
 export class ResidenceEffectView {
     /**
-     * 
-     * @param {[ResidenceBuilding]} residences 
-     * @param {PopulationNeed} need 
+     * Creates a new ResidenceEffectView instance
+     * @param {Array<ResidenceBuilding>} residences - Array of residences to manage effects for
+     * @param {string} heading - Optional heading for the view
+     * @param {PopulationNeed} need - Optional specific need to focus on
      */
     constructor(residences, heading = null, need = null) {
         this.heading = heading || window.view.texts.needConsumption.name;
@@ -310,6 +378,10 @@ export class ResidenceEffectView {
         })
     }
 
+    /**
+     * Creates a new residence effect coverage
+     * Applies the selected effect to the residences
+     */
     create() {
         var e = this.selectedEffect();
         var a = null;
@@ -335,6 +407,11 @@ export class ResidenceEffectView {
         }
     }
 
+    /**
+     * Deletes a residence effect aggregate
+     * Removes the effect coverage from all affected residences
+     * @param {ResidenceEffectAggregate} aggregate - The aggregate to delete
+     */
     delete(aggregate) {
         aggregate.coverage.forEach(coverage => {
             coverage.residence.removeEffectCoverage(coverage);
@@ -347,11 +424,17 @@ export class ResidenceEffectView {
         this.percentCoverage(aggregate.coverage[0].coverage() * 100);
     }
 
+    /**
+     * Sorts the effects and aggregates by priority
+     */
     sort() {
         this.aggregates.sort((a, b) => a.residenceEffect.compare(b.residenceEffect));
         this.unusedEffects.sort((a, b) => a.compare(b));
     }
 
+    /**
+     * Applies the current configuration globally to all islands
+     */
     applyConfigGlobally() {
         for (var isl of view.islands()) {
             // region is null for allIslands
@@ -366,14 +449,31 @@ export class ResidenceEffectView {
     }
 }
 
+/**
+ * Manages the collapsed state of a collapsible section
+ * Tracks whether a section is expanded or collapsed
+ */
 class Collapsible {
+    /**
+     * Creates a new Collapsible instance
+     * @param {string} id - Unique identifier for the collapsible section
+     * @param {boolean} collapsed - Initial collapsed state
+     */
     constructor(id, collapsed) {
         this.id = id;
         this.collapsed = ko.observable(!!collapsed);
     }
 }
 
+/**
+ * Manages the state of all collapsible sections in the application
+ * Handles persistence and retrieval of collapsed states
+ */
 export class CollapsibleStates {
+    /**
+     * Creates a new CollapsibleStates instance
+     * Initializes from localStorage if available
+     */
     constructor() {
         this.key = "collapsibleStates";
         this.collapsibles = ko.observableArray([]);
@@ -399,10 +499,10 @@ export class CollapsibleStates {
     }
 
     /**
-     * 
-     * @param {string} id
-     * @param {boolean} collapsed
-     * @returns {Collapsible}
+     * Gets or creates a collapsible state for the given ID
+     * @param {string} id - The unique identifier for the collapsible section
+     * @param {boolean} collapsed - Default collapsed state if creating new
+     * @returns {Collapsible} The collapsible state object
      */
     get(id, collapsed) {
         for (var c of this.collapsibles())

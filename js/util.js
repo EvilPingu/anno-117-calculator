@@ -2,14 +2,22 @@
 
 var ko = require( "knockout" );
 
+/** Version string for the calculator application */
 export let versionCalculator = "v11.1";
+/** Flag indicating if this is a preview version */
 export let isPreview = false;
+/** Accuracy threshold for floating point comparisons */
 export let ACCURACY = 0.01;
+/** Very small epsilon value for precise floating point comparisons */
 export let EPSILON = 0.0000001;
+/** Special identifier for "All Islands" view */
 export let ALL_ISLANDS = "All Islands";
 
-
-
+/**
+ * Sets default fixed factory assignments for specific products
+ * Assigns rum, cotton fabric, and coffee to their default New World production locations
+ * @param {Map} assetsMap - Map of all available assets
+ */
 export function setDefaultFixedFactories(assetsMap) {
     // Default rum, cotton fabric and coffee to the new world production
     assetsMap.get(1010240).fixedFactory(assetsMap.get(1010318));
@@ -20,13 +28,26 @@ export function setDefaultFixedFactories(assetsMap) {
     assetsMap.get(1010206).fixedFactory(assetsMap.get(1010284));
 }
 
+/**
+ * Removes all non-word characters from a string
+ * @param {string|Function} string - The string to process or a function returning a string
+ * @returns {string} The string with all non-word characters removed
+ */
 function removeSpaces(string) {
     if (typeof string === "function")
         string = string();
     return string.replace(/\W/g, "");
 }
 
+/** Number formatter using the browser's locale */
 var formater = new Intl.NumberFormat(navigator.language || "en").format;
+
+/**
+ * Formats a number according to the browser's locale with optional sign
+ * @param {number|string} num - The number to format
+ * @param {boolean} forceSign - Whether to force a plus sign for positive numbers
+ * @returns {string} The formatted number string
+ */
 export function formatNumber(num, forceSign = false) {
     var rounded = Math.ceil(100 * parseFloat(num)) / 100;
     if (Math.abs(rounded) < EPSILON)
@@ -37,7 +58,17 @@ export function formatNumber(num, forceSign = false) {
     return str;
 }
 
+/**
+ * Handles number input with mouse wheel support and keyboard modifiers
+ * Provides increment/decrement functionality with configurable step sizes
+ */
 export class NumberInputHandler {
+    /**
+     * Creates a new NumberInputHandler instance
+     * @param {Object} params - Configuration parameters
+     * @param {ko.observable} params.obs - The observable to update
+     * @param {string} params.id - The ID of the input element
+     */
     constructor(params) {
         this.obs = params.obs;
         this.id = params.id;
@@ -64,6 +95,11 @@ export class NumberInputHandler {
         });
     }
 
+    /**
+     * Gets the input factor based on keyboard modifiers
+     * @param {WheelEvent} evt - The wheel event
+     * @returns {number} The factor to multiply the step by
+     */
     getInputFactor(evt) {
         var factor = 1
         if (evt.ctrlKey)
@@ -74,10 +110,21 @@ export class NumberInputHandler {
     }
 }
 
+/**
+ * Formats a number as a percentage with optional sign
+ * @param {number|string} number - The number to format as percentage
+ * @param {boolean} forceSign - Whether to force a plus sign for positive numbers
+ * @returns {string} The formatted percentage string
+ */
 export function formatPercentage(number, forceSign = true) {
     return window.formatNumber(Math.ceil(10 * parseFloat(number)) / 10, forceSign) + ' %';
 }
 
+/**
+ * Delays updating an observable to prevent rapid successive updates
+ * @param {ko.observable} obs - The observable to update
+ * @param {*} val - The value to set
+ */
 export function delayUpdate(obs, val) {
     var version = obs.getVersion ? obs.getVersion() : obs();
     setTimeout(() => {
@@ -86,9 +133,17 @@ export function delayUpdate(obs, val) {
     });
 }
 
-
-
-// from https://knockoutjs.com/documentation/extenders.html
+/**
+ * Knockout extender for numeric input validation and formatting
+ * Provides bounds checking, precision control, and custom callbacks
+ * @param {ko.observable} target - The target observable
+ * @param {Object} bounds - Configuration object for bounds and behavior
+ * @param {number} bounds.precision - Number of decimal places (0 for integers)
+ * @param {number} bounds.min - Minimum allowed value
+ * @param {number} bounds.max - Maximum allowed value
+ * @param {Function} bounds.callback - Optional callback function for custom validation
+ * @returns {ko.computed} A computed observable with numeric validation
+ */
 ko.extenders.numeric = function (target, bounds) {
     //create a writable computed observable to intercept writes to our observable
     var result = ko.computed({
@@ -146,13 +201,13 @@ ko.extenders.numeric = function (target, bounds) {
     return result;
 };
 
-
 /**
- * 
- * @param {number} init - inital value
- * @param {number} min
- * @param {number} max
- * @param {beforeValueUpdateCallback} callback
+ * Creates an integer input observable with validation
+ * @param {number} init - Initial value
+ * @param {number} min - Minimum allowed value
+ * @param {number} max - Maximum allowed value
+ * @param {Function} callback - Optional callback function for custom validation
+ * @returns {ko.observable} An observable with integer validation
  */
 export function createIntInput(init, min = -Infinity, max = Infinity, callback = null) {
     return ko.observable(init).extend({
@@ -165,6 +220,14 @@ export function createIntInput(init, min = -Infinity, max = Infinity, callback =
     });
 }
 
+/**
+ * Creates a float input observable with validation
+ * @param {number} init - Initial value
+ * @param {number} min - Minimum allowed value
+ * @param {number} max - Maximum allowed value
+ * @param {Function} callback - Optional callback function for custom validation
+ * @returns {ko.observable} An observable with float validation
+ */
 export function createFloatInput(init, min = -Infinity, max = Infinity, callback = null) {
     return ko.observable(init).extend({
         numeric: {
@@ -176,9 +239,19 @@ export function createFloatInput(init, min = -Infinity, max = Infinity, callback
     });
 }
 
-
-
+/**
+ * Base class for all named elements in the application
+ * Provides localization support and DLC management
+ */
 export class NamedElement {
+    /**
+     * Creates a new NamedElement instance
+     * @param {Object} config - Configuration object
+     * @param {string} config.name - Default name for the element
+     * @param {Object} config.locaText - Localization text object
+     * @param {string} config.iconPath - Path to the icon
+     * @param {Array} config.dlcs - Array of DLC identifiers
+     */
     constructor(config) {
         $.extend(this, config);
         this.locaText = this.locaText || {}
@@ -212,6 +285,10 @@ export class NamedElement {
 
     }
 
+    /**
+     * Locks an observable to a specific DLC if this element has only one DLC
+     * @param {ko.observable} obs - The observable to lock
+     */
     lockDLCIfSet(obs) {
         if (this.dlcs == null || this.dlcs.length != 1)
             return;
@@ -220,6 +297,9 @@ export class NamedElement {
         this.dlcs[0].addDependentObject(obs);
     }
 
+    /**
+     * Removes DLC dependencies when this element is deleted
+     */
     delete() {
         if (this.dlcs == null || this.dlcs.length != 1)
             return;
@@ -229,7 +309,15 @@ export class NamedElement {
     }
 }
 
+/**
+ * Represents an optional element that can be checked/unchecked
+ * Extends NamedElement to provide checkbox functionality
+ */
 export class Option extends NamedElement {
+    /**
+     * Creates a new Option instance
+     * @param {Object} config - Configuration object
+     */
     constructor(config) {
         super(config);
         this.checked = ko.observable(false);
@@ -237,7 +325,15 @@ export class Option extends NamedElement {
     }
 }
 
+/**
+ * Represents a DLC (Downloadable Content) package
+ * Manages DLC availability and dependent object tracking
+ */
 export class DLC extends Option {
+    /**
+     * Creates a new DLC instance
+     * @param {Object} config - Configuration object
+     */
     constructor(config) {
         super(config);
 
@@ -258,16 +354,16 @@ export class DLC extends Option {
     }
 
     /**
-     * 
-     * @param {ko.observable} obs
+     * Adds a dependent object that will be tracked for usage
+     * @param {ko.observable} obs - The observable to track
      */
     addDependentObject(obs) {
         this.dependentObjects.push(obs);
     }
 
     /**
-     *
-     * @param {ko.observable} obs
+     * Removes a dependent object from tracking
+     * @param {ko.observable} obs - The observable to stop tracking
      */
     removeDependentObject(obs) {
         this.dependentObjects.remove(obs);

@@ -6,7 +6,17 @@ import { TradeList, ContractList } from './trade.js'
 
 var ko = require("knockout");
 
+/**
+ * Base class for all consumers in the game
+ * Represents buildings that consume goods and require workforce
+ */
 export class Consumer extends NamedElement {
+    /**
+     * Creates a new Consumer instance
+     * @param {Object} config - Configuration object for the consumer
+     * @param {Map} assetsMap - Map of all available assets
+     * @param {Island} island - The island this consumer belongs to
+     */
     constructor(config, assetsMap, island) {
         super(config);
 
@@ -45,10 +55,18 @@ export class Consumer extends NamedElement {
         this.notes = ko.observable("");
     }
 
+    /**
+     * Gets the input requirements for this consumer
+     * @returns {Array} Array of input requirements
+     */
     getInputs() {
         return this.inputs || [];
     }
 
+    /**
+     * References products and sets up input demands
+     * @param {Map} assetsMap - Map of all available assets
+     */
     referenceProducts(assetsMap) {
         if (this.inputs)
             this.inputs.forEach(i => i.product = assetsMap.get(i.Product));
@@ -108,25 +126,24 @@ export class Consumer extends NamedElement {
         });
     }
 
-
+    /**
+     * Creates workforce demand for this consumer
+     * @param {Map} assetsMap - Map of all available assets
+     * @returns {WorkforceDemand|null} The created workforce demand or null
+     */
     createWorkforceDemand(assetsMap) {
         for (let m of this.maintenances || []) {
             let a = assetsMap.get(m.Product);
             if (a instanceof Workforce) {
                 this.workforceDemand = new WorkforceDemand($.extend({ factory: this, workforce: a }, m));
 
-
                 this.workforceDemandSubscription = ko.computed(() => {
-
-                // for workforce replacement, the last applied item matters
-                let items = this.items.filter(item => item.replacingWorkforce && item.replacingWorkforce != a && item.checked()).sort((a, b) => b.item.guid - a.item.guid);
-                if(items.length)
-                    this.workforceDemand.updateWorkforce(items[0].replacingWorkforce)
-                else
-                    this.workforceDemand.updateWorkforce(null);
-                    
-
-                
+                    // for workforce replacement, the last applied item matters
+                    let items = this.items.filter(item => item.replacingWorkforce && item.replacingWorkforce != a && item.checked()).sort((a, b) => b.item.guid - a.item.guid);
+                    if(items.length)
+                        this.workforceDemand.updateWorkforce(items[0].replacingWorkforce)
+                    else
+                        this.workforceDemand.updateWorkforce(null);
                 });
                 this.buildings.subscribe(val => this.workforceDemand.updateAmount(Math.max(val, this.buildings())));
             }
@@ -134,6 +151,10 @@ export class Consumer extends NamedElement {
         return null;
     }
 
+    /**
+     * Gets the extended name including region information
+     * @returns {string} The extended name
+     */
     getRegionExtendedName() {
         if (!this.forceRegionExtendedName && (!this.region || !this.product || this.product.factories.length <= 1))
             return this.name();
@@ -141,14 +162,23 @@ export class Consumer extends NamedElement {
         return `${this.name()} (${this.region.name()})`;
     }
 
+    /**
+     * Gets the icon for this consumer
+     * @returns {string} The icon path
+     */
     getIcon() {
         return this.icon;
     }
 
+    /**
+     * Updates the amount for this consumer
+     */
     updateAmount() {
-
     }
 
+    /**
+     * Applies configuration globally to all islands
+     */
     applyConfigGlobally() {
         for (var isl of view.islands()) {
             if (this.region && isl.region && this.region != isl.region)
@@ -165,7 +195,17 @@ export class Consumer extends NamedElement {
     }
 }
 
+/**
+ * Represents a module that can be attached to factories
+ * Extends Consumer to provide module-specific functionality
+ */
 export class Module extends Consumer {
+    /**
+     * Creates a new Module instance
+     * @param {Object} config - Configuration object for the module
+     * @param {Map} assetsMap - Map of all available assets
+     * @param {Island} island - The island this module belongs to
+     */
     constructor(config, assetsMap, island) {
         super(config, assetsMap, island);
         this.checked = ko.observable(false);
@@ -174,7 +214,17 @@ export class Module extends Consumer {
     }
 }
 
+/**
+ * Represents a public consumer building
+ * Extends Consumer to provide public building-specific functionality
+ */
 export class PublicConsumerBuilding extends Consumer {
+    /**
+     * Creates a new PublicConsumerBuilding instance
+     * @param {Object} config - Configuration object for the building
+     * @param {Map} assetsMap - Map of all available assets
+     * @param {Island} island - The island this building belongs to
+     */
     constructor(config, assetsMap, island) {
         super(config, assetsMap, island);
 
@@ -192,7 +242,17 @@ export class PublicConsumerBuilding extends Consumer {
     }
 }
 
+/**
+ * Represents a power plant building
+ * Extends PublicConsumerBuilding to provide power plant-specific functionality
+ */
 export class PowerPlant extends PublicConsumerBuilding {
+    /**
+     * Creates a new PowerPlant instance
+     * @param {Object} config - Configuration object for the power plant
+     * @param {Map} assetsMap - Map of all available assets
+     * @param {Island} island - The island this power plant belongs to
+     */
     constructor(config, assetsMap, island) {
         super(config, assetsMap, island);
 
@@ -202,6 +262,9 @@ export class PowerPlant extends PublicConsumerBuilding {
         });
     }
 
+    /**
+     * Applies configuration globally to all islands
+     */
     applyConfigGlobally() {
         super.applyConfigGlobally();
 
@@ -217,7 +280,16 @@ export class PowerPlant extends PublicConsumerBuilding {
     }
 }
 
+/**
+ * Represents a buff that can be applied to buildings
+ * Provides buff-specific functionality for production bonuses
+ */
 export class Buff extends NamedElement {
+    /**
+     * Creates a new Buff instance
+     * @param {Object} config - Configuration object for the buff
+     * @param {Map} assetsMap - Map of all available assets
+     */
     constructor(config, assetsMap) {
         super(config);
 
@@ -225,7 +297,17 @@ export class Buff extends NamedElement {
     }
 }
 
+/**
+ * Represents a factory that produces goods
+ * Extends Consumer to provide factory-specific functionality
+ */
 export class Factory extends Consumer {
+    /**
+     * Creates a new Factory instance
+     * @param {Object} config - Configuration object for the factory
+     * @param {Map} assetsMap - Map of all available assets
+     * @param {Island} island - The island this factory belongs to
+     */
     constructor(config, assetsMap, island) {
         super(config, assetsMap, island);
         this.isFactory = true;
@@ -245,7 +327,6 @@ export class Factory extends Consumer {
         this.extraGoodProductionHistory = [];
         this.extraGoodProductionAmount = ko.pureComputed(() => {
             var val = this.extraGoodProductionList.checked() ? this.extraGoodProductionList.amount() : 0;
-
 
             if (this.extraGoodProductionHistory.length && Math.abs(val - this.extraGoodProductionHistory[0][0]) < ACCURACY)
                 return this.extraGoodProductionHistory[0][0];
@@ -293,8 +374,6 @@ export class Factory extends Consumer {
         });
 
         this.inputAmountByExtraGoods = ko.observable(0);
-
-
 
         this.percentBoost = createIntInput(100, 1);
         this.percentBoost.subscribe((val) => {
@@ -415,10 +494,8 @@ export class Factory extends Consumer {
             this.useinputAmountByExistingBuildings(this.editable() || view.settings.utilizeExistingFactories.checked());
         });
         
-
         if (this.workforceDemand)
             this.buildings.subscribe(val => this.workforceDemand.updateAmount(Math.max(val, this.buildings())));
-
 
         this.overProduction = ko.pureComputed(() => Math.max(0, this.inputAmount() * this.extraGoodFactor() + this.externalProduction() - this.totalDemands()));
         if(this.extraGoodProductionList)
@@ -455,11 +532,18 @@ export class Factory extends Consumer {
         });
     }
 
-
+    /**
+     * Gets the output products for this factory
+     * @returns {Array} Array of output products
+     */
     getOutputs() {
         return this.outputs || [];
     }
 
+    /**
+     * References products and sets up factory-specific relationships
+     * @param {Map} assetsMap - Map of all available assets
+     */
     referenceProducts(assetsMap) {
         super.referenceProducts(assetsMap);
         this.getOutputs().forEach(i => i.product = assetsMap.get(i.Product));
@@ -497,17 +581,27 @@ export class Factory extends Consumer {
                         demand.updateAmount(0);
             }
         });
-
     }
 
+    /**
+     * Gets the primary product produced by this factory
+     * @returns {Product|null} The primary product or null
+     */
     getProduct() {
         return this.getOutputs()[0] ? this.getOutputs()[0].product : null;
     }
 
+    /**
+     * Gets the icon for this factory
+     * @returns {string} The icon path
+     */
     getIcon() {
         return this.getProduct() ? this.getProduct().icon : super.getIcon();
     }
 
+    /**
+     * Increments the number of buildings while maintaining productivity
+     */
     incrementBuildings() {
         if (this.buildings() <= 0 || parseInt(this.percentBoost()) <= 1)
             return;
@@ -517,6 +611,9 @@ export class Factory extends Consumer {
         this.percentBoost(Math.min(nextBoost, parseInt(this.percentBoost()) - 1));
     }
 
+    /**
+     * Decrements the number of buildings while maintaining productivity
+     */
     decrementBuildings() {
         let currentBuildings = Math.ceil(this.buildings() * 100) / 100;
         var nextBuildings = Math.floor(currentBuildings);
@@ -531,24 +628,41 @@ export class Factory extends Consumer {
         this.percentBoost(nextBoost);
     }
 
+    /**
+     * Increments the productivity boost percentage
+     */
     incrementPercentBoost() {
         this.percentBoost(parseInt(this.percentBoost()) + 1);
     }
 
+    /**
+     * Decrements the productivity boost percentage
+     */
     decrementPercentBoost() {
         this.percentBoost(parseInt(this.percentBoost()) - 1);
     }
 
+    /**
+     * Adds a demand to this factory
+     * @param {Demand} demand - The demand to add
+     */
     add(demand) {
         this.demands.push(demand);
         this.updateAmount();
     }
 
+    /**
+     * Removes a demand from this factory
+     * @param {Demand} demand - The demand to remove
+     */
     remove(demand) {
         this.demands.remove(demand);
         this.updateAmount();
     }
 
+    /**
+     * Applies configuration globally to all islands
+     */
     applyConfigGlobally() {
         for (var isl of view.islands()) {
             if (this.region && isl.region && this.region != isl.region)

@@ -3,10 +3,18 @@ import { EPSILON, NamedElement, Option } from './util.js'
 
 var ko = require( "knockout" );
 
+/**
+ * Represents a product that can be produced by factories
+ * Manages production relationships and factory assignments
+ */
 export class Product extends NamedElement {
+    /**
+     * Creates a new Product instance
+     * @param {Object} config - Configuration object for the product
+     * @param {Map} assetsMap - Map of all available assets
+     */
     constructor(config, assetsMap) {
         super(config);
-
 
         //this.amount = ko.observable(0);
 
@@ -26,13 +34,31 @@ export class Product extends NamedElement {
     }
 }
 
+/**
+ * Represents a meta product that groups other products
+ * Used for organizing products into categories
+ */
 export class MetaProduct extends NamedElement {
+    /**
+     * Creates a new MetaProduct instance
+     * @param {Object} config - Configuration object for the meta product
+     * @param {Map} assetsMap - Map of all available assets
+     */
     constructor(config, assetsMap) {
         super(config);
     }
 }
 
+/**
+ * Represents a product that doesn't require a factory to produce
+ * Used for goods obtained through other means (e.g., trade, special buildings)
+ */
 export class NoFactoryProduct extends NamedElement {
+    /**
+     * Creates a new NoFactoryProduct instance
+     * @param {Object} config - Configuration object for the product
+     * @param {Map} assetsMap - Map of all available assets
+     */
     constructor(config, assetsMap) {
         super(config);
 
@@ -49,15 +75,25 @@ export class NoFactoryProduct extends NamedElement {
         });
     }
 
+    /**
+     * Adds a need to this product
+     * @param {Object} need - The need to add
+     */
     addNeed(need) {
         this.needs.push(need);
     }
 }
 
-
-
-
+/**
+ * Represents a demand for a product from a consumer
+ * Manages the relationship between consumers and the products they need
+ */
 export class Demand extends NamedElement {
+    /**
+     * Creates a new Demand instance
+     * @param {Object} config - Configuration object for the demand
+     * @param {Map} assetsMap - Map of all available assets
+     */
     constructor(config, assetsMap) {
         super(config);
 
@@ -74,10 +110,12 @@ export class Demand extends NamedElement {
             this.updateFixedProductFactory(this.product.fixedFactory());
             this.product.fixedFactory.subscribe(f => this.updateFixedProductFactory(f));
         }
-
-
     }
 
+    /**
+     * Updates the factory assigned to this demand
+     * @param {Factory} f - The factory to assign
+     */
     updateFixedProductFactory(f) {
         if (f == null && (this.consumer || this.region)) { // find factory in the same region as consumer
             let region = this.region || this.consumer.region;
@@ -103,6 +141,10 @@ export class Demand extends NamedElement {
         }
     }
 
+    /**
+     * Updates the amount of this demand
+     * @param {number} amount - The new amount
+     */
     updateAmount(amount) {
         amount *= this.factor;
         if (Math.abs(this.amount() - amount) >= EPSILON)
@@ -110,23 +152,39 @@ export class Demand extends NamedElement {
     }
 }
 
-
-
+/**
+ * Represents a category of products
+ * Groups related products together for organization
+ */
 export class ProductCategory extends NamedElement {
+    /**
+     * Creates a new ProductCategory instance
+     * @param {Object} config - Configuration object for the category
+     * @param {Map} assetsMap - Map of all available assets
+     */
     constructor(config, assetsMap) {
         super(config);
         this.products = config.products.map(p => assetsMap.get(p)).filter(p => p != null && p instanceof Product);
     }
 }
 
+/**
+ * Represents an item that can be equipped to factories
+ * Provides bonuses and modifications to factory production
+ */
 export class Item extends NamedElement {
+    /**
+     * Creates a new Item instance
+     * @param {Object} config - Configuration object for the item
+     * @param {Map} assetsMap - Map of all available assets
+     * @param {Region} region - The region this item belongs to
+     */
     constructor(config, assetsMap, region) {
         super(config);
 
         if (this.replaceInputs) {
             this.replacements = new Map();
             this.replacementArray = [];
-
 
             this.replaceInputs.forEach(r => {
                 this.replacementArray.push({
@@ -157,7 +215,6 @@ export class Item extends NamedElement {
         if (this.replacingWorkforce)
             this.replacingWorkforce = assetsMap.get(this.replacingWorkforce);
 
-
         this.equipments =
             this.factories.map(f => new EquippedItem({ item: this, factory: f, icon: this.icon, locaText: this.locaText, dlcs: config.dlcs }, assetsMap));
         this.availableEquipments = ko.pureComputed(() => this.equipments.filter(e => e.factory.available()));
@@ -173,7 +230,6 @@ export class Item extends NamedElement {
             write: (checked) => {
                 this.equipments.forEach(e => e.checked(checked));
             }
-
         });
 
         this.visible = ko.computed(() => {
@@ -199,7 +255,16 @@ export class Item extends NamedElement {
     }
 }
 
+/**
+ * Represents an item equipped to a specific factory
+ * Manages the relationship between items and factories
+ */
 class EquippedItem extends Option {
+    /**
+     * Creates a new EquippedItem instance
+     * @param {Object} config - Configuration object for the equipped item
+     * @param {Map} assetsMap - Map of all available assets
+     */
     constructor(config, assetsMap) {
         super(config);
 
@@ -237,7 +302,16 @@ class EquippedItem extends Option {
     }
 }
 
+/**
+ * Represents additional goods production from equipped items
+ * Manages extra goods produced by factories with specific items
+ */
 class ExtraGoodProduction {
+    /**
+     * Creates a new ExtraGoodProduction instance
+     * @param {Object} config - Configuration object for the extra good production
+     * @param {Map} assetsMap - Map of all available assets
+     */
     constructor(config, assetsMap) {
         this.item = config.item;
         this.factory = config.factory;
@@ -261,7 +335,15 @@ class ExtraGoodProduction {
     }
 }
 
+/**
+ * Manages a list of extra goods production for a factory
+ * Handles the collection and calculation of additional goods production
+ */
 export class ExtraGoodProductionList {
+    /**
+     * Creates a new ExtraGoodProductionList instance
+     * @param {Factory} factory - The factory this list belongs to
+     */
     constructor(factory) {
         this.factory = factory;
 
