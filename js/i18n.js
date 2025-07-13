@@ -521,41 +521,6 @@ export let texts = {
         english: "Export overproduction",
         german: "Überproduktion exportieren"
     },
-    setTotalCapacity: {
-        "english": "Set Total Capacity",
-        "chinese": "Set 总容量",
-        "taiwanese": "Set 總容量",
-        "italian": "Set Capienza totale",
-        "spanish": "Set Capacidad total",
-        "german": "Setze Gesamtkapazität",
-        "polish": "Set Pojemność całkowita",
-        "french": "Set Capacité totale",
-        "korean": "Set 총 수용량",
-        "japanese": "Set 総収容能力",
-        "russian": "Set Общая вместимость"
-    },
-    setTotalCapacityTooltip: {
-        "english": "Multiply all contracts by such a factor that the total capacity equals this value. Click the lock symbol to prevent contracts from modification.",
-        "german": "Multipliziere all Verträge mit solch einem Faktor, dass die Gesamtkapazität diesem Wert entspricht. Klicke auf das Schlosssymbol, um das Ändern von Verträgen zu verhindern.",
-    },
-    fixContractTooltip: {
-        "english": "Determine whether clicking 'Set Total Capacity' modifies the contract.",
-        "german": "Lege fest, ob Vertrag  bei Klick auf 'Setze Gesamtkapazität' geändert wird."
-    },
-    travelTime: {
-        "chinese": "航行时间",
-        "english": "Travel Time",
-        "french": "Durée du voyage",
-        "german": "Reisezeit",
-        //"guid": 12736,
-        "italian": "Durata viaggio",
-        "japanese": "移動時間",
-        "korean": "이동 시간",
-        "polish": "Czas podróży",
-        "russian": "Время путешествия",
-        "spanish": "Tiempo de viaje",
-        "taiwanese": "航行時間"
-    },
     loadingSpeed: {
         "english": "Loading Speed",
         "chinese": "装货速度",
@@ -568,19 +533,6 @@ export let texts = {
         "korean": "화물 선적 속도",
         "japanese": "積み込み速度",
         "russian": "Скорость погрузки"
-    },
-    duration: {
-        "english": "Trade Duration",
-        "chinese": "持续时间",
-        "taiwanese": "持續時間",
-        "italian": "Durata",
-        "spanish": "Duración",
-        "german": "Handelsdauer",
-        "polish": "Czas trwania",
-        "french": "Durée",
-        "korean": "지속 시간",
-        "japanese": "持続時間",
-        "russian": "Длительность"
     },
     "tradeRoutes": {
         "english": "Trade Routes",

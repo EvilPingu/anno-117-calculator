@@ -67,7 +67,6 @@
     <div data-bind="template: 'population-level-config-dialog'"></div>
     <div data-bind="template: 'residence-effect-dialog'"></div>
     <div data-bind="template: 'factory-config-dialog'"></div>
-    <div data-bind="template: 'contract-management-dialog'"></div>
     <!-- navbar -->
     <div id="content" data-bind="visible: true" style="display:none">
         <nav class="navbar navbar-expand-sm bg-dark inline-list-stretched">
@@ -80,9 +79,6 @@
                 </button>
                 <button type="button" class="btn">
                     <img data-toggle="modal" data-target="#item-equipment-dialog" class="icon-navbar" src="./icons/icon_add_goods_socket_white.png" />
-                </button>
-                <button type="button" class="btn" data-bind="enable: $root.dlcsMap.get('dlc7').checked(), visible: $root.island().contractManager">
-                    <img data-toggle="modal" data-target="#contract-management-dialog" class="icon-navbar" src="./icons/icon_docklands_2d_white.png" />
                 </button>
             </div>
             <div class="input-group input-group-sm" data-bind="visible: $root.islands().length > 1" style="width: unset;">

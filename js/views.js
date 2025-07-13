@@ -246,10 +246,6 @@ export class ProductionChainView {
                         maxSubAmount = factory.tradeList.amount()
                         icon = "./icons/icon_shiptrade.png"
                     }
-                    if (factory.contractList && factory.contractList.amount() > maxSubAmount){
-                        maxSubAmount = factory.contractList.amount()
-                        icon = "./icons/icon_docklands_2d_white.png"
-                    } 
                     if (factory.extraGoodProductionAmount && factory.extraGoodProductionAmount() > maxSubAmount) {
                         maxSubAmount = factory.extraGoodProductionAmount()
                         icon = "./icons/icon_add_goods_socket_white.png"

@@ -2,7 +2,7 @@
 import { ACCURACY, EPSILON, createIntInput, createFloatInput, NamedElement } from './util.js'
 import { Workforce, WorkforceDemand } from './population.js'
 import { ExtraGoodProductionList, Demand} from './production.js'
-import { TradeList, ContractList } from './trade.js'
+import { TradeList} from './trade.js'
 
 var ko = require("knockout");
 
@@ -363,9 +363,6 @@ export class Factory extends Consumer {
 
         this.tradeList = new TradeList(island, this);
 
-        if (params.tradeContracts && (!this.island.region || this.island.region.guid == 5000000))
-            this.contractList = new ContractList(island, this);
-
         this.extraGoodProductionList = new ExtraGoodProductionList(this);
 
         // use the history to break the cycle: extra good (lumberjack) -> building materials need (timber) -> production (sawmill) -> production (lumberjack)
@@ -402,9 +399,6 @@ export class Factory extends Consumer {
 
             sum += this.tradeList.inputAmount();
 
-            if (this.contractList)
-                sum += this.contractList.inputAmount();
-
             return sum;
         });
 
@@ -413,9 +407,6 @@ export class Factory extends Consumer {
 
             sum += this.tradeList.outputAmount();
             sum += this.extraGoodProductionAmount();
-
-            if (this.contractList)
-                sum += this.contractList.outputAmount();
 
             return sum;
         });

@@ -3,7 +3,7 @@ import { languageCodes, texts as locaTexts, options, serverOptions } from './i18
 
 import { PopulationLevel, ResidenceBuilding } from './population.js'
 import { Consumer } from './factories.js'
-import { NPCTrader, ContractUpgradeManager, TradeManager, ContractCreatorFactory } from './trade.js'
+import { NPCTrader, TradeManager} from './trade.js'
 import { Region, Session, IslandManager } from './world.js'
 import { DarkMode, ViewMode, Template, ProductionChainView, ResidenceEffectView, CollapsibleStates } from './views.js'
 
@@ -96,60 +96,6 @@ function configUpgrade(configVersion) {
             localStorage.removeItem(`settings.${settingName}`);
         }
 
-        // Handle DLC7 (contracts) migration
-        {
-            let id = "contracts";
-            if (isChecked(id)) {
-                var dlc = view.dlcsMap.get("dlc7");
-                if (dlc)
-                    dlc.checked(true);
-            }
-            remove(id);
-        }
-
-        // Handle version 10 migration
-        if (configVersion[0] < 10) {
-            if (isChecked("noOptionalNeeds"))
-                for (var isl of view.islands())
-                    for (var l of isl.populationLevels)
-                        for (var n of l.luxuryNeeds)
-                            n.checked(false);
-
-            for (var key of ["simpleView", "hideNewWorldConstructionMaterial", "populationInput", "consumptionModifier", "additionalProduction", "tradeRoutes", "autoApplyExtraNeed", "autoApplyConsumptionUpgrades", "deriveResidentsPerHouse", "noOptionalNeeds"])
-                remove(key);
-
-            for (var key of ["populationLevelAmount"])
-                localStorage.removeItem(`serverSettings.${key}`);
-
-            for (var isl of view.islands()) {
-                for (var b of isl.residenceBuildings) {
-                    for (var key of ["limitPerHouse", "limit", "fixLimitPerHouse"])
-                        isl.storage.removeItem(`${b.guid}.${key}`);
-                }
-
-                for (var l of isl.populationLevels) {
-                    for (var key of ["limitPerHouse", "limit", "fixLimitPerHouse", "amountPerHouse", "amount", "fixAmountPerHouse"])
-                        isl.storage.removeItem(`${l.guid}.${key}`);
-
-                    for (let n of l.needs)
-                        isl.storage.removeItem(`${l.guid}[${n.guid}].percentBoost`);
-                }
-            }
-        }
-
-        // Handle version 11 migration
-        if (configVersion[0] < 11) {
-            for (var isl of view.islands()) {
-                for (var f of isl.factories) {
-                    var id = `${f.guid}.palaceBuff.checked`;
-                    var buffChecked = isl.storage.getItem(id);
-                    if (buffChecked == "1" && f.palaceBuff == null && f.setBuff != null) {
-                        f.setBuffChecked(true);
-                        isl.storage.removeItem(id);
-                    }
-                }
-            }
-        }
     } catch (e) { console.warn(e); }
 }
 
@@ -532,9 +478,6 @@ function init(isFirstRun, configVersion) {
         }
     }
 
-    if (params.tradeContracts) {
-        view.contractUpgradeManager = new ContractUpgradeManager();
-    }
 
     // Set up island management
     view.islandManager = new IslandManager(params, isFirstRun);
@@ -559,14 +502,10 @@ function init(isFirstRun, configVersion) {
     view.productionChain = new ProductionChainView(view.selectedFactory);
     view.selectedMultiFactoryProducts = ko.observable(view.island().multiFactoryProducts);
     view.selectedExtraGoodItems = ko.observable(view.island().extraGoodItems);
-    view.selectedContractManager = ko.observable(view.island().contractManager);
     view.selectedResidenceEffectView = ko.observable(new ResidenceEffectView([view.island().residenceBuildings[0]]));
 
     view.tradeManager = new TradeManager();
 
-    if (params.tradeContracts) {
-        view.contractCreatorFactory = new ContractCreatorFactory();
-    }
 
     // Set up templates
     var allIslands = view.islandManager.allIslands;
@@ -607,13 +546,8 @@ function init(isFirstRun, configVersion) {
             view.selectedExtraGoodItems(view.island().extraGoodItems);
         });
 
-    $('#contract-management-dialog').on('show.bs.modal',
-        () => {
-            view.selectedContractManager(view.island().contractManager);
-        });
-
     $('*').on('hidden.bs.modal', () => {
-        for (var dialog of ['contract-management', 'download', 'factory-choose', 'factory-config', 'island-management', 'island-rename', 'item-equipment', 'population-level-config', 'residence-effect', 'settings', 'trade-routes-management', 'view-mode', 'help']) {
+        for (var dialog of [ 'download', 'factory-choose', 'factory-config', 'island-management', 'island-rename', 'item-equipment', 'population-level-config', 'residence-effect', 'settings', 'trade-routes-management', 'view-mode', 'help']) {
             var classes = $('#' + dialog + '-dialog').attr('class');
             if (classes != null && classes.indexOf("show") != -1) {
                 $('body').addClass('modal-open');

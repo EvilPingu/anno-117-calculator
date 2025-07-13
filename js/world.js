@@ -6,7 +6,6 @@ import { CommuterWorkforce, Workforce, ResidenceBuilding, PopulationLevel } from
 import { ResidenceEffect, RecipeList } from './consumption.js'
 import { NoFactoryProduct, Product, MetaProduct, Item, ProductCategory } from './production.js'
 import { PublicConsumerBuilding, Module, Factory, Consumer, Buff, PowerPlant } from './factories.js'
-import { ContractManager } from './trade.js'
 import {ResidenceEffectView} from './views.js'
 
 var ko = require("knockout");
@@ -611,9 +610,6 @@ class Island {
 
             return [...this.factories].sort(comp).slice(0, 5).filter(f => useBuildings ? f.existingBuildings() : f.buildings());
         });
-
-        if (params.tradeContracts && (!this.region || this.region.guid == 5000000))
-            this.contractManager = new ContractManager(this);
 
         if (this.session)
             this.session.addIsland(this);
