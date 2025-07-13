@@ -280,32 +280,6 @@ export let texts = {
         "japanese": "需要の消費",
         "russian": "Потребление"
     },
-    "newspaper": {
-        "english": "Newspaper",
-        "chinese": "报纸",
-        "taiwanese": "報紙",
-        "italian": "Giornale",
-        "spanish": "Periódico",
-        "german": "Zeitung",
-        "polish": "Gazeta",
-        "french": "Journal",
-        "korean": "신문",
-        "japanese": "新聞",
-        "russian": "Газета"
-    },
-    "newspaperEffectiveness": {
-        "english": "Newspaper Effectiveness",
-        "chinese": "报纸效用",
-        "taiwanese": "報紙效用",
-        "italian": "Efficacia giornale",
-        "spanish": "Efectividad del periódico",
-        "german": "Effektivität der Zeitung",
-        "polish": "Skuteczność gazety",
-        "french": "Efficacité du journal",
-        "korean": "신문 효과",
-        "japanese": "新聞の効力",
-        "russian": "Эффективность газеты"
-    },
     "basicNeeds": {
         "english": "Basic Need",
         //"guid": 11708,

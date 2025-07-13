@@ -54,8 +54,7 @@ export class ResidenceNeed {
 
         if(this.need.amount){
             this.amount = ko.pureComputed(() => {
-                var newspaper = (100 + window.view.newspaperConsumption.amount()) / 100;
-                var total = this.residence.consumingLimit() * this.need.tpmin * newspaper;
+                var total = this.residence.consumingLimit() * this.need.tpmin;
                 return total * (Math.max(0, this.fulfillment() - this.substitution()));
             });
         }
@@ -351,121 +350,6 @@ export class PopulationNeed extends Need {
     updateAmount(population) { }
 }
 
-/**
- * Manages newspaper consumption effects and propaganda buffs
- * Handles the selection and application of newspaper effects
- */
-export class NewspaperNeedConsumption {
-    /**
-     * Creates a new NewspaperNeedConsumption instance
-     */
-    constructor() {
-        this.selectedEffects = ko.observableArray();
-        this.allEffects = [];
-        this.amount = ko.observable(100);
-        this.selectedBuff = ko.observable(0);
-        this.selectableBuffs = ko.observableArray();
-
-        this.updateBuff();
-
-        this.selectedEffects.subscribe(() => this.updateBuff());
-
-        this.selectedEffects.subscribe(() => {
-            if (this.selectedEffects().length > 3)
-                this.selectedEffects.splice(0, 1)[0].checked(false);
-        });
-
-        this.amount = ko.computed(() => {
-            var sum = 0;
-            for (var effect of this.selectedEffects()) {
-                sum += Math.ceil(effect.amount * (1 + parseInt(this.selectedBuff()) / 100));
-            }
-
-            return sum;
-        });
-    }
-
-    /**
-     * Adds a newspaper effect to the available effects list
-     * @param {NewspaperNeedConsumptionEntry} effect - The effect to add
-     */
-    add(effect) {
-        this.allEffects.push(effect);
-        effect.checked.subscribe(checked => {
-            var idx = this.selectedEffects.indexOf(effect);
-            if (checked && idx != -1 || !checked && idx == -1)
-                return;
-
-            if (checked)
-                this.selectedEffects.push(effect);
-            else
-                this.selectedEffects.remove(effect);
-        });
-    }
-
-    /**
-     * Updates the available buff options based on selected effects
-     */
-    updateBuff() {
-        var influenceCosts = 0;
-        for (var effect of this.selectedEffects()) {
-            influenceCosts += effect.influenceCosts;
-        }
-
-        var threeSelected = this.selectedEffects().length >= 3;
-        var selectedBuff = this.selectedBuff();
-
-        this.selectableBuffs.removeAll();
-        if (influenceCosts < 50)
-            this.selectableBuffs.push(0);
-        if (influenceCosts < 150 && (!threeSelected || !this.selectableBuffs().length))
-            this.selectableBuffs.push(7);
-        if (influenceCosts < 300 && (!threeSelected || !this.selectableBuffs().length))
-            this.selectableBuffs.push(15);
-        if (!threeSelected || !this.selectableBuffs().length)
-            this.selectableBuffs.push(25);
-
-        if (this.selectableBuffs.indexOf(selectedBuff) == -1)
-            this.selectedBuff(this.selectableBuffs()[0]);
-        else
-            this.selectedBuff(selectedBuff);
-    }
-
-    /**
-     * Applies the newspaper effects to the game state
-     */
-    apply() {
-        
-    }
-}
-
-/**
- * Represents a single newspaper consumption effect entry
- * Extends Option to provide selectable newspaper effects
- */
-export class NewspaperNeedConsumptionEntry extends Option {
-    /**
-     * Creates a new NewspaperNeedConsumptionEntry instance
-     * @param {Object} config - Configuration object for the effect
-     */
-    constructor(config) {
-        // Validate required parameters
-        if (!config) {
-            throw new Error('NewspaperNeedConsumptionEntry config is required');
-        }
-        if (!config.articleEffects || !Array.isArray(config.articleEffects) || config.articleEffects.length === 0) {
-            throw new Error('NewspaperNeedConsumptionEntry config.articleEffects array is required');
-        }
-
-        super(config);
-
-        this.lockDLCIfSet(this.checked);
-
-        this.amount = config.articleEffects[0].ArticleValue;
-
-        this.visible = ko.pureComputed(() => this.available())
-    }
-}
 
 /**
  * Represents a single residence effect entry

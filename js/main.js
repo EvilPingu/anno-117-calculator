@@ -2,7 +2,6 @@ import { ACCURACY, isPreview, formatNumber, formatPercentage, versionCalculator,
 import { languageCodes, texts as locaTexts, options, serverOptions } from './i18n.js'
 
 import { PopulationLevel, ResidenceBuilding } from './population.js'
-import { NewspaperNeedConsumption, NewspaperNeedConsumptionEntry } from './consumption.js'
 import { Consumer } from './factories.js'
 import { NPCTrader, ContractUpgradeManager, TradeManager, ContractCreatorFactory } from './trade.js'
 import { Region, Session, IslandManager } from './world.js'
@@ -517,28 +516,7 @@ function init(isFirstRun, configVersion) {
         view.sessions.push(s);
     }
 
-    // Set up newspaper consumption
-    view.newspaperConsumption = new NewspaperNeedConsumption();
-    if (localStorage) {
-        let id = "newspaperPropagandaBuff";
-        if (localStorage.getItem(id) != null)
-            view.newspaperConsumption.selectedBuff(localStorage.getItem(id));
 
-        view.newspaperConsumption.selectedBuff.subscribe(val => localStorage.setItem(id, val));
-    }
-
-    for (var e of (params.newspaper || [])) {
-        var effect = new NewspaperNeedConsumptionEntry(e);
-        view.newspaperConsumption.add(effect);
-
-        if (localStorage) {
-            let id = effect.guid + ".checked";
-            if (localStorage.getItem(id) != null)
-                effect.checked(parseInt(localStorage.getItem(id)));
-
-            effect.checked.subscribe(val => localStorage.setItem(id, val ? 1 : 0));
-        }
-    }
 
     // Set up NPC traders
     view.productsToTraders = new Map();
