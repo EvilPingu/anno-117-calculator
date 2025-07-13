@@ -18,7 +18,23 @@ export class Consumer extends NamedElement {
      * @param {Island} island - The island this consumer belongs to
      */
     constructor(config, assetsMap, island) {
+        // Validate required parameters
+        if (!config) {
+            throw new Error('Consumer config is required');
+        }
+        if (!assetsMap) {
+            throw new Error('Consumer assetsMap is required');
+        }
+        if (!island) {
+            throw new Error('Consumer island is required');
+        }
+
         super(config);
+        this.isFactory = false;
+        this.inputs = config.inputs || [];
+        this.maintenances = config.maintenances || [];
+        this.tpmin = config.tpmin || 0;
+        this.forceRegionExtendedName = config.forceRegionExtendedName || false;
 
         this.island = island;
 
@@ -135,7 +151,12 @@ export class Consumer extends NamedElement {
         for (let m of this.maintenances || []) {
             let a = assetsMap.get(m.Product);
             if (a instanceof Workforce) {
-                this.workforceDemand = new WorkforceDemand($.extend({ factory: this, workforce: a }, m));
+                this.workforceDemand = new WorkforceDemand(
+                    this, 
+                    a,
+                    m.Amount || 0,
+                    m.percentBoost || 100
+                );
 
                 this.workforceDemandSubscription = ko.computed(() => {
                     // for workforce replacement, the last applied item matters
@@ -208,6 +229,12 @@ export class Module extends Consumer {
      */
     constructor(config, assetsMap, island) {
         super(config, assetsMap, island);
+        
+        this.additionalOutputCycle = config.additionalOutputCycle || null;
+        this.productivityUpgrade = config.productivityUpgrade || 0;
+        this.workforceAmountUpgrade = config.workforceAmountUpgrade || null;
+
+        // Explicit assignments
         this.checked = ko.observable(false);
         this.lockDLCIfSet(this.checked);
         this.visible = ko.pureComputed(() => !!config && this.available());
@@ -228,6 +255,8 @@ export class PublicConsumerBuilding extends Consumer {
     constructor(config, assetsMap, island) {
         super(config, assetsMap, island);
 
+        // Explicit assignments
+        this.forceRegionExtendedName = config.forceRegionExtendedName || false;
         this.needs = [];
 
         this.visible = ko.computed(() => {
@@ -256,6 +285,7 @@ export class PowerPlant extends PublicConsumerBuilding {
     constructor(config, assetsMap, island) {
         super(config, assetsMap, island);
 
+        // Explicit assignments
         this.percentBoost = createIntInput(100, 1);
         this.percentBoost.subscribe((val) => {
             this.boost(val / 100);
@@ -291,8 +321,22 @@ export class Buff extends NamedElement {
      * @param {Map} assetsMap - Map of all available assets
      */
     constructor(config, assetsMap) {
+        // Validate required parameters
+        if (!config) {
+            throw new Error('Buff config is required');
+        }
+        if (!assetsMap) {
+            throw new Error('Buff assetsMap is required');
+        }
+
         super(config);
 
+        // Explicit assignments for properties not already assigned in NamedElement
+        this.additionalOutputCycle = config.additionalOutputCycle || null;
+        this.amount = config.amount || 0;
+        this.factory = config.factory || null;
+        this.product = config.product || null;
+        
         this.visible = ko.pureComputed(() => this.available());
     }
 }
@@ -310,8 +354,11 @@ export class Factory extends Consumer {
      */
     constructor(config, assetsMap, island) {
         super(config, assetsMap, island);
+        
+        // Explicit assignments
         this.isFactory = true;
-
+        this.canClip = config.canClip || false;
+        this.outputs = config.outputs || [];
         this.demands = ko.observableArray([]);
 
         this.tradeList = new TradeList(island, this);
@@ -337,7 +384,7 @@ export class Factory extends Consumer {
                 // after initialization, we have this.extraGoodProductionHistory = [val, 0]
                 // when the user manually sets it to 0, the wrong value is propagated
                 // restrict to cycles triggered by automatic updates, i.e. update interval < 200 ms
-                if (Math.abs(this.extraGoodProductionHistory[1][0] - val) < ACCURACY && this.extraGoodProductionHistory[1][0] !== 0 && time - this.extraGoodProductionHistory[1][1] < 200)
+                if (Math.abs(this.extraGoodProductionHistory[1][0] - val) < ACCURACY && this.extraGoodProductionHistory[1][0] !== 0 && time.getTime() - this.extraGoodProductionHistory[1][1].getTime() < 200)
                     val = (val + this.extraGoodProductionHistory[0][0]) / 2;
             }
 
@@ -383,8 +430,8 @@ export class Factory extends Consumer {
         if (config.canClip)
             this.clipped = ko.observable(false);
 
-        if (this.module) {
-            this.module = assetsMap.get(this.module);
+        if (config.module) {
+            this.module = assetsMap.get(config.module);
             this.moduleChecked = ko.observable(false);
             this.module.lockDLCIfSet(this.moduleChecked);
             var workforceUpgrade = this.module.workforceAmountUpgrade ? this.module.workforceAmountUpgrade.Value : 0;
@@ -405,8 +452,8 @@ export class Factory extends Consumer {
             //moduleDemand created in this.referenceProducts
         }
 
-        if (this.fertilizerModule) {
-            this.fertilizerModule = assetsMap.get(this.fertilizerModule);
+        if (config.fertilizerModule) {
+            this.fertilizerModule = assetsMap.get(config.fertilizerModule);
             this.fertilizerModuleChecked = ko.observable(false);
             this.fertilizerModule.lockDLCIfSet(this.fertilizerModuleChecked);
             this.fertilizerModuleChecked.subscribe(checked => {
@@ -556,7 +603,11 @@ export class Factory extends Consumer {
             var module = this[m];
 
             if (module) {
-                this[m + "Demand"] = new Demand({ guid: module.getInputs()[0].Product, consumer: this, module: module }, assetsMap);
+                this[m + "Demand"] = new Demand({ 
+                    guid: module.getInputs()[0].Product, 
+                    consumer: this, 
+                    module: module 
+                }, assetsMap);
             }
         }
 

@@ -21,6 +21,12 @@ class Storage {
      * @param {string} key - The localStorage key for this storage instance
      */
     constructor(key) {
+        // Validate required parameters
+        if (!key) {
+            throw new Error('Storage key is required');
+        }
+
+        // Explicit assignments
         this.key = key;
         var text = localStorage.getItem(key);
         this.json = text ? JSON.parse(text) : {};
@@ -140,8 +146,17 @@ export class Session extends NamedElement {
      * @param {Map} assetsMap - Map of all available assets
      */
     constructor(config, assetsMap) {
+        // Validate required parameters
+        if (!config) {
+            throw new Error('Session config is required');
+        }
+        if (!assetsMap) {
+            throw new Error('Session assetsMap is required');
+        }
+
         super(config);
 
+        // Explicit assignments
         this.region = assetsMap.get(config.region);
         this.islands = ko.observableArray([]);
         this.lockDLCIfSet(ko.pureComputed(() => this.islands().length))
@@ -184,6 +199,15 @@ class Island {
      * @param {Session} session - The session this island belongs to
      */
     constructor(params, localStorage, isNew, session) {
+        // Validate required parameters
+        if (!params) {
+            throw new Error('Island params is required');
+        }
+        if (!localStorage) {
+            throw new Error('Island localStorage is required');
+        }
+
+        // Explicit assignments
         if (localStorage instanceof Storage) {
             this.name = ko.observable(localStorage.key);
             this.name.subscribe(name => this.storage.updateKey(name));
@@ -442,7 +466,7 @@ class Island {
                         equip.checked(true);
 
                     if (localStorage.getItem(id) != null)
-                        equip.checked(parseInt(localStorage.getItem(id)));
+                        equip.checked(!!parseInt(localStorage.getItem(id)));
 
                     equip.checked.subscribe(val => localStorage.setItem(id, val ? 1 : 0));
                 }
@@ -728,6 +752,12 @@ export class IslandManager {
      * @param {boolean} isFirstRun - Whether this is the first run of the application
      */
     constructor(params, isFirstRun = false) {
+        // Validate required parameters
+        if (!params) {
+            throw new Error('IslandManager params is required');
+        }
+
+        // Explicit assignments
         let islandKey = "islandName";
         let islandsKey = "islandNames";
 
@@ -749,7 +779,7 @@ export class IslandManager {
 
         var islandNames = [];
         if (localStorage && localStorage.getItem(islandsKey))
-            islandNames = JSON.parse(localStorage.getItem(islandsKey))
+            islandNames = JSON.parse(localStorage.getItem(islandsKey) || '[]')
 
         var islandName = localStorage.getItem(islandKey);
         view.islands = ko.observableArray();
@@ -758,7 +788,7 @@ export class IslandManager {
         view.island.subscribe(isl => window.document.title = isl.name());
 
         for (var name of islandNames) {
-            var island = new Island(params, new Storage(name), false);
+            var island = new Island(params, new Storage(name), false, null);
             view.islands.push(island);
             this.serverNamesMap.set(island.name(), island);
 
@@ -768,7 +798,7 @@ export class IslandManager {
 
         this.sortIslands();
 
-        var allIslands = new Island(params, localStorage, isFirstRun);
+        var allIslands = new Island(params, localStorage, isFirstRun, null);
         this.allIslands = allIslands;
         view.islands.unshift(allIslands);
         this.serverNamesMap.set(allIslands.name(), allIslands);

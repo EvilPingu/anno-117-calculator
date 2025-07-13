@@ -294,10 +294,12 @@ class PopulationReader {
      * Creates a new PopulationReader instance
      */
     constructor() {
+        // Explicit assignments
         this.url = 'http://localhost:8000/AnnoServer/Population';
         this.notificationShown = false;
-        this.currentVersion;
-        this.recentVersion;
+        this.currentVersion = null;
+        this.recentVersion = null;
+        this.requestInterval = null;
 
         // only ping the server when the website is run locally
         if (isLocal()) {

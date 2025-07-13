@@ -49,7 +49,7 @@ var formater = new Intl.NumberFormat(navigator.language || "en").format;
  * @returns {string} The formatted number string
  */
 export function formatNumber(num, forceSign = false) {
-    var rounded = Math.ceil(100 * parseFloat(num)) / 100;
+    var rounded = Math.ceil(100 * parseFloat(String(num))) / 100;
     if (Math.abs(rounded) < EPSILON)
         rounded = 0;
     var str = formater(rounded);
@@ -70,6 +70,18 @@ export class NumberInputHandler {
      * @param {string} params.id - The ID of the input element
      */
     constructor(params) {
+        // Validate required parameters
+        if (!params) {
+            throw new Error('NumberInputHandler params is required');
+        }
+        if (!params.obs) {
+            throw new Error('NumberInputHandler params.obs is required');
+        }
+        if (!params.id) {
+            throw new Error('NumberInputHandler params.id is required');
+        }
+
+        // Explicit assignments
         this.obs = params.obs;
         this.id = params.id;
         this.max = parseFloat($('#' + this.id).attr('max') || Infinity);
@@ -117,7 +129,7 @@ export class NumberInputHandler {
  * @returns {string} The formatted percentage string
  */
 export function formatPercentage(number, forceSign = true) {
-    return window.formatNumber(Math.ceil(10 * parseFloat(number)) / 10, forceSign) + ' %';
+    return window.formatNumber(Math.ceil(10 * parseFloat(String(number))) / 10, forceSign) + ' %';
 }
 
 /**
@@ -136,13 +148,13 @@ export function delayUpdate(obs, val) {
 /**
  * Knockout extender for numeric input validation and formatting
  * Provides bounds checking, precision control, and custom callbacks
- * @param {ko.observable} target - The target observable
+ * @param {typeof ko.observable} target - The target observable
  * @param {Object} bounds - Configuration object for bounds and behavior
  * @param {number} bounds.precision - Number of decimal places (0 for integers)
  * @param {number} bounds.min - Minimum allowed value
  * @param {number} bounds.max - Maximum allowed value
  * @param {Function} bounds.callback - Optional callback function for custom validation
- * @returns {ko.computed} A computed observable with numeric validation
+ * @returns {typeof ko.computed} A computed observable with numeric validation
  */
 ko.extenders.numeric = function (target, bounds) {
     //create a writable computed observable to intercept writes to our observable
@@ -206,7 +218,7 @@ ko.extenders.numeric = function (target, bounds) {
  * @param {number} init - Initial value
  * @param {number} min - Minimum allowed value
  * @param {number} max - Maximum allowed value
- * @param {Function} callback - Optional callback function for custom validation
+ * @param {Function|null} callback - Optional callback function for custom validation
  * @returns {ko.observable} An observable with integer validation
  */
 export function createIntInput(init, min = -Infinity, max = Infinity, callback = null) {
@@ -225,7 +237,7 @@ export function createIntInput(init, min = -Infinity, max = Infinity, callback =
  * @param {number} init - Initial value
  * @param {number} min - Minimum allowed value
  * @param {number} max - Maximum allowed value
- * @param {Function} callback - Optional callback function for custom validation
+ * @param {Function|null} callback - Optional callback function for custom validation
  * @returns {ko.observable} An observable with float validation
  */
 export function createFloatInput(init, min = -Infinity, max = Infinity, callback = null) {
@@ -253,8 +265,16 @@ export class NamedElement {
      * @param {Array} config.dlcs - Array of DLC identifiers
      */
     constructor(config) {
-        $.extend(this, config);
-        this.locaText = this.locaText || {}
+        // Validate required parameters
+        if (!config) {
+            throw new Error('NamedElement config is required');
+        }
+
+
+        // Explicit assignments
+        this.guid = config.guid || null;
+        
+        this.locaText = config.locaText || {}
         this.name = ko.computed(() => {
 
             let text = this.locaText[view.settings.language()];
@@ -262,14 +282,14 @@ export class NamedElement {
                 return text;
 
             text = this.locaText["english"];
-            return text ? text : config.name;
+            return text ? text : (config.name || "");
         });
 
-        if (this.iconPath && params && params.icons)
-            this.icon = params.icons[this.iconPath];
+        if (config.iconPath && params && params.icons)
+            this.icon = params.icons[config.iconPath];
 
-        if (this.dlcs && params && params.dlcs) {
-            this.dlcs = this.dlcs.map(d => view.dlcsMap.get(d)).filter(d => d);
+        if (config.dlcs && config.dlcs.length > 0 && params && params.dlcs) {
+            this.dlcs = config.dlcs.map(d => view.dlcsMap.get(d)).filter(d => d);
             this.available = ko.pureComputed(() => {
                 for (var d of this.dlcs) {
                     if (d.checked())
@@ -319,7 +339,14 @@ export class Option extends NamedElement {
      * @param {Object} config - Configuration object
      */
     constructor(config) {
+        // Validate required parameters
+        if (!config) {
+            throw new Error('Option config is required');
+        }
+
         super(config);
+        
+        // Explicit assignments
         this.checked = ko.observable(false);
         this.visible = ko.observable(!!config);
     }
@@ -335,8 +362,15 @@ export class DLC extends Option {
      * @param {Object} config - Configuration object
      */
     constructor(config) {
-        super(config);
+        // Validate required parameters
+        if (!config) {
+            throw new Error('DLC config is required');
+        }
 
+        super(config);
+        this.id = config.id;
+
+        // Explicit assignments
         this.dependentObjects = ko.observableArray([]).extend({ deferred: true }); // notify subscribers at most once per 500 ms
 
         this.used = ko.pureComputed(() => {

@@ -18,7 +18,22 @@ export class ResidenceBuilding extends NamedElement {
      * @param {Island} island - The island this residence belongs to
      */
     constructor(config, assetsMap, island) {
+        // Validate required parameters
+        if (!config) {
+            throw new Error('ResidenceBuilding config is required');
+        }
+        if (!assetsMap) {
+            throw new Error('ResidenceBuilding assetsMap is required');
+        }
+        if (!island) {
+            throw new Error('ResidenceBuilding island is required');
+        }
+
         super(config);
+        this.populationLevel = config.populationLevel;
+        this.residentMax = config.residentMax;
+        this.residentsPerNeed = config.residentsPerNeed;
+        // Explicit assignments
         this.island = island;
 
         this.region = assetsMap.get(config.region)
@@ -207,7 +222,7 @@ export class ResidenceBuilding extends NamedElement {
 
 /**
  * Represents a population level with specific needs and requirements
- * Manages population counts, needs, and residence buildings
+ * Manages population counts, needs, and consumption for different population tiers
  */
 export class PopulationLevel extends NamedElement {
     /**
@@ -217,7 +232,18 @@ export class PopulationLevel extends NamedElement {
      * @param {Island} island - The island this population level belongs to
      */
     constructor(config, assetsMap, island) {
+        // Validate required parameters
+        if (!config) {
+            throw new Error('PopulationLevel config is required');
+        }
+        if (!assetsMap) {
+            throw new Error('PopulationLevel assetsMap is required');
+        }
+        if (!island) {
+            throw new Error('PopulationLevel island is required');
+        }
         super(config);
+        this.fullHouse = config.fullHouse;
         this.island = island
 
         this.hotkey = ko.observable(null);
@@ -233,8 +259,8 @@ export class PopulationLevel extends NamedElement {
         this.allResidences = [];
         this.notes = ko.observable("");
 
-        if (this.residence) {
-            this.residence = assetsMap.get(this.residence);
+        if (config.residence) {
+            this.residence = assetsMap.get(config.residence);
             this.residence.populationLevel = this;
             this.allResidences.push(this.residence);
         }
@@ -394,7 +420,7 @@ export class PopulationLevel extends NamedElement {
     }
 
     /**
-     * Initializes ban conditions for all needs
+     * Initializes ban conditions and unlock requirements
      * @param {Map} assetsMap - Map of all available assets
      */
     initBans(assetsMap) {
@@ -415,14 +441,14 @@ export class PopulationLevel extends NamedElement {
     }
 
     /**
-     * Increments the population amount
+     * Increments the amount for this population level
      */
     incrementAmount() {
         this.residents(parseFloat(this.residents()) + 1);
     }
 
     /**
-     * Decrements the population amount
+     * Decrements the amount for this population level
      */
     decrementAmount() {
         this.residents(parseFloat(this.residents()) - 1);
@@ -461,8 +487,8 @@ export class PopulationLevel extends NamedElement {
 }
 
 /**
- * Represents commuter workforce that can work across multiple islands
- * Manages workforce that travels between islands
+ * Represents a commuter workforce that can work on different islands
+ * Manages workforce allocation across multiple islands
  */
 export class CommuterWorkforce extends NamedElement {
     /**
@@ -471,6 +497,14 @@ export class CommuterWorkforce extends NamedElement {
      * @param {Session} session - The session this workforce belongs to
      */
     constructor(config, session) {
+        // Validate required parameters
+        if (!config) {
+            throw new Error('CommuterWorkforce config is required');
+        }
+        if (!session) {
+            throw new Error('CommuterWorkforce session is required');
+        }
+
         super(config);
 
         this.session = session;
@@ -496,8 +530,8 @@ export class CommuterWorkforce extends NamedElement {
 }
 
 /**
- * Represents a workforce type that can be assigned to buildings
- * Manages workforce demands and availability
+ * Represents a workforce type that can be assigned to factories
+ * Manages workforce-specific functionality and requirements
  */
 export class Workforce extends NamedElement {
     /**
@@ -506,6 +540,14 @@ export class Workforce extends NamedElement {
      * @param {Map} assetsMap - Map of all available assets
      */
     constructor(config, assetsMap) {
+        // Validate required parameters
+        if (!config) {
+            throw new Error('Workforce config is required');
+        }
+        if (!assetsMap) {
+            throw new Error('Workforce assetsMap is required');
+        }
+
         super(config);
         this.demands = ko.observableArray([]);
 
@@ -543,17 +585,24 @@ export class Workforce extends NamedElement {
 }
 
 /**
- * Represents a workforce demand for a specific building
- * Manages the workforce requirements for individual buildings
+ * Represents a workforce demand for a specific factory
+ * Manages the relationship between factories and their workforce requirements
  */
-export class WorkforceDemand extends NamedElement {
+export class WorkforceDemand {
     /**
      * Creates a new WorkforceDemand instance
-     * @param {Object} config - Configuration object for the workforce demand
+     * @param {Consumer} factory 
+     * @param {Workforce} workforce
+     * @param {number} amount
+     * @param {number} percentBoost
      */
-    constructor(config) {
-        super(config);
-        this.buildings = 0;
+    constructor(factory, workforce, amount, percentBoost) {
+
+        
+        // Explicit assignments
+        this.factory = factory;
+        this.amountPerBuilding = amount || 0;
+        this.percentBoost = percentBoost || 0;
 
         this.amount = ko.observable(0);
         this.percentBoost = createIntInput(100, 0);
@@ -562,14 +611,14 @@ export class WorkforceDemand extends NamedElement {
         });
 
         /** @type KnockoutObservable<Workforce> */
-        this.workforce = ko.observable(config.workforce);
-        this.defaultWorkforce = config.workforce;
+        this.workforce = ko.observable(workforce);
+        this.defaultWorkforce = workforce;
         this.workforce().add(this);
     }
 
     /**
-     * Updates the workforce type for this demand
-     * @param {Workforce|null} workforce - The new workforce type, or null to use default
+     * Updates the workforce assigned to this demand
+     * @param {Workforce} workforce - The workforce to assign
      */
     updateWorkforce(workforce = null){
         if(workforce == null)
@@ -583,13 +632,13 @@ export class WorkforceDemand extends NamedElement {
     }
 
     /**
-     * Updates the amount based on the number of buildings
+     * Updates the amount for this workforce demand
      * @param {number} buildings - The number of buildings
      */
     updateAmount(buildings) {
         this.buildings = buildings;
 
-        var perBuilding = Math.ceil(this.Amount * this.percentBoost() / 100);
+        var perBuilding = Math.ceil(this.amountPerBuilding * this.percentBoost() / 100);
         this.amount(Math.ceil(buildings) * perBuilding);
     }
 }

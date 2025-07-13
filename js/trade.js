@@ -15,7 +15,29 @@ class TradeRoute {
      * @param {Object} config - Configuration object for the trade route
      */
     constructor(config) {
-        $.extend(this, config);
+        // Validate required parameters
+        if (!config) {
+            throw new Error('TradeRoute config is required');
+        }
+        if (!config.from) {
+            throw new Error('TradeRoute config.from is required');
+        }
+        if (!config.to) {
+            throw new Error('TradeRoute config.to is required');
+        }
+        if (!config.fromFactory) {
+            throw new Error('TradeRoute config.fromFactory is required');
+        }
+        if (!config.toFactory) {
+            throw new Error('TradeRoute config.toFactory is required');
+        }
+
+        // Explicit assignments
+        this.from = config.from;
+        this.to = config.to;
+        this.fromFactory = config.fromFactory;
+        this.toFactory = config.toFactory;
+        this.amount = config.amount || 0;
 
         this.amount = createFloatInput(0, 0);
         this.amount(config.amount);
@@ -72,7 +94,13 @@ export class NPCTrader extends NamedElement {
      * @param {Object} config - Configuration object for the NPC trader
      */
     constructor(config) {
+        // Validate required parameters
+        if (!config) {
+            throw new Error('NPCTrader config is required');
+        }
+
         super(config);
+        this.goodsProduction = config.goodsProduction || [];
     }
 }
 
@@ -86,7 +114,21 @@ class NPCTradeRoute {
      * @param {Object} config - Configuration object for the NPC trade route
      */
     constructor(config) {
-        $.extend(this, config);
+        // Validate required parameters
+        if (!config) {
+            throw new Error('NPCTradeRoute config is required');
+        }
+        if (typeof config.ProductionPerMinute !== 'number') {
+            throw new Error('NPCTradeRoute config.ProductionPerMinute is required and must be a number');
+        }
+
+        // Explicit assignments
+        this.ProductionPerMinute = config.ProductionPerMinute;
+        this.to = config.to;
+        this.toFactory = config.toFactory;
+        this.from = config.from;
+        this.fromFactory = config.fromFactory;
+        this.trader = config.trader;
 
         this.amount = this.ProductionPerMinute;
         this.checked = ko.observable(false);
@@ -112,6 +154,15 @@ export class TradeList {
      * @param {Factory} factory - The factory this trade list manages
      */
     constructor(island, factory) {
+        // Validate required parameters
+        if (!island) {
+            throw new Error('TradeList island is required');
+        }
+        if (!factory) {
+            throw new Error('TradeList factory is required');
+        }
+
+        // Explicit assignments
         this.island = island;
         this.factory = factory;
 
@@ -405,6 +456,8 @@ class Pier extends NamedElement {
      */
     constructor(config) {
         super(config);
+        this.loadingSpeed = config.loadingSpeed || 1;
+        this.minLoadingTime = config.minLoadingTime || 0;
     }
 }
 
@@ -418,7 +471,25 @@ class TradeContract {
      * @param {Object} config - Configuration object for the trade contract
      */
     constructor(config) {
-        $.extend(this, config);
+        // Validate required parameters
+        if (!config) {
+            throw new Error('TradeContract config is required');
+        }
+        if (!config.importFactory) {
+            throw new Error('TradeContract config.importFactory is required');
+        }
+        if (!config.exportFactory) {
+            throw new Error('TradeContract config.exportFactory is required');
+        }
+        if (typeof config.importAmount !== 'number') {
+            throw new Error('TradeContract config.importAmount is required and must be a number');
+        }
+
+        // Explicit assignments
+        this.importFactory = config.importFactory;
+        this.exportFactory = config.exportFactory;
+        this.importAmount = config.importAmount;
+        this.fixed = config.fixed || false;
 
         this.exportProduct = this.exportFactory.product;
         this.importProduct = this.importFactory.product;
@@ -465,6 +536,15 @@ export class ContractList {
      * @param {Factory} factory - The factory this contract list manages
      */
     constructor(island, factory) {
+        // Validate required parameters
+        if (!island) {
+            throw new Error('ContractList island is required');
+        }
+        if (!factory) {
+            throw new Error('ContractList factory is required');
+        }
+
+        // Explicit assignments
         this.island = island;
         this.factory = factory;
 
@@ -503,6 +583,12 @@ export class ContractManager {
      * @param {Island} island - The island this contract manager belongs to
      */
     constructor(island) {
+        // Validate required parameters
+        if (!island) {
+            throw new Error('ContractManager island is required');
+        }
+
+        // Explicit assignments
         this.key = "tradingContracts";
         this.paramKey = "tradingContractParams";
         this.island = island;
@@ -804,10 +890,12 @@ export class ContractManager {
 class ContractUpgrade {
     /**
      * Creates a new ContractUpgrade instance
-     * @param {Object} config - Configuration object for the contract upgrade
+     * @param {Product} product - Configuration object for the contract upgrade
+     * @param {number} factor - The factor of the contract upgrade
      */
-    constructor(config) {
-        $.extend(this, config);
+    constructor(product, factor) {
+        this.product = product;
+        this.factor = factor;
     }
 
     /**
@@ -840,12 +928,7 @@ export class ContractUpgradeManager {
             var text = localStorage.getItem(this.key);
             var json = text ? JSON.parse(text) : {};
             for (var p in json) {
-                var config = {
-                    product: this.productsMap.get(parseInt(p)),
-                    factor: json[p],
-                };
-
-                this.upgrades.push(new ContractUpgrade(config));
+                this.upgrades.push(new ContractUpgrade(this.productsMap.get(parseInt(p)), json[p]));
             }
 
             this.persistenceSubscription = ko.computed(() => {
@@ -897,10 +980,10 @@ export class ContractUpgradeManager {
      * Creates a new contract upgrade
      */
     create() {
-        this.upgrades.push(new ContractUpgrade({
-            product: this.product(),
-            factor: this.factor()
-        }));
+        this.upgrades.push(new ContractUpgrade(
+            this.product(),
+            this.factor()
+        ));
 
         this.sortUpgrades();
     }

@@ -18,6 +18,11 @@ export class Need extends Demand {
     constructor(config, assetsMap) {
         super(config, assetsMap);
         this.isNeed = true;
+        this.excludePopulationFromMoneyAndConsumptionCalculation = !!config.excludePopulationFromMoneyAndConsumptionCalculation;
+        this.isBonusNeed = !!config.isBonusNeed;
+        this.tpmin = config.tpmin || 0;
+        this.residents = config.residents || 0;
+        this.happiness = !!config.happiness;
     }
 }
 
@@ -32,6 +37,15 @@ export class ResidenceNeed {
      * @param {PopulationNeed} need - The population need this residence need represents
      */
     constructor(residence, need) {
+        // Validate required parameters
+        if (!residence) {
+            throw new Error('ResidenceNeed residence is required');
+        }
+        if (!need) {
+            throw new Error('ResidenceNeed need is required');
+        }
+
+        // Explicit assignments
         this.residence = residence;
         this.need = need;
         
@@ -121,8 +135,21 @@ export class PublicBuildingNeed extends Option {
      * @param {Map} assetsMap - Map of all available assets
      */
     constructor(config, level, assetsMap) {
-        super(config);
+        // Validate required parameters
+        if (!config) {
+            throw new Error('PublicBuildingNeed config is required');
+        }
+        if (!level) {
+            throw new Error('PublicBuildingNeed level is required');
+        }
+        if (!assetsMap) {
+            throw new Error('PublicBuildingNeed assetsMap is required');
+        }
 
+        super(config);
+        this.excludePopulationFromMoneyAndConsumptionCalculation = config.excludePopulationFromMoneyAndConsumptionCalculation || false;
+
+        // Explicit assignments
         this.level = level;
 
         this.checked(true);
@@ -149,6 +176,8 @@ export class NoFactoryNeed extends PublicBuildingNeed {
      */
     constructor(config, level, assetsMap) {
         super(config, level, assetsMap);
+        
+        // Explicit assignments
         this.level = level;
         this.isNoFactoryNeed = true;
 
@@ -179,7 +208,23 @@ export class PopulationNeed extends Need {
      * @param {Map} assetsMap - Map of all available assets
      */
     constructor(config, level, assetsMap) {
+        // Validate required parameters
+        if (!config) {
+            throw new Error('PopulationNeed config is required');
+        }
+        if (!level) {
+            throw new Error('PopulationNeed level is required');
+        }
+        if (!assetsMap) {
+            throw new Error('PopulationNeed assetsMap is required');
+        }
+
         super(config, assetsMap);
+        this.requiredBuildings = config.requiredBuildings || null;
+        this.requiredFloorLevel = config.requiredFloorLevel || null;
+        this.excludePopulationFromMoneyAndConsumptionCalculation = config.excludePopulationFromMoneyAndConsumptionCalculation || false;
+        
+        // Explicit assignments
         this.level = level;
 
         this.residentsUnlockCondition = 0;
@@ -404,6 +449,14 @@ export class NewspaperNeedConsumptionEntry extends Option {
      * @param {Object} config - Configuration object for the effect
      */
     constructor(config) {
+        // Validate required parameters
+        if (!config) {
+            throw new Error('NewspaperNeedConsumptionEntry config is required');
+        }
+        if (!config.articleEffects || !Array.isArray(config.articleEffects) || config.articleEffects.length === 0) {
+            throw new Error('NewspaperNeedConsumptionEntry config.articleEffects array is required');
+        }
+
         super(config);
 
         this.lockDLCIfSet(this.checked);
@@ -425,11 +478,23 @@ class ResidenceEffectEntry {
      * @param {Map} assetsMap - Map of all available assets
      */
     constructor(config, assetsMap) {
+        // Validate required parameters
+        if (!config) {
+            throw new Error('ResidenceEffectEntry config is required');
+        }
+        if (!config.guid) {
+            throw new Error('ResidenceEffectEntry config.guid is required');
+        }
+        if (!assetsMap) {
+            throw new Error('ResidenceEffectEntry assetsMap is required');
+        }
+
+        // Explicit assignments
         this.guid = parseInt(config.guid);
         this.product = assetsMap.get(this.guid);
-        this.consumptionModifier = config.consumptionModifier;
-        this.residents = config.residents;
-        this.suppliedBy = config.suppliedBy.map(e => assetsMap.get(e));
+        this.consumptionModifier = config.consumptionModifier || 0;
+        this.residents = config.residents || 0;
+        this.suppliedBy = (config.suppliedBy || []).map(e => assetsMap.get(e));
     }
 }
 
@@ -444,7 +509,23 @@ export class ResidenceEffect extends NamedElement {
      * @param {Map} assetsMap - Map of all available assets
      */
     constructor(config, assetsMap) {
+        // Validate required parameters
+        if (!config) {
+            throw new Error('ResidenceEffect config is required');
+        }
+        if (!config.effects || !Array.isArray(config.effects)) {
+            throw new Error('ResidenceEffect config.effects array is required');
+        }
+        if (!config.residences || !Array.isArray(config.residences)) {
+            throw new Error('ResidenceEffect config.residences array is required');
+        }
+        if (!assetsMap) {
+            throw new Error('ResidenceEffect assetsMap is required');
+        }
+
         super(config);
+        
+        this.allowStacking = config.allowStacking || false;
         this.entries = config.effects.map(e => new ResidenceEffectEntry(e, assetsMap));
         this.effectsPerNeed = new Map();
 
@@ -492,6 +573,15 @@ export class ResidenceEffectCoverage {
      * @param {number} coverage - The coverage percentage (0-1)
      */
     constructor(residence, residenceEffect, coverage = 1) {
+        // Validate required parameters
+        if (!residence) {
+            throw new Error('ResidenceEffectCoverage residence is required');
+        }
+        if (!residenceEffect) {
+            throw new Error('ResidenceEffectCoverage residenceEffect is required');
+        }
+
+        // Explicit assignments
         this.residence = residence;
         this.residenceEffect = residenceEffect;
         this.coverage = ko.observable(coverage);
@@ -509,6 +599,15 @@ export class ResidenceEffectEntryCoverage{
      * @param {ResidenceEffectEntry} residenceEffectEntry - The residence effect entry
      */
     constructor(residenceEffectCoverage, residenceEffectEntry) {
+        // Validate required parameters
+        if (!residenceEffectCoverage) {
+            throw new Error('ResidenceEffectEntryCoverage residenceEffectCoverage is required');
+        }
+        if (!residenceEffectEntry) {
+            throw new Error('ResidenceEffectEntryCoverage residenceEffectEntry is required');
+        }
+
+        // Explicit assignments
         this.residenceEffectCoverage = residenceEffectCoverage;
         this.residenceEffectEntry = residenceEffectEntry;
     }
@@ -534,14 +633,26 @@ export class RecipeList extends NamedElement {
      * @param {Island} island - The island this recipe list belongs to
      */
     constructor(list, assetsMap, island) {
+        // Validate required parameters
+        if (!list) {
+            throw new Error('RecipeList list is required');
+        }
+        if (!assetsMap) {
+            throw new Error('RecipeList assetsMap is required');
+        }
+        if (!island) {
+            throw new Error('RecipeList island is required');
+        }
+
         super(list);
 
+        // Explicit assignments
         this.island = island;
 
         if (list.region)
             this.region = assetsMap.get(list.region);
 
-        this.recipeBuildings = list.recipeBuildings.map(r => {
+        this.recipeBuildings = (list.recipeBuildings || []).map(r => {
             var a = assetsMap.get(r);
             a.recipeList = this;
             return a;

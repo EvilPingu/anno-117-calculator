@@ -17,6 +17,7 @@ export class DarkMode {
      * Initializes dark mode state and loads saved preference
      */
     constructor() {
+        // Explicit assignments
         this.checked = ko.observable(false);
 
         this.classAdditions = {
@@ -70,6 +71,7 @@ export class ViewMode {
      * Creates a new ViewMode instance
      */
     constructor() {
+        // No explicit assignments needed for this constructor
     }
 
     /**
@@ -129,8 +131,21 @@ export class Template {
      * @param {number} index - The index of this template in the parent's array
      */
     constructor(asset, parentInstance, attributeName, index) {
+        // Validate required parameters
+        if (!asset) {
+            throw new Error('Template asset is required');
+        }
+        if (!parentInstance) {
+            throw new Error('Template parentInstance is required');
+        }
+        if (!attributeName) {
+            throw new Error('Template attributeName is required');
+        }
+        if (typeof index !== 'number') {
+            throw new Error('Template index is required and must be a number');
+        }
 
-
+        // Explicit assignments
         this.attributeName = attributeName;
         this.index = index;
 
@@ -200,6 +215,12 @@ export class ProductionChainView {
      * @param {ko.observable<number>|null} amount - Optional amount to base calculations on
      */
     constructor(factory, amount = null) {
+        // Validate required parameters
+        if (!factory) {
+            throw new Error('ProductionChainView factory is required');
+        }
+
+        // Explicit assignments
         this.factory = factory;
         this.amount = amount;
 
@@ -284,6 +305,15 @@ class ResidenceEffectAggregate {
      * @param {ResidenceEffectCoverage} residenceEffectCoverage - The initial coverage
      */
     constructor(totalResidences, residenceEffectCoverage) {
+        // Validate required parameters
+        if (!totalResidences) {
+            throw new Error('ResidenceEffectAggregate totalResidences is required');
+        }
+        if (!residenceEffectCoverage) {
+            throw new Error('ResidenceEffectAggregate residenceEffectCoverage is required');
+        }
+
+        // Explicit assignments
         this.totalResidences = totalResidences;
         this.residenceEffect = residenceEffectCoverage.residenceEffect;
 
@@ -323,6 +353,12 @@ export class ResidenceEffectView {
      * @param {PopulationNeed} need - Optional specific need to focus on
      */
     constructor(residences, heading = null, need = null) {
+        // Validate required parameters
+        if (!residences || !Array.isArray(residences)) {
+            throw new Error('ResidenceEffectView residences array is required');
+        }
+
+        // Explicit assignments
         this.heading = heading || window.view.texts.needConsumption.name;
         this.residences = residences.filter(r => r.available());
         this.percentCoverage = ko.observable(100);
@@ -460,6 +496,12 @@ class Collapsible {
      * @param {boolean} collapsed - Initial collapsed state
      */
     constructor(id, collapsed) {
+        // Validate required parameters
+        if (!id) {
+            throw new Error('Collapsible id is required');
+        }
+
+        // Explicit assignments
         this.id = id;
         this.collapsed = ko.observable(!!collapsed);
     }
@@ -475,6 +517,7 @@ export class CollapsibleStates {
      * Initializes from localStorage if available
      */
     constructor() {
+        // Explicit assignments
         this.key = "collapsibleStates";
         this.collapsibles = ko.observableArray([]);
 
