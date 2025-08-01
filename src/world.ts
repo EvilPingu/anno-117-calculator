@@ -1,13 +1,18 @@
-import { ALL_ISLANDS, setDefaultFixedFactories, NamedElement, Option } from './util';
+import { ALL_ISLANDS, setDefaultFixedFactories, NamedElement, Option, ko } from './util';
 import { texts } from './i18n';
+import { 
+    RegionConfig, 
+    SessionConfig, 
+    AssetsMap, 
+    GameParams,
+} from './types';
 
 import { Workforce, ResidenceBuilding, PopulationLevel } from './population';
 import { NoFactoryProduct, Product, MetaProduct, Item, ProductCategory } from './production';
-import { PublicConsumerBuilding, Module, Factory, Consumer, Buff, PowerPlant } from './factories';
+import { PublicConsumerBuilding, Module, Factory, Consumer, Buff } from './factories';
 import { ResidenceEffectView } from './views';
 import { RecipeList, ResidenceEffect } from './consumption';
 
-declare const ko: any;
 declare const $: any;
 declare const view: any;
 declare const window: any;
@@ -139,9 +144,11 @@ class Storage {
     }
 }
 
-// Basic stub classes for the world module
+/**
+ * Represents a region in the game: all sessions of a region have the same products, factories, residences.
+ */
 export class Region extends NamedElement {
-    constructor(config: any) {
+    constructor(config: RegionConfig) {
         // Use locaText.englisch as the name if available, otherwise use a fallback
         const regionConfig = {
             ...config,
@@ -153,11 +160,11 @@ export class Region extends NamedElement {
 }
 
 export class Session extends NamedElement {
-    public region: any;
-    public islands: any;
-    public workforce: any[] = [];
+    public region: Region | null;
+    public islands: KnockoutObservableArray<Island>;
+    public workforce: Workforce[] = [];
     
-    constructor(config: any, assetsMap: Map<string, any>) {
+    constructor(config: SessionConfig, assetsMap: AssetsMap) {
         // Validate config before calling super
         if (!config) {
             throw new Error('Session config is required');
@@ -174,7 +181,7 @@ export class Session extends NamedElement {
         };
         
         super(sessionConfig);
-        this.region = assetsMap.get(config.region);
+        this.region = config.region ? assetsMap.get(parseInt(config.region)) : null;
         this.islands = ko.observableArray([]);
     }
     
@@ -203,10 +210,10 @@ export class IslandManager {
     public sessionInput: KnockoutObservable<Session>;
     public renameIsland: KnockoutObservable<Island>;
     public islandExists: KnockoutObservable<boolean>;
-    public params: any;
+    public params: GameParams;
     public currentIslandSubscription: KnockoutComputed<void>;
     
-    constructor(params: any, isFirstRun: boolean) {
+    constructor(params: GameParams, isFirstRun: boolean) {
         // Explicit assignments
         const islandKey = "islandName";
         const islandsKey = "islandNames";
@@ -439,7 +446,7 @@ export class IslandManager {
  * Manages all buildings, population, and production on a single island
  */
 class Island {
-    public name: any;
+    public name: KnockoutObservable<string>;
     public isAllIslands: () => boolean;
     public storage: Storage;
     public session: Session;
@@ -447,7 +454,6 @@ class Island {
     public sessionExtendedName: KnockoutComputed<string>;
     public populationLevels: PopulationLevel[];
     public residenceBuildings: ResidenceBuilding[];
-    public powerPlants: PowerPlant[];
     public publicServices: PublicConsumerBuilding[];
     public publicRecipeBuildings: PublicConsumerBuilding[];
     public consumers: Consumer[];
@@ -460,7 +466,7 @@ class Island {
     public recipeLists: RecipeList[];
     public workforce: Workforce[];
 
-    public assetsMap: Map<string, NamedElement>;
+    public assetsMap: AssetsMap;
     public products: Product[];
     public noFactoryProducts: NoFactoryProduct[];
     public top2Population: KnockoutComputed<PopulationLevel[]>;
@@ -475,7 +481,7 @@ class Island {
      * @param isNew - Whether this is a newly created island
      * @param session - The session this island belongs to
      */
-    constructor(params: any, localStorage: Storage | any, isNew: boolean, session: Session | null) {
+    constructor(params: GameParams, localStorage: Storage | any, isNew: boolean, session: Session | null) {
         // Validate required parameters
         if (!params) {
             throw new Error('Island params is required');
@@ -487,7 +493,7 @@ class Island {
         // Explicit assignments
         if (localStorage instanceof Storage) {
             this.name = ko.observable(localStorage.key);
-            this.name.subscribe((name: string) => this.storage.updateKey(name));
+            this.name.subscribe(() => this.storage.updateKey(this.name()));
             this.isAllIslands = function () { return false; };
         } else {
             this.name = ko.computed(() => window.view.texts.allIslands.name());
@@ -584,7 +590,6 @@ class Island {
         // objects
         this.populationLevels = [];
         this.residenceBuildings = [];
-        this.powerPlants = [];
         this.publicServices = [];
         this.publicRecipeBuildings = [];
         this.consumers = [];
@@ -605,24 +610,15 @@ class Island {
             this.workforce.push(w);
         }
 
-        for (let consumer of (params.powerPlants || [])) {
-            let f = new (PowerPlant as any)(consumer, assetsMap, this);
-            assetsMap.set(f.guid, f);
-            this.consumers.push(f);
-            this.powerPlants.push(f);
-
-            persistInt(f, "percentBoost");
-        }
-
         for (let consumer of (params.publicServices || [])) {
-            let f = new PublicConsumerBuilding(consumer, assetsMap, this);
+            let f = new PublicConsumerBuilding(consumer, assetsMap, this as any);
             assetsMap.set(f.guid, f);
             this.consumers.push(f);
             this.publicServices.push(f);
         }
 
         for (let consumer of (params.publicRecipeBuildings || [])) {
-            let f = new PublicConsumerBuilding(consumer, assetsMap, this);
+            let f = new PublicConsumerBuilding(consumer, assetsMap, this as any);
             assetsMap.set(f.guid, f);
             this.consumers.push(f);
             this.publicRecipeBuildings.push(f);
@@ -630,11 +626,11 @@ class Island {
 
         for (let list of (params.recipeLists || [])) {
             if (!list.region || !this.region || list.region === this.region.guid)
-                this.recipeLists.push(new RecipeList(list, assetsMap, this));
+                this.recipeLists.push(new RecipeList(list, assetsMap, this as any));
         }
 
         for (let consumer of (params.modules || [])) {
-            let f = new Module(consumer, assetsMap, this);
+            let f = new Module(consumer, assetsMap, this as any);
             assetsMap.set(f.guid, f);
             this.consumers.push(f);
         }
@@ -654,9 +650,6 @@ class Island {
             assetsMap.set(f.guid, f);
             this.consumers.push(f);
             this.factories.push(f);
-
-            if (f.clipped)
-                persistBool(f, "clipped", `${f.guid}.clipped.checked`)
 
             persistBool(f, "moduleChecked", `${f.guid}.module.checked`);
             persistBool(f, "fertilizerModuleChecked", `${f.guid}.fertilizerModule.checked`);
@@ -758,8 +751,8 @@ class Island {
         }
 
         for (var b of this.residenceBuildings) {
-            if ((b as any).upgradedBuilding)
-                (b as any).upgradedBuilding = assetsMap.get(parseInt((b as any).upgradedBuilding));
+            if ((b as any).upgradedBuildingGuid)
+                (b as any).upgradedBuilding = assetsMap.get(parseInt((b as any).upgradedBuildingGuid));
         }
 
         for (let l of this.populationLevels)
@@ -873,10 +866,6 @@ class Island {
         });
 
         this.publicBuildingsSectionVisible = ko.pureComputed(() => {
-            for (var powerPlant of this.powerPlants)
-                if (powerPlant.visible())
-                    return true;
-
             for (var service of this.publicServices)
                 if (service.visible())
                     return true;
@@ -926,8 +915,6 @@ class Island {
                     a.percentBoost(100);
             }
             if (a instanceof Factory) {
-                if (typeof a.clipped === 'function')
-                    a.clipped(false);
                 for (var m of ["module", "fertilizerModule"]) {
                     var checked = (a as any)[m + "Checked"];
                     if (typeof checked === 'function')
@@ -984,5 +971,13 @@ class Island {
      */
     prepareResidenceEffectView(): void {
         view.selectedResidenceEffectView(new ResidenceEffectView(this.residenceBuildings));
+    }
+    
+    /**
+     * Deletes an island (stub method for interface compatibility)
+     * @param island - The island to delete
+     */
+    deleteIsland(_island: Island): void {
+        // Implementation handled by IslandManager
     }
 } 

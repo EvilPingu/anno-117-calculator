@@ -1030,12 +1030,11 @@ Siehe folgenden Link für weitere Informationen: `,
     }
 };
 
-// Note: This is a large file with many more text entries. 
-// For brevity, I'm including just the first portion.
-// The full file would continue with all the remaining text entries from the original js/i18n.js file.
+
 
 export const options: Record<string, any> = {
     "decimalsForBuildings": {
+        "guid": -1,
         "name": "Show number of buildings with decimals",
         "locaText": {
             chinese: "建筑数量显示为小数模式",
@@ -1045,6 +1044,7 @@ export const options: Record<string, any> = {
         }
     },
     "hideNames": {
+        "guid": -2,
         "name": "Hide the names of products, factories, and population levels",
         "locaText": {
             "english": "Hide the names of products, factories, and population levels",
@@ -1053,6 +1053,7 @@ export const options: Record<string, any> = {
         }
     },
     "hideProductionBoost": {
+        "guid": -3,
         "name": "Hide the input fields for productivity",
         "locaText": {
             "english": "Hide the input fields for producivity",
@@ -1061,6 +1062,7 @@ export const options: Record<string, any> = {
         }
     },
     "showAllConstructableFactories": {
+        "guid": -4,
         "name": "Show all factories constructable in the region",
         "locaText": {
             "english": "Show all factories constructable in the region",
@@ -1068,6 +1070,7 @@ export const options: Record<string, any> = {
         }
     },
     "missingBuildingsHighlight": {
+        "guid": -5,
         "name": "Highlight missing buildings",
         "locaText": {
             chinese: "高亮缺失的建筑",
@@ -1077,6 +1080,7 @@ export const options: Record<string, any> = {
         }
     },
     "utilizeExistingFactories": {
+        "guid": -6,
         "name": "Fully utilize existing factories",
         "locaText": {
             "english": "Fully utilize existing factories even when output is not needed",
@@ -1084,6 +1088,7 @@ export const options: Record<string, any> = {
         }
     },
     "needUnlockConditions": {
+        "guid": -7,
         "name": "Consider unlock conditions for needs",
         "locaText": {
             "english": "Consider unlock conditions for needs",
@@ -1092,53 +1097,3 @@ export const options: Record<string, any> = {
     },
 };
 
-export const serverOptions: Record<string, any> = {
-   "populationLevelExistingBuildings": {
-        "name": "PopulationLevel ExistingBuildings",
-        "locaText": {
-            chinese: "更新人口数量",
-            "english": "Update houses count",
-            "german": "Aktualisiere Häuseranzahl",
-            "korean": "주택 수 가져오기"
-        }
-    },
-    "factoryExistingBuildings": {
-        "name": "FactoryExistingBuildings",
-        "locaText": {
-            chinese: "更新工厂数量",
-            "english": "Update factories count",
-            "german": "Aktualisiere Fabrikanzahl",
-            "korean": "생산건물 수 가져오기"
-        }
-    },
-    "factoryPercentBoost": {
-        "name": "FactoryPercentBoost",
-        "locaText": {
-            "english": "Update productivity",
-            "german": "Aktualisiere Produktivität",
-            "korean": "생산성 가져오기"
-        }
-    },
-    "optimalProductivity": {
-        "name": "Optimal Productivity",
-        "locaText": {
-            "english": "Use the production limit to calculate optimal productivity",
-            "german": "Verwende das Produktionslimit, um die optimale Produktivität zu berechnen"
-        }
-    },
-    "updateSelectedIslandOnly": {
-        "name": "Update selected islands only",
-        "locaText": {
-            "english": "Restrict updates to the selected island",
-            "german": "Beschränke Updates auf die ausgewählte Insel",
-            "korean": "선택한 섬만 가져오기"
-        }
-    },
-    "proposeIslandNames": {
-        "name": "Suggest island names encountered by the server",
-        "locaText": {
-            "english": "Suggest island names encountered by the server",
-            "german": "Vom Server erkannte Inselnamen vorschlagen"
-        }
-    }
-}; 

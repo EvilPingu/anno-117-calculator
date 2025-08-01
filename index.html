@@ -21,7 +21,7 @@
     <!-- Latest compiled JavaScript -->
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="./bootstrap-notify.min.js"></script>
-    <script type="text/javascript" src="js/knockout-min.js"></script>
+
     <script type="text/javascript" src="js/params.js"></script>
     <script type="text/javascript" src="./dist/calculator.bundle.js"></script>
 
@@ -157,7 +157,7 @@
             <div data-bind="visible:  $root.island().publicBuildingsSectionVisible()">
                 <collapsible params="id: 'category-public-buildings', heading: $root.texts.publicBuildings.name, collapsed: false, data: $data, fieldsetClass: 'ui-fieldset'">
 
-                    <div data-bind="foreach: $root.template.powerPlants.concat($root.template.publicServices)">
+                    <div data-bind="foreach: $root.template.publicServices">
 
                         <!-- power plants and public services -->
                         <div class="ui-service-building-item" data-bind="visible: $data.instance().visible(), css: {'no-name': $root.settings.hideNames.checked()}">

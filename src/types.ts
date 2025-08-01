@@ -1,63 +1,10 @@
 // Core type definitions for the Anno 1800 Calculator
 
-// Knockout.js type definitions
-export interface KnockoutObservable<T> {
-  (): T; // Callable to get value
-  (value: T): void; // Callable with value to set it
-  subscribe(callback: () => void): void;
-  unsubscribe(callback: () => void): void;
-  extend(options: any): KnockoutObservable<T>;
-  notifySubscribers(): void;
-}
 
-export interface KnockoutComputed<T> {
-  (): T; // Callable to get value
-  subscribe(callback: () => void): void;
-  unsubscribe(callback: () => void): void;
-  notifySubscribers(): void;
-}
-
-export interface KnockoutPureComputed<T> {
-  (): T; // Callable to get value
-  subscribe(callback: () => void): void;
-  unsubscribe(callback: () => void): void;
-}
-
-export interface KnockoutObservableArray<T> {
-  (): T[]; // Callable to get array
-  subscribe(callback: () => void): void;
-  unsubscribe(callback: () => void): void;
-  
-  // Array reading methods
-  indexOf(item: T): number;
-  slice(start?: number, end?: number): T[];
-  
-  // Array manipulation methods
-  push(value: T): void;
-  pop(): T | undefined;
-  unshift(value: T): void;
-  shift(): T | undefined;
-  reverse(): KnockoutObservableArray<T>;
-  sort(compareFunction?: (a: T, b: T) => number): KnockoutObservableArray<T>;
-  splice(start: number, deleteCount?: number, ...items: T[]): T[];
-  
-  // Knockout-specific methods
-  sorted(compareFunction?: (a: T, b: T) => number): T[];
-  reversed(): T[];
-  replace(oldItem: T, newItem: T): void;
-  remove(item: T): T[];
-  remove(predicate: (item: T) => boolean): T[];
-  removeAll(items: T[]): T[];
-  removeAll(): T[];
-  destroy(item: T): void;
-  destroy(predicate: (item: T) => boolean): void;
-  destroyAll(items: T[]): void;
-  destroyAll(): void;
-}
 
 // Base configuration interfaces
 export interface NamedElementConfig {
-  guid: string;
+  guid: number;
   name: string;
   locaText: Record<string, string>;
   iconPath: string;
@@ -88,6 +35,14 @@ export interface ConsumerConfig extends NamedElementConfig {
   outputs?: any[];
   productionTime?: number;
   workforceDemands?: WorkforceDemandConfig[];
+  canClip?: boolean;
+  module?: string;
+  fertilizerModule?: string;
+  palaceBuff?: string;
+  setBuff?: string;
+  additionalOutputCycle?: number;
+  productivityUpgrade?: number;
+  workforceAmountUpgrade?: { Value: number } | undefined;
 }
 
 export interface BuffConfig extends NamedElementConfig {
@@ -114,20 +69,19 @@ export interface FactoryConfig extends NamedElementConfig {
 }
 
 export interface PopulationLevelConfig extends NamedElementConfig {
-  populationLevel?: string;
-  residentMax?: number;
+  populationLevel: number;
+  residentMax: number;
   residentsPerNeed?: Map<string, number>;
-  fullHouse?: boolean;
-  region?: string;
-  residence?: string;
-  upgradedBuilding?: string;
-  skyscraperLevels?: string[];
-  specialResidence?: string;
-  needs?: NeedConfig[];
+  fullHouse: number;
+  region: number;
+  residence: number; 
+  skyscraperLevels?: number[];
+  specialResidence?: number;
+  needs: NeedConfig[];
 }
 
 export interface NeedConfig {
-  guid: string;
+  guid: number;
   tpmin?: number;
   isBonusNeed?: boolean;
   excludePopulationFromMoneyAndConsumptionCalculation?: boolean;
@@ -142,6 +96,7 @@ export interface ResidenceBuildingConfig extends NamedElementConfig {
   residenceNeedsMap?: Map<string, any>;
   existingBuildings?: number;
   residentsPerNeed?: Record<string, number>;
+  upgradedBuilding?: number;
 }
 
 
@@ -155,6 +110,7 @@ export interface RegionConfig extends NamedElementConfig {
 
 export interface SessionConfig extends NamedElementConfig {
   islands?: string[];
+  region?: string;
 }
 
 export interface IslandConfig extends NamedElementConfig {
@@ -204,12 +160,33 @@ export interface NumericBounds {
   callback?: (value: number, current: number, newValue: any) => number | null;
 }
 
-// Asset map type
-export type AssetsMap = Map<string, any>;
+// Asset map type - any type that extends NamedElement
+export type AssetsMap = Map<number, any>;
+
+// Helper functions for AssetsMap operations
+export function getFromAssetsMap(assetsMap: AssetsMap, guid: string | number): any {
+    const numericGuid = typeof guid === 'string' ? parseInt(guid) : guid;
+    return isNaN(numericGuid) ? undefined : assetsMap.get(numericGuid);
+}
+
+export function setInAssetsMap(assetsMap: AssetsMap, guid: string | number, element: any): void {
+    const numericGuid = typeof guid === 'string' ? parseInt(guid) : guid;
+    if (!isNaN(numericGuid)) {
+        assetsMap.set(numericGuid, element);
+    }
+}
+
+export function generateGuidIfMissing(element: any): string {
+    if (!element.guid) {
+        // Generate a unique guid if missing - use timestamp + random for uniqueness
+        element.guid = `${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+    }
+    return element.guid;
+}
 
 // Core game interfaces with comprehensive property definitions
 export interface PopulationLevel {
-  guid: string;
+  guid: number;
   name: string;
   residents: KnockoutObservable<number>;
   residence: ResidenceBuilding;
@@ -225,7 +202,7 @@ export interface PopulationLevel {
 }
 
 export interface ResidenceBuilding {
-  guid: string;
+  guid: number;
   name: string;
   existingBuildings: KnockoutObservable<number>;
   consumingLimit(): number;
@@ -241,7 +218,7 @@ export interface ResidenceBuilding {
 }
 
 export interface PopulationNeed {
-  guid: string;
+  guid: number;
   name: string;
   checked(): boolean;
   amount?: number;
@@ -266,21 +243,60 @@ export interface ResidenceNeed {
   [key: string]: any; // Allow dynamic properties
 }
 
+export interface Region {
+  guid: number;
+  name: KnockoutObservable<string>;
+  icon?: string;
+  [key: string]: any;
+}
+
+export interface Demand {
+  guid: number;
+  consumer: Factory;
+  factor: number;
+  amount: KnockoutObservable<number>;
+  updateAmount(amount: number): void;
+}
+
+export interface Output {
+  Product: string;
+  Amount: number;
+  product?: Product;
+}
+
+export interface Item {
+  guid: number;
+  name(): string;
+  icon?: string;
+  locaText?: Record<string, string>;
+  factories: Factory[];
+  replacements?: Map<string, string>;
+  replacementArray?: string[];
+  replacingWorkforce?: Workforce;
+  additionalOutputs?: Output[];
+  equipments: Equipment[];
+  checked: KnockoutComputed<boolean>;
+  visible(): boolean;
+  notes?: KnockoutObservable<string>;
+  [key: string]: any; // Allow dynamic properties
+}
+
 export interface Factory {
-  guid: string;
-  name: string;
+  guid: number;
+  name: KnockoutObservable<string>;
   available(): boolean;
-  outputAmount?: () => number; // Make optional to match FactoryExtended
-  region: any;
-  add(demand: any): void;
-  remove(demand: any): void;
-  getOutputs(): any[];
-  items: any[];
-  extraGoodProductionList: ExtraGoodProductionList;
-  clipped?: KnockoutObservable<boolean>;
+  outputAmount?: KnockoutComputed<number>;
+  region: Region | null;
+  add(demand: Demand): void;
+  remove(demand: Demand): void;
+  getOutputs(): Output[];
+  getInputs(): { Product: string; Amount?: number }[];
+  items: Item[];
+  extraGoodProductionList?: ExtraGoodProductionList;
+  extraGoodProductionAmount?: KnockoutComputed<number>;
   inputAmount(): number;
-  demands(): any[];
-  island: any;
+  demands(): Demand[];
+  island: Island;
   getRegionExtendedName(): string;
   percentBoost?: KnockoutObservable<number>;
   palaceBuffChecked?: KnockoutObservable<boolean>;
@@ -290,88 +306,146 @@ export interface Factory {
   existingBuildings: KnockoutObservable<number>;
   buildings(): number;
   visible(): boolean;
-  inputDemands(): any[];
-  outputDemands(): any[];
+  inputDemands(): Demand[];
+  overProduction?: KnockoutComputed<number>;
+  substitutableOutputAmount?: KnockoutComputed<number>;
   editable?: (value?: boolean) => boolean;
-  [key: string]: any; // Allow dynamic properties
+  // Consolidated properties from extensions
+  clipped?: () => boolean;
+  extraGoodFactor?: KnockoutComputed<number>;
+  goodConsumptionUpgrade?: any;
+  recipeName?: KnockoutComputed<string>;
+  fixedFactory?: KnockoutObservable<Factory | null> | ((factory: Factory | null) => void);
+  // Property for factories that accept fixed factory assignment
+  fixedFactoryProperty?: KnockoutObservable<any>;
+  // Method version for compatibility
+  fixedFactoryMethod?: (factory: any) => void;
+  [key: string]: any; // Allow dynamic properties for flexibility
+}
+
+export interface Workforce {
+  guid: number;
+  name: string;
+  visible(): boolean;
+  demands(): any[];
+  [key: string]: any;
+}
+
+export interface WorkforceDemand {
+  percentBoost(): number;
+  updateAmount(amount: number): void;
+  updateWorkforce(workforce: Workforce | null): void;
 }
 
 export interface Consumer extends Factory {
   // Consumer-specific properties
-  workforceDemand?: any;
+  workforceDemand?: WorkforceDemand;
   percentBoost?: KnockoutObservable<number>;
   existingBuildings: KnockoutObservable<number>;
+  product?: Product | null | undefined;
   [key: string]: any; // Allow dynamic properties
 }
 
+export interface Need {
+  guid: number;
+  factory: Factory;
+  amount: number;
+}
+
 export interface Product {
-  guid: string;
+  guid: number;
   name: string;
+  icon: string;
   available(): boolean;
-  addNeed(need: any): void;
+  addNeed(need: Need): void;
   factories: Factory[];
-  mainFactory?: Factory;
-  fixedFactory?: KnockoutObservable<Factory>;
+  mainFactory?: Factory | null;
+  fixedFactory?: KnockoutObservable<Factory | null>;
+  producers?: string[];
+  isAbstract?: boolean;
+  availableFactories?: KnockoutComputed<Factory[]>;
+  visible?: KnockoutComputed<boolean>;
   [key: string]: any; // Allow dynamic properties
 }
 
 export interface NoFactoryProduct extends Product {
   residentsInputFactor: number;
-  needs: KnockoutObservableArray<any>;
+  needs: KnockoutObservableArray<Need>;
   amount: KnockoutComputed<number>;
   residentsInput: KnockoutComputed<number>;
-  visible(): boolean; // Method version
+  visible: KnockoutComputed<boolean>;
   [key: string]: any; // Allow dynamic properties
 }
 
 export interface MetaProduct extends Product {
-  guid: string;
+  guid: number;
   [key: string]: any; // Allow dynamic properties
 }
 
-export interface Item {
-  guid: string;
-  name(): string;
-  icon?: string;
-  locaText?: Record<string, string>;
-  factories: Factory[];
-  replacements?: Map<string, string>;
-  replacementArray?: any[];
-  replacingWorkforce?: any;
-  additionalOutputs?: any[];
-  equipments: any[];
-  checked: KnockoutComputed<boolean>;
-  visible(): boolean; // Method version
-  notes?: KnockoutObservable<string>;
-  [key: string]: any; // Allow dynamic properties
+export interface Equipment {
+  guid: number;
+  name: string;
+  checked(): boolean;
+}
+
+export interface Module {
+  guid: number;
+  name: KnockoutObservable<string>;
+  lockDLCIfSet(observable: KnockoutObservable<boolean>): void;
+  additionalOutputCycle: number;
+  productivityUpgrade: number;
+  workforceAmountUpgrade?: { Value: number } | undefined;
+  tpmin: number;
+  getInputs(): { Product: string; Amount?: number }[];
+}
+
+export interface Buff {
+  guid: number;
+  name: KnockoutObservable<string>;
+  lockDLCIfSet(observable: KnockoutObservable<boolean>): void;
+  additionalOutputCycle: number;
+}
+
+export interface TradeList {
+  inputAmount(): number;
+  outputAmount(): number;
+  routes?: any[];
+  amount?: KnockoutComputed<number>;
+  onShow?: () => void;
+  unusedIslands?: any;
+}
+
+export interface ExtraGoodProductionEntry {
+  item: Item;
+  Amount: number;
+  additionalOutputCycle: number;
+  amount(): number;
 }
 
 export interface ExtraGoodProductionList {
   factory: Factory;
   checked: KnockoutObservable<boolean>;
-  selfEffecting: KnockoutObservableArray<any>;
-  entries: KnockoutObservableArray<any>;
-  nonZero: KnockoutComputed<any[]>;
+  selfEffecting: KnockoutObservableArray<ExtraGoodProductionEntry>;
+  entries: KnockoutObservableArray<ExtraGoodProductionEntry>;
+  nonZero: KnockoutComputed<ExtraGoodProductionEntry[]>;
   amount: KnockoutComputed<number>;
   amountWithSelf: KnockoutComputed<number>;
   [key: string]: any; // Allow dynamic properties
 }
 
-export interface Region {
-  guid: string;
-  name: string;
-  icon?: string;
-  [key: string]: any; // Allow dynamic properties
-}
-
 export interface Island {
-  guid: string;
+  guid: number;
   name: KnockoutObservable<string>;
   region: Region;
-  assetsMap: Map<string, any>;
+  assetsMap: AssetsMap;
   session: Session;
+  factories: Factory[];
+  populationLevels: PopulationLevel[];
+  residenceBuildings: ResidenceBuilding[];
+  multiFactoryProducts: Product[];
+  extraGoodItems: Item[];
+  storage: Storage;
   isAllIslands(): boolean;
-  deleteIsland(island: Island): void;
   [key: string]: any; // Allow dynamic properties
 }
 
@@ -381,16 +455,26 @@ export interface Session {
   [key: string]: any; // Allow dynamic properties
 }
 
+export interface GameParams {
+  dlcs: DLCConfig[];
+  regions: RegionConfig[];
+  sessions: SessionConfig[];
+  traders: NPCTraderConfig[];
+  [key: string]: any;
+}
+
 export interface IslandManager {
-  params: any;
+  params: GameParams;
   serverNamesMap: Map<string, Island>;
   islandCandidates: KnockoutObservableArray<IslandCandidate>;
   unusedNames: Set<string>;
   allIslands: Island;
   compareNames(name1: string, name2: string): number;
   getIsland(name: string): Island | null;
+  getByName(name: string): Island | null;
   createIsland(name: string | null, session: Session): Island;
   deleteIsland(name: string): void;
+  registerName(name: string, session: Session): void;
   [key: string]: any; // Allow dynamic properties
 }
 
@@ -413,16 +497,9 @@ export interface PublicConsumerBuilding {
   workforceDemand?: any;
   percentBoost?: KnockoutObservable<number>;
   notes?: KnockoutObservable<string>;
-  guid: string;
+  guid: number;
   name: KnockoutObservable<string>;
   [key: string]: any; // Allow dynamic properties for assignment
-}
-
-export interface PowerPlant {
-  visible(): boolean;
-  guid: string;
-  name: string;
-  [key: string]: any; // Allow dynamic properties
 }
 
 export interface NPCTrader {
@@ -471,7 +548,6 @@ export interface CollapsibleStates {
 
 // Utility types
 export type ALL_ISLANDS = string;
-export const ALL_ISLANDS = "All Islands";
 
 // Global declarations
 declare global {
@@ -490,7 +566,7 @@ declare global {
 
 export interface RecipeList {
   constructor(config: any, assetsMap: any, island: Island): void;
-  guid: string;
+  guid: number;
   name: string;
   visible(): boolean; // Method version
   [key: string]: any; // Allow dynamic properties

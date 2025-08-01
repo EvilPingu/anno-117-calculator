@@ -1,10 +1,10 @@
 import { PopulationNeed } from './consumption';
 import { Consumer } from './factories';
-import { NumberInputHandler, EPSILON } from './util';
+import { NumberInputHandler, EPSILON, ko } from './util';
 
 declare const $: any;
 declare const window: any;
-declare const ko: any;
+
 
 // Function to register all components
 function registerComponents(): void {

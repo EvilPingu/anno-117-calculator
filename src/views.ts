@@ -1,34 +1,14 @@
-import { ACCURACY } from './util';
+import { ACCURACY, ko, NamedElement } from './util';
 import { PopulationLevel, ResidenceBuilding, Workforce } from './population';
 import { PopulationNeed, ResidenceEffectCoverage, ResidenceEffect } from './consumption';
-import { Product, Demand } from './production';
-import { Consumer, Factory } from './factories';
+import { ProductCategory, Product, Demand } from './production';
+import { Factory as FactoryClass, Consumer, Factory } from './factories';
 
-// Extend PopulationNeed interface with missing properties
-interface PopulationNeedExtended extends PopulationNeed {
-    guid: string;
-    factory: any;
-    amount: any;
-    product: any;
-}
 
-// Extend Factory interface with missing properties
-interface FactoryExtended extends Factory {
-    extraGoodProductionAmount?: any;
-    extraGoodFactor(): number;
-}
-
-// Extend ResidenceEffectCoverage interface with missing properties
-interface ResidenceEffectCoverageExtended extends ResidenceEffectCoverage {
-    residenceEffect: ResidenceEffect;
-    residence: ResidenceBuilding;
-    coverage(): number;
-}
-
-declare const ko: any;
 declare const $: any;
 declare const view: any;
 declare const window: any;
+
 
 /**
  * Manages dark mode functionality for the application
@@ -154,14 +134,14 @@ export class Template {
     public index: number;
     public name: string;
     public recipeName: string;
-    public guid: string;
+    public guid: number;
     public getRegionExtendedName: any;
     public editable: boolean;
     public region: string;
     public hotkey: string;
     public templates: Template[];
     public parentInstance: any;
-    public instance: any;
+    public instance: KnockoutObservable<NamedElement>;
     [key: string]: any; // Index signature for dynamic properties
 
     /**
@@ -226,6 +206,7 @@ export class Template {
             }
             else if (!ko.isObservable(val) && !ko.isComputed(val) && asset.hasOwnProperty(attr))
                 this[attr] = val;
+
         }
     }
 
@@ -237,6 +218,7 @@ export class Template {
     static applicable(asset: any): boolean {
         return asset instanceof PopulationLevel ||
             asset instanceof Workforce ||
+            asset instanceof ProductCategory ||
             asset instanceof Product ||
             asset instanceof Factory ||
             asset instanceof Demand;
@@ -269,11 +251,11 @@ export class ProductionChainView {
         this.amount = amount;
 
         this.tree = ko.pureComputed(() => {
-            let traverse = (consumer: FactoryExtended | Consumer, amount: number): any => {
+            let traverse = (consumer: Factory | Consumer, amount: number): any => {
                     if (amount < ACCURACY)
                         return null;
 
-                    if (!(consumer instanceof Factory)){
+                    if (!(consumer instanceof FactoryClass)){
                         return {
                             'amount': amount,
                             'factory': consumer,
@@ -282,7 +264,7 @@ export class ProductionChainView {
                         }; 
                     }
 
-                    var factory = consumer as FactoryExtended;
+                    var factory = consumer as any;
 
                     var icon = null;
                     var maxSubAmount = factory.outputAmount ? factory.outputAmount() : factory.inputAmount();
@@ -304,7 +286,7 @@ export class ProductionChainView {
                         }
                     }
 
-                    var inputAmount = amount / factory.extraGoodFactor();
+                    var inputAmount = amount / (factory.extraGoodFactor?.() || 1);
                     return {
                         'amount': amount,
                         'factory': factory,
@@ -341,7 +323,7 @@ export class ProductionChainView {
 class ResidenceEffectAggregate {
     public totalResidences: any;
     public residenceEffect: ResidenceEffect;
-    public coverage: ResidenceEffectCoverageExtended[];
+    public coverage: ResidenceEffectCoverage[];
     public averageCoverage: any;
 
     /**
@@ -349,7 +331,7 @@ class ResidenceEffectAggregate {
      * @param totalResidences - Total number of residences
      * @param residenceEffectCoverage - The initial coverage
      */
-    constructor(totalResidences: any, residenceEffectCoverage: ResidenceEffectCoverageExtended) {
+    constructor(totalResidences: any, residenceEffectCoverage: ResidenceEffectCoverage) {
         // Validate required parameters
         if (!totalResidences) {
             throw new Error('ResidenceEffectAggregate totalResidences is required');
@@ -369,7 +351,7 @@ class ResidenceEffectAggregate {
      * Adds another coverage instance to this aggregate
      * @param residenceEffectCoverage - The coverage to add
      */
-    add(residenceEffectCoverage: ResidenceEffectCoverageExtended): void {
+    add(residenceEffectCoverage: ResidenceEffectCoverage): void {
         this.coverage.push(residenceEffectCoverage);
     }
 
@@ -431,16 +413,16 @@ export class ResidenceEffectView {
         var aggregatesMap = new Map<ResidenceEffect, ResidenceEffectAggregate>();
         this.consumedProducts = new Set();
         this.residences.forEach(r => {
-            (r.populationLevel as any).needsMap.forEach((n: PopulationNeedExtended) => {
+            (r.populationLevel as any).needsMap.forEach((n: PopulationNeed) => {
                 this.consumedProducts.add(n.product);
             });
 
             r.allEffects.forEach((e: ResidenceEffect) => {
-                if (e.available() && (need == null || e.effectsPerNeed.has((need as PopulationNeedExtended).guid)))
+                if (e.available() && (need == null || e.effectsPerNeed.has((need as PopulationNeed).guid)))
                     effects.add(e);
             });
 
-            r.effectCoverage().forEach((c: ResidenceEffectCoverageExtended) => {
+            r.effectCoverage().forEach((c: ResidenceEffectCoverage) => {
                 var e = c.residenceEffect;
                 if (aggregatesMap.has(e)) {
                     aggregatesMap.get(e)!.add(c);
@@ -462,7 +444,7 @@ export class ResidenceEffectView {
 
         this.need = need;
         if (need instanceof PopulationNeed) {
-            this.productionChain = new ProductionChainView((need as PopulationNeedExtended).factory, (need as PopulationNeedExtended).amount);
+            this.productionChain = new ProductionChainView((need as PopulationNeed).factory, (need as PopulationNeed).amount);
         } else {
             this.productionChain = null;
         }
@@ -485,7 +467,7 @@ export class ResidenceEffectView {
             if (this.residences.indexOf(r) == -1)
                 return;
 
-            var c = new ResidenceEffectCoverage(r, e) as ResidenceEffectCoverageExtended;
+            var c = new ResidenceEffectCoverage(r, e);
             r.addEffectCoverage(c);
 
             if (a == null) {

@@ -1,23 +1,15 @@
-import { ACCURACY, formatNumber, formatPercentage, versionCalculator } from './util';
-import { languageCodes, texts as locaTexts } from './i18n';
+import { ACCURACY, formatNumber, formatPercentage, versionCalculator, Option, ko } from './util';
+import { languageCodes, texts as locaTexts, options } from './i18n';
 import { registerComponents } from './components';
 
 
-// Import the missing modules (these will be stubs for now)
 import './params';
 import { Island } from './types';
+import { DarkMode } from './views';
 
 declare const $: any;
 declare const window: any;
-declare const ko: any;
-
-
-
-// Remove AMD helpers and module binding setup
-// (No code for ko.bindingHandlers.module or ko.amdTemplateEngine should remain)
-// The rest of the file remains unchanged.
-
-
+declare const require: any;
 
 
 // Make utility functions globally available
@@ -33,9 +25,7 @@ declare const ko: any;
 (window as any).view = {
     settings: {
         language: ko.observable("english"),
-        options: [],
-        serverOptions: [],
-        serverAddress: ko.observable(localStorage.getItem('serverAddress')||'localhost'),
+        options: []
     },
     texts: {},
     dlcs: [],
@@ -59,7 +49,6 @@ declare const ko: any;
         populationLevels: [],
         categories: [],
         consumers: [],
-        powerPlants: [],
         publicServices: [],
         publicRecipeBuildings: []
     },
@@ -234,38 +223,58 @@ function installImportConfigListener(): void {
                 }
             };
 
+            fileReader.onerror = function (err: ProgressEvent<FileReader>) {
+                console.error(err);
+            };
+
             fileReader.readAsText(file);
         });
     }
 }
 
+
+
 /**
- * Loads and registers all templates with Knockout
- * Reads template files and registers them as named templates
+ * Sets up Knockout numeric input validation and extender
  */
-function loadTemplates(): void {
-    // Template context for webpack
-    const templateContext = (require as any).context("../templates", true, /\.html$/);
-    
-    // Get all template files
-    const templateFiles = templateContext.keys();
-    
-    for (const templatePath of templateFiles) {
-        // Extract template name from path (remove ./ and .html)
-        const templateName = templatePath.replace(/^\.\//, '').replace(/\.html$/, '');
+function setupNumericExtender(): void {
+    ko.extenders.numeric = function(target: any, options: any) {
+        const result = ko.pureComputed({
+            read: target,
+            write: function(newValue: any) {
+                const current = target();
+                let newValueAsNum = isNaN(newValue) ? 0 : +newValue;
+                
+                if (options && options.precision !== undefined) {
+                    newValueAsNum = parseFloat(newValueAsNum.toFixed(options.precision));
+                }
+                
+                if (options && options.min !== undefined && newValueAsNum < options.min) {
+                    newValueAsNum = options.min;
+                }
+                
+                if (options && options.max !== undefined && newValueAsNum > options.max) {
+                    newValueAsNum = options.max;
+                }
+                
+                if (options && options.callback) {
+                    const callbackResult = options.callback(newValue, current, newValueAsNum);
+                    if (callbackResult !== null) {
+                        newValueAsNum = callbackResult;
+                    }
+                }
+                
+                if (newValueAsNum !== current) {
+                    target(newValueAsNum);
+                } else {
+                    target.notifySubscribers(newValueAsNum);
+                }
+            }
+        }).extend({ notify: 'always' });
         
-        // Get template content
-        const templateContent = templateContext(templatePath);
-        
-        // Create a script element to register the template
-        const script = document.createElement('script');
-        script.type = 'text/html';
-        script.id = templateName;
-        script.innerHTML = templateContent.default || templateContent;
-        document.head.appendChild(script);
-    }
-    
-    console.log(`Loaded ${templateFiles.length} templates:`, templateFiles);
+        result(target());
+        return result;
+    };
 }
 
 /**
@@ -276,6 +285,11 @@ function loadTemplates(): void {
 function init(_isFirstRun: boolean, configVersion: string | null): void {
     // Initialize application
     configUpgrade(configVersion);
+
+    (window as any).view.darkMode = new DarkMode();
+    
+    // Set up Knockout numeric extender
+    setupNumericExtender();
     
     // Use the global params object (set by params.js)
     const params = (window as any).params;
@@ -296,6 +310,25 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
         }
     }
 
+        // Set up options
+
+        for (let attr in options) {
+            let o = new Option(options[attr]);
+
+            (window as any).view.settings[attr] = o;
+            (window as any).view.settings.options.push(o);
+    
+            if (localStorage) {
+                let id = "settings." + attr;
+                if (localStorage.getItem(id) != null)
+                    o.checked(parseInt(localStorage.getItem(id) || '0') ? true : false);
+    
+                o.checked.subscribe((val: boolean) => localStorage.setItem(id, val ? '1' : '0'));
+            }
+        }
+    
+        (window as any).view.settings.languages = params.languages;
+
     // Set up regions
     (window as any).view.regions = [];
     for (let region of (params.regions || [])) {
@@ -307,56 +340,126 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
     // Set up sessions
     (window as any).view.sessions = [];
     for (let session of (params.sessions || [])) {
-        console.log('Creating session with config:', session);
         const s = new (require('./world').Session)(session, (window as any).view.assetsMap);
         (window as any).view.assetsMap.set(s.guid, s);
         (window as any).view.sessions.push(s);
     }
 
-    // Set up island management
-    (window as any).view.islandManager = new (require('./world').IslandManager)(params, _isFirstRun);
-    
-    // Populate the islands observable array
-    if ((window as any).view.islandManager && (window as any).view.islandManager.allIslands) {
-        (window as any).view.islands((window as any).view.islandManager.allIslands);
-    }
-    
-    // Set the current island - ensure we always have a valid island
-    if ((window as any).view.islandManager && (window as any).view.islandManager.allIslands && (window as any).view.islandManager.allIslands.length > 0) {
-        (window as any).view.island((window as any).view.islandManager.allIslands[0]);
-        (window as any).view.island.subscribe((island: any) => {
-            console.log('Island changed:', island);
-        });
+    // Set up NPC traders
+    (window as any).view.productsToTraders = new Map();
+    for (let t of (params.traders || [])) {
+        const trader = new (require('./trade').NPCTrader)(t);
+
+        for (let r of t.goodsProduction) {
+            const route = Object.assign({}, r, { trader: trader });
+            if ((window as any).view.productsToTraders.has(r.Good))
+                (window as any).view.productsToTraders.get(r.Good).push(route);
+            else
+                (window as any).view.productsToTraders.set(r.Good, [route]);
+        }
     }
 
-    // Set up selected items
-    if ((window as any).view.island()) {
-        const island = (window as any).view.island();
-        if (island.factories && island.factories.length > 0) {
-            (window as any).view.selectedFactory(island.factories[0]);
-        }
-        if (island.populationLevels && island.populationLevels.length > 0) {
-            (window as any).view.selectedPopulationLevel(island.populationLevels[0]);
-        }
+    // Set up island management
+    (window as any).view.islandManager = new (require('./world').IslandManager)(params, _isFirstRun);
+
+    // Set up language persistence
+    if (localStorage) {
+        const id = "language";
+        if (localStorage.getItem(id))
+            (window as any).view.settings.language(localStorage.getItem(id));
+
+        (window as any).view.settings.language.subscribe((val: string) => localStorage.setItem(id, val));
     }
-    
+
+    // Handle configuration upgrades
+    if (!_isFirstRun)
+        configUpgrade(configVersion);
+    else
+        localStorage.setItem("upgrade.bonusResidentsApplied", "1");
+
+    // Set up modal dialogs and UI state
+    (window as any).view.collapsibleStates = new (require('./views').CollapsibleStates)();
+    (window as any).view.selectedFactory = ko.observable((window as any).view.island().factories[0]);
+    (window as any).view.selectedPopulationLevel = ko.observable((window as any).view.island().populationLevels[0]);
+    (window as any).view.productionChain = new (require('./views').ProductionChainView)((window as any).view.selectedFactory);
+    (window as any).view.selectedMultiFactoryProducts = ko.observable((window as any).view.island().multiFactoryProducts);
+    (window as any).view.selectedExtraGoodItems = ko.observable((window as any).view.island().extraGoodItems);
+    (window as any).view.selectedResidenceEffectView = ko.observable(new (require('./views').ResidenceEffectView)([(window as any).view.island().residenceBuildings[0]]));
+
     // Set up trade manager
     (window as any).view.tradeManager = new (require('./trade').TradeManager)();
-    
-    // Set up event listeners
-    installImportConfigListener();
-    
-    // Check for updates
-    checkAndShowNotifications();
-    
-    // Load templates before applying bindings
-    loadTemplates();
-    
+
+    // Set up templates
+    const allIslands = (window as any).view.islandManager.allIslands;
+    const selectedIsland = (window as any).view.island();
+    const templates: any[] = [];
+    const arrayToTemplate = (name: string) => allIslands[name].map((asset: any, index: number) => {
+        const t = new (require('./views').Template)(asset, selectedIsland, name, index);
+        templates.push(t);
+        return t;
+    });
+
+    (window as any).view.island.subscribe((i: any) => templates.forEach(t => t.parentInstance(i)));
+
+    (window as any).view.template = {
+        populationLevels: arrayToTemplate("populationLevels"),
+        categories: arrayToTemplate("categories"),
+        consumers: arrayToTemplate("consumers"),
+        publicServices: arrayToTemplate("publicServices"),
+        publicRecipeBuildings: arrayToTemplate("publicRecipeBuildings")
+    };
+
+    // Set up view mode for first run
+    if (_isFirstRun)
+        (window as any).view.viewMode = new (require('./views').ViewMode)(_isFirstRun);
+
+    // Register Knockout components (before bindings are applied)
+    registerComponents();
+
     // Apply Knockout bindings
     ko.applyBindings((window as any).view, $(document.body)[0]);
-    
-    // Register Knockout components (after bindings are applied)
-    registerComponents();
+
+    // Set up modal event handlers
+    $('#factory-choose-dialog').on('show.bs.modal', () => {
+        (window as any).view.selectedMultiFactoryProducts((window as any).view.island().multiFactoryProducts
+            .filter((p: any) => p.availableFactories().length > 1)
+            .sort((a: any, b: any) => a.name().localeCompare(b.name())));
+    });
+
+    $('#item-equipment-dialog').on('show.bs.modal', () => {
+        (window as any).view.selectedExtraGoodItems((window as any).view.island().extraGoodItems);
+    });
+
+    $('*').on('hidden.bs.modal', () => {
+        const input = $(':focus');
+        if (input.length)
+            input.blur();
+        $('.modal-backdrop').remove();
+        $('body').removeClass('modal-open');
+        $('body').css('padding-right', '');
+    });
+
+    // Set up key bindings for navigation
+    $(document).keydown((e: JQuery.KeyDownEvent) => {
+        if (!$('input, textarea').is(':focus')) {
+            switch (e.which) {
+                case 37: // left
+                    const prevButton = $('.island-navigation .fa-chevron-left').closest('button');
+                    if (prevButton.length && !prevButton.prop('disabled'))
+                        prevButton.click();
+                    break;
+                case 39: // right
+                    const nextButton = $('.island-navigation .fa-chevron-right').closest('button');
+                    if (nextButton.length && !nextButton.prop('disabled'))
+                        nextButton.click();
+                    break;
+                default:
+                    return;
+            }
+            e.preventDefault();
+        }
+    });
+
 }
 
 // Export functions for global access

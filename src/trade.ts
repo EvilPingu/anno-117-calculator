@@ -1,25 +1,9 @@
-import { ALL_ISLANDS, createFloatInput, NamedElement, EPSILON } from './util';
-import { Factory } from './factories';
+import { ALL_ISLANDS, createFloatInput, NamedElement, EPSILON, ko } from './util';
+import { Factory as FactoryClass } from './factories';
+import { Factory, Island } from './types';
 
-declare const ko: any;
 declare const $: any;
 declare const view: any;
-
-// Temporary type definitions until full conversion
-interface Island {
-    name(): string;
-    isAllIslands(): boolean;
-    factories: Factory[];
-    assetsMap: Map<string, any>;
-    session: any;
-}
-
-// Extend Factory interface with missing properties
-interface FactoryExtended extends Factory {
-    overProduction(): number;
-    substitutableOutputAmount(): number;
-    tradeList: TradeList;
-}
 
 interface ITradeList {
     island: Island;
@@ -194,7 +178,7 @@ class NPCTradeRoute {
  */
 export class TradeList {
     public island: Island;
-    public factory: FactoryExtended;
+    public factory: Factory;
     public routes: any;
     public npcRoutes?: NPCTradeRoute[];
     public inputAmount: any;
@@ -211,7 +195,7 @@ export class TradeList {
      * @param island - The island this trade list belongs to
      * @param factory - The factory this trade list manages
      */
-    constructor(island: Island, factory: FactoryExtended) {
+    constructor(island: Island, factory: Factory) {
         // Validate required parameters
         if (!island) {
             throw new Error('TradeList island is required');
@@ -336,10 +320,10 @@ export class TradeList {
                 return sIdxA - sIdxB;
             }
         });
-        var overProduction = this.factory.overProduction();
+        var overProduction = this.factory.overProduction?.() || 0;
 
-        this.export(overProduction > EPSILON);
-        this.newAmount(Math.max(overProduction, this.factory.substitutableOutputAmount()));
+        this.export(overProduction > EPSILON); 
+        this.newAmount(Math.max(overProduction, this.factory.substitutableOutputAmount?.() || 0));
 
         this.unusedIslands(islands);
     }
@@ -367,10 +351,10 @@ export class TradeManager {
         this.routes = ko.observableArray();
 
         view.selectedFactory.subscribe((f: any) => {
-            if (!(f instanceof Factory))
+            if (!(f instanceof FactoryClass))
                 return;
 
-            if (f.tradeList)
+            if (f.tradeList && f.tradeList.onShow)
                 f.tradeList.onShow();
         });
 

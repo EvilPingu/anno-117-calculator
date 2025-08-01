@@ -1,39 +1,40 @@
-import { createIntInput, NamedElement } from './util';
+import { createIntInput, NamedElement, ko } from './util';
 import { MetaProduct, NoFactoryProduct, Product } from './production';
-import { NoFactoryNeed, PopulationNeed, PublicBuildingNeed, ResidenceNeed, ResidenceEffectEntryCoverage } from './consumption';
+import { NoFactoryNeed, PopulationNeed, PublicBuildingNeed, ResidenceNeed, ResidenceEffectEntryCoverage, Need } from './consumption';
 import { ResidenceEffectView } from './views';
 import { 
+    Island, 
+    Region,
     ResidenceBuildingConfig, 
     PopulationLevelConfig, 
     WorkforceConfig,
-    KnockoutObservable,
-    KnockoutComputed,
-    KnockoutObservableArray,
-    AssetsMap
+    AssetsMap,
 } from './types';
 
-const ko = require("knockout");
+declare const view: any;
 
 /**
  * Represents a residence building that houses population
  * Manages population counts, effects, and consumption needs
  */
 export class ResidenceBuilding extends NamedElement {
-    public populationLevel: string;
+    public populationLevel!: PopulationLevel;
     public residentMax: number;
     public residentsPerNeed: Map<number, number>;
-    public island: any;
-    public region: any;
+    public island: Island;
+    public region: Region;
     public existingBuildings: KnockoutObservable<number>;
     public allEffects: Map<string, any>;
     public effectCoverage: KnockoutObservableArray<any>;
     public panoramaCoverage: KnockoutComputed<number>;
     public entryCoveragePerProduct: KnockoutComputed<Map<any, any[]>>;
-    public consumingLimit: KnockoutComputed<number> | null;
-    public needsMap: Map<string, any> | null;
-    public residenceNeedsMap: Map<string, any> | null;
+    public consumingLimit!: KnockoutComputed<number>;
+    public needsMap!: Map<number, Need|PublicBuildingNeed>;
+    public residenceNeedsMap: Map<number, any> | null;
     public residents: KnockoutComputed<number>;
     public residentsInput: KnockoutObservable<number>;
+    public upgradedBuildingGuid?: number | undefined;
+    public upgradedBuilding?: ResidenceBuilding;
 
     /**
      * Creates a new ResidenceBuilding instance
@@ -56,25 +57,25 @@ export class ResidenceBuilding extends NamedElement {
         super(config);
         
         // Explicit assignments
-        this.populationLevel = config.populationLevel || '';
         this.residentMax = config.residentMax || 0;
         this.residentsPerNeed = new Map();
         this.island = island;
-        this.region = assetsMap.get(config.region || '');
+        this.region = config.region ? assetsMap.get(parseInt(config.region)) : null;
+        this.upgradedBuildingGuid = config.upgradedBuilding;
         this.existingBuildings = createIntInput(0, 0);
         this.lockDLCIfSet(this.existingBuildings);
         this.allEffects = new Map();
         this.effectCoverage = ko.observableArray([]);
-        this.consumingLimit = null;
-        this.needsMap = null;
         this.residenceNeedsMap = null;
         this.residents = ko.computed(() => {
             let sum = 0;
-            for (const n of this.residenceNeedsMap!.values()) {
-                if (!n.residents) {
-                    console.log(n);
+            if (this.residenceNeedsMap) {
+                for (const n of this.residenceNeedsMap.values()) {
+                    if (!n.residents) {
+                        console.log(n);
+                    }
+                    sum += n.residents();
                 }
-                sum += n.residents();
             }
             return sum;
         });
@@ -117,7 +118,7 @@ export class ResidenceBuilding extends NamedElement {
      * Initializes needs and sets up computed observables
      * @param needsMap - Map of all needs for this residence
      */
-    initializeNeeds(needsMap: Map<string, any>): void {
+    initializeNeeds(needsMap: Map<number, Need|PublicBuildingNeed>): void {
         this.needsMap = needsMap;
         this.consumingLimit = ko.pureComputed(() => {
             let sum = 0;
@@ -137,20 +138,22 @@ export class ResidenceBuilding extends NamedElement {
 
         this.residenceNeedsMap = new Map();
         this.residentsPerNeed.forEach((_, guid) => {
-            const n = this.needsMap!.get(guid.toString()); // some residence needs come from buff but have no need in population level
+            const n = this.needsMap!.get(guid) as PopulationNeed; // some residence needs come from buff but have no need in population level
             if (n) {
-                this.residenceNeedsMap!.set(guid.toString(), new ResidenceNeed(this, n));
+                this.residenceNeedsMap!.set(guid, new ResidenceNeed(this, n));
             }
         });
 
         this.residenceNeedsMap.forEach(n => n.initDependencies(this.residenceNeedsMap!));
         this.residentsInput.subscribe(() => {
             let sum = 0;
-            for (const n of this.residenceNeedsMap!.values()) {
-                if (!n.residents) {
-                    console.log(n);
+            if (this.residenceNeedsMap) {
+                for (const n of this.residenceNeedsMap.values()) {
+                    if (!n.residents) {
+                        console.log(n);
+                    }
+                    sum += n.residents();
                 }
-                sum += n.residents();
             }
             this.residentsInput(sum);
         });
@@ -257,20 +260,19 @@ export class ResidenceBuilding extends NamedElement {
  * Manages population counts, needs, and building requirements
  */
 export class PopulationLevel extends NamedElement {
-    public populationLevel: string;
     public residentMax: number;
-    public residentsPerNeed: Map<string, number>;
-    public fullHouse: boolean;
-    public island: any;
+    public residentsPerNeed: Map<number, number>;
+    public fullHouse: number;
+    public island: Island;
     public hotkey: KnockoutObservable<string | null>;
-    public needs: any[];
-    public buildingNeeds: any[];
-    public basicNeeds: any[];
-    public luxuryNeeds: any[];
-    public lifestyleNeeds: any[];
-    public needsMap: Map<string, any>;
-    public region: any;
-    public allResidences: any[];
+    public needs: (PublicBuildingNeed | PopulationNeed)[];
+    public buildingNeeds: PublicBuildingNeed[];
+    public basicNeeds: (PublicBuildingNeed | PopulationNeed)[];
+    public luxuryNeeds: (PublicBuildingNeed | PopulationNeed)[];
+    public lifestyleNeeds: (PublicBuildingNeed | PopulationNeed)[];
+    public needsMap: Map<number, Need|PublicBuildingNeed>;
+    public region?: Region;
+    public allResidences: ResidenceBuilding[];
     public notes: KnockoutObservable<string>;
     public existingBuildings: KnockoutComputed<number>;
     public residents: KnockoutComputed<number>;
@@ -279,9 +281,9 @@ export class PopulationLevel extends NamedElement {
     public hasBonusNeeds: KnockoutComputed<boolean>;
     public floorsSummedExistingBuildings?: KnockoutComputed<number>;
     public canEditPerHouse?: KnockoutComputed<boolean>;
-    public skyscraperLevels?: any[];
-    public specialResidence?: any;
-    public residence?: any;
+    public skyscraperLevels?: ResidenceBuilding[];
+    public specialResidence?: ResidenceBuilding;
+    public residence: ResidenceBuilding;
     public availableResidences?: KnockoutComputed<any[]>;
     public canEdit?: KnockoutComputed<boolean>;
     public hasSkyscrapers?: () => boolean;
@@ -308,10 +310,9 @@ export class PopulationLevel extends NamedElement {
         super(config);
         
         // Explicit assignments
-        this.populationLevel = config.populationLevel || '';
         this.residentMax = config.residentMax || 0;
         this.residentsPerNeed = config.residentsPerNeed || new Map();
-        this.fullHouse = config.fullHouse || false;
+        this.fullHouse = config.fullHouse;
         this.island = island;
         this.hotkey = ko.observable(null);
         this.needs = [];
@@ -320,18 +321,16 @@ export class PopulationLevel extends NamedElement {
         this.luxuryNeeds = [];
         this.lifestyleNeeds = [];
         this.needsMap = new Map();
-        this.region = assetsMap.get(config.region || '');
+        this.region = config.region ? assetsMap.get(config.region) : null;
         this.allResidences = [];
         this.notes = ko.observable("");
 
         // Initialize residences
-        if (config.residence) {
-            const residence = assetsMap.get(config.residence);
-            if (residence) {
-                residence.populationLevel = this;
-                this.allResidences.push(residence);
-            }
-        }
+        //if (config.residence) {
+            this.residence = assetsMap.get(config.residence);
+            this.residence.populationLevel = this;
+            this.allResidences.push(this.residence);
+        //}
 
         if (config.skyscraperLevels) {
             this.skyscraperLevels = config.skyscraperLevels.map(l => assetsMap.get(l));
@@ -341,8 +340,11 @@ export class PopulationLevel extends NamedElement {
 
         if (config.specialResidence) {
             this.specialResidence = assetsMap.get(config.specialResidence);
-            this.specialResidence.populationLevel = this;
-            this.allResidences.push(this.specialResidence);
+
+            if(this.specialResidence){
+                this.specialResidence.populationLevel = this;
+                this.allResidences.push(this.specialResidence);
+            }
         }
 
         this.availableResidences = ko.pureComputed(() => this.allResidences.filter(r => r.available()));
@@ -374,7 +376,7 @@ export class PopulationLevel extends NamedElement {
         // Set up needs
         if (config.needs) {
             config.needs.forEach(n => {
-                let need: any;
+                let need: PublicBuildingNeed | PopulationNeed;
                 const product = assetsMap.get(n.guid);
 
                 if (n.tpmin && n.tpmin > 0 && product && !(product instanceof MetaProduct)) {
@@ -438,17 +440,19 @@ export class PopulationLevel extends NamedElement {
                 
                 let perHouse = 0;
 
-                for (const n of this.residence.residenceNeedsMap.values()) {
-                    if (n.need.residentsUnlockCondition && numVal < n.need.residentsUnlockCondition) {
-                        continue;
-                    }
+                if (this.residence.residenceNeedsMap) {
+                    for (const n of this.residence.residenceNeedsMap.values()) {
+                        if (n.need.residentsUnlockCondition && numVal < n.need.residentsUnlockCondition) {
+                            continue;
+                        }
 
                     const fulfillment = n.need.checked() ? 1 : n.substitution();
 
-                    perHouse += fulfillment * this.residence.residentsPerNeed.get(n.need.guid);
+                    perHouse += fulfillment * (this.residence.residentsPerNeed.get(n.need.guid) || 0);
                     for (const c of this.residence.getConsumptionEntries(n)) {
                         const coverage = c.residenceEffectCoverage.coverage();
                         perHouse += coverage * fulfillment * (c.residenceEffectEntry.residents || 0);
+                    }
                     }
                 }
 
@@ -555,7 +559,7 @@ export class PopulationLevel extends NamedElement {
             }
 
             for (const guid of this.needsMap.keys()) {
-                other.needsMap.get(guid).checked(this.needsMap.get(guid).checked());
+                other.needsMap.get(guid).checked((this.needsMap.get(guid) as PopulationNeed|PublicBuildingNeed).checked());
             }
         }
     }
@@ -578,7 +582,7 @@ export class PopulationLevel extends NamedElement {
 /**
  * Represents a workforce that can be assigned to factories
  */
-export class Workforce extends NamedElement {
+export class Workforce extends NamedElement{
     public demands: KnockoutObservableArray<any>;
     public amount: KnockoutComputed<number>;
     public visible: KnockoutComputed<boolean>;

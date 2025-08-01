@@ -4,38 +4,64 @@ import {
   DLCConfig, 
   NumberInputHandlerParams, 
   NumericBounds,
-  KnockoutObservable,
-  KnockoutComputed
+  AssetsMap
 } from './types';
 
 declare const $: any;
 declare const window: any;
-declare const ko: any;
+
+export const ko = require("knockout");
+require("knockout-amd-helpers");
+
+// Set up module context for dynamic imports
+const moduleContext = (require as any).context(".", true);
+const templateContext = (require as any).context("../templates", true);
+
+/**
+ * Custom module loader for Knockout AMD helpers
+ * @param moduleName - Name of the module to load
+ * @param done - Callback function to execute when module is loaded
+ */
+ko.bindingHandlers.module.loader = function (moduleName: string, done: Function) {
+    const mod = moduleContext("./" + moduleName);
+    done(mod);
+};
+
+ko.amdTemplateEngine.defaultSuffix = ".html";
+/**
+ * Custom template loader for Knockout AMD template engine
+ * @param templateName - Name of the template to load
+ * @param done - Callback function to execute when template is loaded
+ */
+ko.amdTemplateEngine.loader = function (templateName: string, done: Function) {
+    const template = templateContext("./" + templateName + ko.amdTemplateEngine.defaultSuffix);
+    done(template.default);
+};
 
 /** Version string for the calculator application */
-export let versionCalculator: string = "v11.1";
+export let versionCalculator = "v11.1";
 /** Flag indicating if this is a preview version */
-export let isPreview: boolean = false;
+export let isPreview = false;
 /** Accuracy threshold for floating point comparisons */
-export let ACCURACY: number = 0.01;
+export let ACCURACY = 0.01;
 /** Very small epsilon value for precise floating point comparisons */
-export let EPSILON: number = 0.0000001;
+export let EPSILON = 0.0000001;
 /** Special identifier for "All Islands" view */
-export let ALL_ISLANDS: string = "All Islands";
+export let ALL_ISLANDS = "All Islands";
 
 /**
  * Sets default fixed factory assignments for specific products
  * Assigns rum, cotton fabric, and coffee to their default New World production locations
  * @param assetsMap - Map of all available assets
  */
-export function setDefaultFixedFactories(assetsMap: Map<string, any>): void {
+export function setDefaultFixedFactories(assetsMap: AssetsMap): void {
     // Default rum, cotton fabric and coffee to the new world production
-    assetsMap.get("1010240")?.fixedFactory(assetsMap.get("1010318"));
-    assetsMap.get("1010257")?.fixedFactory(assetsMap.get("1010340"));
-    assetsMap.get("120032")?.fixedFactory(assetsMap.get("101252"));
-    assetsMap.get("1010216")?.fixedFactory(assetsMap.get("1010294"));
-    assetsMap.get("1010214")?.fixedFactory(assetsMap.get("1010292"));
-    assetsMap.get("1010206")?.fixedFactory(assetsMap.get("1010284"));
+    assetsMap.get(1010240)?.fixedFactory(assetsMap.get(1010318));
+    assetsMap.get(1010257)?.fixedFactory(assetsMap.get(1010340));
+    assetsMap.get(120032)?.fixedFactory(assetsMap.get(101252));
+    assetsMap.get(1010216)?.fixedFactory(assetsMap.get(1010294));
+    assetsMap.get(1010214)?.fixedFactory(assetsMap.get(1010292));
+    assetsMap.get(1010206)?.fixedFactory(assetsMap.get(1010284));
 }
 
 /** Number formatter using the browser's locale */
@@ -240,12 +266,15 @@ export function createFloatInput(init: number, min: number = -Infinity, max: num
  * Provides common functionality for all named objects
  */
 export class NamedElement {
-    public name: KnockoutObservable<string>;
-    public guid: string;
-    public dlcs: string[];
-    public available: KnockoutObservable<boolean>;
-    public notes: KnockoutObservable<string>;
-    public dependentObjects: KnockoutObservableArray<any>;
+    public name: KnockoutComputed<string>;
+    public guid: number;
+    public locaText: Record<string, string>;
+    public icon?: string;
+    public dlcs?: DLC[];
+    public available: KnockoutComputed<boolean>;
+    public notes?: KnockoutObservable<string>;
+    public dependentObjects?: KnockoutObservableArray<any>;
+    public dlcLockingObservables: any[];
 
     /**
      * Creates a new NamedElement instance
@@ -256,66 +285,75 @@ export class NamedElement {
         if (!config) {
             throw new Error('NamedElement config is required');
         }
-        if (!config.name) {
-            throw new Error('NamedElement config.name is required');
-        }
-        if (!config.guid) {
-            throw new Error('NamedElement config.guid is required');
-        }
 
         // Explicit assignments
-        this.name = ko.observable(config.name || '') as any;
-        this.guid = config.guid || '';
-        this.dlcs = config.dlcs || [];
-        this.available = ko.observable(true) as any;
-        this.notes = ko.observable("") as any;
-        this.dependentObjects = ko.observableArray([]) as any;
-
-        // Initialize DLC dependencies
-        this.initDLCs();
-    }
-
-    /**
-     * Initializes DLC dependencies for this element
-     */
-    private initDLCs(): void {
-        if (!window.view || !window.view.dlcsMap) return;
-
-        for (const dlcGuid of this.dlcs) {
-            const dlc = window.view.dlcsMap.get(dlcGuid);
-            if (dlc) {
-                dlc.addDependentObject(this.available);
+        this.guid = config.guid;
+        this.locaText = config.locaText || {};
+        
+        // Create computed name that uses localization
+        this.name = ko.computed(() => {
+            const view = (window as any).view;
+            if (!view || !view.settings) {
+                return config.name || "";
             }
+
+            let text = this.locaText[view.settings.language()];
+            if (text) {
+                return text;
+            }
+
+            text = this.locaText["english"];
+            return text ? text : (config.name || "");
+        });
+
+        // Set up icon from params if available
+        const params = (window as any).params;
+        if (config.iconPath && params && params.icons) {
+            this.icon = params.icons[config.iconPath];
+        }
+
+        // Set up DLC management
+        if (config.dlcs && config.dlcs.length > 0 && params && params.dlcs) {
+            const view = (window as any).view;
+            this.dlcs = config.dlcs.map(d => view.dlcsMap.get(d)).filter(d => d);
+            this.available = ko.pureComputed(() => {
+                for (const d of this.dlcs!) {
+                    if (d.checked()) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+            this.dlcLockingObservables = [];
+        } else {
+            this.available = ko.pureComputed(() => true);
+            this.dlcLockingObservables = [];
         }
     }
 
     /**
-     * Locks an observable if DLC is set
+     * Locks an observable to a specific DLC if this element has only one DLC
      * @param obs - The observable to lock
      */
-    lockDLCIfSet(obs: KnockoutObservable<any> | KnockoutComputed<any>): void {
-        if (!window.view || !window.view.dlcsMap) return;
-
-        for (const dlcGuid of this.dlcs) {
-            const dlc = window.view.dlcsMap.get(dlcGuid);
-            if (dlc && dlc.checked()) {
-                (obs as any).extend({ rateLimit: { timeout: 0, method: "notifyWhenChangesStop" } });
-                break;
-            }
+    lockDLCIfSet(obs: any): void {
+        if (!this.dlcs || this.dlcs.length !== 1) {
+            return;
         }
+
+        this.dlcLockingObservables.push(obs);
+        this.dlcs[0].addDependentObject(obs);
     }
 
     /**
-     * Deletes this element and cleans up dependencies
+     * Removes DLC dependencies when this element is deleted
      */
     delete(): void {
-        if (!window.view || !window.view.dlcsMap) return;
+        if (!this.dlcs || this.dlcs.length !== 1) {
+            return;
+        }
 
-        for (const dlcGuid of this.dlcs) {
-            const dlc = window.view.dlcsMap.get(dlcGuid);
-            if (dlc) {
-                dlc.removeDependentObject(this.available);
-            }
+        for (const obs of this.dlcLockingObservables) {
+            this.dlcs[0].removeDependentObject(obs);
         }
     }
 }
@@ -326,6 +364,7 @@ export class NamedElement {
  */
 export class Option extends NamedElement {
     public checked: KnockoutObservable<boolean>;
+    public visible: KnockoutObservable<boolean>;
 
     /**
      * Creates a new Option instance
@@ -336,6 +375,7 @@ export class Option extends NamedElement {
         
         // Explicit assignments
         this.checked = ko.observable(config.checked || false) as any;
+        this.visible = ko.observable(!!config);
     }
 }
 
@@ -407,8 +447,7 @@ export function dummyObservable<T = any>(name: string): KnockoutObservable<T> {
       console.error(`[DummyObservable] Attempted to write to uninitialized observable: ${name}`, value);
     }
   } as KnockoutObservable<T>;
-  obs.subscribe = () => { console.error(`[DummyObservable] subscribe on ${name}`); };
-  obs.unsubscribe = () => { console.error(`[DummyObservable] unsubscribe on ${name}`); };
+  obs.subscribe = () => { console.error(`[DummyObservable] subscribe on ${name}`); return { dispose: () => {} } as any; };
   obs.extend = () => obs;
   obs.notifySubscribers = () => { console.error(`[DummyObservable] notifySubscribers on ${name}`); };
   return obs;
@@ -435,8 +474,7 @@ export function dummyComputed<T = any>(name: string): KnockoutComputed<T> {
     console.error(`[DummyComputed] Attempted to read uninitialized computed: ${name}`);
     return undefined as any;
   } as KnockoutComputed<T>;
-  computed.subscribe = () => { console.error(`[DummyComputed] subscribe on ${name}`); };
-  computed.unsubscribe = () => { console.error(`[DummyComputed] unsubscribe on ${name}`); };
+  computed.subscribe = () => { console.error(`[DummyComputed] subscribe on ${name}`); return { dispose: () => {} } as any; };
   computed.notifySubscribers = () => { console.error(`[DummyComputed] notifySubscribers on ${name}`); };
   return computed;
 } 

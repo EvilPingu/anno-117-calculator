@@ -1,26 +1,9 @@
-import { NamedElement, Option, EPSILON } from './util';
+import { NamedElement, Option, EPSILON, ko } from './util';
+import { Factory, Region, AssetsMap } from './types';
 
-declare const ko: any;
+
 declare const view: any;
 declare const $: any;
-
-// Temporary type definitions until full conversion
-interface Factory {
-    available(): boolean;
-    outputAmount(): number;
-    region: any;
-    add(demand: any): void;
-    remove(demand: any): void;
-    getOutputs(): any[];
-    items: any[];
-    extraGoodProductionList: ExtraGoodProductionList;
-    clipped?: any;
-    inputAmount(): number;
-}
-
-interface Region {
-    // Placeholder until converted
-}
 
 /**
  * Represents a product that can be produced by factories
@@ -31,16 +14,16 @@ export class Product extends NamedElement {
     public mainFactory: Factory | null;
     public isAbstract: boolean;
     public factories: Factory[];
-    public availableFactories: any;
-    public fixedFactory: any;
-    public visible: any;
+    public availableFactories: KnockoutObservableArray<Factory>;
+    public fixedFactory: KnockoutObservable<Factory | null>;
+    public visible: KnockoutComputed<boolean>;
 
     /**
      * Creates a new Product instance
      * @param config - Configuration object for the product
      * @param assetsMap - Map of all available assets
      */
-    constructor(config: any, _assetsMap: Map<string, any>) {
+    constructor(config: any, _assetsMap: AssetsMap) {
         // Validate required parameters
         if (!config.name) {
             throw new Error('Product name is required');
@@ -68,13 +51,13 @@ export class Product extends NamedElement {
         this.mainFactory = config.mainFactory || null;
         this.isAbstract = config.isAbstract || false;
 
-        this.factories = this.producers.map((p: number) => _assetsMap.get(p.toString())).filter((p: any) => !!p);
+        this.factories = this.producers.map((p: number) => _assetsMap.get(p)).filter((p: any) => !!p);
         this.availableFactories = ko.pureComputed(() => this.factories.filter((f: Factory) => f.available()));
 
         this.fixedFactory = ko.observable(null);
-        // this.mainFactory is already a Factory object, not a string key
-        // if (this.mainFactory)
-        //     this.mainFactory = assetsMap.get(this.mainFactory);
+
+        if (config.mainFactory)
+            this.mainFactory = _assetsMap.get(parseInt(config.mainFactory));
 
         if (this.producers && this.factories.length) {
             //this.amount = ko.computed(() => this.factories.map(f => f.outputAmount()).reduce((a, b) => a + b));
@@ -97,7 +80,7 @@ export class MetaProduct extends NamedElement {
      * @param config - Configuration object for the meta product
      * @param assetsMap - Map of all available assets
      */
-    constructor(config: any, _assetsMap: Map<string, any>) {
+    constructor(config: any, _assetsMap: AssetsMap) {
         // Validate required parameters
         if (!config.name) {
             throw new Error('MetaProduct name is required');
@@ -127,19 +110,18 @@ export class MetaProduct extends NamedElement {
  * Used for goods obtained through other means (e.g., trade, special buildings)
  */
 export class NoFactoryProduct extends NamedElement {
-    public guid: string;
     public residentsInputFactor: number;
     public needs: any;
-    public amount: any;
-    public residentsInput: any;
-    public visible: any;
+    public amount: KnockoutComputed<number>;
+    public residentsInput: KnockoutComputed<number>;
+    public visible: KnockoutComputed<boolean>;
 
     /**
      * Creates a new NoFactoryProduct instance
      * @param config - Configuration object for the product
      * @param assetsMap - Map of all available assets
      */
-    constructor(config: any, _assetsMap: Map<string, any>) {
+    constructor(config: any, _assetsMap: AssetsMap) {
         // Validate required parameters
         if (!config.name) {
             throw new Error('NoFactoryProduct name is required');
@@ -168,7 +150,7 @@ export class NoFactoryProduct extends NamedElement {
 
         this.needs = ko.observableArray([]);
         this.amount = ko.computed(() => this.needs().map((n: any) => n.amount()).reduce((a: number, b: number) => a + b, 0));
-        this.lockDLCIfSet(this.amount);
+        this.lockDLCIfSet(this.amount as any);
 
         this.residentsInput = ko.pureComputed(() => {
             return this.amount() * this.residentsInputFactor;
@@ -193,20 +175,19 @@ export class NoFactoryProduct extends NamedElement {
  * Manages the relationship between consumers and the products they need
  */
 export class Demand extends NamedElement {
-    public guid: string;
     public factor: number;
-    public consumer: any;
-    public region: any;
-    public amount: any;
+    public consumer: Factory;
+    public region: Region;
+    public amount: KnockoutObservable<number>;
     public product: Product;
-    public factory: any;
+    public factory: KnockoutObservable<Factory>;
 
     /**
      * Creates a new Demand instance
      * @param config - Configuration object for the demand
      * @param assetsMap - Map of all available assets
      */
-    constructor(config: any, _assetsMap: Map<string, any>) {
+    constructor(config: any, _assetsMap: AssetsMap) {
         // Validate required parameters
         if (!config.guid) {
             throw new Error('Demand GUID is required');
@@ -238,7 +219,7 @@ export class Demand extends NamedElement {
 
         if (this.product && this.product.fixedFactory) {
             this.updateFixedProductFactory(this.product.fixedFactory());
-            this.product.fixedFactory.subscribe((f: Factory) => this.updateFixedProductFactory(f));
+            this.product.fixedFactory.subscribe((f: Factory | null) => this.updateFixedProductFactory(f));
         }
     }
 
@@ -287,7 +268,6 @@ export class Demand extends NamedElement {
  * Groups related products together for organization
  */
 export class ProductCategory extends NamedElement {
-    public guid: string;
     public products: Product[];
 
     /**
@@ -295,7 +275,7 @@ export class ProductCategory extends NamedElement {
      * @param config - Configuration object for the category
      * @param assetsMap - Map of all available assets
      */
-    constructor(config: any, _assetsMap: Map<string, any>) {
+    constructor(config: any, _assetsMap: AssetsMap) {
         // Validate required parameters
         if (!config.name) {
             throw new Error('ProductCategory name is required');
@@ -322,7 +302,7 @@ export class ProductCategory extends NamedElement {
         this.guid = config.guid;
         this.products = config.products;
 
-        this.products = config.products.map((p: number) => _assetsMap.get(p.toString())).filter((p: any) => p != null && p instanceof Product);
+        this.products = config.products.map((p: number) => _assetsMap.get(p)).filter((p: any) => p != null && p instanceof Product);
     }
 }
 
@@ -331,7 +311,6 @@ export class ProductCategory extends NamedElement {
  * Provides bonuses and modifications to factory production
  */
 export class Item extends NamedElement {
-    public guid: string;
     public replaceInputs: any;
     public additionalOutputs: any;
     public replacements?: Map<string, string>;
@@ -342,8 +321,8 @@ export class Item extends NamedElement {
     public replacingWorkforce?: any;
     public equipments: EquippedItem[];
     public availableEquipments: any;
-    public checked: any;
-    public visible: any;
+    public checked: KnockoutComputed<boolean>;
+    public visible: KnockoutComputed<boolean>;
 
     /**
      * Creates a new Item instance
@@ -351,7 +330,7 @@ export class Item extends NamedElement {
      * @param assetsMap - Map of all available assets
      * @param region - The region this item belongs to
      */
-    constructor(config: any, _assetsMap: Map<string, any>, _region: Region) {
+    constructor(config: any, _assetsMap: AssetsMap, _region: Region) {
         // Validate required parameters
         if (!config.name) {
             throw new Error('Item name is required');
@@ -388,23 +367,23 @@ export class Item extends NamedElement {
                     throw new Error('ReplaceInputs must have OldInput and NewInput properties');
                 }
                 this.replacementArray!.push({
-                    old: _assetsMap.get(r.OldInput),
-                    new: _assetsMap.get(r.NewInput)
+                    old: _assetsMap.get(parseInt(r.OldInput)),
+                    new: _assetsMap.get(parseInt(r.NewInput))
                 });
                 this.replacements!.set(r.OldInput, r.NewInput);
             });
         }
 
-        this.factories = config.factories.map((f: number) => _assetsMap.get(f.toString())).filter((f: any) => !!f);
+        this.factories = config.factories.map((f: number) => _assetsMap.get(f)).filter((f: any) => !!f);
 
         if (config.additionalOutputs) {
             this.extraGoods = [];
             for (var p of config.additionalOutputs) {
                 if (p.ForceProductSameAsFactoryOutput)
                     for (var f of this.factories)
-                        this.extraGoods!.push(_assetsMap.get(f.getOutputs()[0].Product));
+                        this.extraGoods!.push(_assetsMap.get(parseInt(f.getOutputs()[0].Product)));
                 else {
-                    p = _assetsMap.get(p.Product);
+                    p = _assetsMap.get(parseInt(p.Product));
                     if (p)
                         this.extraGoods!.push(p);
                 }
@@ -413,7 +392,7 @@ export class Item extends NamedElement {
         }
 
         if (config.replacingWorkforce)
-            this.replacingWorkforce = _assetsMap.get(config.replacingWorkforce);
+            this.replacingWorkforce = _assetsMap.get(parseInt(config.replacingWorkforce));
 
         this.equipments =
             this.factories.map((f: Factory) => new EquippedItem({ item: this, factory: f, icon: config.iconPath, locaText: config.locaText, dlcs: config.dlcs }, _assetsMap));
@@ -466,14 +445,14 @@ class EquippedItem extends Option {
     public replacementArray?: any[];
     public replacingWorkforce?: any;
     public extraGoods?: ExtraGoodProduction[];
-    public visible: any;
+    public visible: KnockoutComputed<boolean>;
 
     /**
      * Creates a new EquippedItem instance
      * @param config - Configuration object for the equipped item
      * @param assetsMap - Map of all available assets
      */
-    constructor(config: any, _assetsMap: Map<string, any>) {
+    constructor(config: any, _assetsMap: AssetsMap) {
         // Validate required parameters
         if (!config.item) {
             throw new Error('EquippedItem item is required');
@@ -484,7 +463,7 @@ class EquippedItem extends Option {
 
         // Prepare config for parent constructor
         const parentConfig = {
-            guid: `${config.item.guid}_${config.factory.guid}`,
+            guid: config.item.guid + config.factory.guid,
             name: config.item.name(),
             locaText: config.locaText || {},
             iconPath: config.icon || "",
@@ -513,7 +492,7 @@ class EquippedItem extends Option {
             }
         }
 
-        this.factory.items.push(this);
+        this.factory.items.push(this as any);
 
         this.visible = ko.pureComputed(() => {
             if (!this.available())
@@ -550,7 +529,7 @@ class ExtraGoodProduction {
      * @param config - Configuration object for the extra good production
      * @param assetsMap - Map of all available assets
      */
-    constructor(config: any, _assetsMap: Map<string, any>) {
+    constructor(config: any, _assetsMap: AssetsMap) {
         // Validate required parameters
         if (!config.item) {
             throw new Error('ExtraGoodProduction item is required');
@@ -574,17 +553,19 @@ class ExtraGoodProduction {
         this.Product = config.Product || null;
 
         var product = config.ForceProductSameAsFactoryOutput ? config.factory.getOutputs()[0].Product : config.Product;
-        this.product = _assetsMap.get(product);
+        this.product = _assetsMap.get(parseInt(product));
         if (!this.product)
             throw "Product " + product + " not found";
 
         this.amount = ko.computed(() => (this.item.checked() ? 1 : 0) * config.Amount * (this.factory.clipped && this.factory.clipped() ? 2 : 1) * this.factory.inputAmount() / this.additionalOutputCycle);
 
         for (var f of this.product.factories) {
-            f.extraGoodProductionList.entries.push(this);
+            if (f.extraGoodProductionList) {
+                f.extraGoodProductionList.entries.push(this as any);
 
-            if (f == this.factory)
-                f.extraGoodProductionList.selfEffecting.push(this);
+                if (f == this.factory)
+                    f.extraGoodProductionList.selfEffecting.push(this as any);
+            }
         }
     }
 }
@@ -595,12 +576,12 @@ class ExtraGoodProduction {
  */
 export class ExtraGoodProductionList {
     public factory: Factory;
-    public checked: any;
+    public checked: KnockoutObservable<boolean>;
     public selfEffecting: any;
     public entries: any;
     public nonZero: any;
-    public amount: any;
-    public amountWithSelf: any;
+    public amount: KnockoutComputed<number>;
+    public amountWithSelf: KnockoutComputed<number>;
 
     /**
      * Creates a new ExtraGoodProductionList instance

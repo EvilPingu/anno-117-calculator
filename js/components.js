@@ -3,7 +3,7 @@ import { PopulationNeed } from './consumption.js';
 import { Consumer } from './factories.js';
 import { NumberInputHandler, EPSILON } from './util.js'
 
-var ko = require("knockout");
+const ko = require("knockout");
 
 /**
  * Custom Knockout binding handler for applying properties to descendant elements
