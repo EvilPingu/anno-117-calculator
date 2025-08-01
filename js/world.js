@@ -9,6 +9,7 @@ import { PublicConsumerBuilding, Module, Factory, Consumer, Buff, PowerPlant } f
 import {ResidenceEffectView} from './views.js'
 
 var ko = require("knockout");
+require("knockout-amd-helpers");
 
 /**
  * Manages persistent storage for island data

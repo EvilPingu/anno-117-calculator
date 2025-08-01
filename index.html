@@ -21,10 +21,9 @@
     <!-- Latest compiled JavaScript -->
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="./bootstrap-notify.min.js"></script>
-    <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.0/knockout-min.js"></script>-->
-
-    <!-- <script src="js/params.js"></script> -->
-    <script src="./dist/calculator.bundle.js"></script>
+    <script type="text/javascript" src="js/knockout-min.js"></script>
+    <script type="text/javascript" src="js/params.js"></script>
+    <script type="text/javascript" src="./dist/calculator.bundle.js"></script>
 
 </head>
 <body>
@@ -138,7 +137,7 @@
                 <collapsible params="id: 'workforce', heading: $root.texts.workforce.name, collapsed: false, data: $data, fieldsetClass: 'ui-fieldset'">
                     <div class="inline-list-stretched" data-bind="with: $root.island()">
                         <div class="ui-tier-input fleft">
-                            <div data-bind="foreach: $data.commuterPier.checked() ? $data.session.workforce : $data.workforce">
+                            <div data-bind="foreach: $data.workforce">
                                 <div class="ui-tier-unit" data-bind="visible: $data.visible()">
                                     <div class="ui-tier-unit-icon"><img class="icon-tile" data-bind="attr: { src: $data.icon ? $data.icon : null, alt: $data.name }"></div>
                                     <!--<div class="ui-tier-unit-name" data-bind="text: name"></div>-->
@@ -149,10 +148,6 @@
                             </div>
                         </div>
 
-                        <div class="custom-control custom-checkbox float-right align-middle" data-bind="visible: $data.commuterPier.visible()">
-                            <input id="commuterPier" class="custom-control-input" type="checkbox" data-bind="checked: $data.commuterPier.checked" />
-                            <label class="custom-control-label" data-bind="text: $data.commuterPier.name" for="commuterPier">Commuter Pier</label>
-                        </div>
                     </div>
                 </collapsible>
             </div>

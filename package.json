@@ -5,7 +5,17 @@
   "description": "A calculator to compute the consumption of goods in the computer game Anno 1800.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "build": "webpack",
+    "build:ts": "tsc",
+    "dev": "webpack --watch",
+    "type-check": "tsc --noEmit",
+    "migrate": "node scripts/migrate-to-typescript.js",
+    "type-check:watch": "tsc --noEmit --watch",
+    "fix-types": "node fix-typescript-errors.js",
+    "migration-helper": "node scripts/migration-helper.js",
+    "fix-critical": "node fix-critical-errors.js",
+    "quick-fix": "node scripts/quick-fix.js",
+    "generate-types": "node fix-critical-errors.js && node scripts/quick-fix.js"
   },
   "author": "Nico Höllerich",
   "license": "MIT",
@@ -16,5 +26,11 @@
     "html-loader": "^5.0.0",
     "knockout": "^3.5.1",
     "knockout-amd-helpers": "^1.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "@types/knockout": "^3.4.72",
+    "@types/jquery": "^3.5.29",
+    "ts-loader": "^9.5.1"
   }
 }
