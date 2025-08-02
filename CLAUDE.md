@@ -1,0 +1,110 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+Anno 1800 Calculator is a web-based calculator for the computer game Anno 1800, built to compute production chains and resource consumption based on population requirements. The project is currently undergoing migration from JavaScript to TypeScript.
+
+## Development Commands
+
+### Build Commands
+- `npm run build` - Build the project with webpack
+- `npm run build:ts` - TypeScript compilation only
+- `npm run dev` - Development mode with webpack watch
+- `npm run type-check` - TypeScript type checking without emitting files
+- `npm run type-check:watch` - TypeScript type checking in watch mode
+
+### Migration Scripts
+- `npm run migrate` - Run TypeScript migration helper
+- `npm run fix-types` - Fix TypeScript errors automatically
+- `npm run fix-critical` - Fix critical TypeScript errors
+- `npm run quick-fix` - Apply quick TypeScript fixes
+- `npm run generate-types` - Generate type definitions from params
+
+## Project Architecture
+
+### Dual Source Structure
+The project maintains both JavaScript (legacy) and TypeScript (target) versions:
+- `js/` - Original JavaScript files (legacy, still referenced by webpack aliases)
+- `src/` - TypeScript source files (target)
+- `dist/` - Compiled output directory
+
+### Core Modules
+- **main.ts** - Application entry point, initializes knockout bindings and global state
+- **types.ts** - Comprehensive type definitions for all interfaces and configurations
+- **util.ts** - Base classes (NamedElement, DLC, Option) and utility functions
+- **params.ts** - Game configuration data (generated from Anno 1800 assets)
+- **population.ts** - Population management and residence calculations
+- **factories.ts** - Production building and factory logic
+- **world.ts** - Session, region, and island management
+- **trade.ts** - Trade route and NPC trader management
+- **views.ts** - UI view models and dialogs
+- **components.ts** - Knockout component registration
+- **i18n.ts** - Internationalization and text management
+
+### Key Design Patterns
+- **Knockout.js MVVM** - Uses observables for reactive UI updates
+- **Global State Management** - `window.view` object contains all application state
+- **Configuration-Driven** - All game data loaded from `params.ts` configuration
+- **Module System** - Mix of ES6 imports and AMD requires for compatibility
+
+### Template System
+HTML templates are loaded from `templates/` directory via webpack context and registered as Knockout templates.
+
+## TypeScript Migration Status
+
+The project is partially migrated to TypeScript. Key considerations:
+
+### Migration Guidelines
+- Prefer editing TypeScript files in `src/` over JavaScript files in `js/`
+- Use explicit type annotations and avoid `any` types where possible
+- Replace `$.extend()` patterns with explicit property assignments
+- Add proper error handling and validation in constructors
+- Use configuration interfaces defined in `types.ts`
+
+### Build Process
+- Webpack bundles TypeScript source from `src/main.ts`
+- TypeScript compiler outputs to `dist/` with declaration files
+- Knockout and jQuery remain as external dependencies via webpack aliases
+
+### Critical Architecture Notes
+- **Global Dependencies**: Knockout, jQuery, and Bootstrap are loaded globally
+- **AMD Compatibility**: Some modules still use AMD require() for Knockout compatibility  
+- **Template Loading**: Uses webpack's require.context() to load HTML templates
+- **State Persistence**: Uses localStorage for configuration persistence
+- **Asset Loading**: Game configuration loaded from generated params files
+
+## Testing and Validation
+
+Always run type checking after making changes:
+```bash
+npm run type-check
+```
+
+For build validation:
+```bash
+npm run build
+```
+
+## Deprecated Features (DO NOT MIGRATE)
+
+The following features from the original JavaScript files are no longer required and should NOT be migrated to TypeScript:
+
+1. **CommuterWorkforce** - Deprecated workforce management feature
+2. **Powerplant** - Deprecated power plant management feature  
+3. **PopulationReader** - Server communication for Anno game data is no longer needed
+4. **clipped property** - Factory clipping functionality has been removed
+
+When working on the migration, ignore any references to these features in the original JavaScript files.
+
+## Key Files to Understand
+
+1. **src/main.ts:276** - `init()` function contains the main application initialization sequence
+2. **src/types.ts** - Comprehensive type definitions for all major interfaces
+3. **docs/MIGRATION_GUIDE.md** - Detailed migration documentation
+4. **webpack.config.js** - Build configuration with TypeScript support
+
+## Code Style and Best Practices
+
+- Use `!` for lazy-initialized variables
