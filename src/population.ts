@@ -5,11 +5,13 @@ import { ResidenceEffectView } from './views';
 import { 
     Island, 
     Region,
+    AssetsMap,
+} from './types';
+import { 
     ResidenceBuildingConfig, 
     PopulationLevelConfig, 
     WorkforceConfig,
-    AssetsMap,
-} from './types';
+} from './types.config';
 
 declare const view: any;
 
@@ -60,7 +62,7 @@ export class ResidenceBuilding extends NamedElement {
         this.residentMax = config.residentMax || 0;
         this.residentsPerNeed = new Map();
         this.island = island;
-        this.region = config.region ? assetsMap.get(parseInt(config.region)) : null;
+        this.region = config.region ? assetsMap.get(config.region) : null;
         this.upgradedBuildingGuid = config.upgradedBuilding;
         this.existingBuildings = createIntInput(0, 0);
         this.lockDLCIfSet(this.existingBuildings);

@@ -1,11 +1,15 @@
 import { ALL_ISLANDS, setDefaultFixedFactories, NamedElement, Option, ko } from './util';
 import { texts } from './i18n';
 import { 
-    RegionConfig, 
-    SessionConfig, 
+ 
     AssetsMap, 
     GameParams,
 } from './types';
+import { 
+    RegionConfig, 
+    SessionConfig, 
+
+} from './types.config';
 
 import { Workforce, ResidenceBuilding, PopulationLevel } from './population';
 import { NoFactoryProduct, Product, MetaProduct, Item, ProductCategory } from './production';
@@ -152,7 +156,7 @@ export class Region extends NamedElement {
         // Use locaText.englisch as the name if available, otherwise use a fallback
         const regionConfig = {
             ...config,
-            name: config.locaText?.englisch || config.name || 'Unknown Region'
+            name: config.name || config.locaText?.english || 'Unknown Region'
         };
         
         super(regionConfig);
@@ -177,11 +181,11 @@ export class Session extends NamedElement {
         // Use locaText.englisch as the name if available, otherwise use a fallback
         const sessionConfig = {
             ...config,
-            name: config.locaText?.englisch || config.name || 'Unknown Session'
+            name: config.locaText?.english || config.name || 'Unknown Session'
         };
         
         super(sessionConfig);
-        this.region = config.region ? assetsMap.get(parseInt(config.region)) : null;
+        this.region = config.region ? assetsMap.get(config.region) : null;
         this.islands = ko.observableArray([]);
     }
     

@@ -1,5 +1,6 @@
 import { NamedElement, Option, EPSILON, ko } from './util';
 import { Factory, Region, AssetsMap } from './types';
+import { ProductConfig } from './types.config';
 
 
 declare const view: any;
@@ -23,7 +24,7 @@ export class Product extends NamedElement {
      * @param config - Configuration object for the product
      * @param assetsMap - Map of all available assets
      */
-    constructor(config: any, _assetsMap: AssetsMap) {
+    constructor(config: ProductConfig, _assetsMap: AssetsMap) {
         // Validate required parameters
         if (!config.name) {
             throw new Error('Product name is required');

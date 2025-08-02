@@ -1,0 +1,1605 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Anno 117 Calculator Parameters",
+  "description": "Generated schema for Anno 117 calculator parameters",
+  "type": "object",
+  "properties": {
+    "languages": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Language",
+      "description": "Supported localization languages"
+    },
+    "regions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "guid": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "iconPath": {
+            "type": "string"
+          },
+          "locaText": {
+            "type": "object",
+            "properties": {
+              "english": {
+                "type": "string"
+              },
+              "french": {
+                "type": "string"
+              },
+              "polish": {
+                "type": "string"
+              },
+              "spanish": {
+                "type": "string"
+              },
+              "italian": {
+                "type": "string"
+              },
+              "german": {
+                "type": "string"
+              },
+              "brazilian": {
+                "type": "string"
+              },
+              "russian": {
+                "type": "string"
+              },
+              "simplified_chinese": {
+                "type": "string"
+              },
+              "traditional_chinese": {
+                "type": "string"
+              },
+              "japanese": {
+                "type": "string"
+              },
+              "korean": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "english",
+              "french",
+              "polish",
+              "spanish",
+              "italian",
+              "german",
+              "brazilian",
+              "russian",
+              "simplified_chinese",
+              "traditional_chinese",
+              "japanese",
+              "korean"
+            ]
+          }
+        },
+        "required": [
+          "guid",
+          "name",
+          "iconPath",
+          "locaText"
+        ]
+      },
+      "title": "Region",
+      "description": "Game regions data with GUID, name, icon, and localized text"
+    },
+    "sessions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "guid": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "iconPath": {
+            "type": "string"
+          },
+          "locaText": {
+            "type": "object",
+            "properties": {
+              "english": {
+                "type": "string"
+              },
+              "french": {
+                "type": "string"
+              },
+              "polish": {
+                "type": "string"
+              },
+              "spanish": {
+                "type": "string"
+              },
+              "italian": {
+                "type": "string"
+              },
+              "german": {
+                "type": "string"
+              },
+              "brazilian": {
+                "type": "string"
+              },
+              "russian": {
+                "type": "string"
+              },
+              "simplified_chinese": {
+                "type": "string"
+              },
+              "traditional_chinese": {
+                "type": "string"
+              },
+              "japanese": {
+                "type": "string"
+              },
+              "korean": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "english",
+              "french",
+              "polish",
+              "spanish",
+              "italian",
+              "german",
+              "brazilian",
+              "russian",
+              "simplified_chinese",
+              "traditional_chinese",
+              "japanese",
+              "korean"
+            ]
+          },
+          "region": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "guid",
+          "name",
+          "iconPath",
+          "locaText",
+          "region"
+        ]
+      },
+      "title": "Session",
+      "description": "Game session information including region associations"
+    },
+    "populationGroups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "guid": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "locaText": {
+            "type": "object",
+            "properties": {
+              "english": {
+                "type": "string"
+              },
+              "french": {
+                "type": "string"
+              },
+              "polish": {
+                "type": "string"
+              },
+              "spanish": {
+                "type": "string"
+              },
+              "italian": {
+                "type": "string"
+              },
+              "german": {
+                "type": "string"
+              },
+              "brazilian": {
+                "type": "string"
+              },
+              "russian": {
+                "type": "string"
+              },
+              "simplified_chinese": {
+                "type": "string"
+              },
+              "traditional_chinese": {
+                "type": "string"
+              },
+              "japanese": {
+                "type": "string"
+              },
+              "korean": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "english",
+              "french",
+              "polish",
+              "spanish",
+              "italian",
+              "german",
+              "brazilian",
+              "russian",
+              "simplified_chinese",
+              "traditional_chinese",
+              "japanese",
+              "korean"
+            ]
+          },
+          "populationLevels": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": [
+          "guid",
+          "name",
+          "locaText",
+          "populationLevels"
+        ]
+      },
+      "title": "PopulationGroup",
+      "description": "Population group definitions with associated levels"
+    },
+    "populationLevels": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "guid": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "iconPath": {
+            "type": "string"
+          },
+          "locaText": {
+            "type": "object",
+            "properties": {
+              "english": {
+                "type": "string"
+              },
+              "french": {
+                "type": "string"
+              },
+              "polish": {
+                "type": "string"
+              },
+              "spanish": {
+                "type": "string"
+              },
+              "italian": {
+                "type": "string"
+              },
+              "german": {
+                "type": "string"
+              },
+              "brazilian": {
+                "type": "string"
+              },
+              "russian": {
+                "type": "string"
+              },
+              "simplified_chinese": {
+                "type": "string"
+              },
+              "traditional_chinese": {
+                "type": "string"
+              },
+              "japanese": {
+                "type": "string"
+              },
+              "korean": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "english",
+              "french",
+              "polish",
+              "spanish",
+              "italian",
+              "german",
+              "brazilian",
+              "russian",
+              "simplified_chinese",
+              "traditional_chinese",
+              "japanese",
+              "korean"
+            ]
+          },
+          "region": {
+            "type": "integer"
+          },
+          "fullHouse": {
+            "type": "integer"
+          },
+          "needs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "guid": {
+                  "type": "integer"
+                },
+                "residents": {
+                  "type": "integer"
+                },
+                "tpmin": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "guid",
+                "residents",
+                "tpmin"
+              ]
+            }
+          },
+          "residence": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "guid",
+          "name",
+          "iconPath",
+          "locaText",
+          "region",
+          "fullHouse",
+          "needs",
+          "residence"
+        ]
+      },
+      "title": "PopulationLevel",
+      "description": "Population level definitions with needs and requirements"
+    },
+    "residenceBuildings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "guid": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "iconPath": {
+            "type": "string"
+          },
+          "locaText": {
+            "type": "object",
+            "properties": {
+              "english": {
+                "type": "string"
+              },
+              "french": {
+                "type": "string"
+              },
+              "polish": {
+                "type": "string"
+              },
+              "spanish": {
+                "type": "string"
+              },
+              "italian": {
+                "type": "string"
+              },
+              "german": {
+                "type": "string"
+              },
+              "brazilian": {
+                "type": "string"
+              },
+              "russian": {
+                "type": "string"
+              },
+              "simplified_chinese": {
+                "type": "string"
+              },
+              "traditional_chinese": {
+                "type": "string"
+              },
+              "japanese": {
+                "type": "string"
+              },
+              "korean": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "english",
+              "french",
+              "polish",
+              "spanish",
+              "italian",
+              "german",
+              "brazilian",
+              "russian",
+              "simplified_chinese",
+              "traditional_chinese",
+              "japanese",
+              "korean"
+            ]
+          },
+          "populationLevel": {
+            "type": "integer"
+          },
+          "region": {
+            "type": "integer"
+          },
+          "residentMax": {
+            "type": "integer"
+          },
+          "residentsPerNeed": {
+            "type": "object",
+            "properties": {
+              "2097": {
+                "type": "integer"
+              },
+              "2108": {
+                "type": "integer"
+              },
+              "6706": {
+                "type": "integer"
+              },
+              "6709": {
+                "type": "integer"
+              },
+              "2159": {
+                "type": "integer"
+              },
+              "2141": {
+                "type": "integer"
+              },
+              "2139": {
+                "type": "integer"
+              },
+              "2137": {
+                "type": "integer"
+              },
+              "8405": {
+                "type": "integer"
+              },
+              "16201": {
+                "type": "integer"
+              },
+              "6710": {
+                "type": "integer"
+              },
+              "2156": {
+                "type": "integer"
+              },
+              "2143": {
+                "type": "integer"
+              },
+              "31700": {
+                "type": "integer"
+              },
+              "2149": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "2097",
+              "2108",
+              "6706",
+              "6709",
+              "2159",
+              "2141",
+              "2139",
+              "2137",
+              "8405",
+              "16201",
+              "6710",
+              "2156",
+              "2143",
+              "31700",
+              "2149"
+            ]
+          }
+        },
+        "required": [
+          "guid",
+          "name",
+          "iconPath",
+          "locaText",
+          "populationLevel",
+          "region",
+          "residentMax",
+          "residentsPerNeed"
+        ]
+      },
+      "title": "ResidenceBuilding",
+      "description": "Residence building definitions with capacity and needs"
+    },
+    "workforce": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "guid": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "iconPath": {
+            "type": "string"
+          },
+          "locaText": {
+            "type": "object",
+            "properties": {
+              "english": {
+                "type": "string"
+              },
+              "french": {
+                "type": "string"
+              },
+              "polish": {
+                "type": "string"
+              },
+              "spanish": {
+                "type": "string"
+              },
+              "italian": {
+                "type": "string"
+              },
+              "german": {
+                "type": "string"
+              },
+              "brazilian": {
+                "type": "string"
+              },
+              "russian": {
+                "type": "string"
+              },
+              "simplified_chinese": {
+                "type": "string"
+              },
+              "traditional_chinese": {
+                "type": "string"
+              },
+              "japanese": {
+                "type": "string"
+              },
+              "korean": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "english",
+              "french",
+              "polish",
+              "spanish",
+              "italian",
+              "german",
+              "brazilian",
+              "russian",
+              "simplified_chinese",
+              "traditional_chinese",
+              "japanese",
+              "korean"
+            ]
+          }
+        },
+        "required": [
+          "guid",
+          "name",
+          "iconPath",
+          "locaText"
+        ]
+      },
+      "title": "Workforce",
+      "description": "Workforce definitions"
+    },
+    "products": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "guid": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "iconPath": {
+            "type": "string"
+          },
+          "locaText": {
+            "type": "object",
+            "properties": {
+              "english": {
+                "type": "string"
+              },
+              "french": {
+                "type": "string"
+              },
+              "polish": {
+                "type": "string"
+              },
+              "spanish": {
+                "type": "string"
+              },
+              "italian": {
+                "type": "string"
+              },
+              "german": {
+                "type": "string"
+              },
+              "brazilian": {
+                "type": "string"
+              },
+              "russian": {
+                "type": "string"
+              },
+              "simplified_chinese": {
+                "type": "string"
+              },
+              "traditional_chinese": {
+                "type": "string"
+              },
+              "japanese": {
+                "type": "string"
+              },
+              "korean": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "english",
+              "french",
+              "polish",
+              "spanish",
+              "italian",
+              "german",
+              "brazilian",
+              "russian",
+              "simplified_chinese",
+              "traditional_chinese",
+              "japanese",
+              "korean"
+            ]
+          }
+        },
+        "required": [
+          "guid",
+          "name",
+          "iconPath",
+          "locaText"
+        ]
+      },
+      "title": "Product",
+      "description": "Product definitions with producer information"
+    },
+    "productFilter": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "iconPath": {
+            "type": "string"
+          },
+          "locaText": {
+            "type": "object",
+            "properties": {
+              "english": {
+                "type": "string"
+              },
+              "french": {
+                "type": "string"
+              },
+              "polish": {
+                "type": "string"
+              },
+              "spanish": {
+                "type": "string"
+              },
+              "italian": {
+                "type": "string"
+              },
+              "german": {
+                "type": "string"
+              },
+              "brazilian": {
+                "type": "string"
+              },
+              "russian": {
+                "type": "string"
+              },
+              "simplified_chinese": {
+                "type": "string"
+              },
+              "traditional_chinese": {
+                "type": "string"
+              },
+              "japanese": {
+                "type": "string"
+              },
+              "korean": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "english",
+              "french",
+              "polish",
+              "spanish",
+              "italian",
+              "german",
+              "brazilian",
+              "russian",
+              "simplified_chinese",
+              "traditional_chinese",
+              "japanese",
+              "korean"
+            ]
+          },
+          "guid": {
+            "type": "integer"
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": [
+          "iconPath",
+          "locaText",
+          "guid",
+          "products"
+        ]
+      },
+      "title": "ProductFilter",
+      "description": "Product category filters for UI organization"
+    },
+    "factories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "guid": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "iconPath": {
+            "type": "string"
+          },
+          "locaText": {
+            "type": "object",
+            "properties": {
+              "english": {
+                "type": "string"
+              },
+              "french": {
+                "type": "string"
+              },
+              "polish": {
+                "type": "string"
+              },
+              "spanish": {
+                "type": "string"
+              },
+              "italian": {
+                "type": "string"
+              },
+              "german": {
+                "type": "string"
+              },
+              "brazilian": {
+                "type": "string"
+              },
+              "russian": {
+                "type": "string"
+              },
+              "simplified_chinese": {
+                "type": "string"
+              },
+              "traditional_chinese": {
+                "type": "string"
+              },
+              "japanese": {
+                "type": "string"
+              },
+              "korean": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "english",
+              "french",
+              "polish",
+              "spanish",
+              "italian",
+              "german",
+              "brazilian",
+              "russian",
+              "simplified_chinese",
+              "traditional_chinese",
+              "japanese",
+              "korean"
+            ]
+          },
+          "region": {
+            "type": "integer"
+          },
+          "outputs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Product": {
+                  "type": "integer"
+                },
+                "Amount": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "Product",
+                "Amount"
+              ]
+            }
+          },
+          "maintenances": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Product": {
+                  "type": "integer"
+                },
+                "Amount": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "Product",
+                "Amount"
+              ]
+            }
+          },
+          "tpmin": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "guid",
+          "name",
+          "iconPath",
+          "locaText",
+          "region",
+          "outputs",
+          "maintenances",
+          "tpmin"
+        ]
+      },
+      "title": "Factory",
+      "description": "Factory building definitions with inputs, outputs, and production rates"
+    },
+    "icons": {
+      "type": "object",
+      "properties": {
+        "data/ui/2kimages/fpp/assets/main_menu_flow/symbol_heartlands_280.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/fpp/assets/main_menu_flow/symbol_wetlands_fp_280.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/hud_minimap/icon_minimap_world_map.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/building/icon_3d_residence.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_roman_tier2_mercator.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_mercators_2d.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_roman_tier3_noble.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_nobles_2d.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier1_libertus.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_libertus_2d.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier2_plebeian.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_plebeian_2d.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier3_equites.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_equites_2d.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier4_patrician.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_patrician_2d.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_tier1_wader.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_waders_2d.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_tier2_smith.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_smiths_2d.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_tier3_aldermen.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_aldermen_2d.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/attributes/icon_2d_income.png": {
+          "type": "string"
+        },
+        "data/ui/4k/base/icon_content/generic/icon_2d_villa.png": {
+          "type": "string"
+        },
+        "data/ui/4k/base/icon_content/generic/icon_2d_storage_capacity.png": {
+          "type": "string"
+        },
+        "data/ui/4k/base/icon_content/generic/icon_2d_religion.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/military/icon_3d_military_auxilia.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/military/icon_3d_military_archer.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/military/icon_3d_military_equites.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_samphire.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_barley.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_dye_plants.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/plants/icon_reeds.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_mud.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_auroch.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_eels.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_beaver.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_tin_ore.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_copper_ore.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_granite.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_pony.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_celtic_green.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_lye.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_chassis.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_bronze.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_malt.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_cheese.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/production_goods/icon_3d_beer_goods.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_roast.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_reed_shoes.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_trouser.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/production_goods/icon_3d_cloak_goods.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_torc.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_pelt_hat.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/production_goods/icon_3d_drinkinghorns_goods.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_clan_shields.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_chariot.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_wattle_daub.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_granite_block.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_sardines.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_mackerels.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_salt.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_murex_snails.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_silica.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_oyster.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_oat.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_hemp.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_wheat.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_lavender.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_olives.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_grapes.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_flax.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_cypress_wood.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_wood.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/production_goods/icon_3d_charcoal_goods.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/production_goods/icon_3d_resin_goods.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_honeycombs.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_iron_ore.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_limestone.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_marble.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_minerals.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_sheep.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_pig.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_horse.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_clay.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_sturgeon.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_gold_ore.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_leather.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_tyrian_purple.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_pig_lard.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_cloth.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_ornamented_wood.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_cushion.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_string.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_iron.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_glass.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_pigments.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_gold.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_flour.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_caviar.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_porridge.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_bread.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_garum.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_wine.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_oysters_and_caviar.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_tunics.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_farm_hat.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_lavender_soap.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_sandal.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_toga.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_necklace.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_wax_tablet.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_fine_glass.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_lounger.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_olive_oil.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_amphorae.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_lyre.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_timber.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_tile.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_concrete.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_marble_block.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_mosaics.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_rope.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_sail.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_weapons.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_armory.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_seashells.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_cockles.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_marsh_birds.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_silver_ore.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_herbs.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_wig_base.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_silver.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_bird_tongue.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_sausages.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_tongue_in_aspic.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_brooch.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_wig.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_handmirrors.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_marketplace_roman.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_taverna_roman.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_sanctuary_roman.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_grammaticus_roman.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_theatre_roman.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_gambling_house_roman.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_temple_roman.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_library_roman.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_infrastructure/icon_aqueduct_cistern.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_forum_roman.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_bathhouse_roman.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_colosseum_roman.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_marketplace_celtic.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_grammaticus_celtic.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_fanom.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_forum_celtic.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_bathhouse_celtic.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/public_building/aquaduct_cistern.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_bardic_hall.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_sportsfield.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_town_hall_celtic.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/building/icon_public_barrows_celtic.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/building/icon_public_ceremonial_ground_celtic.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/generic/icon_2d_filter_goods_consumption.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/generic/icon_2d_filter_goods_construction.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/generic/icon_2d_filter_goods_raw.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/generic/icon_2d_filter_goods_agricultural.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/generic/icon_2d_filter_goods_intermediate.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_charcoal.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/infrastructure/icon_3d_silos.png": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "data/ui/2kimages/fpp/assets/main_menu_flow/symbol_heartlands_280.png",
+        "data/ui/2kimages/fpp/assets/main_menu_flow/symbol_wetlands_fp_280.png",
+        "data/ui/fhd/base/icon_content/hud_minimap/icon_minimap_world_map.png",
+        "data/ui/fhd/base/icon_content/building/icon_3d_residence.png",
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_roman_tier2_mercator.png",
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_mercators_2d.png",
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_roman_tier3_noble.png",
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_nobles_2d.png",
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier1_libertus.png",
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_libertus_2d.png",
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier2_plebeian.png",
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_plebeian_2d.png",
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier3_equites.png",
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_equites_2d.png",
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier4_patrician.png",
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_patrician_2d.png",
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_tier1_wader.png",
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_waders_2d.png",
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_tier2_smith.png",
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_smiths_2d.png",
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_tier3_aldermen.png",
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_aldermen_2d.png",
+        "data/ui/fhd/base/icon_content/attributes/icon_2d_income.png",
+        "data/ui/4k/base/icon_content/generic/icon_2d_villa.png",
+        "data/ui/4k/base/icon_content/generic/icon_2d_storage_capacity.png",
+        "data/ui/4k/base/icon_content/generic/icon_2d_religion.png",
+        "data/ui/fhd/base/icon_content/military/icon_3d_military_auxilia.png",
+        "data/ui/fhd/base/icon_content/military/icon_3d_military_archer.png",
+        "data/ui/fhd/base/icon_content/military/icon_3d_military_equites.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_samphire.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_barley.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_dye_plants.png",
+        "data/ui/2kimages/main/3dicons/plants/icon_reeds.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_mud.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_auroch.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_eels.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_beaver.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_tin_ore.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_copper_ore.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_granite.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_pony.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_celtic_green.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_lye.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_chassis.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_bronze.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_malt.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_cheese.png",
+        "data/ui/fhd/base/icon_content/production_goods/icon_3d_beer_goods.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_roast.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_reed_shoes.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_trouser.png",
+        "data/ui/fhd/base/icon_content/production_goods/icon_3d_cloak_goods.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_torc.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_pelt_hat.png",
+        "data/ui/fhd/base/icon_content/production_goods/icon_3d_drinkinghorns_goods.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_clan_shields.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_chariot.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_wattle_daub.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_granite_block.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_sardines.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_mackerels.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_salt.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_murex_snails.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_silica.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_oyster.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_oat.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_hemp.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_wheat.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_lavender.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_olives.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_grapes.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_flax.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_cypress_wood.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_wood.png",
+        "data/ui/fhd/base/icon_content/production_goods/icon_3d_charcoal_goods.png",
+        "data/ui/fhd/base/icon_content/production_goods/icon_3d_resin_goods.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_honeycombs.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_iron_ore.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_limestone.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_marble.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_minerals.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_sheep.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_pig.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_horse.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_clay.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_sturgeon.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_gold_ore.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_leather.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_tyrian_purple.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_pig_lard.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_cloth.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_ornamented_wood.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_cushion.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_string.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_iron.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_glass.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_pigments.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_gold.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_flour.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_caviar.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_porridge.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_bread.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_garum.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_wine.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_oysters_and_caviar.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_tunics.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_farm_hat.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_lavender_soap.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_sandal.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_toga.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_necklace.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_wax_tablet.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_fine_glass.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_lounger.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_olive_oil.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_amphorae.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_lyre.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_timber.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_tile.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_concrete.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_marble_block.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_mosaics.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_rope.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_sail.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_weapons.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_armory.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_seashells.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_cockles.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_marsh_birds.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_silver_ore.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_herbs.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_wig_base.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_silver.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_bird_tongue.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_sausages.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_tongue_in_aspic.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_brooch.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_wig.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_handmirrors.png",
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_marketplace_roman.png",
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_taverna_roman.png",
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_sanctuary_roman.png",
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_grammaticus_roman.png",
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_theatre_roman.png",
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_gambling_house_roman.png",
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_temple_roman.png",
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_library_roman.png",
+        "data/ui/2kimages/main/3dicons/limestone_infrastructure/icon_aqueduct_cistern.png",
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_forum_roman.png",
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_bathhouse_roman.png",
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_colosseum_roman.png",
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_marketplace_celtic.png",
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_grammaticus_celtic.png",
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_fanom.png",
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_forum_celtic.png",
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_bathhouse_celtic.png",
+        "data/ui/2kimages/main/3dicons/public_building/aquaduct_cistern.png",
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_bardic_hall.png",
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_sportsfield.png",
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_town_hall_celtic.png",
+        "data/ui/fhd/base/icon_content/building/icon_public_barrows_celtic.png",
+        "data/ui/fhd/base/icon_content/building/icon_public_ceremonial_ground_celtic.png",
+        "data/ui/fhd/base/icon_content/generic/icon_2d_filter_goods_consumption.png",
+        "data/ui/fhd/base/icon_content/generic/icon_2d_filter_goods_construction.png",
+        "data/ui/fhd/base/icon_content/generic/icon_2d_filter_goods_raw.png",
+        "data/ui/fhd/base/icon_content/generic/icon_2d_filter_goods_agricultural.png",
+        "data/ui/fhd/base/icon_content/generic/icon_2d_filter_goods_intermediate.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_charcoal.png",
+        "data/ui/fhd/base/icon_content/infrastructure/icon_3d_silos.png"
+      ],
+      "title": "Icon",
+      "description": "Icon data URLs indexed by icon identifier"
+    }
+  },
+  "required": [
+    "languages",
+    "regions",
+    "sessions",
+    "populationGroups",
+    "populationLevels",
+    "residenceBuildings",
+    "workforce",
+    "products",
+    "productFilter",
+    "factories",
+    "icons"
+  ]
+}

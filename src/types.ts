@@ -1,14 +1,29 @@
 // Core type definitions for the Anno 1800 Calculator
-
+// Common interface for localized text
+export interface LocaTextConfig {
+  english: string;
+  french: string;
+  polish: string;
+  spanish: string;
+  italian: string;
+  german: string;
+  brazilian: string;
+  russian: string;
+  simplified_chinese: string;
+  traditional_chinese: string;
+  japanese: string;
+  korean: string;
+  [key: string]: string; // Allow string indexing
+}
 
 
 // Base configuration interfaces
 export interface NamedElementConfig {
   guid: number;
   name: string;
-  locaText: Record<string, string>;
+  locaText: LocaTextConfig;
   iconPath: string;
-  dlcs: string[];
+  dlcs?: string[];
   available?: boolean;
   notes?: string;
 }
@@ -268,7 +283,7 @@ export interface Item {
   guid: number;
   name(): string;
   icon?: string;
-  locaText?: Record<string, string>;
+  locaText?: LocaTextConfig;
   factories: Factory[];
   replacements?: Map<string, string>;
   replacementArray?: string[];

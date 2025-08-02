@@ -4,7 +4,8 @@ import {
   DLCConfig, 
   NumberInputHandlerParams, 
   NumericBounds,
-  AssetsMap
+  AssetsMap,
+  LocaTextConfig
 } from './types';
 
 declare const $: any;
@@ -268,7 +269,7 @@ export function createFloatInput(init: number, min: number = -Infinity, max: num
 export class NamedElement {
     public name: KnockoutComputed<string>;
     public guid: number;
-    public locaText: Record<string, string>;
+    public locaText: LocaTextConfig;
     public icon?: string;
     public dlcs?: DLC[];
     public available: KnockoutComputed<boolean>;
@@ -297,12 +298,15 @@ export class NamedElement {
                 return config.name || "";
             }
 
-            let text = this.locaText[view.settings.language()];
-            if (text) {
-                return text;
+            const lang = view.settings.language() as string
+            if (lang in this.locaText){            
+                let text = this.locaText[lang];
+                if (text) {
+                    return text;
+                }
             }
 
-            text = this.locaText["english"];
+            let text = this.locaText["english"];
             return text ? text : (config.name || "");
         });
 
