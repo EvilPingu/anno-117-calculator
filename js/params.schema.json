@@ -4,6 +4,24 @@
   "description": "Generated schema for Anno 117 calculator parameters",
   "type": "object",
   "properties": {
+    "constants": {
+      "type": "object",
+      "title": "Constants",
+      "properties": {
+        "fuelProductionTime": {
+          "type": "integer",
+          "description": "How long does 1t of this product activate a production in seconds"
+        },
+        "fuelProduct": {
+          "type": "integer",
+          "description": "which product can be used as fuel"
+        }
+      },
+      "required": [
+        "fuelProductionTime",
+        "fuelProduct"
+      ]
+    },
     "languages": {
       "type": "array",
       "items": {
@@ -11,6 +29,86 @@
       },
       "title": "Language",
       "description": "Supported localization languages"
+    },
+    "needConsumptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "locaText": {
+            "type": "object",
+            "properties": {
+              "english": {
+                "type": "string"
+              },
+              "french": {
+                "type": "string"
+              },
+              "polish": {
+                "type": "string"
+              },
+              "spanish": {
+                "type": "string"
+              },
+              "italian": {
+                "type": "string"
+              },
+              "german": {
+                "type": "string"
+              },
+              "brazilian": {
+                "type": "string"
+              },
+              "russian": {
+                "type": "string"
+              },
+              "simplified_chinese": {
+                "type": "string"
+              },
+              "traditional_chinese": {
+                "type": "string"
+              },
+              "japanese": {
+                "type": "string"
+              },
+              "korean": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "english",
+              "french",
+              "polish",
+              "spanish",
+              "italian",
+              "german",
+              "brazilian",
+              "russian",
+              "simplified_chinese",
+              "traditional_chinese",
+              "japanese",
+              "korean"
+            ]
+          },
+          "consumptionFactor": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "locaText",
+          "consumptionFactor"
+        ]
+      },
+      "title": "NeedConsumption",
+      "description": "Scaling factor for NeedConsumptionRate"
     },
     "regions": {
       "type": "array",
@@ -80,13 +178,17 @@
               "japanese",
               "korean"
             ]
+          },
+          "id": {
+            "type": "string"
           }
         },
         "required": [
           "guid",
           "name",
           "iconPath",
-          "locaText"
+          "locaText",
+          "id"
         ]
       },
       "title": "Region",
@@ -99,6 +201,79 @@
         "properties": {
           "guid": {
             "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "iconPath": {
+            "type": "string"
+          },
+          "locaText": {
+            "type": "object",
+            "properties": {
+              "english": {
+                "type": "string"
+              },
+              "french": {
+                "type": "string"
+              },
+              "polish": {
+                "type": "string"
+              },
+              "spanish": {
+                "type": "string"
+              },
+              "italian": {
+                "type": "string"
+              },
+              "german": {
+                "type": "string"
+              },
+              "brazilian": {
+                "type": "string"
+              },
+              "russian": {
+                "type": "string"
+              },
+              "simplified_chinese": {
+                "type": "string"
+              },
+              "traditional_chinese": {
+                "type": "string"
+              },
+              "japanese": {
+                "type": "string"
+              },
+              "korean": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "english"
+            ]
+          },
+          "region": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "guid",
+          "name",
+          "iconPath",
+          "locaText",
+          "region"
+        ]
+      },
+      "title": "Session",
+      "description": "Game session information including region associations"
+    },
+    "needAttributes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
           },
           "name": {
             "type": "string"
@@ -160,21 +335,173 @@
               "japanese",
               "korean"
             ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "iconPath",
+          "locaText"
+        ]
+      },
+      "title": "NeedAttribute",
+      "description": "Attributes obtained from needs"
+    },
+    "needCategories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
           },
-          "region": {
+          "name": {
+            "type": "string"
+          },
+          "iconPath": {
+            "type": "string"
+          },
+          "locaText": {
+            "type": "object",
+            "properties": {
+              "english": {
+                "type": "string"
+              },
+              "french": {
+                "type": "string"
+              },
+              "polish": {
+                "type": "string"
+              },
+              "spanish": {
+                "type": "string"
+              },
+              "italian": {
+                "type": "string"
+              },
+              "german": {
+                "type": "string"
+              },
+              "brazilian": {
+                "type": "string"
+              },
+              "russian": {
+                "type": "string"
+              },
+              "simplified_chinese": {
+                "type": "string"
+              },
+              "traditional_chinese": {
+                "type": "string"
+              },
+              "japanese": {
+                "type": "string"
+              },
+              "korean": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "english",
+              "french",
+              "polish",
+              "spanish",
+              "italian",
+              "german",
+              "brazilian",
+              "russian",
+              "simplified_chinese",
+              "traditional_chinese",
+              "japanese",
+              "korean"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "iconPath",
+          "locaText"
+        ]
+      },
+      "title": "NeedCategory",
+      "description": "Categories for needs"
+    },
+    "needs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "guid": {
             "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "needProduct": {
+            "type": "integer"
+          },
+          "needCategory": {
+            "type": "string"
+          },
+          "supplyWeight": {
+            "type": "number"
+          },
+          "isBuilding": {
+            "type": "boolean"
+          },
+          "needAttributes": {
+            "type": "object",
+            "properties": {
+              "Population": {
+                "type": "integer"
+              },
+              "Money": {
+                "type": "integer"
+              },
+              "Happiness": {
+                "type": "integer"
+              },
+              "Health": {
+                "type": "integer"
+              },
+              "FireSafety": {
+                "type": "integer"
+              },
+              "Belief": {
+                "type": "integer"
+              },
+              "Knowledge": {
+                "type": "integer"
+              },
+              "Prestige": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "Population",
+              "Money",
+              "Happiness",
+              "Health",
+              "FireSafety",
+              "Belief",
+              "Knowledge",
+              "Prestige"
+            ]
           }
         },
         "required": [
           "guid",
           "name",
-          "iconPath",
-          "locaText",
-          "region"
+          "needProduct",
+          "needCategory",
+          "supplyWeight",
+          "isBuilding",
+          "needAttributes"
         ]
       },
-      "title": "Session",
-      "description": "Game session information including region associations"
+      "title": "Need",
+      "description": "Population group definitions with associated levels"
     },
     "populationGroups": {
       "type": "array",
@@ -247,132 +574,21 @@
             "items": {
               "type": "integer"
             }
+          },
+          "region": {
+            "type": "string"
           }
         },
         "required": [
           "guid",
           "name",
           "locaText",
-          "populationLevels"
+          "populationLevels",
+          "region"
         ]
       },
       "title": "PopulationGroup",
       "description": "Population group definitions with associated levels"
-    },
-    "populationLevels": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "guid": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          },
-          "iconPath": {
-            "type": "string"
-          },
-          "locaText": {
-            "type": "object",
-            "properties": {
-              "english": {
-                "type": "string"
-              },
-              "french": {
-                "type": "string"
-              },
-              "polish": {
-                "type": "string"
-              },
-              "spanish": {
-                "type": "string"
-              },
-              "italian": {
-                "type": "string"
-              },
-              "german": {
-                "type": "string"
-              },
-              "brazilian": {
-                "type": "string"
-              },
-              "russian": {
-                "type": "string"
-              },
-              "simplified_chinese": {
-                "type": "string"
-              },
-              "traditional_chinese": {
-                "type": "string"
-              },
-              "japanese": {
-                "type": "string"
-              },
-              "korean": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "english",
-              "french",
-              "polish",
-              "spanish",
-              "italian",
-              "german",
-              "brazilian",
-              "russian",
-              "simplified_chinese",
-              "traditional_chinese",
-              "japanese",
-              "korean"
-            ]
-          },
-          "region": {
-            "type": "integer"
-          },
-          "fullHouse": {
-            "type": "integer"
-          },
-          "needs": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "guid": {
-                  "type": "integer"
-                },
-                "residents": {
-                  "type": "integer"
-                },
-                "tpmin": {
-                  "type": "number"
-                }
-              },
-              "required": [
-                "guid",
-                "residents",
-                "tpmin"
-              ]
-            }
-          },
-          "residence": {
-            "type": "integer"
-          }
-        },
-        "required": [
-          "guid",
-          "name",
-          "iconPath",
-          "locaText",
-          "region",
-          "fullHouse",
-          "needs",
-          "residence"
-        ]
-      },
-      "title": "PopulationLevel",
-      "description": "Population level definitions with needs and requirements"
     },
     "residenceBuildings": {
       "type": "array",
@@ -443,81 +659,38 @@
               "korean"
             ]
           },
+          "associatedRegions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "possibleUpgrades": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
           "populationLevel": {
             "type": "integer"
           },
-          "region": {
-            "type": "integer"
-          },
-          "residentMax": {
-            "type": "integer"
-          },
-          "residentsPerNeed": {
-            "type": "object",
-            "properties": {
-              "2097": {
-                "type": "integer"
+          "needsList": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "need": {
+                  "type": "integer"
+                },
+                "needConsumptionRate": {
+                  "type": "number"
+                }
               },
-              "2108": {
-                "type": "integer"
-              },
-              "6706": {
-                "type": "integer"
-              },
-              "6709": {
-                "type": "integer"
-              },
-              "2159": {
-                "type": "integer"
-              },
-              "2141": {
-                "type": "integer"
-              },
-              "2139": {
-                "type": "integer"
-              },
-              "2137": {
-                "type": "integer"
-              },
-              "8405": {
-                "type": "integer"
-              },
-              "16201": {
-                "type": "integer"
-              },
-              "6710": {
-                "type": "integer"
-              },
-              "2156": {
-                "type": "integer"
-              },
-              "2143": {
-                "type": "integer"
-              },
-              "31700": {
-                "type": "integer"
-              },
-              "2149": {
-                "type": "integer"
-              }
-            },
-            "required": [
-              "2097",
-              "2108",
-              "6706",
-              "6709",
-              "2159",
-              "2141",
-              "2139",
-              "2137",
-              "8405",
-              "16201",
-              "6710",
-              "2156",
-              "2143",
-              "31700",
-              "2149"
-            ]
+              "required": [
+                "need",
+                "needConsumptionRate"
+              ]
+            }
           }
         },
         "required": [
@@ -525,16 +698,16 @@
           "name",
           "iconPath",
           "locaText",
+          "associatedRegions",
+          "possibleUpgrades",
           "populationLevel",
-          "region",
-          "residentMax",
-          "residentsPerNeed"
+          "needsList"
         ]
       },
       "title": "ResidenceBuilding",
-      "description": "Residence building definitions with capacity and needs"
+      "description": "Residence building for a population level"
     },
-    "workforce": {
+    "populationLevels": {
       "type": "array",
       "items": {
         "type": "object",
@@ -602,17 +775,32 @@
               "japanese",
               "korean"
             ]
+          },
+          "connectedWorkforce": {
+            "type": "integer"
+          },
+          "populationToWorkforceFactor": {
+            "type": "number"
+          },
+          "associatedRegions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         },
         "required": [
           "guid",
           "name",
           "iconPath",
-          "locaText"
+          "locaText",
+          "connectedWorkforce",
+          "populationToWorkforceFactor",
+          "associatedRegions"
         ]
       },
-      "title": "Workforce",
-      "description": "Workforce definitions"
+      "title": "PopulationLevel",
+      "description": "Population level definitions with needs and requirements"
     },
     "products": {
       "type": "array",
@@ -682,19 +870,114 @@
               "japanese",
               "korean"
             ]
+          },
+          "associatedRegions": {
+            "type": "array"
+          },
+          "isAbstract": {
+            "type": "boolean"
           }
         },
         "required": [
           "guid",
           "name",
           "iconPath",
-          "locaText"
+          "locaText",
+          "associatedRegions",
+          "isAbstract"
         ]
       },
       "title": "Product",
       "description": "Product definitions with producer information"
     },
-    "productFilter": {
+    "workforce": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "guid": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "iconPath": {
+            "type": "string"
+          },
+          "locaText": {
+            "type": "object",
+            "properties": {
+              "english": {
+                "type": "string"
+              },
+              "french": {
+                "type": "string"
+              },
+              "polish": {
+                "type": "string"
+              },
+              "spanish": {
+                "type": "string"
+              },
+              "italian": {
+                "type": "string"
+              },
+              "german": {
+                "type": "string"
+              },
+              "brazilian": {
+                "type": "string"
+              },
+              "russian": {
+                "type": "string"
+              },
+              "simplified_chinese": {
+                "type": "string"
+              },
+              "traditional_chinese": {
+                "type": "string"
+              },
+              "japanese": {
+                "type": "string"
+              },
+              "korean": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "english",
+              "french",
+              "polish",
+              "spanish",
+              "italian",
+              "german",
+              "brazilian",
+              "russian",
+              "simplified_chinese",
+              "traditional_chinese",
+              "japanese",
+              "korean"
+            ]
+          },
+          "associatedRegions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "guid",
+          "name",
+          "iconPath",
+          "locaText",
+          "associatedRegions"
+        ]
+      },
+      "title": "Workforce",
+      "description": "Product definitions with producer information"
+    },
+    "productFilters": {
       "type": "array",
       "items": {
         "type": "object",
@@ -846,24 +1129,33 @@
               "korean"
             ]
           },
-          "region": {
-            "type": "integer"
+          "associatedRegions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "inputs": {
+            "type": "array"
+          },
+          "needsFuelInput": {
+            "type": "boolean"
           },
           "outputs": {
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
-                "Product": {
+                "product": {
                   "type": "integer"
                 },
-                "Amount": {
+                "amount": {
                   "type": "integer"
                 }
               },
               "required": [
-                "Product",
-                "Amount"
+                "product",
+                "amount"
               ]
             }
           },
@@ -872,21 +1164,24 @@
             "items": {
               "type": "object",
               "properties": {
-                "Product": {
+                "product": {
                   "type": "integer"
                 },
-                "Amount": {
+                "amount": {
                   "type": "integer"
                 }
               },
               "required": [
-                "Product",
-                "Amount"
+                "product",
+                "amount"
               ]
             }
           },
-          "tpmin": {
-            "type": "number"
+          "cycleTime": {
+            "type": "integer"
+          },
+          "modulesLimit": {
+            "type": "integer"
           }
         },
         "required": [
@@ -894,14 +1189,143 @@
           "name",
           "iconPath",
           "locaText",
-          "region",
+          "associatedRegions",
+          "inputs",
+          "needsFuelInput",
           "outputs",
           "maintenances",
-          "tpmin"
+          "cycleTime",
+          "modulesLimit"
         ]
       },
       "title": "Factory",
-      "description": "Factory building definitions with inputs, outputs, and production rates"
+      "description": "Factory building definitions with inputs, outputs, maintenances, and production rates"
+    },
+    "modules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "guid": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "iconPath": {
+            "type": "string"
+          },
+          "locaText": {
+            "type": "object",
+            "properties": {
+              "english": {
+                "type": "string"
+              },
+              "french": {
+                "type": "string"
+              },
+              "polish": {
+                "type": "string"
+              },
+              "spanish": {
+                "type": "string"
+              },
+              "italian": {
+                "type": "string"
+              },
+              "german": {
+                "type": "string"
+              },
+              "brazilian": {
+                "type": "string"
+              },
+              "russian": {
+                "type": "string"
+              },
+              "simplified_chinese": {
+                "type": "string"
+              },
+              "traditional_chinese": {
+                "type": "string"
+              },
+              "japanese": {
+                "type": "string"
+              },
+              "korean": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "english",
+              "french",
+              "polish",
+              "spanish",
+              "italian",
+              "german",
+              "brazilian",
+              "russian",
+              "simplified_chinese",
+              "traditional_chinese",
+              "japanese",
+              "korean"
+            ]
+          },
+          "associatedRegions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "product": {
+                  "type": "integer"
+                },
+                "amount": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "product",
+                "amount"
+              ]
+            }
+          },
+          "needsFuelInput": {
+            "type": "boolean"
+          },
+          "outputs": {
+            "type": "array"
+          },
+          "maintenances": {
+            "type": "array"
+          },
+          "cycleTime": {
+            "type": "integer"
+          },
+          "modulesLimit": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "guid",
+          "name",
+          "iconPath",
+          "locaText",
+          "associatedRegions",
+          "inputs",
+          "needsFuelInput",
+          "outputs",
+          "maintenances",
+          "cycleTime",
+          "modulesLimit"
+        ]
+      },
+      "title": "Module",
+      "description": "Modules attachable to factories with inputs, maintenances, and production rates"
     },
     "icons": {
       "type": "object",
@@ -915,64 +1339,118 @@
         "data/ui/fhd/base/icon_content/hud_minimap/icon_minimap_world_map.png": {
           "type": "string"
         },
+        "data/ui/fhd/base/icon_content/attributes/icon_2d_population.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/attributes/icon_2d_income.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/attributes/icon_2d_happiness.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/attributes/icon_2d_health.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/attributes/icon_2d_fire_safety.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/attributes/icon_2d_religion_belief.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/attributes/icon_2d_techtree_knowledge.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/attributes/icon_2d_prestige.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_marketplace_roman.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/need_categories/icon_3d_need_category_food.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/need_categories/icon_3d_need_category_fashion.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/need_categories/icon_3d_need_category_household.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_colosseum_roman.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/need_categories/icon_3d_need_category_culture.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_soap.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_amphorae.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_lyre.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_roast.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_pelt_hat.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/goods_limestone/drinking_horns.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_clan_shields.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_chariot.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/building/icon_public_barrows_celtic.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/building/icon_public_ceremonial_ground_celtic.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/production_goods/icon_3d_beer_goods.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_garum.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/building/icon_3d_public_roman_gambling_house.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/building/icon_3d_public_celtic_gambling_house.png": {
+          "type": "string"
+        },
         "data/ui/fhd/base/icon_content/building/icon_3d_residence.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_roman_tier2_mercator.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_mercators_2d.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_roman_tier3_noble.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_nobles_2d.png": {
           "type": "string"
         },
         "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier1_libertus.png": {
           "type": "string"
         },
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_libertus_2d.png": {
-          "type": "string"
-        },
         "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier2_plebeian.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_plebeian_2d.png": {
           "type": "string"
         },
         "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier3_equites.png": {
           "type": "string"
         },
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_equites_2d.png": {
-          "type": "string"
-        },
         "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier4_patrician.png": {
           "type": "string"
         },
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_patrician_2d.png": {
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_roman_tier2_mercator.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_roman_tier3_noble.png": {
           "type": "string"
         },
         "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_tier1_wader.png": {
           "type": "string"
         },
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_waders_2d.png": {
-          "type": "string"
-        },
         "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_tier2_smith.png": {
           "type": "string"
         },
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_smiths_2d.png": {
-          "type": "string"
-        },
         "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_tier3_aldermen.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_aldermen_2d.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/attributes/icon_2d_income.png": {
           "type": "string"
         },
         "data/ui/4k/base/icon_content/generic/icon_2d_villa.png": {
@@ -1047,12 +1525,6 @@
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_cheese.png": {
           "type": "string"
         },
-        "data/ui/fhd/base/icon_content/production_goods/icon_3d_beer_goods.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_roast.png": {
-          "type": "string"
-        },
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_reed_shoes.png": {
           "type": "string"
         },
@@ -1065,16 +1537,7 @@
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_torc.png": {
           "type": "string"
         },
-        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_pelt_hat.png": {
-          "type": "string"
-        },
         "data/ui/fhd/base/icon_content/production_goods/icon_3d_drinkinghorns_goods.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_clan_shields.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_chariot.png": {
           "type": "string"
         },
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_wattle_daub.png": {
@@ -1212,9 +1675,6 @@
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_bread.png": {
           "type": "string"
         },
-        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_garum.png": {
-          "type": "string"
-        },
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_wine.png": {
           "type": "string"
         },
@@ -1249,12 +1709,6 @@
           "type": "string"
         },
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_olive_oil.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_amphorae.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_lyre.png": {
           "type": "string"
         },
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_timber.png": {
@@ -1323,9 +1777,6 @@
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_handmirrors.png": {
           "type": "string"
         },
-        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_marketplace_roman.png": {
-          "type": "string"
-        },
         "data/ui/2kimages/main/3dicons/limestone_public_building/icon_taverna_roman.png": {
           "type": "string"
         },
@@ -1356,9 +1807,6 @@
         "data/ui/2kimages/main/3dicons/limestone_public_building/icon_bathhouse_roman.png": {
           "type": "string"
         },
-        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_colosseum_roman.png": {
-          "type": "string"
-        },
         "data/ui/2kimages/main/3dicons/limestone_public_building/icon_marketplace_celtic.png": {
           "type": "string"
         },
@@ -1386,10 +1834,31 @@
         "data/ui/2kimages/main/3dicons/limestone_public_building/icon_town_hall_celtic.png": {
           "type": "string"
         },
-        "data/ui/fhd/base/icon_content/building/icon_public_barrows_celtic.png": {
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_libertus_2d.png": {
           "type": "string"
         },
-        "data/ui/fhd/base/icon_content/building/icon_public_ceremonial_ground_celtic.png": {
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_plebeian_2d.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_equites_2d.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_patrician_2d.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_mercators_2d.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_nobles_2d.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_waders_2d.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_smiths_2d.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_aldermen_2d.png": {
           "type": "string"
         },
         "data/ui/fhd/base/icon_content/generic/icon_2d_filter_goods_consumption.png": {
@@ -1418,26 +1887,44 @@
         "data/ui/2kimages/fpp/assets/main_menu_flow/symbol_heartlands_280.png",
         "data/ui/2kimages/fpp/assets/main_menu_flow/symbol_wetlands_fp_280.png",
         "data/ui/fhd/base/icon_content/hud_minimap/icon_minimap_world_map.png",
-        "data/ui/fhd/base/icon_content/building/icon_3d_residence.png",
-        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_roman_tier2_mercator.png",
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_mercators_2d.png",
-        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_roman_tier3_noble.png",
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_nobles_2d.png",
-        "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier1_libertus.png",
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_libertus_2d.png",
-        "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier2_plebeian.png",
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_plebeian_2d.png",
-        "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier3_equites.png",
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_equites_2d.png",
-        "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier4_patrician.png",
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_patrician_2d.png",
-        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_tier1_wader.png",
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_waders_2d.png",
-        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_tier2_smith.png",
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_smiths_2d.png",
-        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_tier3_aldermen.png",
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_aldermen_2d.png",
+        "data/ui/fhd/base/icon_content/attributes/icon_2d_population.png",
         "data/ui/fhd/base/icon_content/attributes/icon_2d_income.png",
+        "data/ui/fhd/base/icon_content/attributes/icon_2d_happiness.png",
+        "data/ui/fhd/base/icon_content/attributes/icon_2d_health.png",
+        "data/ui/fhd/base/icon_content/attributes/icon_2d_fire_safety.png",
+        "data/ui/fhd/base/icon_content/attributes/icon_2d_religion_belief.png",
+        "data/ui/fhd/base/icon_content/attributes/icon_2d_techtree_knowledge.png",
+        "data/ui/fhd/base/icon_content/attributes/icon_2d_prestige.png",
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_marketplace_roman.png",
+        "data/ui/fhd/base/icon_content/need_categories/icon_3d_need_category_food.png",
+        "data/ui/fhd/base/icon_content/need_categories/icon_3d_need_category_fashion.png",
+        "data/ui/fhd/base/icon_content/need_categories/icon_3d_need_category_household.png",
+        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_colosseum_roman.png",
+        "data/ui/fhd/base/icon_content/need_categories/icon_3d_need_category_culture.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_soap.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_amphorae.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_lyre.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_roast.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_pelt_hat.png",
+        "data/ui/2kimages/main/3dicons/goods_limestone/drinking_horns.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_clan_shields.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_chariot.png",
+        "data/ui/fhd/base/icon_content/building/icon_public_barrows_celtic.png",
+        "data/ui/fhd/base/icon_content/building/icon_public_ceremonial_ground_celtic.png",
+        "data/ui/fhd/base/icon_content/production_goods/icon_3d_beer_goods.png",
+        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_garum.png",
+        "data/ui/fhd/base/icon_content/building/icon_3d_public_roman_gambling_house.png",
+        "data/ui/fhd/base/icon_content/building/icon_3d_public_celtic_gambling_house.png",
+        "data/ui/fhd/base/icon_content/building/icon_3d_residence.png",
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier1_libertus.png",
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier2_plebeian.png",
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier3_equites.png",
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier4_patrician.png",
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_roman_tier2_mercator.png",
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_roman_tier3_noble.png",
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_tier1_wader.png",
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_tier2_smith.png",
+        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_tier3_aldermen.png",
         "data/ui/4k/base/icon_content/generic/icon_2d_villa.png",
         "data/ui/4k/base/icon_content/generic/icon_2d_storage_capacity.png",
         "data/ui/4k/base/icon_content/generic/icon_2d_religion.png",
@@ -1462,16 +1949,11 @@
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_bronze.png",
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_malt.png",
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_cheese.png",
-        "data/ui/fhd/base/icon_content/production_goods/icon_3d_beer_goods.png",
-        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_roast.png",
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_reed_shoes.png",
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_trouser.png",
         "data/ui/fhd/base/icon_content/production_goods/icon_3d_cloak_goods.png",
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_torc.png",
-        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_pelt_hat.png",
         "data/ui/fhd/base/icon_content/production_goods/icon_3d_drinkinghorns_goods.png",
-        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_clan_shields.png",
-        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_chariot.png",
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_wattle_daub.png",
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_granite_block.png",
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_sardines.png",
@@ -1517,7 +1999,6 @@
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_caviar.png",
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_porridge.png",
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_bread.png",
-        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_garum.png",
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_wine.png",
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_oysters_and_caviar.png",
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_tunics.png",
@@ -1530,8 +2011,6 @@
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_fine_glass.png",
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_lounger.png",
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_olive_oil.png",
-        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_amphorae.png",
-        "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_lyre.png",
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_timber.png",
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_tile.png",
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_concrete.png",
@@ -1554,7 +2033,6 @@
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_brooch.png",
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_wig.png",
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_handmirrors.png",
-        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_marketplace_roman.png",
         "data/ui/2kimages/main/3dicons/limestone_public_building/icon_taverna_roman.png",
         "data/ui/2kimages/main/3dicons/limestone_public_building/icon_sanctuary_roman.png",
         "data/ui/2kimages/main/3dicons/limestone_public_building/icon_grammaticus_roman.png",
@@ -1565,7 +2043,6 @@
         "data/ui/2kimages/main/3dicons/limestone_infrastructure/icon_aqueduct_cistern.png",
         "data/ui/2kimages/main/3dicons/limestone_public_building/icon_forum_roman.png",
         "data/ui/2kimages/main/3dicons/limestone_public_building/icon_bathhouse_roman.png",
-        "data/ui/2kimages/main/3dicons/limestone_public_building/icon_colosseum_roman.png",
         "data/ui/2kimages/main/3dicons/limestone_public_building/icon_marketplace_celtic.png",
         "data/ui/2kimages/main/3dicons/limestone_public_building/icon_grammaticus_celtic.png",
         "data/ui/2kimages/main/3dicons/limestone_public_building/icon_fanom.png",
@@ -1575,8 +2052,15 @@
         "data/ui/2kimages/main/3dicons/limestone_public_building/icon_bardic_hall.png",
         "data/ui/2kimages/main/3dicons/limestone_public_building/icon_sportsfield.png",
         "data/ui/2kimages/main/3dicons/limestone_public_building/icon_town_hall_celtic.png",
-        "data/ui/fhd/base/icon_content/building/icon_public_barrows_celtic.png",
-        "data/ui/fhd/base/icon_content/building/icon_public_ceremonial_ground_celtic.png",
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_libertus_2d.png",
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_plebeian_2d.png",
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_equites_2d.png",
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_patrician_2d.png",
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_mercators_2d.png",
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_nobles_2d.png",
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_waders_2d.png",
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_smiths_2d.png",
+        "data/ui/2kimages/main/icons/limestone_workforce/icon_aldermen_2d.png",
         "data/ui/fhd/base/icon_content/generic/icon_2d_filter_goods_consumption.png",
         "data/ui/fhd/base/icon_content/generic/icon_2d_filter_goods_construction.png",
         "data/ui/fhd/base/icon_content/generic/icon_2d_filter_goods_raw.png",
@@ -1591,15 +2075,21 @@
   },
   "required": [
     "languages",
+    "needConsumptions",
     "regions",
     "sessions",
+    "needAttributes",
+    "needCategories",
+    "needs",
     "populationGroups",
-    "populationLevels",
     "residenceBuildings",
-    "workforce",
+    "populationLevels",
     "products",
-    "productFilter",
+    "workforce",
+    "productFilters",
     "factories",
-    "icons"
+    "modules",
+    "icons",
+    "productFilters"
   ]
 }

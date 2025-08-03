@@ -1,8 +1,8 @@
-import { ACCURACY, ko, NamedElement } from './util';
-import { PopulationLevel, ResidenceBuilding, Workforce } from './population';
-import { PopulationNeed, ResidenceEffectCoverage, ResidenceEffect } from './consumption';
+import { ACCURACY, BuildingsCalc, formatNumber, ko, NamedElement } from './util';
+import { PopulationGroup, PopulationLevel, ResidenceBuilding, Workforce } from './population';
+import { ResidenceEffectCoverage, ResidenceEffect, ResidenceNeed, NeedCategory, Need } from './consumption';
 import { ProductCategory, Product, Demand } from './production';
-import { Factory as FactoryClass, Consumer, Factory } from './factories';
+import { Consumer, Factory } from './factories';
 
 
 declare const $: any;
@@ -216,11 +216,12 @@ export class Template {
      * @returns True if the asset can be templated
      */
     static applicable(asset: any): boolean {
-        return asset instanceof PopulationLevel ||
+        return asset instanceof PopulationGroup ||
+            asset instanceof PopulationLevel ||
+            asset instanceof ResidenceBuilding ||
             asset instanceof Workforce ||
             asset instanceof ProductCategory ||
             asset instanceof Product ||
-            asset instanceof Factory ||
             asset instanceof Demand;
     }
 }
@@ -255,11 +256,11 @@ export class ProductionChainView {
                     if (amount < ACCURACY)
                         return null;
 
-                    if (!(consumer instanceof FactoryClass)){
+                    if (!(consumer instanceof Factory)){
                         return {
                             'amount': amount,
                             'factory': consumer,
-                            'buildings': amount / consumer.tpmin / consumer.boost(),
+                            'buildings': amount * consumer.cycleTime / 60 / consumer.boost(),
                             'children': consumer.inputDemands().map((d: any) => traverse(d.factory(), amount)).filter((d: any) => d)
                         }; 
                     }
@@ -290,7 +291,7 @@ export class ProductionChainView {
                     return {
                         'amount': amount,
                         'factory': factory,
-                        'buildings': inputAmount / factory.tpmin / factory.boost(),
+                        'buildings': inputAmount * consumer.cycleTime / 60 / factory.boost(),
                         'children': factory.inputDemands().map((d: any) => traverse(d.factory(), inputAmount * d.factor)).filter((d: any) => d)
                     };           
 
@@ -361,7 +362,7 @@ class ResidenceEffectAggregate {
     finishInitialization(): void {
         this.averageCoverage = ko.pureComputed(() => {
             var sum = 0;
-            this.coverage.forEach(coverage => { sum += coverage.residence.existingBuildings() * coverage.coverage(); });
+            this.coverage.forEach(coverage => { sum += coverage.residence.buildings.constructed() * coverage.coverage(); });
 
             return sum / this.totalResidences();
         });
@@ -375,15 +376,15 @@ class ResidenceEffectAggregate {
 export class ResidenceEffectView {
     public heading: string;
     public residences: ResidenceBuilding[];
-    public percentCoverage: any;
-    public totalResidences: any;
-    public consumedProducts: Set<any>;
+    public percentCoverage: KnockoutObservable<number>;
+    public totalResidences: KnockoutComputed<number>;
+    public consumedProducts: Set<Product>;
     public allEffects: ResidenceEffect[];
-    public aggregates: any;
-    public unusedEffects: any;
-    public need: PopulationNeed | null;
+    public aggregates: KnockoutObservableArray<ResidenceEffectAggregate>;
+    public unusedEffects: KnockoutObservableArray<ResidenceEffect>;
+    public need: ResidenceNeed | null;
     public productionChain: ProductionChainView | null;
-    public selectedEffect: any;
+    public selectedEffect: KnockoutObservable<ResidenceEffect>;
     public region: string | null = null;
 
     /**
@@ -392,7 +393,7 @@ export class ResidenceEffectView {
      * @param heading - Optional heading for the view
      * @param need - Optional specific need to focus on
      */
-    constructor(residences: ResidenceBuilding[], heading: string | null = null, need: PopulationNeed | null = null) {
+    constructor(residences: ResidenceBuilding[], heading: string | null = null, need: ResidenceNeed | null = null) {
         // Validate required parameters
         if (!residences || !Array.isArray(residences)) {
             throw new Error('ResidenceEffectView residences array is required');
@@ -405,7 +406,7 @@ export class ResidenceEffectView {
 
         this.totalResidences = ko.pureComputed(() => {
             var sum = 0;
-            this.residences.forEach(r => { sum += r.existingBuildings(); });
+            this.residences.forEach(r => { sum += r.buildings.constructed(); });
             return sum;
         });
 
@@ -413,12 +414,12 @@ export class ResidenceEffectView {
         var aggregatesMap = new Map<ResidenceEffect, ResidenceEffectAggregate>();
         this.consumedProducts = new Set();
         this.residences.forEach(r => {
-            (r.populationLevel as any).needsMap.forEach((n: PopulationNeed) => {
-                this.consumedProducts.add(n.product);
+            r.needsMap.forEach((n) => {
+                this.consumedProducts.add(n.need.product);
             });
 
             r.allEffects.forEach((e: ResidenceEffect) => {
-                if (e.available() && (need == null || e.effectsPerNeed.has((need as PopulationNeed).guid)))
+                if (e.available() && (need == null || e.effectsPerNeed.has(need.need.product.guid)))
                     effects.add(e);
             });
 
@@ -443,8 +444,8 @@ export class ResidenceEffectView {
         this.unusedEffects = ko.observableArray([...effects]);
 
         this.need = need;
-        if (need instanceof PopulationNeed) {
-            this.productionChain = new ProductionChainView((need as PopulationNeed).factory, (need as PopulationNeed).amount);
+        if (need instanceof ResidenceNeed && need.demand) {
+            this.productionChain = new ProductionChainView(need.demand.factory, need.demand.amount);
         } else {
             this.productionChain = null;
         }
@@ -509,20 +510,7 @@ export class ResidenceEffectView {
         this.unusedEffects.sort((a: ResidenceEffect, b: ResidenceEffect) => a.compare(b));
     }
 
-    /**
-     * Applies the current configuration globally to all islands
-     */
-    applyConfigGlobally(): void {
-        for (var isl of view.islands()) {
-            // region is null for allIslands
-            if (this.region && isl.region && this.region != isl.region)
-                continue;
 
-            for (var r of this.residences)
-                if (isl.assetsMap.has(r.guid))
-                    isl.assetsMap.get(r.guid).applyEffects(r.serializeEffects());
-        }
-    }
 }
 
 /**
@@ -603,3 +591,150 @@ export class CollapsibleStates {
         return newCollapsible;
     }
 } 
+
+class ResidenceNeedPresenter {
+    public parent: NeedCategoryPresenter;
+    public guid: number;
+    public id: string;
+    private instance: KnockoutObservable<ResidenceNeed | undefined>;
+    public name: KnockoutObservable<string>;
+    public visible: KnockoutComputed<boolean>;
+    public amount: KnockoutComputed<number>;
+    public checked: KnockoutComputed<boolean>;
+    public isInactive: KnockoutComputed<boolean>;
+    public product: KnockoutObservable<Product>;
+    public residents: KnockoutComputed<number>;
+
+    constructor(parent: NeedCategoryPresenter, need: Need){
+        this.parent = parent;
+        this.guid = need.guid;
+        this.id = "residence-" + this.guid;
+        this.instance = ko.observable();
+        this.name = ko.pureComputed(() => need.product.name());
+        this.visible =  ko.pureComputed(() => !!this.instance());
+        this.product = ko.pureComputed(() => need.product);
+        this.amount = ko.pureComputed(() => {
+            let inst = this.instance();
+            if(inst == null || !inst.demand)
+                return 0;
+
+            return (inst.demand as Demand).amount();
+        });
+        this.checked = ko.pureComputed({
+            read: () => this.instance()?.checked(),
+            write: (checked: boolean) => {
+                if(this.instance())
+                    this.instance()?.checked(checked);
+
+            }
+        });
+        this.isInactive =  ko.pureComputed(() => false);
+        this.residents = ko.pureComputed(() => {
+            let inst = this.instance();
+            if(inst == null)
+                return 0;
+
+            return inst.residents();
+        });
+    }
+
+    update(need?: ResidenceNeed){
+        this.instance(need);
+    }
+    
+    prepareResidenceEffectView(): void {
+        (window as any).view.selectedResidenceEffectView(new ResidenceEffectView([this.parent.parent.instance()], this.name(), this.instance()));
+    }
+}
+
+class NeedCategoryPresenter {
+    public parent: ResidencePresenter;
+    public id: string;
+    public name: KnockoutObservable<string>;
+    public visible: KnockoutComputed<boolean>;
+    public checked: KnockoutComputed<boolean>;
+    public residenceNeeds: KnockoutObservableArray<ResidenceNeedPresenter>;
+    public visibleResidenceNeeds: KnockoutObservableArray<ResidenceNeedPresenter>;
+
+    constructor(parent: ResidencePresenter, needCategory: NeedCategory){
+        this.parent = parent;
+        this.id = "residence-" + needCategory.id;
+
+        this.name = ko.pureComputed(() => needCategory.name());
+        this.residenceNeeds = ko.observableArray();
+        this.visible = ko.pureComputed(() => this.residenceNeeds().filter(n => n.visible()).length > 0);
+        this.visibleResidenceNeeds = ko.pureComputed(() => this.residenceNeeds().filter(n => n.visible()));
+
+        this.checked = ko.pureComputed({
+            read: () => {
+                for (var n of this.visibleResidenceNeeds())
+                    if (!n.checked())
+                        return false;
+
+                return true;
+            },
+            write: (checked: boolean) => {
+                for (var n of this.visibleResidenceNeeds())
+                    n.checked(checked);
+            }
+        })
+    }
+
+    addNeed(need: ResidenceNeedPresenter){
+        this.residenceNeeds.push(need);
+    }
+}
+
+export class ResidencePresenter{
+    public instance: KnockoutObservable<ResidenceBuilding>;
+    public buildings: KnockoutObservable<BuildingsCalc>;
+    public name: KnockoutObservable<string>;
+    public residents: KnockoutObservable<string>;
+    private residenceNeeds: ResidenceNeedPresenter[];
+    public needCategories: NeedCategoryPresenter[];
+    public visibleNeedCategories: KnockoutObservableArray<NeedCategoryPresenter>;
+    public effectCoverage: KnockoutObservableArray<ResidenceEffectCoverage>;
+
+
+    constructor(needCategories: NeedCategory[], residence: ResidenceBuilding){
+        this.instance = ko.observable(residence);
+        this.name = ko.pureComputed(() => this.instance() ? this.instance().name() : "");
+        this.residents = ko.pureComputed(() => this.instance() ? formatNumber(this.instance().residents()) : "0");
+        this.buildings = ko.pureComputed(() => this.instance() ? this.instance().buildings : null);
+        this.residenceNeeds = [];
+        this.needCategories = [];
+        this.effectCoverage = ko.pureComputed(() => this.instance() ? this.instance().effectCoverage : []);
+
+        for (let category of needCategories){
+            let presCat = new NeedCategoryPresenter(this, category);
+            for (let need of category.needs){
+                let presNeed = new ResidenceNeedPresenter(presCat, need);
+                presCat.addNeed(presNeed);
+                this.residenceNeeds.push(presNeed);
+            }
+            this.needCategories.push(presCat);
+        }
+
+        this.instance.subscribe(residence => {
+            if(!(residence instanceof ResidenceBuilding))
+                return;
+
+            for (var presNeed of this.residenceNeeds){
+                presNeed.update(residence.needsMap.get(presNeed.guid));
+            }
+        });
+
+        this.visibleNeedCategories = ko.pureComputed(() => this.needCategories.filter(n => n.visible()));
+    }
+
+    update(residence: ResidenceBuilding){
+        this.instance(residence);
+    }
+
+    /**
+     * Prepares the residence effect view for this residence building
+     */
+    prepareResidenceEffectView(): void {
+        (window as any).view.selectedResidenceEffectView(new ResidenceEffectView([this.instance()], this.name()));
+    }
+}

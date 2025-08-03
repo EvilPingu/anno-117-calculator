@@ -18,11 +18,25 @@ export interface LocaTextConfig {
   [key: string]: string; // Allow string indexing
 }
 
+// Constants configuration interface
+export interface ConstantsConfig {
+  fuelProductionTime: number;
+  fuelProduct: number;
+}
+
 // Language configuration interface
 export interface LanguageConfig {
   // This interface represents individual items in the languages array
   // The actual array type is string[]
 
+}
+
+// NeedConsumption configuration interface
+export interface NeedConsumptionConfig {
+  id: string;
+  name: string;
+  locaText: LocaTextConfig;
+  consumptionFactor: number;
 }
 
 // Region configuration interface
@@ -31,6 +45,7 @@ export interface RegionConfig {
   name: string;
   iconPath: string;
   locaText: LocaTextConfig;
+  id: string;
 }
 
 // Session configuration interface
@@ -42,28 +57,50 @@ export interface SessionConfig {
   region: number;
 }
 
+// NeedAttribute configuration interface
+export interface NeedAttributeConfig {
+  id: string;
+  name: string;
+  iconPath: string;
+  locaText: LocaTextConfig;
+}
+
+// NeedCategory configuration interface
+export interface NeedCategoryConfig {
+  id: string;
+  name: string;
+  iconPath: string;
+  locaText: LocaTextConfig;
+}
+
+// Need configuration interface
+export interface NeedConfig {
+  guid: number;
+  name: string;
+  needProduct: number;
+  needCategory: string;
+  supplyWeight: number;
+  isBuilding: boolean;
+  needAttributes: {
+    Population: number;
+    Money: number;
+    Happiness: number;
+    Health: number;
+    FireSafety: number;
+    Belief: number;
+    Knowledge: number;
+    Prestige: number;
+    [key: string]: number; // Allow string indexing
+  };
+}
+
 // PopulationGroup configuration interface
 export interface PopulationGroupConfig {
   guid: number;
   name: string;
   locaText: LocaTextConfig;
   populationLevels: number[];
-}
-
-// PopulationLevel configuration interface
-export interface PopulationLevelConfig {
-  guid: number;
-  name: string;
-  iconPath: string;
-  locaText: LocaTextConfig;
-  region: number;
-  fullHouse: number;
-  needs: {
-    guid: number;
-    residents: number;
-    tpmin: number;
-  }[];
-  residence: number;
+  region: string;
 }
 
 // ResidenceBuilding configuration interface
@@ -72,35 +109,24 @@ export interface ResidenceBuildingConfig {
   name: string;
   iconPath: string;
   locaText: LocaTextConfig;
+  associatedRegions: string[];
+  possibleUpgrades: number[];
   populationLevel: number;
-  region: number;
-  residentMax: number;
-  residentsPerNeed: {
-    2097: number;
-    2108: number;
-    2137: number;
-    2139: number;
-    2141: number;
-    2143: number;
-    2149: number;
-    2156: number;
-    2159: number;
-    6706: number;
-    6709: number;
-    6710: number;
-    8405: number;
-    16201: number;
-    31700: number;
-    [key: number]: number; 
-  };
+  needsList: {
+    need: number;
+    needConsumptionRate: number;
+  }[];
 }
 
-// Workforce configuration interface
-export interface WorkforceConfig {
+// PopulationLevel configuration interface
+export interface PopulationLevelConfig {
   guid: number;
   name: string;
   iconPath: string;
   locaText: LocaTextConfig;
+  connectedWorkforce: number;
+  populationToWorkforceFactor: number;
+  associatedRegions: string[];
 }
 
 // Product configuration interface
@@ -109,14 +135,22 @@ export interface ProductConfig {
   name: string;
   iconPath: string;
   locaText: LocaTextConfig;
+  associatedRegions: any[];
+  isAbstract: boolean;
+}
+
+// Workforce configuration interface
+export interface WorkforceConfig {
+  guid: number;
+  name: string;
+  iconPath: string;
+  locaText: LocaTextConfig;
+  associatedRegions: string[];
 }
 
 // ProductFilter configuration interface
 export interface ProductFilterConfig {
-  iconPath: string;
-  locaText: LocaTextConfig;
-  guid: number;
-  products: number[];
+
 }
 
 // Factory configuration interface
@@ -125,16 +159,37 @@ export interface FactoryConfig {
   name: string;
   iconPath: string;
   locaText: LocaTextConfig;
-  region: number;
+  associatedRegions: string[];
+  inputs: any[];
+  needsFuelInput: boolean;
   outputs: {
-    Product: number;
-    Amount: number;
+    product: number;
+    amount: number;
   }[];
   maintenances: {
-    Product: number;
-    Amount: number;
+    product: number;
+    amount: number;
   }[];
-  tpmin: number;
+  cycleTime: number;
+  modulesLimit: number;
+}
+
+// Module configuration interface
+export interface ModuleConfig {
+  guid: number;
+  name: string;
+  iconPath: string;
+  locaText: LocaTextConfig;
+  associatedRegions: string[];
+  inputs: {
+    product: number;
+    amount: number;
+  }[];
+  needsFuelInput: boolean;
+  outputs: any[];
+  maintenances: any[];
+  cycleTime: number;
+  modulesLimit: number;
 }
 
 // Icon configuration interface
@@ -145,15 +200,21 @@ export interface IconConfig {
 
 // Root configuration interface combining all parameter types
 export interface ParamsConfig {
+  constants: ConstantsConfig;
   languages: string[];
+  needConsumptions: NeedConsumptionConfig[];
   regions: RegionConfig[];
   sessions: SessionConfig[];
+  needAttributes: NeedAttributeConfig[];
+  needCategories: NeedCategoryConfig[];
+  needs: NeedConfig[];
   populationGroups: PopulationGroupConfig[];
-  populationLevels: PopulationLevelConfig[];
   residenceBuildings: ResidenceBuildingConfig[];
-  workforce: WorkforceConfig[];
+  populationLevels: PopulationLevelConfig[];
   products: ProductConfig[];
-  productFilter: ProductFilterConfig[];
+  workforce: WorkforceConfig[];
+  productFilters: ProductFilterConfig[];
   factories: FactoryConfig[];
+  modules: ModuleConfig[];
   icons: IconConfig;
 }

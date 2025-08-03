@@ -1,6 +1,7 @@
-import { PopulationNeed } from './consumption';
+import { ResidenceNeed } from './consumption';
 import { Consumer } from './factories';
 import { NumberInputHandler, EPSILON, ko } from './util';
+import { Constructible } from './world';
 
 declare const $: any;
 declare const window: any;
@@ -242,9 +243,10 @@ interface Demand {
  * Provides a numeric input with increment/decrement buttons for existing building counts
  * @param asset - The asset object to configure existing buildings for
  */
-(ko as any).components.register('existing-buildings-input', {
-    viewModel: function (asset: Asset) {
-        this.asset = asset;
+(ko as any).components.register('constructed-buildings-input', {
+    viewModel: function (asset: Constructible) {
+        this.guid = asset.guid;
+        this.buildings = asset.buildings;
         this.texts = window.view.texts;
     }, template:
         `<div class="input-group input-group-short spinner float-left" style="max-width: 10rem;">
@@ -253,9 +255,9 @@ interface Demand {
                     <img class="icon-sm icon-light" src="icons/icon_house_white.png" />
                 </div>
             </div>
-            <input class="form-control" type="number" value="0" step="1" min="0" data-bind="value: asset.existingBuildings, enable: asset.canEdit == null || asset.canEdit(), attr: {id: asset.guid + '-existing-buildings-input'}" />
+            <input class="form-control" type="number" value="0" step="1" min="0" data-bind="value: buildings.constructed, attr: {id: guid + '-constructed-buildings-input'}" />
             <div class="input-group-append">
-                <div data-bind="component: { name: 'number-input-increment', params: { obs: asset.existingBuildings, id: asset.guid + '-existing-buildings-input' }}"></div>
+                <div data-bind="component: { name: 'number-input-increment', params: { obs: buildings.constructed, id: guid + '-constructed-buildings-input' }}"></div>
             </div>
         </div>`
 });
@@ -462,7 +464,7 @@ interface Demand {
 
         this.component = "consumer-unknown";
 
-        if (this.demand instanceof PopulationNeed)
+        if (this.demand instanceof ResidenceNeed)
             this.component = "consumer-population";
         else if (this.demand.module)
             this.component = "consumer-module";
@@ -481,20 +483,20 @@ interface Demand {
  */
 (ko as any).components.register('consumer-view', {
     viewModel: function (params: any) {
-        this.factory = params.factory;
-        this.populationLevelIndices = new Map();
-        this.factory.island.populationLevels.forEach((l: any, i: number) => this.populationLevelIndices.set(l.guid, i));
+        this.factory = params.factory as Consumer;
+        this.populationResidenceIndices = new Map() as Map<number, number>;
+        (this.factory as Consumer).island.residenceBuildings.forEach((r, i) => this.populationResidenceIndices.set(r, i));
 
         this.demands = ko.pureComputed(() => {
             var demands = this.factory.demands().filter((d: Demand) => d.amount() > EPSILON);
             return demands.sort((a: Demand, b: Demand) => {
-                if (a instanceof PopulationNeed && b instanceof PopulationNeed)
-                    return this.populationLevelIndices.get(a.level!.guid) - this.populationLevelIndices.get(b.level!.guid);
+                if (a.consumer instanceof ResidenceNeed && b.consumer instanceof ResidenceNeed)
+                    return this.populationResidenceIndices.get(a.consumer.residence.populationLevel) - this.populationResidenceIndices.get(b.consumer.residence.populationLevel);
 
-                if (a instanceof PopulationNeed)
+                if (a.consumer instanceof ResidenceNeed)
                     return -1000;
 
-                if (b instanceof PopulationNeed)
+                if (b.consumer instanceof ResidenceNeed)
                     return 1000;
 
                 if (a.consumer && b.consumer)

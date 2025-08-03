@@ -7,6 +7,7 @@ import {
   AssetsMap,
   LocaTextConfig
 } from './types';
+import { NeedConsumptionConfig } from './types.config';
 
 declare const $: any;
 declare const window: any;
@@ -268,7 +269,8 @@ export function createFloatInput(init: number, min: number = -Infinity, max: num
  */
 export class NamedElement {
     public name: KnockoutComputed<string>;
-    public guid: number;
+    public guid?: number;
+    public id?: string;
     public locaText: LocaTextConfig;
     public icon?: string;
     public dlcs?: DLC[];
@@ -288,7 +290,10 @@ export class NamedElement {
         }
 
         // Explicit assignments
-        this.guid = config.guid;
+        if (config.guid)
+            this.guid = config.guid;
+        if (config.id)
+            this.id = config.id;
         this.locaText = config.locaText || {};
         
         // Create computed name that uses localization
@@ -317,22 +322,8 @@ export class NamedElement {
         }
 
         // Set up DLC management
-        if (config.dlcs && config.dlcs.length > 0 && params && params.dlcs) {
-            const view = (window as any).view;
-            this.dlcs = config.dlcs.map(d => view.dlcsMap.get(d)).filter(d => d);
-            this.available = ko.pureComputed(() => {
-                for (const d of this.dlcs!) {
-                    if (d.checked()) {
-                        return true;
-                    }
-                }
-                return false;
-            });
-            this.dlcLockingObservables = [];
-        } else {
-            this.available = ko.pureComputed(() => true);
-            this.dlcLockingObservables = [];
-        }
+        this.available = ko.pureComputed(() => true);
+        this.dlcLockingObservables = [];
     }
 
     /**
@@ -359,6 +350,16 @@ export class NamedElement {
         for (const obs of this.dlcLockingObservables) {
             this.dlcs[0].removeDependentObject(obs);
         }
+    }
+}
+
+export class NeedConsumptionSetting extends NamedElement {
+    public consumptionFactor: number
+
+    constructor(config: NeedConsumptionConfig){
+        super(config);
+        this.id = config.id;
+        this.consumptionFactor = config.consumptionFactor;
     }
 }
 
@@ -437,6 +438,18 @@ export class DLC extends Option {
     }
 } 
 
+export class BuildingsCalc {
+    public constructed: KnockoutObservable<number>;
+    public planned: KnockoutObservable<number>;
+    public required: KnockoutObservable<number>; // set by parent class
+
+    constructor(){
+        this.constructed = ko.observable(0);
+        this.planned = ko.observable(0);
+        this.required = ko.observable(0);
+    }
+}
+
 /**
  * Creates a dummy observable that logs an error when accessed before proper initialization
  * @param name - The name of the observable for error reporting
@@ -455,6 +468,43 @@ export function dummyObservable<T = any>(name: string): KnockoutObservable<T> {
   obs.extend = () => obs;
   obs.notifySubscribers = () => { console.error(`[DummyObservable] notifySubscribers on ${name}`); };
   return obs;
+}
+
+/**
+ * Creates a dummy observable array that logs an error when accessed before proper initialization
+ * @param name - The name of the observable array for error reporting
+ * @returns A dummy observable array that logs errors on access
+ */
+export function dummyObservableArray<T = any>(name: string): KnockoutObservableArray<T> {
+  const obsArray = function(value?: T[]) {
+    if (arguments.length === 0) {
+      console.error(`[DummyObservableArray] Attempted to read uninitialized observable array: ${name}`);
+      return [] as any;
+    } else {
+      console.error(`[DummyObservableArray] Attempted to write to uninitialized observable array: ${name}`, value);
+    }
+  } as KnockoutObservableArray<T>;
+  
+  // Array methods
+  obsArray.push = () => { console.error(`[DummyObservableArray] push on ${name}`); return 0; };
+  obsArray.pop = () => { console.error(`[DummyObservableArray] pop on ${name}`); return undefined as any; };
+  obsArray.shift = () => { console.error(`[DummyObservableArray] shift on ${name}`); return undefined as any; };
+  obsArray.unshift = () => { console.error(`[DummyObservableArray] unshift on ${name}`); return 0; };
+  obsArray.splice = () => { console.error(`[DummyObservableArray] splice on ${name}`); return [] as any; };
+  obsArray.reverse = () => { console.error(`[DummyObservableArray] reverse on ${name}`); return obsArray; };
+  obsArray.sort = () => { console.error(`[DummyObservableArray] sort on ${name}`); return obsArray; };
+  obsArray.remove = () => { console.error(`[DummyObservableArray] remove on ${name}`); return [] as any; };
+  obsArray.removeAll = () => { console.error(`[DummyObservableArray] removeAll on ${name}`); return [] as any; };
+  obsArray.destroy = () => { console.error(`[DummyObservableArray] destroy on ${name}`); return [] as any; };
+  obsArray.destroyAll = () => { console.error(`[DummyObservableArray] destroyAll on ${name}`); return [] as any; };
+  obsArray.replace = () => { console.error(`[DummyObservableArray] replace on ${name}`); return [] as any; };
+  
+  // Observable methods
+  obsArray.subscribe = () => { console.error(`[DummyObservableArray] subscribe on ${name}`); return { dispose: () => {} } as any; };
+  obsArray.extend = () => obsArray;
+  obsArray.notifySubscribers = () => { console.error(`[DummyObservableArray] notifySubscribers on ${name}`); };
+  
+  return obsArray;
 }
 
 /**

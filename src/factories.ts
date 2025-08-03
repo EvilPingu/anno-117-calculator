@@ -1,50 +1,52 @@
-import { createIntInput, NamedElement, ACCURACY, EPSILON, ko } from './util';
+import { createIntInput, NamedElement, ACCURACY, EPSILON, ko, BuildingsCalc } from './util';
 import { Workforce, WorkforceDemand } from './population';
-import { Demand, ExtraGoodProductionList } from './production';
+import { Demand, EquippedItem, ExtraGoodProductionList, Item, Product } from './production';
 import { TradeList } from './trade';
 import { 
     ConsumerConfig, 
     BuffConfig,
     AssetsMap,
-    Output,
-    Module as ModuleInterface,
-    Buff as BuffInterface,
-    Island,
-    Region,
-    Item,
-    Product
+    LiteralsMap,
 } from './types';
+import { Island, Region } from './world';
+import { FactoryConfig } from './types.config';
 
 
 /**
  * Base class for all consumers in the game
  * Represents buildings that consume goods and require workforce
  */
-export class Consumer extends NamedElement {
+export class Consumer extends NamedElement{
+    public guid: number;
     public isFactory: boolean;
-    public inputs: { Product: string; Amount: number }[];
-    public maintenances: { Product: string; Amount: number; percentBoost?: number }[];
-    public tpmin: number;
-    public forceRegionExtendedName: boolean;
+    public needsFuelInput: boolean;
+    public defaultInputs: Map<Product, number>;
+    public associatedRegions: Region[];
+
+    public maintenances: Map<Product|Workforce, number>;
+    public connectedWorkforce?: Workforce;
+    public cycleTime: number;
     public island: Island;
-    public region: Region | null;
-    public items: Item[];
-    public inputDemandsMap: Map<string, Demand>;
+
+    public items: EquippedItem[];
+    public inputDemandsMap: Map<Product, Demand>;
     public inputDemands: KnockoutObservableArray<Demand>;
-    public workforceDemand: WorkforceDemand | null;
+    public buildingInputDemands: KnockoutObservableArray<Demand>;
+    public workforceDemand!: WorkforceDemand;
     public boost: KnockoutObservable<number>;
     public editable: KnockoutObservable<boolean>;
-    public existingBuildings: KnockoutObservable<number>;
+    public buildings: BuildingsCalc;
     public useinputAmountByExistingBuildings: KnockoutObservable<boolean>;
     public inputAmountByOutput: KnockoutObservable<number>;
     public inputAmountByExistingBuildings: KnockoutComputed<number>;
     public inputAmount: KnockoutComputed<number>;
-    public buildings: KnockoutComputed<number>;
     public availableItems!: KnockoutComputed<Item[]>;
+    public buildingsSubscription!: KnockoutComputed<void>;
     public inputDemandsSubscription!: KnockoutComputed<void>;
     public workforceDemandSubscription?: KnockoutComputed<void>;
+    public fuelSubscription?: KnockoutComputed<void>;
     public product!: Product | null;
-    public icon?: string;
+
     public percentBoost?: KnockoutObservable<number>; // Added for dynamic assignment
 
     /**
@@ -53,7 +55,7 @@ export class Consumer extends NamedElement {
      * @param assetsMap - Map of all available assets
      * @param island - The island this consumer belongs to
      */
-    constructor(config: ConsumerConfig, assetsMap: AssetsMap, island: Island) {
+    constructor(config: ConsumerConfig, assetsMap: AssetsMap, literalsMap: LiteralsMap, island: Island) {
         // Validate required parameters
         if (!config) {
             throw new Error('Consumer config is required');
@@ -66,29 +68,32 @@ export class Consumer extends NamedElement {
         }
 
         super(config);
+        this.guid = config.guid;
         
         // Explicit assignments
         this.isFactory = false;
-        this.inputs = config.inputs || [];
-        this.maintenances = config.maintenances || [];
-        this.tpmin = config.tpmin || 0;
-        this.forceRegionExtendedName = config.forceRegionExtendedName || false;
+        this.needsFuelInput = config.needsFuelInput;
+        this.cycleTime = config.cycleTime;
         this.island = island;
-        this.region = config.region ? assetsMap.get(parseInt(config.region)) : null;
+        this.associatedRegions = [];
+        for (var r of config.associatedRegions)
+            this.associatedRegions.push(literalsMap.get(r) as Region);
+ 
         this.items = [];
         this.inputDemandsMap = new Map();
         this.inputDemands = ko.observableArray([]);
-        this.workforceDemand = null;
+        this.buildingInputDemands = ko.observableArray([]);
+
         this.boost = ko.observable(1);
         this.editable = ko.observable(false);
-        this.existingBuildings = createIntInput(0, 0).extend({ deferred: true });
-        this.lockDLCIfSet(this.existingBuildings);
+        this.buildings = new BuildingsCalc();
+        this.lockDLCIfSet(this.buildings.constructed);
         this.useinputAmountByExistingBuildings = ko.observable(true);
         this.inputAmountByOutput = ko.observable(0);
 
         // Set up computed observables
         this.inputAmountByExistingBuildings = ko.computed(() => {
-            return this.existingBuildings() * this.boost() * this.tpmin;
+            return this.buildings.constructed() * this.boost() * 60 /  this.cycleTime ;
         });
 
         this.inputAmount = ko.pureComputed(() => {
@@ -99,47 +104,64 @@ export class Consumer extends NamedElement {
             return amount;
         });
 
-        this.buildings = ko.computed(() => this.inputAmount() / this.tpmin / this.boost()).extend({ deferred: true });
+        this.buildingsSubscription = ko.computed(() => {        
+            this.buildings.required(this.inputAmount() / 60 * this.cycleTime / this.boost());
+        }).extend({ deferred: true });
         this.lockDLCIfSet(this.buildings);
         
         this.notes = ko.observable("");
 
-        // availableItems and inputDemandsSubscription are initialized in referenceProducts()
+        this.defaultInputs = new Map();
+        for(var i of config.inputs){
+            let product = assetsMap.get(i.product);
+            if (!product) {
+                throw new Error(`Product with GUID ${i.product} not found in assetsMap`);
+            }
+            this.defaultInputs.set(product, i.amount);            
+        }
+
+        this.maintenances = new Map();
+        for(var i of config.maintenances){
+            let product = assetsMap.get(i.product);
+            if (!product) {
+                throw new Error(`Product with GUID ${i.product} not found in assetsMap`);
+            }
+            this.maintenances.set(product, i.amount);    
+            
+            if (product instanceof Workforce)
+                this.connectedWorkforce = product;
+        }
+
+
+
+        this.availableItems = ko.pureComputed(() => this.items.filter(i => i.available()));
     }
 
-    /**
-     * Gets the input requirements for this consumer
-     * @returns Array of input requirements
-     */
-    getInputs(): { Product: string; Amount?: number }[] {
-        return this.inputs || [];
-    }
 
     /**
      * References products and sets up input demands
      * @param assetsMap - Map of all available assets
      */
-    referenceProducts(assetsMap: AssetsMap): void {
-        if (this.inputs) {
-            this.inputs.forEach((i: any) => i.product = assetsMap.get(parseInt(i.Product)));
-        }
-        this.availableItems = ko.pureComputed(() => this.items.filter(i => i.available()));
+    initDemands(assetsMap: AssetsMap): void {
+
 
         this.inputDemandsSubscription = ko.computed(() => {
-            if (!this.inputs) {
+            if (!this.defaultInputs) {
                 return;
             }
 
             const amount = this.inputAmount();
 
-            const inputs = new Map();
-            this.inputs.forEach(i => { inputs.set(i.Product, i.Amount); });
-            const items = this.items.filter(item => item.replacements && item.checked()).sort((a, b) => a.item.guid - b.item.guid);
+            const inputs = new Map() as Map<Product, number>;
+            for (let product of this.defaultInputs.keys())
+                inputs.set(product, this.defaultInputs.get(product) as number);
+
+            const items = this.items.filter(item => item.replacements && item.checked()).sort((a, b) => a.item.guid as number - (b.item.guid as number));
             
             for (const item of items) {
                 for (const replacement of item.replacements || []) {
                     if (inputs.has(replacement[0])) {
-                        const factor = inputs.get(replacement[0]);
+                        const factor = inputs.get(replacement[0]) as number;
                         inputs.delete(replacement[0]);
                         if (replacement[1]) {
                             inputs.set(replacement[1], factor);
@@ -150,28 +172,23 @@ export class Consumer extends NamedElement {
 
             const map = new Map();
             const demands = [];
-            for (const guid of inputs.keys()) {
-                const p = assetsMap.get(parseInt(guid));
+            for (const p of inputs.keys()) {
 
                 if (p.isAbstract) {
                     continue;
                 }
 
-                let d = this.inputDemandsMap.get(guid);
+                let d = this.inputDemandsMap.get(p);
                 if (d) {
-                    map.set(guid, d);
+                    map.set(p, d);
                     demands.push(d);
-                    this.inputDemandsMap.delete(guid);
+                    this.inputDemandsMap.delete(p);
                     d.updateAmount(amount);
                 } else {
-                    d = new Demand({
-                        guid: guid,
-                        consumer: this,
-                        factor: inputs.get(guid),
-                    }, assetsMap);
+                    d = new Demand(p, this,assetsMap, inputs.get(p));
                     d.updateAmount(amount);
                     demands.push(d);
-                    map.set(guid, d);
+                    map.set(p, d);
                 }
             }
 
@@ -183,6 +200,22 @@ export class Consumer extends NamedElement {
             this.inputDemands.removeAll();
             for (const d of demands) this.inputDemands.push(d);
         });
+
+        if (this.needsFuelInput){
+            let product = assetsMap.get(window.view.constants.fuelProduct);
+            if (!product) {
+                throw new Error(`Fuel product with GUID ${window.view.constants.fuelProduct} not found in assetsMap`);
+            }
+            let cycleTime = window.view.constants.fuelProductionTime;
+
+            this.buildingInputDemands.push(new Demand(product, this, assetsMap));
+            this.fuelSubscription = ko.computed(() => {
+                let amount = this.buildings.required() * this.cycleTime / cycleTime / this.boost();
+                this.buildingInputDemands()[0].updateAmount(amount);
+            })
+        }
+
+        this.createWorkforceDemand();
     }
 
     /**
@@ -190,32 +223,28 @@ export class Consumer extends NamedElement {
      * @param assetsMap - Map of all available assets
      * @returns The created workforce demand or null
      */
-    createWorkforceDemand(assetsMap: AssetsMap): WorkforceDemand | null {
-        for (const m of this.maintenances || []) {
-            const a = assetsMap.get(parseInt(m.Product));
-            if (a instanceof Workforce) {
-                this.workforceDemand = new WorkforceDemand(
-                    this, 
-                    a,
-                    m.Amount || 0,
-                    m.percentBoost || 100
-                );
+    createWorkforceDemand(): void {
+        if (this.connectedWorkforce == null)
+            return;
 
-                this.workforceDemandSubscription = ko.computed(() => {
-                    // for workforce replacement, the last applied item matters
-                    const items = this.items.filter(item => item.replacingWorkforce && (item.replacingWorkforce as any) != (a as any) && item.checked()).sort((a, b) => b.item.guid - a.item.guid);
-                    if (items.length && this.workforceDemand) {
-                        this.workforceDemand.updateWorkforce(items[0].replacingWorkforce);
-                    } else if (this.workforceDemand) {
-                        this.workforceDemand.updateWorkforce(null);
-                    }
-                });
-                if (this.workforceDemand) {
-                    this.buildings.subscribe(() => this.workforceDemand!.updateAmount(this.buildings()));
-                }
+
+        this.workforceDemand = new WorkforceDemand(
+            this, 
+            this.connectedWorkforce,
+            this.maintenances.get(this.connectedWorkforce) as number,
+            100
+        );
+
+        this.workforceDemandSubscription = ko.computed(() => {
+            // for workforce replacement, the last applied item matters
+            const items = this.items.filter(item => item.replacingWorkforce && (item.replacingWorkforce as any) != this.connectedWorkforce && item.checked()).sort((a, b) => b.item.guid as number - (a.item.guid as number));
+            if (items.length && this.workforceDemand) {
+                this.workforceDemand.updateWorkforce(items[0].replacingWorkforce);
+            } else if (this.workforceDemand) {
+                this.workforceDemand.updateWorkforce(null);
             }
-        }
-        return null;
+        });
+ 
     }
 
     /**
@@ -223,11 +252,11 @@ export class Consumer extends NamedElement {
      * @returns The extended name
      */
     getRegionExtendedName(): string {
-        if (!this.forceRegionExtendedName && (!this.region || !this.product || this.product.factories.length <= 1)) {
+        if (this.product && this.product.factories.length <= 1) {
             return this.name();
         }
 
-        return `${this.name()} (${this.region?.name() || 'Unknown Region'})`;
+        return `${this.name()} (${this.island.region.name() || 'Unknown Region'})`;
     }
 
     /**
@@ -242,35 +271,18 @@ export class Consumer extends NamedElement {
      * Updates the amount for this consumer
      */
     updateAmount(): void {
-        // Implementation will be added when needed
     }
 
-    /**
-     * Applies configuration globally to all islands
-     */
-    applyConfigGlobally(): void {
-        for (const isl of (window as any).view.islands()) {
-            if (this.region && isl.region && this.region != isl.region) {
-                continue;
-            }
-
-            const other = isl.assetsMap.get(this.guid);
-            if (other) {
-                other.existingBuildings(this.existingBuildings());
-                other.boost(this.boost());
-            }
-        }
-    }
 }
 
 /**
  * Represents a module that can be attached to factories
  */
-export class Module extends Consumer implements ModuleInterface {
+export class Module extends Consumer {
     public additionalOutputCycle: number;
     public productivityUpgrade: number;
     public workforceAmountUpgrade?: { Value: number } | undefined;
-    public tpmin: number;
+
     public checked: KnockoutObservable<boolean>;
     public visible: KnockoutComputed<boolean>;
     
@@ -280,14 +292,14 @@ export class Module extends Consumer implements ModuleInterface {
      * @param assetsMap - Map of all available assets
      * @param island - The island this module belongs to
      */
-    constructor(config: ConsumerConfig, assetsMap: AssetsMap, island: Island) {
-        super(config, assetsMap, island);
+    constructor(config: any, assetsMap: AssetsMap, literalsMap: LiteralsMap, island: Island) {
+        super(config, assetsMap, literalsMap, island);
         
         // Module-specific initialization
         this.additionalOutputCycle = config.additionalOutputCycle || 0;
         this.productivityUpgrade = config.productivityUpgrade || 0;
         this.workforceAmountUpgrade = config.workforceAmountUpgrade;
-        this.tpmin = config.tpmin || 0;
+
 
         // Module-specific initialization
         this.isFactory = false;
@@ -297,8 +309,8 @@ export class Module extends Consumer implements ModuleInterface {
         this.visible = ko.pureComputed(() => !!config && this.available());
     }
     
-    getInputs(): { Product: string; Amount?: number }[] {
-        return this.inputs || [];
+    getInputs(): Map<Product, number> {
+        return this.defaultInputs || [];
     }
 }
 
@@ -318,11 +330,17 @@ export class PublicConsumerBuilding extends Consumer {
      * @param assetsMap - Map of all available assets
      * @param island - The island this building belongs to
      */
-    constructor(config: ConsumerConfig, assetsMap: AssetsMap, island: Island) {
-        super(config, assetsMap, island);
+    constructor(config: any, assetsMap: AssetsMap, literalsMap: LiteralsMap, island: Island) {
+        super(config, assetsMap, literalsMap, island);
 
         // Explicit assignments
-        this.product = config.product ? assetsMap.get(parseInt(config.product)) : null;
+        this.product = config.product ? (() => {
+            const product = assetsMap.get(parseInt(config.product));
+            if (!product) {
+                throw new Error(`Product with GUID ${config.product} not found in assetsMap`);
+            }
+            return product;
+        })() : null;
         this.fixedFactory = ko.observable(null);
         
         this.fixedFactorySubscription = ko.computed(() => {
@@ -351,7 +369,8 @@ export class PublicConsumerBuilding extends Consumer {
 /**
  * Represents a buff that can be applied to factories
  */
-export class Buff extends NamedElement implements BuffInterface {
+export class Buff extends NamedElement {
+    public guid: number;
     public additionalOutputCycle: number;
     public amount: number;
     public factory: Factory | null;
@@ -373,12 +392,25 @@ export class Buff extends NamedElement implements BuffInterface {
         }
 
         super(config);
+        this.guid = config.guid;
         
         // Explicit assignments
         this.additionalOutputCycle = config.additionalOutputCycle || 0;
         this.amount = config.amount || 0;
-        this.factory = config.factory ? assetsMap.get(parseInt(config.factory)) : null;
-        this.product = config.product ? assetsMap.get(parseInt(config.product)) : null;
+        this.factory = config.factory ? (() => {
+            const factory = assetsMap.get(parseInt(config.factory));
+            if (!factory) {
+                throw new Error(`Factory with GUID ${config.factory} not found in assetsMap`);
+            }
+            return factory;
+        })() : null;
+        this.product = config.product ? (() => {
+            const product = assetsMap.get(parseInt(config.product));
+            if (!product) {
+                throw new Error(`Product with GUID ${config.product} not found in assetsMap`);
+            }
+            return product;
+        })() : null;
 
         this.visible = ko.pureComputed(() => this.available());
     }
@@ -391,7 +423,8 @@ export class Buff extends NamedElement implements BuffInterface {
 export class Factory extends Consumer {
     public isFactory: boolean;
     public canClip: boolean;
-    public outputs: Output[];
+    public clipped: KnockoutObservable<boolean>;
+    public outputs: Product[];
     public demands: KnockoutObservableArray<Demand>;
     public tradeList: TradeList;
     public extraGoodProductionList: ExtraGoodProductionList;
@@ -432,13 +465,21 @@ export class Factory extends Consumer {
      * @param assetsMap - Map of all available assets
      * @param island - The island this factory belongs to
      */
-    constructor(config: ConsumerConfig, assetsMap: AssetsMap, island: Island) {
-        super(config, assetsMap, island);
+    constructor(config: FactoryConfig, assetsMap: AssetsMap, literalsMap: LiteralsMap, island: Island) {
+        super(config, assetsMap, literalsMap, island);
         
         // Explicit assignments
         this.isFactory = true;
-        this.canClip = config.canClip || false;
-        this.outputs = config.outputs || [];
+        this.canClip = false;
+        this.clipped = ko.observable(false);
+        this.outputs = []
+        for (let entry of config.outputs) {
+            const product = assetsMap.get(entry.product);
+            if (!product) {
+                throw new Error(`Product with GUID ${entry.product} not found in assetsMap`);
+            }
+            this.outputs.push(product);
+        }
         this.demands = ko.observableArray([]);
 
         this.tradeList = new TradeList(island, this);
@@ -499,8 +540,13 @@ export class Factory extends Consumer {
                 this.boost(this.percentBoost() / 100);
         });
 
+        /*
         if (config.module) {
-            this.module = assetsMap.get(parseInt(config.module));
+            const module = assetsMap.get(parseInt(config.module));
+            if (!module) {
+                throw new Error(`Module with GUID ${config.module} not found in assetsMap`);
+            }
+            this.module = module;
             this.moduleChecked = ko.observable(false);
             if (this.module && this.module.lockDLCIfSet && this.moduleChecked) {
                 this.module.lockDLCIfSet(this.moduleChecked);
@@ -527,7 +573,11 @@ export class Factory extends Consumer {
         }
 
         if (config.fertilizerModule) {
-            this.fertilizerModule = assetsMap.get(parseInt(config.fertilizerModule));
+            const fertilizerModule = assetsMap.get(parseInt(config.fertilizerModule));
+            if (!fertilizerModule) {
+                throw new Error(`Fertilizer module with GUID ${config.fertilizerModule} not found in assetsMap`);
+            }
+            this.fertilizerModule = fertilizerModule;
             this.fertilizerModuleChecked = ko.observable(false);
             if (this.fertilizerModule && this.fertilizerModule.lockDLCIfSet && this.fertilizerModuleChecked) {
                 this.fertilizerModule.lockDLCIfSet(this.fertilizerModuleChecked);
@@ -548,7 +598,11 @@ export class Factory extends Consumer {
         }
 
         if (config.palaceBuff) {
-            this.palaceBuff = assetsMap.get(parseInt(config.palaceBuff));
+            const palaceBuff = assetsMap.get(parseInt(config.palaceBuff));
+            if (!palaceBuff) {
+                throw new Error(`Palace buff with GUID ${config.palaceBuff} not found in assetsMap`);
+            }
+            this.palaceBuff = palaceBuff;
             this.palaceBuffChecked = ko.observable(false);
             if (this.palaceBuff && this.palaceBuffChecked) {
                 this.palaceBuff.lockDLCIfSet(this.palaceBuffChecked);
@@ -562,7 +616,11 @@ export class Factory extends Consumer {
         }
 
         if (config.setBuff) {
-            this.setBuff = assetsMap.get(parseInt(config.setBuff));
+            const setBuff = assetsMap.get(parseInt(config.setBuff));
+            if (!setBuff) {
+                throw new Error(`Set buff with GUID ${config.setBuff} not found in assetsMap`);
+            }
+            this.setBuff = setBuff;
             this.setBuffChecked = ko.observable(false);
             if (this.setBuff && this.setBuffChecked) {
                 this.setBuff.lockDLCIfSet(this.setBuffChecked);
@@ -599,6 +657,8 @@ export class Factory extends Consumer {
 
             return factor;
         });
+*/
+        this.extraGoodFactor = ko.computed(() => 1);
 
         this.outputAmount = ko.pureComputed(() => {
             const diff = Math.max(this.inputAmountByExtraGoods() * this.extraGoodFactor(), 
@@ -613,7 +673,7 @@ export class Factory extends Consumer {
             if (!(window as any).view.settings.missingBuildingsHighlight || !(window as any).view.settings.missingBuildingsHighlight.checked())
                 return false;
 
-            return this.buildings() > this.existingBuildings() + ACCURACY;
+            return this.buildings.required() > this.buildings.constructed() + ACCURACY;
         });
 
         this.requiredInputAmountSubscription = ko.computed(() => {
@@ -626,9 +686,6 @@ export class Factory extends Consumer {
             }
         });
         
-        if (this.workforceDemand) {
-            this.buildings.subscribe(() => this.workforceDemand!.updateAmount(Math.max(this.buildings(), this.buildings())));
-        }
 
         // Set up inputAmount as a computed property
         this.inputAmount = ko.pureComputed(() => {
@@ -648,35 +705,32 @@ export class Factory extends Consumer {
             if (Math.abs(this.inputAmount()) > EPSILON ||
                 this.totalDemands() > EPSILON ||
                 this.externalProduction() > EPSILON ||
-                this.existingBuildings() > 0 ||
+                this.buildings.constructed() > 0 ||
                 this.extraGoodProductionList.amount() > EPSILON)
                 return true;
 
-            if (this.region && this.island.region && this.region != this.island.region)
+            if (this.island.region.id != "Meta" && this.associatedRegions.indexOf(this.island.region) == -1)
                 return false;
 
             if ((window as any).view.settings.showAllConstructableFactories && (window as any).view.settings.showAllConstructableFactories.checked())
                 return true;
 
             if (this.editable()) {
-                if (this.region && this.island.region)
-                    return this.region === this.island.region;
-
-                if (!this.region || this.region.guid === 5000000)
-                    return true;
-
-                return false;
+                return this.associatedRegions.indexOf(this.island.region) != -1;
             }
 
             return false;
         });
+
+        
+        (this.getProduct() as Product).addFactory(this);
     }
 
     /**
      * Gets the output products for this factory
      * @returns Array of output products
      */
-    getOutputs(): Output[] {
+    getOutputs(): Product[] {
         return this.outputs || [];
     }
 
@@ -684,14 +738,14 @@ export class Factory extends Consumer {
      * References products and sets up factory-specific relationships
      * @param assetsMap - Map of all available assets
      */
-    referenceProducts(assetsMap: AssetsMap): void {
-        super.referenceProducts(assetsMap);
-        this.getOutputs().forEach((i: Output) => i.product = assetsMap.get(parseInt(i.Product)));
+    initDemands(assetsMap: AssetsMap): void {
+        super.initDemands(assetsMap);
 
         this.product = this.getProduct();
         if (!this.icon && this.product)
-            this.icon = this.product.icon;
+            this.icon = this.product.icon as string;
 
+        /*
         for (const m of ["module", "fertilizerModule"]) {
             const module = (this as any)[m];
 
@@ -703,17 +757,19 @@ export class Factory extends Consumer {
                 }, assetsMap);
             }
         }
+        */
 
         this.buildingSubscription = ko.computed(() => {
-            const b = Math.ceil(this.buildings() - ACCURACY);
+            var b = Math.ceil(this.buildings.required() - ACCURACY);
 
             if ((window as any).view.settings.utilizeExistingFactories && (window as any).view.settings.utilizeExistingFactories.checked()) {
-                Math.max(b, this.existingBuildings());
+                b = Math.max(b, this.buildings.constructed());
             }
 
             if (this.workforceDemand)
                 this.workforceDemand.updateAmount(b);
 
+            /*
             for (const m of ["module", "fertilizerModule"]) {
                 const module = (this as any)[m];
                 const checked = (this as any)[m + "Checked"];
@@ -721,11 +777,12 @@ export class Factory extends Consumer {
 
                 if (module) {
                     if (checked && checked())
-                        demand.updateAmount(b * module.tpmin);
+                        demand.updateAmount(b * 60 / module.cycleTime);
                     else
                         demand.updateAmount(0);
                 }
             }
+                */
         });
     }
 
@@ -734,7 +791,7 @@ export class Factory extends Consumer {
      * @returns The primary product or null
      */
     getProduct(): Product | null {
-        return this.getOutputs()[0] ? this.getOutputs()[0].product || null : null;
+        return this.getOutputs()[0];
     }
 
     /**
@@ -743,56 +800,9 @@ export class Factory extends Consumer {
      */
     getIcon(): string {
         const product = this.getProduct();
-        return product ? product.icon : super.getIcon();
+        return product ? product.icon as string : super.getIcon();
     }
 
-    /**
-     * Increments the number of buildings while maintaining productivity
-     */
-    incrementBuildings(): void {
-        if (!this.percentBoost || this.buildings() <= 0 || parseInt(this.percentBoost() as any) <= 1)
-            return;
-
-        const minBuildings = Math.ceil(this.buildings() * parseInt(this.percentBoost() as any) / (parseInt(this.percentBoost() as any) - 1));
-        const nextBoost = Math.ceil(parseInt(this.percentBoost() as any) * this.buildings() / minBuildings);
-        this.percentBoost(Math.min(nextBoost, parseInt(this.percentBoost() as any) - 1));
-    }
-
-    /**
-     * Decrements the number of buildings while maintaining productivity
-     */
-    decrementBuildings(): void {
-        const currentBuildings = Math.ceil(this.buildings() * 100) / 100;
-        let nextBuildings = Math.floor(currentBuildings);
-        if (nextBuildings <= 0)
-            return;
-
-        if (currentBuildings - nextBuildings < ACCURACY)
-            nextBuildings = Math.floor(nextBuildings - ACCURACY);
-        const nextBoost = Math.ceil(100 * this.boost() * this.buildings() / nextBuildings);
-        if (this.percentBoost) {
-            if (nextBoost - parseInt(this.percentBoost() as any) < 1)
-                this.percentBoost(parseInt(this.percentBoost() as any) + 1);
-            else
-                this.percentBoost(nextBoost);
-        }
-    }
-
-    /**
-     * Increments the productivity boost percentage
-     */
-    incrementPercentBoost(): void {
-        if (this.percentBoost)
-            this.percentBoost(parseInt(this.percentBoost() as any) + 1);
-    }
-
-    /**
-     * Decrements the productivity boost percentage
-     */
-    decrementPercentBoost(): void {
-        if (this.percentBoost)
-            this.percentBoost(parseInt(this.percentBoost() as any) - 1);
-    }
 
     /**
      * Adds a demand to this factory
@@ -812,39 +822,6 @@ export class Factory extends Consumer {
         this.updateAmount();
     }
 
-    /**
-     * Applies configuration globally to all islands
-     */
-    applyConfigGlobally(): void {
-        for (const isl of (window as any).view.islands()) {
-            if (this.region && isl.region && this.region != isl.region)
-                continue;
-
-            const other = isl.assetsMap.get(this.guid);
-
-            for (let i = 0; i < this.items.length; i++)
-                other.items[i].checked(this.items[i].checked());
-
-            for (const m of ["module", "fertilizerModule"]) {
-                const checked = (this as any)[m + "Checked"];
-                if (checked && checked())
-                    (other as any)[m + "Checked"](checked());
-            }
-
-            if (this.palaceBuffChecked)
-                other.palaceBuffChecked(this.palaceBuffChecked());
-
-            if (this.setBuffChecked)
-                other.setBuffChecked(this.setBuffChecked());
-
-            if (this.workforceDemand && this.workforceDemand.percentBoost)
-                other.workforceDemand.percentBoost(this.workforceDemand.percentBoost());
-
-            // set boost after modules
-            if (this.percentBoost)
-                other.percentBoost(this.percentBoost());
-        }
-    }
 
     // inputAmount is now handled as a computed property in the constructor
 
@@ -853,9 +830,6 @@ export class Factory extends Consumer {
      * @returns The extended name
      */
     getRegionExtendedName(): string {
-        if (!this.region || !this.product) {
-            return this.name();
-        }
-        return `${this.name()} (${this.region.name()})`;
+        return `${this.name()} (${this.island.region.name()})`;
     }
 } 

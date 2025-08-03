@@ -1,6 +1,7 @@
 import { ALL_ISLANDS, createFloatInput, NamedElement, EPSILON, ko } from './util';
-import { Factory as FactoryClass } from './factories';
-import { Factory, Island } from './types';
+import { Factory, Factory as FactoryClass } from './factories';
+import { Island } from './world';
+
 
 declare const $: any;
 declare const view: any;
@@ -210,7 +211,7 @@ export class TradeList {
 
         this.routes = ko.observableArray();
         if (this.factory.outputs) {
-            var traders = view.productsToTraders.get(this.factory.outputs[0].Product);
+            var traders = view.productsToTraders.get(this.factory.outputs[0]);
             if (traders)
                 this.npcRoutes = traders.map((t: any) => new NPCTradeRoute($.extend({}, t, { to: island, toFactory: factory })));
         }
@@ -379,8 +380,16 @@ export class TradeManager {
                 if (!config.from || !config.to)
                     continue;
 
-                config.fromFactory = config.from.assetsMap.get(r.factory);
-                config.toFactory = config.to.assetsMap.get(r.factory);
+                const fromFactory = config.from.assetsMap.get(r.factory);
+                if (!fromFactory) {
+                    throw new Error(`Factory with GUID ${r.factory} not found in from island assetsMap`);
+                }
+                const toFactory = config.to.assetsMap.get(r.factory);
+                if (!toFactory) {
+                    throw new Error(`Factory with GUID ${r.factory} not found in to island assetsMap`);
+                }
+                config.fromFactory = fromFactory;
+                config.toFactory = toFactory;
 
                 if (!config.fromFactory || !config.toFactory)
                     continue;
@@ -418,8 +427,9 @@ export class TradeManager {
                     continue;
 
                 var factory = to.assetsMap.get(r.factory);
-                if (!factory)
-                    continue;
+                if (!factory) {
+                    throw new Error(`Factory with GUID ${r.factory} not found in to island assetsMap`);
+                }
 
                 factory.tradeList.npcRoutes.forEach((froute: NPCTradeRoute) => {
                     if (froute.trader.guid === r.trader) {

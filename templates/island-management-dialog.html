@@ -112,7 +112,7 @@
                                             <img class="icon-sm" src="../icons/icon_marketplace_2d_light.png" data-bind="attr: { src: $data.icon ? $data.icon : null, alt: $data.name }">
 
                                         </span>
-                                        <span class="mr-3" data-bind="text: $root.settings.missingBuildingsHighlight.checked() ? $data.existingBuildings() : Math.ceil($data.buildings())"></span>
+                                        <span class="mr-3" data-bind="text: $root.settings.missingBuildingsHighlight.checked() ? $data.buildings.constructed() : Math.ceil($data.buildings.required())"></span>
                                     </span>
                                     <!-- /ko -->
                                 </div>

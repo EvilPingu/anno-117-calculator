@@ -1034,7 +1034,6 @@ Siehe folgenden Link für weitere Informationen: `,
 
 export const options: Record<string, any> = {
     "decimalsForBuildings": {
-        "guid": -1,
         "name": "Show number of buildings with decimals",
         "locaText": {
             chinese: "建筑数量显示为小数模式",
@@ -1044,7 +1043,6 @@ export const options: Record<string, any> = {
         }
     },
     "hideNames": {
-        "guid": -2,
         "name": "Hide the names of products, factories, and population levels",
         "locaText": {
             "english": "Hide the names of products, factories, and population levels",
@@ -1053,7 +1051,6 @@ export const options: Record<string, any> = {
         }
     },
     "hideProductionBoost": {
-        "guid": -3,
         "name": "Hide the input fields for productivity",
         "locaText": {
             "english": "Hide the input fields for producivity",
@@ -1062,7 +1059,6 @@ export const options: Record<string, any> = {
         }
     },
     "showAllConstructableFactories": {
-        "guid": -4,
         "name": "Show all factories constructable in the region",
         "locaText": {
             "english": "Show all factories constructable in the region",
@@ -1070,7 +1066,6 @@ export const options: Record<string, any> = {
         }
     },
     "missingBuildingsHighlight": {
-        "guid": -5,
         "name": "Highlight missing buildings",
         "locaText": {
             chinese: "高亮缺失的建筑",
@@ -1080,7 +1075,6 @@ export const options: Record<string, any> = {
         }
     },
     "utilizeExistingFactories": {
-        "guid": -6,
         "name": "Fully utilize existing factories",
         "locaText": {
             "english": "Fully utilize existing factories even when output is not needed",
@@ -1088,7 +1082,6 @@ export const options: Record<string, any> = {
         }
     },
     "needUnlockConditions": {
-        "guid": -7,
         "name": "Consider unlock conditions for needs",
         "locaText": {
             "english": "Consider unlock conditions for needs",

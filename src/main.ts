@@ -1,11 +1,16 @@
-import { ACCURACY, formatNumber, formatPercentage, versionCalculator, Option, ko } from './util';
+import { ACCURACY, formatNumber, formatPercentage, versionCalculator, Option, ko, dummyObservable, NeedConsumptionSetting, NamedElement } from './util';
 import { languageCodes, texts as locaTexts, options } from './i18n';
 import { registerComponents } from './components';
 
-
-import './params';
-import { Island } from './types';
-import { DarkMode } from './views';
+// Import params from the js directory - this is a legacy import that needs to be loaded
+// We'll handle this differently to avoid TypeScript rootDir issues
+if (typeof require !== 'undefined') {
+    require('../js/params');
+}
+import { AssetsMap, LiteralsMap } from './types';
+import { DarkMode, ResidencePresenter } from './views';
+import { ConstantsConfig, NeedConsumptionConfig } from './types.config';
+import { Island, Region, Session } from './world';
 
 declare const $: any;
 declare const window: any;
@@ -25,8 +30,11 @@ declare const require: any;
 (window as any).view = {
     settings: {
         language: ko.observable("english"),
-        options: []
+        options: [],
+        selectedNeedConsumptionSetting: dummyObservable<NeedConsumptionSetting>("selectedNeedConsumption"),
+        needConsumptionSettings: []
     },
+    constants: {} as  ConstantsConfig,
     texts: {},
     dlcs: [],
     dlcsMap: new Map(),
@@ -38,9 +46,11 @@ declare const require: any;
     selectedResidenceEffectView: ko.observable(null),
     island: ko.observable(null),
     islands: ko.observableArray([]),
-    regions: [],
-    sessions: [],
-    assetsMap: new Map(),
+    regions: [] as Region[],
+    sessions: [] as Session[],
+    needAttributes: [] as NamedElement[],
+    assetsMap: new Map() as AssetsMap,
+    literalsMap: new Map() as LiteralsMap,
     productsToTraders: new Map(),
     tradeManager: null,
     collapsibleStates: null,
@@ -51,6 +61,9 @@ declare const require: any;
         consumers: [],
         publicServices: [],
         publicRecipeBuildings: []
+    },
+    presenter: {
+        residence: null
     },
     viewMode: null,
     islandManager: null
@@ -205,15 +218,7 @@ function installImportConfigListener(): void {
                         for (var a in config)
                             localStorage.setItem(a, config[a]);
 
-                        if (!config.islandNames) { // old save, restore islands
-                            for (var island of window.view.islands()) {
-                                if (!island.isAllIslands())
-                                    island.storage.save();
-                            }
-                            let islandNames = JSON.stringify(window.view.islands().filter((i: Island) => !i.isAllIslands()).map((i: Island) => i.name()));
-                            localStorage.setItem("islandNames", islandNames);
-                        }
-                        
+                       
                         location.reload();
                     } else {
                         console.error("No local storage accessible to write result into.");
@@ -293,6 +298,7 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
     
     // Use the global params object (set by params.js)
     const params = (window as any).params;
+    window.view.constants = params.constants;
     
     // Set up DLCs
     (window as any).view.dlcs = [];
@@ -310,30 +316,48 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
         }
     }
 
-        // Set up options
+    // Set up options
 
-        for (let attr in options) {
-            let o = new Option(options[attr]);
+    for (let attr in options) {
+        let o = new Option({...options[attr], id: attr});
 
-            (window as any).view.settings[attr] = o;
-            (window as any).view.settings.options.push(o);
-    
-            if (localStorage) {
-                let id = "settings." + attr;
-                if (localStorage.getItem(id) != null)
-                    o.checked(parseInt(localStorage.getItem(id) || '0') ? true : false);
-    
-                o.checked.subscribe((val: boolean) => localStorage.setItem(id, val ? '1' : '0'));
-            }
+        (window as any).view.settings[attr] = o;
+        (window as any).view.settings.options.push(o);
+
+        if (localStorage) {
+            let id = "settings." + attr;
+            if (localStorage.getItem(id) != null)
+                o.checked(parseInt(localStorage.getItem(id) || '0') ? true : false);
+
+            o.checked.subscribe((val: boolean) => localStorage.setItem(id, val ? '1' : '0'));
         }
-    
-        (window as any).view.settings.languages = params.languages;
+    }
+
+    (window as any).view.settings.languages = params.languages;
+
+    for (let attr of (params.needConsumptions as NeedConsumptionConfig[])) {
+        let o = new NeedConsumptionSetting(attr);
+
+        (window as any).view.settings.needConsumptionSettings.push(o);
+    } 
+    (window as any).view.settings.selectedNeedConsumptionSetting = ko.observable( (window as any).view.settings.needConsumptionSettings[0])
+    if (localStorage) {
+        let id = "settings.needConsumption";
+        let selection = (window as any).view.settings.selectedNeedConsumptionSetting as KnockoutObservable<NeedConsumptionSetting>;
+        if (localStorage.getItem(id) != null)
+            for (var o of (window as any).view.settings.needConsumptionSettings)
+                if(o.id == localStorage.getItem(id))
+                    selection(o);
+
+        selection.subscribe((val ) => localStorage.setItem(id, val.id as string));
+    }
 
     // Set up regions
     (window as any).view.regions = [];
     for (let region of (params.regions || [])) {
         const r = new (require('./world').Region)(region);
         (window as any).view.assetsMap.set(r.guid, r);
+        (window as any).view.literalsMap.set(r.id, r);
         (window as any).view.regions.push(r);
     }
 
@@ -343,6 +367,14 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
         const s = new (require('./world').Session)(session, (window as any).view.assetsMap);
         (window as any).view.assetsMap.set(s.guid, s);
         (window as any).view.sessions.push(s);
+    }
+
+    (window as any).view.needAttributes = [];
+    // Set up attributes: Population, Money, Happiness, Health, FireSafety, Belief, Knowledge, Prestige
+    for (let attribute of (params.needAttributes || [])) {
+        const r = new NamedElement(attribute);
+        (window as any).view.needAttributes.push(r);
+        (window as any).view.literalsMap.set(r.id, r);
     }
 
     // Set up NPC traders
@@ -374,8 +406,7 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
     // Handle configuration upgrades
     if (!_isFirstRun)
         configUpgrade(configVersion);
-    else
-        localStorage.setItem("upgrade.bonusResidentsApplied", "1");
+
 
     // Set up modal dialogs and UI state
     (window as any).view.collapsibleStates = new (require('./views').CollapsibleStates)();
@@ -390,7 +421,7 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
     (window as any).view.tradeManager = new (require('./trade').TradeManager)();
 
     // Set up templates
-    const allIslands = (window as any).view.islandManager.allIslands;
+    const allIslands = (window as any).view.islandManager.allIslands as Island;
     const selectedIsland = (window as any).view.island();
     const templates: any[] = [];
     const arrayToTemplate = (name: string) => allIslands[name].map((asset: any, index: number) => {
@@ -402,12 +433,13 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
     (window as any).view.island.subscribe((i: any) => templates.forEach(t => t.parentInstance(i)));
 
     (window as any).view.template = {
-        populationLevels: arrayToTemplate("populationLevels"),
+        populationGroups: arrayToTemplate("populationGroups"),
         categories: arrayToTemplate("categories"),
         consumers: arrayToTemplate("consumers"),
         publicServices: arrayToTemplate("publicServices"),
         publicRecipeBuildings: arrayToTemplate("publicRecipeBuildings")
     };
+    (window as any).view.presenter.residence = new ResidencePresenter(allIslands.needCategories, allIslands.residenceBuildings[0]);
 
     // Set up view mode for first run
     if (_isFirstRun)
@@ -439,25 +471,57 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
         $('body').css('padding-right', '');
     });
 
-    // Set up key bindings for navigation
-    $(document).keydown((e: JQuery.KeyDownEvent) => {
-        if (!$('input, textarea').is(':focus')) {
-            switch (e.which) {
-                case 37: // left
-                    const prevButton = $('.island-navigation .fa-chevron-left').closest('button');
-                    if (prevButton.length && !prevButton.prop('disabled'))
-                        prevButton.click();
-                    break;
-                case 39: // right
-                    const nextButton = $('.island-navigation .fa-chevron-right').closest('button');
-                    if (nextButton.length && !nextButton.prop('disabled'))
-                        nextButton.click();
-                    break;
-                default:
-                    return;
-            }
-            e.preventDefault();
+    if (window.view.viewMode)
+        $('#view-mode-dialog').modal("show");
+
+    (window.view.island() as Island).name.subscribe(val => { window.document.title = val; });
+
+    // Set up key bindings
+    var keyBindings = ko.computed(() => {
+        var bindings = new Map();
+
+        var language = window.view.settings.language();
+        if (language == 'chinese' || language == 'korean' || language == 'japanese' || language == 'taiwanese') {
+            language = 'english';
         }
+
+        for (var l of (window.view.island() as Island).residenceBuildings) {
+            var name = l.locaText[language];
+
+            for (var c of name.toLowerCase()) {
+                if (!bindings.has(c)) {
+                    bindings.set(c, $(`.ui-tier-unit-name[tier-unit-guid=${l.guid}] ~ .input .input-group input`));
+                    l.hotkey(c);
+                    break;
+                }
+            }
+        }
+
+        return bindings;
+    });
+
+    $(document).on("keydown", (evt: { altKey: any; ctrlKey: any; shiftKey: any; target: { tagName: string; type: string; }; key: string; }) => {
+        if (evt.altKey || evt.ctrlKey || evt.shiftKey)
+            return true;
+
+        if (evt.target.tagName === 'TEXTAREA')
+            return true;
+
+        if (evt.target.tagName === 'INPUT' && evt.target.type === "text")
+            return true;
+
+        var focused = false;
+        var bindings = keyBindings();
+        if (bindings.has(evt.key)) {
+            focused = true;
+            bindings.get(evt.key).focus().select();
+        }
+
+        if (evt.target.tagName === 'INPUT' && !isNaN(parseInt(evt.key)) || focused) {
+            let isDigit = evt.key >= "0" && evt.key <= "9";
+            return ['ArrowUp', 'ArrowDown', 'Backspace', 'Delete'].includes(evt.key) || isDigit || evt.key === "." || evt.key === ",";
+        }
+        return false;
     });
 
 }

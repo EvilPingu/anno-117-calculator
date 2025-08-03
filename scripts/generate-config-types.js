@@ -62,7 +62,10 @@ function generateInterfaceFromObject(objectSchema, indent = '  ') {
                     const nestedType = convertJsonTypeToTypeScript(nestedSchema.type);
                     return `${indent}  ${nestedProp}${nestedOptional}: ${nestedType};`;
                 }).join('\n') + 
-                '\n' + indent + '}';
+                '\n';
+            if (propName == "needAttributes")
+                typeAnnotation += indent + '  [key: string]: number; // Allow string indexing\n'; 
+            typeAnnotation += indent + '}';
         } else if (propSchema.type === 'array' && propSchema.items) {
             // Array type
             if (propSchema.items.type === 'object' && propSchema.items.properties) {

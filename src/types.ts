@@ -1,4 +1,7 @@
 // Core type definitions for the Anno 1800 Calculator
+
+import { NamedElement } from "./util";
+
 // Common interface for localized text
 export interface LocaTextConfig {
   english: string;
@@ -19,10 +22,11 @@ export interface LocaTextConfig {
 
 // Base configuration interfaces
 export interface NamedElementConfig {
-  guid: number;
-  name: string;
+  guid?: number;
+  id?: string;
+  name?: string;
   locaText: LocaTextConfig;
-  iconPath: string;
+  iconPath?: string;
   dlcs?: string[];
   available?: boolean;
   notes?: string;
@@ -39,28 +43,23 @@ export interface DLCConfig extends OptionConfig {
 
 // Configuration interfaces for different components
 export interface ConsumerConfig extends NamedElementConfig {
-  region?: string;
-  workforce?: string[];
-  products?: string[];
-  inputs?: any[];
-  maintenances?: any[];
-  tpmin?: number;
-  forceRegionExtendedName?: boolean;
-  product?: string;
-  outputs?: any[];
-  productionTime?: number;
-  workforceDemands?: WorkforceDemandConfig[];
-  canClip?: boolean;
-  module?: string;
-  fertilizerModule?: string;
-  palaceBuff?: string;
-  setBuff?: string;
-  additionalOutputCycle?: number;
-  productivityUpgrade?: number;
-  workforceAmountUpgrade?: { Value: number } | undefined;
+  guid:number;
+  associatedRegions: string[];
+  inputs: {
+    product: number;
+    amount: number;
+  }[];
+  needsFuelInput: boolean;
+
+  maintenances: {
+    product: number;
+    amount: number;
+  }[];
+  cycleTime: number;
 }
 
 export interface BuffConfig extends NamedElementConfig {
+  guid:number;
   additionalOutputCycle?: number;
   amount?: number;
   factory?: string;
@@ -74,13 +73,13 @@ export interface WorkforceDemandConfig {
   percentBoost?: number;
 }
 
-export interface FactoryConfig extends NamedElementConfig {
-  region?: string;
-  workforce?: string[];
-  products?: string[];
-  inputs?: string[];
-  productionTime?: number;
-  workforceDemands?: WorkforceDemandConfig[];
+export interface FactoryConfig extends ConsumerConfig {
+
+  outputs: {
+    product: number;
+    amount: number;
+  }[];
+  modulesLimit: number;
 }
 
 export interface PopulationLevelConfig extends NamedElementConfig {
@@ -102,6 +101,11 @@ export interface NeedConfig {
   excludePopulationFromMoneyAndConsumptionCalculation?: boolean;
   residents?: number;
   requiredFloorLevel?: number;
+}
+
+export interface ResidenceNeedConfig {
+  need: number;
+  needConsumptionRate: number;
 }
 
 export interface ResidenceBuildingConfig extends NamedElementConfig {
@@ -177,6 +181,7 @@ export interface NumericBounds {
 
 // Asset map type - any type that extends NamedElement
 export type AssetsMap = Map<number, any>;
+export type LiteralsMap = Map<string, NamedElement>;
 
 // Helper functions for AssetsMap operations
 export function getFromAssetsMap(assetsMap: AssetsMap, guid: string | number): any {
@@ -285,10 +290,10 @@ export interface Item {
   icon?: string;
   locaText?: LocaTextConfig;
   factories: Factory[];
-  replacements?: Map<string, string>;
-  replacementArray?: string[];
+  replacements?: Map<Product, Product>;
+  replacementArray?: Product[];
   replacingWorkforce?: Workforce;
-  additionalOutputs?: Output[];
+  additionalOutputs?: Map<Product, number>;
   equipments: Equipment[];
   checked: KnockoutComputed<boolean>;
   visible(): boolean;
@@ -449,7 +454,7 @@ export interface ExtraGoodProductionList {
 }
 
 export interface Island {
-  guid: number;
+  guid?: number;
   name: KnockoutObservable<string>;
   region: Region;
   assetsMap: AssetsMap;
@@ -464,7 +469,15 @@ export interface Island {
   [key: string]: any; // Allow dynamic properties
 }
 
+export interface BuildingsCalc {
+  constructed: KnockoutObservable<number>;
+  planned: KnockoutObservable<number>;
+  required: KnockoutObservable<number>;
+}
+
+
 export interface Session {
+  addIsland(island: Island): void;
   deleteIsland(island: Island): void;
   available(): boolean;
   [key: string]: any; // Allow dynamic properties

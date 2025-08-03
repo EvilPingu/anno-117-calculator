@@ -1,9 +1,10 @@
-import { ALL_ISLANDS, setDefaultFixedFactories, NamedElement, Option, ko } from './util';
+import { ALL_ISLANDS, setDefaultFixedFactories, NamedElement, Option, ko, BuildingsCalc } from './util';
 import { texts } from './i18n';
 import { 
  
     AssetsMap, 
     GameParams,
+    LiteralsMap,
 } from './types';
 import { 
     RegionConfig, 
@@ -11,11 +12,11 @@ import {
 
 } from './types.config';
 
-import { Workforce, ResidenceBuilding, PopulationLevel } from './population';
-import { NoFactoryProduct, Product, MetaProduct, Item, ProductCategory } from './production';
+import { Workforce, ResidenceBuilding, PopulationLevel, PopulationGroup } from './population';
+import { Product, MetaProduct, Item, ProductCategory } from './production';
 import { PublicConsumerBuilding, Module, Factory, Consumer, Buff } from './factories';
 import { ResidenceEffectView } from './views';
-import { RecipeList, ResidenceEffect } from './consumption';
+import { Need, NeedCategory, RecipeList, ResidenceEffect } from './consumption';
 
 declare const $: any;
 declare const view: any;
@@ -152,6 +153,8 @@ class Storage {
  * Represents a region in the game: all sessions of a region have the same products, factories, residences.
  */
 export class Region extends NamedElement {
+    public guid: number;
+
     constructor(config: RegionConfig) {
         // Use locaText.englisch as the name if available, otherwise use a fallback
         const regionConfig = {
@@ -160,11 +163,12 @@ export class Region extends NamedElement {
         };
         
         super(regionConfig);
+        this.guid = regionConfig.guid;
     }
 }
 
 export class Session extends NamedElement {
-    public region: Region | null;
+    public region: Region;
     public islands: KnockoutObservableArray<Island>;
     public workforce: Workforce[] = [];
     
@@ -185,7 +189,11 @@ export class Session extends NamedElement {
         };
         
         super(sessionConfig);
-        this.region = config.region ? assetsMap.get(config.region) : null;
+        const region = assetsMap.get(config.region);
+        if (!region) {
+            throw new Error(`Region with GUID ${config.region} not found in assetsMap`);
+        }
+        this.region = region as Region;
         this.islands = ko.observableArray([]);
     }
     
@@ -211,6 +219,7 @@ export class IslandManager {
     public showIslandOnCreation: Option;
     public islandNameInput: KnockoutObservable<string>;
     public availableSessions: KnockoutComputed<Session[]>;
+    public metaSession: Session;
     public sessionInput: KnockoutObservable<Session>;
     public renameIsland: KnockoutObservable<Island>;
     public islandExists: KnockoutObservable<boolean>;
@@ -233,6 +242,11 @@ export class IslandManager {
         // Create other required properties
         this.islandNameInput = ko.observable();
         this.availableSessions = ko.pureComputed(() => (window as any).view.sessions.filter((s: any) => s.available()));
+        this.metaSession = (window as any).view.sessions[0];
+        this.availableSessions().forEach(session => {
+            if (session.region.id == "Meta")
+                this.metaSession = session;
+        })
         this.sessionInput = ko.observable();
         this.renameIsland = ko.observable();
         this.params = params;
@@ -257,7 +271,7 @@ export class IslandManager {
 
         this.sortIslands();
 
-        var allIslands = new Island(params, localStorage, isFirstRun, null);
+        var allIslands = new Island(params, localStorage, isFirstRun, this.metaSession);
         this.allIslands = allIslands;
         view.islands.unshift(allIslands);
         if (!view.island())
@@ -449,14 +463,16 @@ export class IslandManager {
  * Represents an island in the game world
  * Manages all buildings, population, and production on a single island
  */
-class Island {
+export class Island {
     public name: KnockoutObservable<string>;
     public isAllIslands: () => boolean;
     public storage: Storage;
     public session: Session;
     public region: Region;
     public sessionExtendedName: KnockoutComputed<string>;
+    public needCategories: NeedCategory[];
     public populationLevels: PopulationLevel[];
+    public populationGroups: PopulationGroup[];
     public residenceBuildings: ResidenceBuilding[];
     public publicServices: PublicConsumerBuilding[];
     public publicRecipeBuildings: PublicConsumerBuilding[];
@@ -471,12 +487,13 @@ class Island {
     public workforce: Workforce[];
 
     public assetsMap: AssetsMap;
+    public literalsMap: LiteralsMap;
     public products: Product[];
-    public noFactoryProducts: NoFactoryProduct[];
     public top2Population: KnockoutComputed<PopulationLevel[]>;
     public top5Factories: KnockoutComputed<Factory[]>;
     public workforceSectionVisible: KnockoutComputed<boolean>;
     public publicBuildingsSectionVisible: KnockoutComputed<boolean>;
+    [key:string]: any;
 
     /**
      * Creates a new Island instance
@@ -505,15 +522,32 @@ class Island {
         }
         this.storage = localStorage;
 
-        this.session = session || this.storage.getItem("session");
-        this.session = this.session instanceof Session ? this.session : view.assetsMap.get(this.session);
-        this.region = this.session ? this.session.region : null as any;
+        if (session){
+            this.session = session;
+            this.storage.setItem("session", this.session.guid);
+        }  else { 
+            const sessionGuid = this.storage.getItem("session");
+            if (sessionGuid) {
+                const session = view.assetsMap.get(sessionGuid);
+                if (!session) {
+                    throw new Error(`Session with GUID ${sessionGuid} not found in assetsMap`);
+                }
+                this.session = session;
+            } else {
+                this.session = (window as any).view.sessions[0];
+            }
+        }
+        this.region = this.session.region;
 
-        this.storage.setItem("session", this.session ? this.session.guid : null);
+        
 
-        var assetsMap = new Map();
+        var assetsMap = new Map() as AssetsMap;
         for (var key of view.assetsMap.keys())
             assetsMap.set(key, view.assetsMap.get(key));
+
+        var literalsMap = new Map() as LiteralsMap;
+        for (var key of view.literalsMap.keys())
+            literalsMap.set(key, view.literalsMap.get(key));
 
         this.sessionExtendedName = ko.pureComputed(() => {
             if (!this.session)
@@ -525,8 +559,8 @@ class Island {
         // procedures to persist inputs
         var persistBool: (obj: any, attributeName: string, storageName?: string) => void;
         var persistInt: (obj: any, attributeName: string, storageName?: string) => void;
-        var persistFloat: (obj: any, attributeName: string, storageName?: string) => void;
         var persistString: (obj: any, attributeName: string, storageName?: string) => void;
+        var persistBuildings: (obj: any) => void;
 
         if (localStorage) {
             persistBool = (obj: any, attributeName: string, storageName?: string) => {
@@ -558,24 +592,6 @@ class Island {
                 }
             }
 
-            persistFloat = (obj: any, attributeName: string, storageName?: string) => {
-                var attr = obj[attributeName];
-                if (attr) {
-                    let id = storageName ? storageName : (obj.guid + "." + attributeName);
-                    if (localStorage.getItem(id) != null)
-                        attr(parseFloat(localStorage.getItem(id)));
-
-                    attr.subscribe((val: any) => {
-                        val = parseFloat(val);
-
-                        if (val == null || !isFinite(val) || isNaN(val))
-                            return;
-
-                        localStorage.setItem(id, val.toString());
-                    });
-                }
-            }
-
             persistString = (obj: any, attributeName: string, storageName?: string) => {
                 var attr = obj[attributeName];
                 if (attr) {
@@ -587,18 +603,27 @@ class Island {
                 }
             }
 
+            persistBuildings = (obj: any) => {
+                for (let attr of ["constructed", "planned"]){
+                    persistInt(obj.buildings as BuildingsCalc, attr, obj.guid + ".buildings." + attr);
+                }
+            }
+
         } else {
-            persistBool = persistFloat = persistInt = persistString = () => { };
+            persistBool = persistInt = persistString = persistBuildings = () => { };
         }
 
         // objects
+        this.categories = [];
+        this.products = [];
+        this.needCategories = [];
         this.populationLevels = [];
+        this.populationGroups = [];
         this.residenceBuildings = [];
         this.publicServices = [];
         this.publicRecipeBuildings = [];
         this.consumers = [];
         this.factories = [];
-        this.categories = [];
         this.multiFactoryProducts = [];
         this.items = [];
         this.replaceInputItems = [];
@@ -606,7 +631,47 @@ class Island {
         this.recipeLists = [];
         this.workforce = [];
 
+        let products: Product[] = [];
+        for (let product of params.products) {
+            if (product.isAbstract) {
+                let p = new MetaProduct(product, assetsMap);
+                assetsMap.set(p.guid as number, p);
+            } else {
+                let p = new Product(product, assetsMap);
 
+                products.push(p);
+                assetsMap.set(p.guid, p);
+
+                if (p.factories.length > 1)
+                    this.multiFactoryProducts.push(p);
+
+                if (localStorage) {
+                    let id = p.guid + ".fixedFactory";
+                    if (localStorage.getItem(id) != null) {
+                        const factory = assetsMap.get(parseInt(localStorage.getItem(id)));
+                        if (!factory) {
+                            throw new Error(`Factory with GUID ${localStorage.getItem(id)} not found in assetsMap`);
+                        }
+                        p.fixedFactory(factory);
+                    }
+                    p.fixedFactory.subscribe(
+                        (f: Factory | null) => f ? localStorage.setItem(id, f.guid.toString()) : localStorage.removeItem(id));
+                }
+            }
+        }
+
+
+
+        for (let needCategory of (params.needCategories || [])) {
+            const n = new NeedCategory(needCategory);
+            this.needCategories.push(n);
+            literalsMap.set(n.id, n);
+        }
+
+        for (let need of (params.needs || [])) {
+            const n = new Need(need, assetsMap, literalsMap);
+            assetsMap.set(n.guid, n);
+        }
 
         for (let workforce of params.workforce) {
             let w = new Workforce(workforce, assetsMap);
@@ -615,14 +680,14 @@ class Island {
         }
 
         for (let consumer of (params.publicServices || [])) {
-            let f = new PublicConsumerBuilding(consumer, assetsMap, this as any);
+            let f = new PublicConsumerBuilding(consumer, assetsMap, literalsMap, this as any);
             assetsMap.set(f.guid, f);
             this.consumers.push(f);
             this.publicServices.push(f);
         }
 
         for (let consumer of (params.publicRecipeBuildings || [])) {
-            let f = new PublicConsumerBuilding(consumer, assetsMap, this as any);
+            let f = new PublicConsumerBuilding(consumer, assetsMap, literalsMap, this as any);
             assetsMap.set(f.guid, f);
             this.consumers.push(f);
             this.publicRecipeBuildings.push(f);
@@ -634,7 +699,7 @@ class Island {
         }
 
         for (let consumer of (params.modules || [])) {
-            let f = new Module(consumer, assetsMap, this as any);
+            let f = new Module(consumer, assetsMap, literalsMap, this as any);
             assetsMap.set(f.guid, f);
             this.consumers.push(f);
         }
@@ -650,47 +715,15 @@ class Island {
         }
 
         for (let factory of params.factories) {
-            let f = new (Factory as any)(factory, assetsMap, this);
+            let f = new Factory(factory, assetsMap, literalsMap, this);
             assetsMap.set(f.guid, f);
             this.consumers.push(f);
             this.factories.push(f);
 
-            persistBool(f, "moduleChecked", `${f.guid}.module.checked`);
-            persistBool(f, "fertilizerModuleChecked", `${f.guid}.fertilizerModule.checked`);
-            persistBool(f, "palaceBuffChecked", `${f.guid}.palaceBuff.checked`);
-            persistBool(f, "setBuffChecked", `${f.guid}.setBuff.checked`);
-            persistInt(f, "percentBoost");
             persistBool(f.extraGoodProductionList, "checked", `${f.guid}.extraGoodProductionList.checked`);
         }
 
-        let products: Product[] = [];
-        let noFactoryProducts: NoFactoryProduct[] = [];
-        for (let product of params.products) {
-            if (product.residentsInputFactor) {
-                let p = new NoFactoryProduct(product, assetsMap);
-                noFactoryProducts.push(p);
-                assetsMap.set((p as any).guid, p);
-            } else if (product.producers && product.producers.length) {
-                let p = new Product(product, assetsMap);
 
-                products.push(p);
-                assetsMap.set((p as any).guid, p);
-
-                if ((p as any).factories.length > 1)
-                    this.multiFactoryProducts.push(p);
-
-                if (localStorage) {
-                    let id = (p as any).guid + ".fixedFactory";
-                    if (localStorage.getItem(id) != null)
-                        (p as any).fixedFactory(assetsMap.get(parseInt(localStorage.getItem(id))));
-                    (p as any).fixedFactory.subscribe(
-                        (f: Factory) => f ? localStorage.setItem(id, (f as any).guid.toString()) : localStorage.removeItem(id));
-                }
-            } else {
-                let p = new MetaProduct(product, assetsMap);
-                assetsMap.set(p.guid, p);
-            }
-        }
 
         if (isNew)
             setDefaultFixedFactories(assetsMap);
@@ -710,24 +743,12 @@ class Island {
                 this.extraGoodItems.push(i);
 
             if (localStorage) {
-                let oldId = (i as any).guid + ".checked";
-                var oldChecked = false;
-                if (localStorage.getItem(oldId) != null)
-                    oldChecked = !!parseInt(localStorage.getItem(oldId));
 
                 for (var equip of (i as any).equipments) {
                     let id = `${(equip.factory as any).guid}[${(i as any).guid}].checked`;
-
-                    if (oldChecked)
-                        equip.checked(true);
-
-                    if (localStorage.getItem(id) != null)
-                        equip.checked(!!parseInt(localStorage.getItem(id)));
-
-                    equip.checked.subscribe((val: boolean) => localStorage.setItem(id, val ? "1" : "0"));
+                    persistBool(equip, "checked", id);
                 }
 
-                localStorage.removeItem(oldId);
             }
         }
 
@@ -738,15 +759,8 @@ class Island {
 
         // must be set after items so that extraDemand is correctly handled
         this.consumers.forEach(f => {
-            f.createWorkforceDemand(assetsMap);
-            f.referenceProducts(assetsMap);
+            f.initDemands(assetsMap);
         });
-
-        for (var building of (params.residenceBuildings || [])) {
-            var b = new ResidenceBuilding(building, assetsMap, this);
-            assetsMap.set(b.guid, b);
-            this.residenceBuildings.push(b);
-        }
 
         for (let level of params.populationLevels) {
             let l = new PopulationLevel(level, assetsMap, this);
@@ -754,13 +768,35 @@ class Island {
             this.populationLevels.push(l);
         }
 
-        for (var b of this.residenceBuildings) {
-            if ((b as any).upgradedBuildingGuid)
-                (b as any).upgradedBuilding = assetsMap.get(parseInt((b as any).upgradedBuildingGuid));
+        for (var building of (params.residenceBuildings || [])) {
+            var b = new ResidenceBuilding(building, assetsMap, this);
+            assetsMap.set(b.guid, b);
+            this.residenceBuildings.push(b);
         }
 
-        for (let l of this.populationLevels)
-            l.initBans(assetsMap);  // must be executed before loading the values for residence buildings
+        for (let group of params.populationGroups) {
+            if (this.region.id != "Meta" && this.region.id != group.region)
+                continue;
+
+            let g = new PopulationGroup(group, assetsMap, literalsMap);
+            assetsMap.set(g.guid, g);
+            this.populationGroups.push(g);
+        }
+
+        for (var b of this.residenceBuildings) {
+            if ((b as any).upgradedBuildingGuid) {
+                const upgradedBuilding = assetsMap.get(parseInt((b as any).upgradedBuildingGuid));
+                if (!upgradedBuilding) {
+                    throw new Error(`Upgraded building with GUID ${(b as any).upgradedBuildingGuid} not found in assetsMap`);
+                }
+                (b as any).upgradedBuilding = upgradedBuilding;
+            }
+
+            b.initDemands(assetsMap);
+        }
+
+//        for (let l of this.populationLevels)
+//            l.initBans(assetsMap);  // must be executed before loading the values for residence buildings
 
         for (let effect of (params.residenceEffects || [])) {
             let e = new ResidenceEffect(effect, assetsMap);
@@ -779,69 +815,49 @@ class Island {
                     localStorage.setItem(id, JSON.stringify((b as any).serializeEffects()));
                 });
             }
-            persistInt(b, "existingBuildings");
-            persistFloat(b, "limitPerHouse");
-            persistInt(b, "limit");
-            persistBool(b, "fixLimitPerHouse");
+            persistBuildings(b);
         }
 
-        for (let l of this.populationLevels) {
-            persistInt(l, "existingBuildings");
-            persistFloat(l, "limitPerHouse");
-            persistFloat(l, "amountPerHouse");
-            persistInt(l, "limit");
-            persistInt(l, "amount");
-            persistBool(l, "fixLimitPerHouse");
-            persistBool(l, "fixAmountPerHouse");
-            persistString(l, "notes");
+        for (let r of this.residenceBuildings) {
+            
+            persistString(r, "notes");
 
-            for (let n of (l as any).needs) {
-                persistBool(n, "checked", `${(l as any).guid}[${(n as any).guid}].checked`);
-                persistFloat(n, "percentBoost", `${(l as any).guid}[${(n as any).guid}].percentBoost`);
-                persistString(n, "notes", `${(l as any).guid}[${(n as any).guid}].notes`);
-            }
-
-            for (let n of (l as any).buildingNeeds) {
-                persistBool(n, "checked", `${(l as any).guid}[${(n as any).guid}].checked`);
+            for (let n of r.needsMap.values()) {
+                persistBool(n, "checked", `${r.guid}[${n.need.guid}].checked`);
+                persistString(n, "notes", `${r.guid}[${n.need.guid}].notes`);
             }
         }
 
-        for (var category of params.productFilter) {
+        for (var category of params.productFilters) {
             let c = new ProductCategory(category, assetsMap);
             assetsMap.set(c.guid, c);
             this.categories.push(c);
         }
 
         for (let p of this.categories[1].products) {
-            if (p)
-                for (let b of p.factories) {
-                    if (b && typeof (b as any).editable === 'function') {
-                        (b as any).editable(true);
-                    }
+            for (let b of p.factories) {
+                if (b && typeof (b as any).editable === 'function') {
+                    b.editable(true);
                 }
+            }
         }
 
         for (let b of this.publicRecipeBuildings) {
-            if (b.goodConsumptionUpgrade)
-                b.goodConsumptionUpgrade = assetsMap.get(b.goodConsumptionUpgrade);
-
             b.recipeName = ko.computed(() => {
                 return b.name().split(':').slice(-1)[0].trim();
             });
         }
 
         for (let f of this.consumers) {
-            persistInt(f, "existingBuildings");
+            persistBuildings(f);
             persistString(f, "notes");
-            if (f.workforceDemand)
-                persistInt(f.workforceDemand, "percentBoost", `${f.guid}.workforce.percentBoost`);
         }
 
         this.workforce = this.workforce.filter(w => w.demands().length);
 
         this.assetsMap = assetsMap;
+        this.literalsMap = literalsMap;
         this.products = products;
-        this.noFactoryProducts = noFactoryProducts;
 
         this.top2Population = ko.computed(() => {
             var comp = (a: PopulationLevel, b: PopulationLevel) => b.residents() - a.residents();
@@ -852,10 +868,10 @@ class Island {
         this.top5Factories = ko.computed(() => {
             var useBuildings = view.settings.missingBuildingsHighlight.checked();
             var comp = useBuildings
-                ? (a: Factory, b: Factory) => b.existingBuildings() - a.existingBuildings()
-                : (a: Factory, b: Factory) => b.buildings() - a.buildings();
+                ? (a: Factory, b: Factory) => b.buildings.constructed() - a.buildings.constructed()
+                : (a: Factory, b: Factory) => b.buildings.required() - a.buildings.required();
 
-            return [...this.factories].sort(comp).slice(0, 5).filter(f => useBuildings ? f.existingBuildings() : f.buildings());
+            return [...this.factories].sort(comp).slice(0, 5).filter(f => useBuildings ? f.buildings.constructed() : f.buildings.required());
         });
 
         if (this.session)
@@ -874,10 +890,6 @@ class Island {
                 if (service.visible())
                     return true;
 
-            for (var product of this.noFactoryProducts)
-                if (product.visible())
-                    return true;
-
             for (var recipeBuilding of this.publicRecipeBuildings)
                 if (recipeBuilding.visible())
                     return true;
@@ -889,86 +901,7 @@ class Island {
             return false;
         });
     }
-
-    /**
-     * Resets all island data to default values
-     * Clears all buildings, effects, and configurations
-     */
-    reset(): void {
-
-        {
-            var deletedRoutes = view.tradeManager.routes().filter((r: any) => r.to === this || r.from === this);
-            deletedRoutes.forEach((r: any) => view.tradeManager.remove(r));
-        }
-
-        {
-            var deletedRoutes = view.tradeManager.npcRoutes().filter((r: any) => r.to === this);
-            deletedRoutes.forEach((r: any) => view.tradeManager.remove(r));
-        }
-
-        this.assetsMap.forEach(a => {
-            if (a instanceof Option)
-                a.checked(false);
-            if (a instanceof Product)
-                a.fixedFactory(null);
-            if (a instanceof Consumer) {
-                a.existingBuildings(0);
-                if (a.workforceDemand && a.workforceDemand.percentBoost)
-                    a.workforceDemand.percentBoost(100);
-                if (typeof a.percentBoost === 'function')
-                    a.percentBoost(100);
-            }
-            if (a instanceof Factory) {
-                for (var m of ["module", "fertilizerModule"]) {
-                    var checked = (a as any)[m + "Checked"];
-                    if (typeof checked === 'function')
-                        checked(false);
-                }
-                if (typeof a.palaceBuffChecked === 'function')
-                    a.palaceBuffChecked(false);
-                if (typeof a.setBuffChecked === 'function')
-                    a.setBuffChecked(false);
-                if (typeof a.percentBoost === 'function')
-                    a.percentBoost(100);
-                if (a.extraGoodProductionList && typeof a.extraGoodProductionList.checked === 'function')
-                    a.extraGoodProductionList.checked(true);
-            }
-            if (a instanceof ResidenceBuilding) {
-                a.existingBuildings(0);
-                a.applyEffects({});
-            }
-            if (a instanceof PopulationLevel) {
-                 for (var n of (a.needs || []))
-                    if (n.notes)
-                        n.notes("");
-            }
-            if (a instanceof Item) {
-                a.checked(false);
-                for (var i of a.equipments)
-                    i.checked(false);
-            }
-            if (a.notes)
-                a.notes("");
-        });
-
-        setDefaultFixedFactories(this.assetsMap);
-
-        this.populationLevels.forEach(l => l.needs.forEach(n => {
-            if (n.checked)
-                if (n.isBonusNeed || n.excludePopulationFromMoneyAndConsumptionCalculation)
-                    n.checked(false);
-                else
-                    n.checked(true);
-        }));
-
-        this.populationLevels.forEach(l => l.buildingNeeds.forEach(n => {
-            if (n.checked)
-                if (n.isBonusNeed || n.excludePopulationFromMoneyAndConsumptionCalculation)
-                    n.checked(false);
-                else
-                    n.checked(true);
-        }));
-    }
+    
 
     /**
      * Prepares the residence effect view for this island
@@ -985,3 +918,8 @@ class Island {
         // Implementation handled by IslandManager
     }
 } 
+
+export interface Constructible extends NamedElement{
+    buildings: BuildingsCalc,
+    island: Island
+  }

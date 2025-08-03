@@ -1,36 +1,69 @@
-import { NamedElement, Option, dummyObservable, dummyMethod, dummyComputed, ko } from './util';
-import { Demand } from './production';
-import { ResidenceBuilding, PopulationLevel } from './population';
-import { Product, Island, AssetsMap } from './types';
+import { NamedElement, ko } from './util';
+import { ResidenceBuilding, } from './population';
+import { AssetsMap, LiteralsMap, ResidenceNeedConfig } from './types';
+import { NeedCategoryConfig, NeedConfig } from './types.config';
+import { Demand, Product } from './production';
+import { Island } from './world';
 
 
 declare const view: any;
 
 /**
- * Base class for all consumption needs in the game
- * Extends Demand to provide consumption-specific functionality
+ * Need categories
  */
-export class Need extends Demand {
-    public isNeed: boolean;
-    public excludePopulationFromMoneyAndConsumptionCalculation: boolean;
-    public isBonusNeed: boolean;
-    public tpmin: number;
+export class NeedCategory extends NamedElement{
+    public id: string;
+    public needs: Need[];
+
+    constructor(config: NeedCategoryConfig){
+        super(config);
+        this.id = config.id;
+        this.needs = [];
+    }
+
+    addNeed(need: Need){
+        this.needs.push(need);
+    }
+}
+
+/**
+ * Base properties class for all needs in the game
+ */
+export class Need {
+    public guid: number;
     public residents: number;
-    public happiness: boolean;
+    public product: Product;
+    public category: NeedCategory;
+    public supplyWeight: number;
+    public attributes: Map<NamedElement, number>;
+    public available: KnockoutComputed<boolean>;
+
 
     /**
      * Creates a new Need instance
      * @param config - Configuration object for the need
      * @param assetsMap - Map of all available assets
      */
-    constructor(config: any, assetsMap: AssetsMap) {
-        super(config, assetsMap);
-        this.isNeed = true;
-        this.excludePopulationFromMoneyAndConsumptionCalculation = !!config.excludePopulationFromMoneyAndConsumptionCalculation;
-        this.isBonusNeed = !!config.isBonusNeed;
-        this.tpmin = config.tpmin || 0;
-        this.residents = config.residents || 0;
-        this.happiness = !!config.happiness;
+    constructor(config: NeedConfig, assetsMap: AssetsMap, literalsMap: LiteralsMap) {
+
+        this.guid = config.guid;
+        const product = assetsMap.get(config.needProduct);
+        if (!product) {
+            throw new Error(`Product with GUID ${config.needProduct} not found in assetsMap`);
+        }
+        this.product = product;
+        this.category = literalsMap.get(config.needCategory) as NeedCategory;
+        this.supplyWeight = config.supplyWeight;
+        this.attributes = new Map()
+        for (let attr in config.needAttributes){
+            this.attributes.set((window as any).view.literalsMap.get(attr), config.needAttributes[attr]);
+        }
+        
+
+        this.residents = config.needAttributes["Population"];
+        this.available = ko.pureComputed(() => this.product.available());
+
+        this.category.addNeed(this);
     }
 }
 
@@ -39,381 +72,68 @@ export class Need extends Demand {
  * Manages the relationship between a residence and its consumption needs
  */
 export class ResidenceNeed {
-    public residence!: ResidenceBuilding; // Non-null assertion
-    public need!: PopulationNeed; // Non-null assertion
-    public substitution: any;
-    public fulfillment: any;
-    public amount?: any;
-    public residentsPerHouse: any;
-    public residents: any;
-    public residenceNeedsMap?: Map<string, any>;
-    public substitutionSubscription?: any;
+    public residence: ResidenceBuilding; 
+    public need: Need; 
+    public needConsumptionRate: number;
+    public checked: KnockoutObservable<boolean>;
+    public hidden: KnockoutComputed<boolean>;
+    public amount: KnockoutComputed<number>;
+    public residents: KnockoutComputed<number>;
+    public available: KnockoutComputed<boolean>;
+    public demand?: Demand;
+
 
     /**
      * Creates a new ResidenceNeed instance
      * @param residence - The residence building this need belongs to
      * @param need - The population need this residence need represents
      */
-    constructor(residence: ResidenceBuilding, need: PopulationNeed) {
+    constructor(config: ResidenceNeedConfig, residence: ResidenceBuilding, assetsMap: AssetsMap) {
         // Validate required parameters
         if (!residence) {
             throw new Error('ResidenceNeed residence is required');
         }
-        if (!need) {
-            throw new Error('ResidenceNeed need is required');
-        }
 
         // Explicit assignments
         this.residence = residence;
+        const need = assetsMap.get(config.need);
+        if (!need) {
+            throw new Error(`Need with GUID ${config.need} not found in assetsMap`);
+        }
         this.need = need;
+        this.needConsumptionRate = config.needConsumptionRate;
 
-        this.substitution = ko.observable(0);
-        this.fulfillment = ko.observable(this.need.checked() ? 1 : 0);
+        this.checked = ko.observable(false);
+        this.hidden = ko.computed(() => false);
 
         this.amount = ko.pureComputed(() => {
-            var total = this.residence.consumingLimit() * this.need.tpmin;
-            return total * (Math.max(0, this.fulfillment() - this.substitution()));
-        });
-
-
-        this.need.addResidenceNeed(this);
-
-        this.residentsPerHouse = ko.pureComputed(() => {
-            var sum = this.residence.residentsPerNeed.get(this.need.guid) || 0;
-            for (var c of this.residence.getConsumptionEntries(this.need)) {
-                var coverage = c.residenceEffectCoverage.coverage();
-                sum += coverage * (c.residenceEffectEntry.residents || 0);
-            }
-            return sum;
+            if(!this.checked())
+                return 0;
+            
+            return this.residence.buildings.constructed() * this.needConsumptionRate * (window as any).view.settings.selectedNeedConsumptionSetting().consumptionFactor;
         });
 
         this.residents = ko.pureComputed(() => {
-            var sum = this.residence.existingBuildings() * (this.residence.residentsPerNeed.get(this.need.guid) || 0);
-            for (var c of this.residence.getConsumptionEntries(this.need)) {
-                var coverage = c.residenceEffectCoverage.coverage();
-                sum += Math.round(coverage * this.residence.existingBuildings()) *(c.residenceEffectEntry.residents || 0);
-            }
-            return Math.floor(sum * this.fulfillment());
+            if(!this.checked())
+                return 0;
+
+            return this.residence.buildings.constructed() * this.need.residents;
         })
+
+        this.available = ko.pureComputed(() => this.need.available() && this.residence.available())
     }
 
-    /**
-     * Initializes dependencies and sets up subscriptions for this residence need
-     * @param residenceNeedsMap - Map of all residence needs for this residence
-     */
-    initDependencies(residenceNeedsMap: Map<string, any>): void {
-        this.residenceNeedsMap = residenceNeedsMap;
-        this.substitutionSubscription = ko.computed(() => {
-            var arr = this.residence.getConsumptionEntries(this.need);
-            if(arr == null)
-                return; // no effect for this product
-            
-            var suppliedByFulfillment = 0;
-            var modifier = 0;
-            for (var c of arr){
-                var coverage = c.residenceEffectCoverage.coverage();
-                modifier += c.residenceEffectEntry.consumptionModifier * coverage;
-                            for (var p of c.residenceEffectEntry.suppliedBy){
-                var n = this.residenceNeedsMap?.get(p.guid.toString());
-
-                if(n != null)
-                    suppliedByFulfillment = Math.max(suppliedByFulfillment, coverage * n.fulfillment())
-            }
-            }
-
-            this.substitution(Math.min(1, suppliedByFulfillment - modifier / 100));
-
-            if (this.need.isInactive()) {
-                this.fulfillment(0);
-                return;
-            }
-
-            if (!this.need.banned()) {
-                this.fulfillment(1);
-                return;
-            }
-
-            this.fulfillment(suppliedByFulfillment);
-        });
+    initDemands(assetsMap: AssetsMap){
+        if (!this.need.product.isAbstract){
+            this.demand = new Demand(this.need.product, this.residence, assetsMap);
+            this.demand.updateAmount(this.amount());
+            this.amount.subscribe(val => (this.demand as Demand).updateAmount(val));
+        }
     }
 }
 
-/**
- * Represents a need for a public building
- * Extends Option to provide public building-specific functionality
- */
-export class PublicBuildingNeed extends Option {
-    public excludePopulationFromMoneyAndConsumptionCalculation: boolean;
-    public level: PopulationLevel;
-    public product: Product;
-    public isBonusNeed: boolean;
-    public hidden: KnockoutComputed<boolean>;
-    public initBans: (level: PopulationLevel, assetsMap: AssetsMap) => void;
-
-    /**
-     * Creates a new PublicBuildingNeed instance
-     * @param config - Configuration object for the need
-     * @param level - The population level this need belongs to
-     * @param assetsMap - Map of all available assets
-     */
-    constructor(config: any, level: PopulationLevel, assetsMap: AssetsMap) {
-        // Validate required parameters
-        if (!config) {
-            throw new Error('PublicBuildingNeed config is required');
-        }
-        if (!level) {
-            throw new Error('PublicBuildingNeed level is required');
-        }
-        if (!assetsMap) {
-            throw new Error('PublicBuildingNeed assetsMap is required');
-        }
-
-        super(config);
-        this.excludePopulationFromMoneyAndConsumptionCalculation = config.excludePopulationFromMoneyAndConsumptionCalculation || false;
-
-        // Explicit assignments
-        this.level = level;
-        this.isBonusNeed = false;
-
-        this.checked(true);
-        this.hidden = ko.computed(() => false);
-
-        this.product = assetsMap.get(this.guid);
-        if (!this.product)
-            throw `No Product ${this.guid}`;
-
-        // Call the real initialization method
-        PopulationNeed.prototype.initHidden.bind(this)(assetsMap);
-        this.initBans = PopulationNeed.prototype.initBans;
-    }
-}
-
-/**
- * Represents a need that doesn't require a factory to produce
- * Used for goods that are obtained through other means (e.g., trade, special buildings)
- */
-export class NoFactoryNeed extends PublicBuildingNeed {
-    public isNoFactoryNeed: boolean;
-    public amount: any;
-    public factor: number = 1;
-    public residentsInput: any;
-    public residentsInputFactor: number = 1;
-    declare public product: any;
-
-    /**
-     * Creates a new NoFactoryNeed instance
-     * @param config - Configuration object for the need
-     * @param level - The population level this need belongs to
-     * @param assetsMap - Map of all available assets
-     */
-    constructor(config: any, level: PopulationLevel, assetsMap: AssetsMap) {
-        super(config, level, assetsMap);
-        
-        // Explicit assignments
-        this.level = level;
-        this.isNoFactoryNeed = true;
 
 
-        this.amount = ko.observable(0);
-        this.residentsInput = dummyComputed('NoFactoryNeed.residentsInput');
-
-        if (this.factor == null)
-            this.factor = 1;
-
-        // Call the real initialization method
-        PopulationNeed.prototype.initAggregation.bind(this)(assetsMap);
-
-        this.product.addNeed(this as any);
-    }
-}
-
-/**
- * Represents a need for a specific population level
- * Manages consumption requirements for different population tiers
- */
-export class PopulationNeed extends Need {
-    public requiredBuildings: any;
-    public requiredFloorLevel: any;
-    public level: PopulationLevel;
-    public residentsUnlockCondition: number;
-    public banned: KnockoutObservable<boolean>;
-    public isInactive: KnockoutObservable<boolean>;
-    public residences: ResidenceBuilding[] = [];
-    public hidden: any;
-    public residenceNeeds: any;
-    public addResidenceNeed: (need: ResidenceNeed) => void = () => {};
-    public totalResidents: any;
-    public region: any;
-    public checked: KnockoutObservable<boolean>;
-    public notes: KnockoutObservable<string>;
-    public residenceNeedsSubscription: KnockoutComputed<void>;
-    public locked: KnockoutComputed<boolean>;
-    public bannedSubscription: KnockoutComputed<void>;
-    public unlockCondition?: any;
-
-    /**
-     * Creates a new PopulationNeed instance
-     * @param config - Configuration object for the need
-     * @param level - The population level this need belongs to
-     * @param assetsMap - Map of all available assets
-     */
-    constructor(config: any, level: PopulationLevel, assetsMap: AssetsMap) {
-        // Validate required parameters
-        if (!config) {
-            throw new Error('PopulationNeed config is required');
-        }
-        if (!level) {
-            throw new Error('PopulationNeed level is required');
-        }
-        if (!assetsMap) {
-            throw new Error('PopulationNeed assetsMap is required');
-        }
-
-        super(config, assetsMap);
-        this.requiredBuildings = config.requiredBuildings || null;
-        this.requiredFloorLevel = config.requiredFloorLevel || null;
-        this.excludePopulationFromMoneyAndConsumptionCalculation = config.excludePopulationFromMoneyAndConsumptionCalculation || false;
-        
-        // Explicit assignments
-        this.level = level;
-
-        this.residentsUnlockCondition = 0;
-        if (this.unlockCondition && this.unlockCondition.populationLevel == level.guid)
-            this.residentsUnlockCondition = this.unlockCondition.amount;
-
-        // Dummy assignments for late-initialized properties
-        this.banned = dummyObservable<boolean>('PopulationNeed.banned');
-        this.isInactive = dummyObservable<boolean>('PopulationNeed.isInactive');
-        this.hidden = dummyComputed<boolean>('PopulationNeed.hidden');
-        this.residenceNeeds = dummyObservable<any[]>('PopulationNeed.residenceNeeds');
-        this.addResidenceNeed = dummyMethod('PopulationNeed.addResidenceNeed');
-        this.totalResidents = dummyComputed<number>('PopulationNeed.totalResidents');
-        this.region = null;
-        this.checked = dummyObservable<boolean>('PopulationNeed.checked');
-        this.notes = dummyObservable<string>('PopulationNeed.notes');
-        this.residenceNeedsSubscription = dummyComputed<void>('PopulationNeed.residenceNeedsSubscription');
-        this.locked = ko.computed(() => false);
-        this.bannedSubscription = dummyComputed<void>('PopulationNeed.bannedSubscription');
-
-        // Call the real initialization methods
-        this.initHidden(assetsMap);
-        this.initAggregation(assetsMap);
-    }
-
-    /**
-     * Initializes hidden state and residence relationships
-     * @param assetsMap - Map of all available assets
-     */
-    initHidden(assetsMap: AssetsMap): void {
-        this.banned = ko.observable(false);
-        this.isInactive = ko.observable(false);
-
-        if (this.requiredBuildings) {
-            this.residences = this.requiredBuildings.map((r: any) => assetsMap.get(parseInt(r)));
-
-            this.hidden = ko.computed(() => {
-                if (!this.available())
-                    return true;
-
-                for (var r of this.residences)
-                    if (r.existingBuildings() > 0 || this.level.residence == r)
-                        return false;
-
-                return true;
-            });
-        } else {
-            this.hidden = ko.computed(() => !this.available());
-            this.residences = this.level.allResidences;
-        }
-
-        this.residenceNeeds = ko.observableArray([]);
-
-        this.addResidenceNeed = function (need: ResidenceNeed) {
-            this.residenceNeeds.push(need);
-        }
-
-        this.totalResidents = ko.pureComputed(() => {
-            var sum = 0;
-            for (var n of this.residenceNeeds()) {
-                sum += n.residents();
-            }
-
-            return sum;
-        });
-    }
-
-    /**
-     * Initializes aggregation and computed observables
-     * @param assetsMap - Map of all available assets
-     */
-    initAggregation(_assetsMap: AssetsMap): void {
-        this.region = this.level.region;        
-
-        this.checked = ko.observable(true);
-
-        this.notes = ko.observable("");   
-
-        this.residenceNeedsSubscription = ko.computed(() => {
-            var sum = 0;
-            for (var n of this.residenceNeeds())
-                sum += n.amount();
-
-            this.amount(sum);
-        });
-    }
-
-    /**
-     * Initializes ban conditions and unlock requirements
-     * @param level - The population level this need belongs to
-     * @param assetsMap - Map of all available assets
-     */
-    initBans(level: PopulationLevel, assetsMap: AssetsMap): void {
-        if (this.unlockCondition) {
-            var config = this.unlockCondition;
-            this.locked = ko.computed(() => {
-                if (!config || !view.settings.needUnlockConditions.checked())
-                    return false;
-
-                if (level.skyscraperLevels && typeof level.hasSkyscrapers === 'function' && level.hasSkyscrapers())
-                    return false;
-
-                if (config.populationLevel != level.guid) {
-                    var l = assetsMap.get(parseInt(config.populationLevel)) as PopulationLevel;
-                    return l.residents() < config.amount;
-                }
-
-                if (level.residents() >= config.amount)
-                    return false;
-
-                var residence = level.residence.upgradedBuilding;
-                while (residence) {
-                    var l = residence.populationLevel;
-                    var amount = l.residents();
-                    if (amount > 0)
-                        return false;
-
-                    residence = residence.upgradedBuilding;
-                }
-
-                return true;
-            }).extend({ deferred: true }); // deferred necessary for updating population level residents
-
-            this.isInactive(this.locked());
-            this.locked.subscribe((locked: boolean) => this.isInactive(locked));
-        }
-
-        this.bannedSubscription = ko.computed(() => {
-            var checked = this.checked();
-            this.banned(!checked || this.locked && this.locked());
-        });
-    }
-
-    /**
-     * Updates the amount based on population changes
-     * @param population - The current population count
-     */
-    updateAmount(_population: number): void { }
-}
 
 /**
  * Represents a single residence effect entry
@@ -445,10 +165,20 @@ class ResidenceEffectEntry {
 
         // Explicit assignments
         this.guid = parseInt(config.guid);
-        this.product = assetsMap.get(this.guid);
+        const product = assetsMap.get(this.guid);
+        if (!product) {
+            throw new Error(`Product with GUID ${this.guid} not found in assetsMap`);
+        }
+        this.product = product;
         this.consumptionModifier = config.consumptionModifier || 0;
         this.residents = config.residents || 0;
-        this.suppliedBy = (config.suppliedBy || []).map((e: any) => assetsMap.get(parseInt(e)));
+        this.suppliedBy = (config.suppliedBy || []).map((e: any) => {
+            const product = assetsMap.get(parseInt(e));
+            if (!product) {
+                throw new Error(`Product with GUID ${e} not found in assetsMap`);
+            }
+            return product;
+        });
     }
 }
 
@@ -457,6 +187,7 @@ class ResidenceEffectEntry {
  * Contains multiple effect entries that apply to different products
  */
 export class ResidenceEffect extends NamedElement {
+    public guid: number;
     public allowStacking: boolean;
     public entries: ResidenceEffectEntry[];
     public effectsPerNeed: Map<number, ResidenceEffectEntry>;
@@ -484,6 +215,7 @@ export class ResidenceEffect extends NamedElement {
         }
 
         super(config);
+        this.guid = config.guid;
         
         this.allowStacking = config.allowStacking || false;
         this.entries = config.effects.map((e: any) => new ResidenceEffectEntry(e, assetsMap));
@@ -496,6 +228,9 @@ export class ResidenceEffect extends NamedElement {
         this.residences = [];
         for (var residence of config.residences) {
             let r = assetsMap.get(parseInt(residence));
+            if (!r) {
+                throw new Error(`Residence with GUID ${residence} not found in assetsMap`);
+            }
             this.residences.push(r);
             r.addEffect(this);
         }
@@ -633,10 +368,19 @@ export class RecipeList extends NamedElement {
         
         // Explicit assignments
         this.island = island;
-        this.region = list.region ? assetsMap.get(parseInt(list.region)) : null;
+        this.region = list.region ? (() => {
+            const region = assetsMap.get(parseInt(list.region));
+            if (!region) {
+                throw new Error(`Region with GUID ${list.region} not found in assetsMap`);
+            }
+            return region;
+        })() : null;
 
         this.recipeBuildings = (list.recipeBuildings || []).map((r: number) => {
             var a = assetsMap.get(r);
+            if (!a) {
+                throw new Error(`Recipe building with GUID ${r} not found in assetsMap`);
+            }
             a.recipeList = this;
             return a;
         });

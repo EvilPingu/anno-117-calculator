@@ -199,7 +199,6 @@ export class Template {
             asset instanceof Workforce ||
             asset instanceof ProductCategory ||
             asset instanceof Product ||
-            asset instanceof Factory ||
             asset instanceof Demand;
     }
 }
