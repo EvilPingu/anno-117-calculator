@@ -20,17 +20,17 @@
   "author": "Nico Höllerich",
   "license": "MIT",
   "dependencies": {
-    "webpack-cli": "^5.1.4",
     "compression-webpack-plugin": "^11.1.0",
-    "webpack": "^5.91.0",
     "html-loader": "^5.0.0",
     "knockout": "^3.5.1",
-    "knockout-amd-helpers": "^1.0.0"
+    "knockout-amd-helpers": "^1.0.0",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
   },
   "devDependencies": {
-    "typescript": "^5.3.3",
-    "@types/knockout": "^3.4.72",
     "@types/jquery": "^3.5.29",
-    "ts-loader": "^9.5.1"
+    "@types/knockout": "^3.4.72",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.3.3"
   }
 }

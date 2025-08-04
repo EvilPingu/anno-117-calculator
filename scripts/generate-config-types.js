@@ -53,13 +53,17 @@ function generateInterfaceFromObject(objectSchema, indent = '  ') {
         
         let typeAnnotation;
         
-        if (propSchema.type === 'object' && propSchema.properties) {
+        // Special case for locaText properties - always use LocaTextConfig
+        if (propName === 'locaText') {
+            typeAnnotation = 'LocaTextConfig';
+        } else if (propSchema.type === 'object' && propSchema.properties) {
             // Nested object
             typeAnnotation = '{\n' + 
                 Object.entries(propSchema.properties).map(([nestedProp, nestedSchema]) => {
                     const nestedRequired = propSchema.required || [];
                     const nestedOptional = nestedRequired.includes(nestedProp) ? '' : '?';
-                    const nestedType = convertJsonTypeToTypeScript(nestedSchema.type);
+                    // Special case for nested locaText properties
+                    const nestedType = nestedProp === 'locaText' ? 'LocaTextConfig' : convertJsonTypeToTypeScript(nestedSchema.type);
                     return `${indent}  ${nestedProp}${nestedOptional}: ${nestedType};`;
                 }).join('\n') + 
                 '\n';
@@ -73,7 +77,8 @@ function generateInterfaceFromObject(objectSchema, indent = '  ') {
                 typeAnnotation = `{\n${Object.entries(propSchema.items.properties).map(([itemProp, itemSchema]) => {
                     const itemRequired = propSchema.items.required || [];
                     const itemOptional = itemRequired.includes(itemProp) ? '' : '?';
-                    const itemType = convertJsonTypeToTypeScript(itemSchema.type);
+                    // Special case for locaText in array items
+                    const itemType = itemProp === 'locaText' ? 'LocaTextConfig' : convertJsonTypeToTypeScript(itemSchema.type);
                     return `${indent}  ${itemProp}${itemOptional}: ${itemType};`;
                 }).join('\n')}\n${indent}}[]`;
             } else {
@@ -99,20 +104,10 @@ function generateTypeScriptInterfaces() {
     let output = '// Generated TypeScript interfaces from params.schema.json\n';
     output += '// This file contains configuration interfaces for Anno 117 calculator parameters\n\n';
 
-    // Check if we need LocaTextConfig interface
-    let needsLocaTextConfig = false;
-    
-    // First pass: check if any interfaces need LocaTextConfig
-    for (const [propertyName, propertySchema] of Object.entries(schema.properties)) {
-        if (propertySchema.type === 'array' && propertySchema.items && propertySchema.items.type === 'object') {
-            if (hasLocaTextProperty(propertySchema.items)) {
-                needsLocaTextConfig = true;
-                break;
-            }
-        }
-    }
+    // Always generate LocaTextConfig interface
+    let needsLocaTextConfig = true;
 
-    // Generate LocaTextConfig if needed
+    // Generate LocaTextConfig
     if (needsLocaTextConfig) {
         output += '// Common interface for localized text\n';
         output += 'export interface LocaTextConfig {\n';

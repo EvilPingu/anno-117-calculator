@@ -187,7 +187,6 @@
           "guid",
           "name",
           "iconPath",
-          "locaText",
           "id"
         ]
       },
@@ -488,6 +487,64 @@
               "Knowledge",
               "Prestige"
             ]
+          },
+          "iconPath": {
+            "type": "string"
+          },
+          "locaText": {
+            "type": "object",
+            "properties": {
+              "english": {
+                "type": "string"
+              },
+              "french": {
+                "type": "string"
+              },
+              "polish": {
+                "type": "string"
+              },
+              "spanish": {
+                "type": "string"
+              },
+              "italian": {
+                "type": "string"
+              },
+              "german": {
+                "type": "string"
+              },
+              "brazilian": {
+                "type": "string"
+              },
+              "russian": {
+                "type": "string"
+              },
+              "simplified_chinese": {
+                "type": "string"
+              },
+              "traditional_chinese": {
+                "type": "string"
+              },
+              "japanese": {
+                "type": "string"
+              },
+              "korean": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "english",
+              "french",
+              "polish",
+              "spanish",
+              "italian",
+              "german",
+              "brazilian",
+              "russian",
+              "simplified_chinese",
+              "traditional_chinese",
+              "japanese",
+              "korean"
+            ]
           }
         },
         "required": [
@@ -687,8 +744,7 @@
                 }
               },
               "required": [
-                "need",
-                "needConsumptionRate"
+                "need"
               ]
             }
           }
@@ -699,7 +755,6 @@
           "iconPath",
           "locaText",
           "associatedRegions",
-          "possibleUpgrades",
           "populationLevel",
           "needsList"
         ]
@@ -871,11 +926,14 @@
               "korean"
             ]
           },
-          "associatedRegions": {
-            "type": "array"
-          },
           "isAbstract": {
             "type": "boolean"
+          },
+          "associatedRegions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         },
         "required": [
@@ -883,7 +941,6 @@
           "name",
           "iconPath",
           "locaText",
-          "associatedRegions",
           "isAbstract"
         ]
       },
@@ -1135,9 +1192,6 @@
               "type": "string"
             }
           },
-          "inputs": {
-            "type": "array"
-          },
           "needsFuelInput": {
             "type": "boolean"
           },
@@ -1182,6 +1236,24 @@
           },
           "modulesLimit": {
             "type": "integer"
+          },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "product": {
+                  "type": "integer"
+                },
+                "amount": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "product",
+                "amount"
+              ]
+            }
           }
         },
         "required": [
@@ -1190,7 +1262,6 @@
           "iconPath",
           "locaText",
           "associatedRegions",
-          "inputs",
           "needsFuelInput",
           "outputs",
           "maintenances",
@@ -1297,12 +1368,6 @@
           "needsFuelInput": {
             "type": "boolean"
           },
-          "outputs": {
-            "type": "array"
-          },
-          "maintenances": {
-            "type": "array"
-          },
           "cycleTime": {
             "type": "integer"
           },
@@ -1318,8 +1383,6 @@
           "associatedRegions",
           "inputs",
           "needsFuelInput",
-          "outputs",
-          "maintenances",
           "cycleTime",
           "modulesLimit"
         ]
@@ -2089,7 +2152,6 @@
     "productFilters",
     "factories",
     "modules",
-    "icons",
-    "productFilters"
+    "icons"
   ]
 }

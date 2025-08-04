@@ -271,7 +271,7 @@ export class NamedElement {
     public name: KnockoutComputed<string>;
     public guid?: number;
     public id?: string;
-    public locaText: LocaTextConfig;
+    public locaText: LocaTextConfig | { [key: string]: string };
     public icon?: string;
     public dlcs?: DLC[];
     public available: KnockoutComputed<boolean>;

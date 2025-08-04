@@ -101,7 +101,7 @@ export class ResidenceNeed {
             throw new Error(`Need with GUID ${config.need} not found in assetsMap`);
         }
         this.need = need;
-        this.needConsumptionRate = config.needConsumptionRate;
+        this.needConsumptionRate = config.needConsumptionRate || 0;
 
         this.checked = ko.observable(false);
         this.hidden = ko.computed(() => false);

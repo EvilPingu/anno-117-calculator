@@ -44,7 +44,7 @@ export interface RegionConfig {
   guid: number;
   name: string;
   iconPath: string;
-  locaText: LocaTextConfig;
+  locaText?: LocaTextConfig;
   id: string;
 }
 
@@ -92,6 +92,8 @@ export interface NeedConfig {
     Prestige: number;
     [key: string]: number; // Allow string indexing
   };
+  iconPath?: string;
+  locaText?: LocaTextConfig;
 }
 
 // PopulationGroup configuration interface
@@ -110,11 +112,11 @@ export interface ResidenceBuildingConfig {
   iconPath: string;
   locaText: LocaTextConfig;
   associatedRegions: string[];
-  possibleUpgrades: number[];
+  possibleUpgrades?: number[];
   populationLevel: number;
   needsList: {
     need: number;
-    needConsumptionRate: number;
+    needConsumptionRate?: number;
   }[];
 }
 
@@ -135,8 +137,8 @@ export interface ProductConfig {
   name: string;
   iconPath: string;
   locaText: LocaTextConfig;
-  associatedRegions: any[];
   isAbstract: boolean;
+  associatedRegions?: string[];
 }
 
 // Workforce configuration interface
@@ -150,7 +152,10 @@ export interface WorkforceConfig {
 
 // ProductFilter configuration interface
 export interface ProductFilterConfig {
-
+  iconPath: string;
+  locaText: LocaTextConfig;
+  guid: number;
+  products: number[];
 }
 
 // Factory configuration interface
@@ -160,7 +165,6 @@ export interface FactoryConfig {
   iconPath: string;
   locaText: LocaTextConfig;
   associatedRegions: string[];
-  inputs: any[];
   needsFuelInput: boolean;
   outputs: {
     product: number;
@@ -172,6 +176,10 @@ export interface FactoryConfig {
   }[];
   cycleTime: number;
   modulesLimit: number;
+  inputs?: {
+    product: number;
+    amount: number;
+  }[];
 }
 
 // Module configuration interface
@@ -186,8 +194,6 @@ export interface ModuleConfig {
     amount: number;
   }[];
   needsFuelInput: boolean;
-  outputs: any[];
-  maintenances: any[];
   cycleTime: number;
   modulesLimit: number;
 }

@@ -112,12 +112,14 @@ export class Consumer extends NamedElement{
         this.notes = ko.observable("");
 
         this.defaultInputs = new Map();
-        for(var i of config.inputs){
-            let product = assetsMap.get(i.product);
-            if (!product) {
-                throw new Error(`Product with GUID ${i.product} not found in assetsMap`);
+        if (config.inputs) {
+            for(var i of config.inputs){
+                let product = assetsMap.get(i.product);
+                if (!product) {
+                    throw new Error(`Product with GUID ${i.product} not found in assetsMap`);
+                }
+                this.defaultInputs.set(product, i.amount);            
             }
-            this.defaultInputs.set(product, i.amount);            
         }
 
         this.maintenances = new Map();

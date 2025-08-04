@@ -25,7 +25,7 @@ export interface NamedElementConfig {
   guid?: number;
   id?: string;
   name?: string;
-  locaText: LocaTextConfig;
+  locaText?: LocaTextConfig;
   iconPath?: string;
   dlcs?: string[];
   available?: boolean;
@@ -45,7 +45,7 @@ export interface DLCConfig extends OptionConfig {
 export interface ConsumerConfig extends NamedElementConfig {
   guid:number;
   associatedRegions: string[];
-  inputs: {
+  inputs?: {
     product: number;
     amount: number;
   }[];
@@ -105,7 +105,7 @@ export interface NeedConfig {
 
 export interface ResidenceNeedConfig {
   need: number;
-  needConsumptionRate: number;
+  needConsumptionRate?: number;
 }
 
 export interface ResidenceBuildingConfig extends NamedElementConfig {
