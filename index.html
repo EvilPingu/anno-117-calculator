@@ -121,10 +121,10 @@
 
                     <div class="ui-tier-input inline-list">
                         <!-- ko foreach: $root.template.populationGroups -->
-                            <!-- ko foreach: $data.populationLevels -->
-                                <div data-bind="template: {name: 'population-tile', foreach: $data.residences}">
+
+                                <div data-bind="template: {name: 'population-tile', foreach: $data.populationLevels}">
                                 </div>
-                            <!-- /ko -->
+
                         <!-- /ko -->
                     </div>
 

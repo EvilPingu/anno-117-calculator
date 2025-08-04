@@ -643,7 +643,7 @@ class ResidenceNeedPresenter {
     }
     
     prepareResidenceEffectView(): void {
-        (window as any).view.selectedResidenceEffectView(new ResidenceEffectView([this.parent.parent.instance()], this.name(), this.instance()));
+        (window as any).view.selectedResidenceEffectView(new ResidenceEffectView([this.parent.parent.residence()], this.name(), this.instance()));
     }
 }
 
@@ -686,7 +686,8 @@ class NeedCategoryPresenter {
 }
 
 export class ResidencePresenter{
-    public instance: KnockoutObservable<ResidenceBuilding>;
+    public instance: KnockoutObservable<PopulationLevel>;
+    public residence: KnockoutObservable<ResidenceBuilding>;
     public buildings: KnockoutObservable<BuildingsCalc>;
     public name: KnockoutObservable<string>;
     public residents: KnockoutObservable<string>;
@@ -696,14 +697,16 @@ export class ResidencePresenter{
     public effectCoverage: KnockoutObservableArray<ResidenceEffectCoverage>;
 
 
-    constructor(needCategories: NeedCategory[], residence: ResidenceBuilding){
-        this.instance = ko.observable(residence);
+    constructor(needCategories: NeedCategory[], populationLevel: PopulationLevel){
+        // As long as we only have one residence per population level, we can use the first one
+        this.instance = ko.observable(populationLevel);
+        this.residence = ko.pureComputed(() => this.instance() ? this.instance().residences[0] : null);
         this.name = ko.pureComputed(() => this.instance() ? this.instance().name() : "");
         this.residents = ko.pureComputed(() => this.instance() ? formatNumber(this.instance().residents()) : "0");
-        this.buildings = ko.pureComputed(() => this.instance() ? this.instance().buildings : null);
+        this.buildings = ko.pureComputed(() => this.instance() ? this.instance().residences[0].buildings : null);
         this.residenceNeeds = [];
         this.needCategories = [];
-        this.effectCoverage = ko.pureComputed(() => this.instance() ? this.instance().effectCoverage : []);
+        this.effectCoverage = ko.pureComputed(() => this.residence() ? this.residence().effectCoverage() : []);
 
         for (let category of needCategories){
             let presCat = new NeedCategoryPresenter(this, category);
@@ -715,7 +718,7 @@ export class ResidencePresenter{
             this.needCategories.push(presCat);
         }
 
-        this.instance.subscribe(residence => {
+        this.residence.subscribe(residence => {
             if(!(residence instanceof ResidenceBuilding))
                 return;
 
@@ -727,14 +730,14 @@ export class ResidencePresenter{
         this.visibleNeedCategories = ko.pureComputed(() => this.needCategories.filter(n => n.visible()));
     }
 
-    update(residence: ResidenceBuilding){
-        this.instance(residence);
+    update(populationLevel: PopulationLevel){
+        this.instance(populationLevel);
     }
 
     /**
      * Prepares the residence effect view for this residence building
      */
     prepareResidenceEffectView(): void {
-        (window as any).view.selectedResidenceEffectView(new ResidenceEffectView([this.instance()], this.name()));
+        (window as any).view.selectedResidenceEffectView(new ResidenceEffectView([this.residence()], this.name()));
     }
 }

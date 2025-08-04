@@ -439,7 +439,7 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
         publicServices: arrayToTemplate("publicServices"),
         publicRecipeBuildings: arrayToTemplate("publicRecipeBuildings")
     };
-    (window as any).view.presenter.residence = new ResidencePresenter(allIslands.needCategories, allIslands.residenceBuildings[0]);
+    (window as any).view.presenter.residence = new ResidencePresenter(allIslands.needCategories, allIslands.populationLevels[0]);
 
     // Set up view mode for first run
     if (_isFirstRun)
@@ -485,7 +485,7 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
             language = 'english';
         }
 
-        for (var l of (window.view.island() as Island).residenceBuildings) {
+        for (var l of (window.view.island() as Island).populationLevels) {
             var name = l.locaText[language];
 
             for (var c of name.toLowerCase()) {

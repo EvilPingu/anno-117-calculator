@@ -24,7 +24,6 @@ export class ResidenceBuilding extends NamedElement implements Constructible{
     public island: Island;
     public regions: Region[];
     public buildings: BuildingsCalc;
-    public hotkey: KnockoutObservable<string | null>;
     public allEffects: Map<number, ResidenceEffect>;
     public effectCoverage: KnockoutObservableArray<ResidenceEffectCoverage>;
     public entryCoveragePerProduct: KnockoutComputed<Map<Product, ResidenceEffectEntryCoverage[]>>;
@@ -57,7 +56,7 @@ export class ResidenceBuilding extends NamedElement implements Constructible{
         this.guid = config.guid;
 
         this.buildings = new BuildingsCalc();
-        this.hotkey = ko.observable(null);
+        
         
         // Explicit assignments
 
@@ -227,6 +226,7 @@ export class PopulationLevel extends NamedElement {
     public canEditPerHouse?: KnockoutComputed<boolean>;
     public availableResidences?: KnockoutComputed<any[]>;
     public canEdit?: KnockoutComputed<boolean>;
+    public hotkey: KnockoutObservable<string | null>;
 
 
     /**
@@ -258,7 +258,7 @@ export class PopulationLevel extends NamedElement {
         this.allResidences = ko.observableArray();
         this.notes = ko.observable("");
         this.residences = [];
-
+        this.hotkey = ko.observable(null);
 
         // Skyscraper levels and special residences removed for simplified calculation
         // All population now uses the base residence building only
@@ -294,8 +294,8 @@ export class PopulationLevel extends NamedElement {
                 return true;
             }
 
-            const region = (window as any).view.island().region;
-            if (!region) {
+            const region = (window.view.island() as Island).region;
+            if (region.id == "Meta") {
                 return true;
             }
 

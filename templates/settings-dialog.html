@@ -29,13 +29,21 @@
                         </div>
                     </div>
                     <hr />
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" data-bind="text: 'TODO Need Consumption'">
+                        </div>
+                        <select name="need-consumption-setting" class="form-control custom-select" id="need-consumption-setting" data-bind="value: view.settings.selectedNeedConsumptionSetting, options: view.settings.needConsumptionSettings, optionsText: s => s.name()" ></select>  
+                    </div>
+                    
+                    <hr />
                     <table class="table table-striped">
                         <tbody data-bind="foreach: settings.options">
                             <tr data-bind="if: $data.visible()">
                                 <td>
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" data-bind="checked: $data.checked, attr: { id: $data.guid }">
-                                        <label class="custom-control-label" data-bind="text: $data.name, attr: { for: $data.guid }"></label>
+                                        <input type="checkbox" class="custom-control-input" data-bind="checked: $data.checked, attr: { id: $data.id }">
+                                        <label class="custom-control-label" data-bind="text: $data.name, attr: { for: $data.id }"></label>
                                     </div>
                                 </td>
                                 <td>
