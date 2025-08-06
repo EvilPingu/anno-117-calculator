@@ -87,7 +87,6 @@ export class ViewMode {
      */
     start(): void {
         view.settings.missingBuildingsHighlight.checked(true);
-        view.settings.utilizeExistingFactories.checked(true);
         view.settings.needUnlockConditions.checked(true);
     }
 

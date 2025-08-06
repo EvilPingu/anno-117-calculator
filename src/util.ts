@@ -439,14 +439,20 @@ export class DLC extends Option {
 } 
 
 export class BuildingsCalc {
+    public fullyUtilizeConstructed: KnockoutObservable<boolean>;
     public constructed: KnockoutObservable<number>;
     public planned: KnockoutObservable<number>;
     public required: KnockoutObservable<number>; // set by parent class
+    public utilized: KnockoutComputed<number>;
+
 
     constructor(){
+        this.fullyUtilizeConstructed = ko.observable(false);
         this.constructed = ko.observable(0);
         this.planned = ko.observable(0);
         this.required = ko.observable(0);
+        this.utilized = ko.computed(() => this.fullyUtilizeConstructed() ? Math.max(this.constructed(), this.required()) : this.required());
+        
     }
 }
 

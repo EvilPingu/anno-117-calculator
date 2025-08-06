@@ -684,7 +684,7 @@ export class Factory extends Consumer {
 
         this.useInputAmountByExistingBuildingsSubscription = ko.computed(() => {
             if (this.useinputAmountByExistingBuildings) {
-                this.useinputAmountByExistingBuildings(this.editable() || ((window as any).view.settings.utilizeExistingFactories && (window as any).view.settings.utilizeExistingFactories.checked()));
+                this.useinputAmountByExistingBuildings(this.editable() || this.buildings.fullyUtilizeConstructed());
             }
         });
         
@@ -761,17 +761,11 @@ export class Factory extends Consumer {
         }
         */
 
-        this.buildingSubscription = ko.computed(() => {
-            var b = Math.ceil(this.buildings.required() - ACCURACY);
-
-            if ((window as any).view.settings.utilizeExistingFactories && (window as any).view.settings.utilizeExistingFactories.checked()) {
-                b = Math.max(b, this.buildings.constructed());
-            }
-
+        this.buildings.utilized.subscribe((b: number) => {
             if (this.workforceDemand)
                 this.workforceDemand.updateAmount(b);
 
-            /*
+             /*
             for (const m of ["module", "fertilizerModule"]) {
                 const module = (this as any)[m];
                 const checked = (this as any)[m + "Checked"];
