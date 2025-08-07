@@ -198,10 +198,86 @@ export interface ModuleConfig {
   modulesLimit: number;
 }
 
+// BuildingBuff configuration interface
+export interface BuildingBuffConfig {
+  guid: number;
+  name: string;
+  iconPath?: string;
+  locaText?: LocaTextConfig;
+  isStackable: boolean;
+  workforceModifierInPercent: number;
+  productivityUpgrade: number;
+  fuelDurationPercent: number;
+  replaceWorkforce: {
+    newWorkforce: number;
+    oldWorkforce: number;
+  };
+  workforceMaintenanceFactorUpgrade: number;
+  additionalOutputs?: {
+    product: number;
+    forceProductSameAsFactoryOutput: boolean;
+    additionalOutputCycle: number;
+    amount: number;
+  }[];
+  additionalWorkforces?: number[];
+  replaceInputs?: {
+    newInput: number;
+    oldInput: number;
+  }[];
+}
+
+// Effect configuration interface
+export interface EffectConfig {
+  guid: number;
+  name: string;
+  iconPath?: string;
+  locaText?: LocaTextConfig;
+  buffs: number[];
+  targets?: number[];
+  effectScope: string;
+  excludeEffectSourceGUID: boolean;
+}
+
+// Tech configuration interface
+export interface TechConfig {
+  guid: number;
+  name: string;
+  iconPath: string;
+  locaText: LocaTextConfig;
+  effects: number[];
+  isRepeatable: boolean;
+}
+
+// Patrons configuration interface
+export interface PatronsConfig {
+  guid: number;
+  name: string;
+  iconPath: string;
+  locaText: LocaTextConfig;
+  localEffects?: {
+    effect: number;
+    milestones: any[];
+  }[];
+  wonder?: number;
+}
+
 // Icon configuration interface
 export interface IconConfig {
   [iconPath: string]: string;
 
+}
+
+// Item configuration interface
+export interface ItemConfig {
+  guid: number;
+  name: string;
+  iconPath?: string;
+  locaText?: LocaTextConfig;
+  buffs: number[];
+  targets?: number[];
+  effectScope: string;
+  excludeEffectSourceGUID: boolean;
+  rarity: string;
 }
 
 // Root configuration interface combining all parameter types
@@ -222,5 +298,10 @@ export interface ParamsConfig {
   productFilters: ProductFilterConfig[];
   factories: FactoryConfig[];
   modules: ModuleConfig[];
+  buildingBuffs: BuildingBuffConfig[];
+  effects: EffectConfig[];
+  techs: TechConfig[];
+  patrons: PatronsConfig[];
   icons: IconConfig;
+  items: ItemConfig[];
 }

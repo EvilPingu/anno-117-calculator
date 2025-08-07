@@ -1,5 +1,6 @@
 import { ResidenceNeed } from './consumption';
 import { Consumer } from './factories';
+import { ResidenceBuilding } from './population';
 import { NumberInputHandler, EPSILON, ko } from './util';
 import { Constructible } from './world';
 
@@ -225,14 +226,14 @@ interface Demand {
     }, template:
         ` <div class="ui-fchain-item-icon-replacement">
             <span class="strike-through">
-                <img class="icon-sm" src="" data-bind="attr: { src: old.icon ? old.icon : null, alt: old.name }">
+                <img class="icon-sm icon-light" src="" data-bind="attr: { src: old.icon ? old.icon : null, alt: old.name }">
             </span>
             <!-- ko if: replacing -->
             <div class="ui-replacement-spacer">
                     &rarr;
             </div>
             <div>
-                <img class="icon-sm" src="" data-bind="attr: { src: replacing.icon ? replacing.icon : null, alt: replacing.name }">
+                <img class="icon-sm icon-light" src="" data-bind="attr: { src: replacing.icon ? replacing.icon : null, alt: replacing.name }">
             </div>
             <!-- /ko -->
         </div>`
@@ -275,6 +276,13 @@ interface Demand {
     viewModel: function (params: any) {
         this.asset = params.asset;
         this.checked = params.checked || this.asset.checked;
+        if (typeof this.checked() != "boolean"){
+            this.scaling = this.checked;
+            this.checked = ko.computed({
+                read: () => {return this.scaling() > 0;},
+                write: val => {this.scaling(val ? 1 : 0);}
+            }) as KnockoutComputed<boolean>;
+        }
         this.id = params.id || this.asset.guid;
         this.title = params.title || this.asset.name
     }, template:
@@ -418,11 +426,11 @@ interface Demand {
  * Shows population level icon and name, clickable to open population configuration
  * @param demand - The population demand object
  */
-(ko as any).components.register('consumer-population', {
+(ko as any).components.register('consumer-residence', {
     template:
-        `<div class="inline-list" style="cursor: pointer" data-dismiss="modal" data-bind="click: () => {setTimeout(() => { $root.selectedPopulationLevel($data.level); $('#population-level-config-dialog').modal('show')}, 500);}" >
-            <div data-bind="component: {name: 'asset-icon', params: $data.level}"></div>
-            <span class="ml-2" data-bind="text: $data.level.name"></span>
+        `<div class="inline-list" style="cursor: pointer" data-dismiss="modal" data-bind="click: () => {setTimeout(() => { $root.selectedPopulationLevel($data.consumer.populationLevel); $('#population-level-config-dialog').modal('show')}, 500);}" >
+            <div data-bind="component: {name: 'asset-icon', params: $data.consumer.populationLevel}"></div>
+            <span class="ml-2" data-bind="text: $data.consumer.populationLevel.name"></span>
         </div>`
 });
 
@@ -464,10 +472,11 @@ interface Demand {
 
         this.component = "consumer-unknown";
 
-        if (this.demand instanceof ResidenceNeed)
-            this.component = "consumer-population";
-        else if (this.demand.module)
+        
+        if (this.demand.module)
             this.component = "consumer-module";
+        else if (this.demand.consumer instanceof ResidenceBuilding)
+            this.component = "consumer-residence";
         else if (this.demand.consumer instanceof Consumer)
             this.component = "consumer-factory";
 

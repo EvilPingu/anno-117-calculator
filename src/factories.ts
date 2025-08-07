@@ -1,10 +1,9 @@
 import { createIntInput, NamedElement, ACCURACY, EPSILON, ko, BuildingsCalc } from './util';
 import { Workforce, WorkforceDemand } from './population';
-import { Demand, EquippedItem, ExtraGoodProductionList, Item, Product } from './production';
+import { Demand, AppliedBuff, ExtraGoodProductionList, Product } from './production';
 import { TradeList } from './trade';
 import { 
     ConsumerConfig, 
-    BuffConfig,
     AssetsMap,
     LiteralsMap,
 } from './types';
@@ -28,19 +27,20 @@ export class Consumer extends NamedElement{
     public cycleTime: number;
     public island: Island;
 
-    public items: EquippedItem[];
+    public items: AppliedBuff[];
     public inputDemandsMap: Map<Product, Demand>;
     public inputDemands: KnockoutObservableArray<Demand>;
     public buildingInputDemands: KnockoutObservableArray<Demand>;
     public workforceDemand!: WorkforceDemand;
     public boost: KnockoutObservable<number>;
+    public boostSubscription!: KnockoutComputed<void>;
     public editable: KnockoutObservable<boolean>;
     public buildings: BuildingsCalc;
     public useinputAmountByExistingBuildings: KnockoutObservable<boolean>;
     public inputAmountByOutput: KnockoutObservable<number>;
     public inputAmountByExistingBuildings: KnockoutComputed<number>;
     public inputAmount: KnockoutComputed<number>;
-    public availableItems!: KnockoutComputed<Item[]>;
+    public availableItems!: KnockoutComputed<AppliedBuff[]>;
     public buildingsSubscription!: KnockoutComputed<void>;
     public inputDemandsSubscription!: KnockoutComputed<void>;
     public workforceDemandSubscription?: KnockoutComputed<void>;
@@ -145,7 +145,11 @@ export class Consumer extends NamedElement{
      * @param assetsMap - Map of all available assets
      */
     initDemands(assetsMap: AssetsMap): void {
-
+        this.boostSubscription = ko.computed(() => {
+            const percentBuff = this.items.reduce((a:number, b: AppliedBuff)=> a+b.productivityUpgrade() , 0);
+            const factor = Math.max(ACCURACY, percentBuff / 100 + 1);
+            this.boost(factor);
+        });
 
         this.inputDemandsSubscription = ko.computed(() => {
             if (!this.defaultInputs) {
@@ -158,7 +162,7 @@ export class Consumer extends NamedElement{
             for (let product of this.defaultInputs.keys())
                 inputs.set(product, this.defaultInputs.get(product) as number);
 
-            const items = this.items.filter(item => item.replacements && item.checked()).sort((a, b) => a.item.guid as number - (b.item.guid as number));
+            const items = this.items.filter(item => item.replacements && item.scaling()).sort((a, b) => a.buff.guid as number - (b.buff.guid as number));
             
             for (const item of items) {
                 for (const replacement of item.replacements || []) {
@@ -208,13 +212,16 @@ export class Consumer extends NamedElement{
             if (!product) {
                 throw new Error(`Fuel product with GUID ${window.view.constants.fuelProduct} not found in assetsMap`);
             }
-            let cycleTime = window.view.constants.fuelProductionTime;
+            let cycleTime = window.view.constants.fuelProductionTime as number;
 
             this.buildingInputDemands.push(new Demand(product, this, assetsMap));
             this.fuelSubscription = ko.computed(() => {
-                let amount = this.buildings.required() * this.cycleTime / cycleTime / this.boost();
+                const percentBuff = this.items.reduce((a:number, b: AppliedBuff)=> a+b.fuelDurationPercent() , 0);
+                const factor = percentBuff / 100 + 1;
+
+                let amount = this.buildings.utilized() * this.cycleTime / (factor * cycleTime) / this.boost();
                 this.buildingInputDemands()[0].updateAmount(amount);
-            })
+            });
         }
 
         this.createWorkforceDemand();
@@ -239,12 +246,16 @@ export class Consumer extends NamedElement{
 
         this.workforceDemandSubscription = ko.computed(() => {
             // for workforce replacement, the last applied item matters
-            const items = this.items.filter(item => item.replacingWorkforce && (item.replacingWorkforce as any) != this.connectedWorkforce && item.checked()).sort((a, b) => b.item.guid as number - (a.item.guid as number));
+            const items = this.items.filter(item => item.replacingWorkforce && (item.replacingWorkforce as any) != this.connectedWorkforce && item.scaling()).sort((a, b) => b.parent.guid as number - (a.parent.guid as number));
             if (items.length && this.workforceDemand) {
                 this.workforceDemand.updateWorkforce(items[0].replacingWorkforce);
             } else if (this.workforceDemand) {
                 this.workforceDemand.updateWorkforce(null);
             }
+
+            const percentBuff = this.items.reduce((a:number, b: AppliedBuff)=> a+b.workforceMaintenanceFactorUpgrade() , 0);
+            const factor = Math.max(0, percentBuff / 100 + 1);
+            this.workforceDemand.boost(factor);
         });
  
     }
@@ -275,6 +286,9 @@ export class Consumer extends NamedElement{
     updateAmount(): void {
     }
 
+    addBuff(appliedBuff: AppliedBuff){
+        this.items.push(appliedBuff)
+    }
 }
 
 /**
@@ -369,56 +383,6 @@ export class PublicConsumerBuilding extends Consumer {
 
 
 /**
- * Represents a buff that can be applied to factories
- */
-export class Buff extends NamedElement {
-    public guid: number;
-    public additionalOutputCycle: number;
-    public amount: number;
-    public factory: Factory | null;
-    public product: Product | null;
-    public visible: KnockoutComputed<boolean>;
-
-    /**
-     * Creates a new Buff instance
-     * @param config - Configuration object for the buff
-     * @param assetsMap - Map of all available assets
-     */
-    constructor(config: BuffConfig, assetsMap: AssetsMap) {
-        // Validate required parameters
-        if (!config) {
-            throw new Error('Buff config is required');
-        }
-        if (!assetsMap) {
-            throw new Error('Buff assetsMap is required');
-        }
-
-        super(config);
-        this.guid = config.guid;
-        
-        // Explicit assignments
-        this.additionalOutputCycle = config.additionalOutputCycle || 0;
-        this.amount = config.amount || 0;
-        this.factory = config.factory ? (() => {
-            const factory = assetsMap.get(parseInt(config.factory));
-            if (!factory) {
-                throw new Error(`Factory with GUID ${config.factory} not found in assetsMap`);
-            }
-            return factory;
-        })() : null;
-        this.product = config.product ? (() => {
-            const product = assetsMap.get(parseInt(config.product));
-            if (!product) {
-                throw new Error(`Product with GUID ${config.product} not found in assetsMap`);
-            }
-            return product;
-        })() : null;
-
-        this.visible = ko.pureComputed(() => this.available());
-    }
-}
-
-/**
  * Represents a factory that produces goods
  * Extends Consumer to provide factory-specific functionality
  */
@@ -444,12 +408,6 @@ export class Factory extends Consumer {
     public fertilizerModuleChecked?: KnockoutObservable<boolean>;
     public fertilizerModuleExtraGoods?: KnockoutComputed<number>;
     public fertilizerModuleDemand?: Demand;
-    public palaceBuff?: Buff;
-    public palaceBuffChecked?: KnockoutObservable<boolean>;
-    public palaceBuffExtraGoods?: KnockoutComputed<number>;
-    public setBuff?: Buff;
-    public setBuffChecked?: KnockoutObservable<boolean>;
-    public setBuffExtraGoods?: KnockoutComputed<number>;
     public extraGoodFactor: KnockoutComputed<number>;
     public outputAmount: KnockoutComputed<number>;
     public substitutableOutputAmount: KnockoutComputed<number>;

@@ -1,9 +1,9 @@
-import { NamedElement, Option, EPSILON, ko, dummyObservableArray } from './util';
+import { NamedElement, EPSILON, ko, dummyObservableArray } from './util';
 import {  AssetsMap } from './types';
-import { ProductConfig } from './types.config';
+import { ProductConfig, BuildingBuffConfig, PatronsConfig, EffectConfig, ItemConfig } from './types.config';
 import { Workforce } from './population';
-import { Factory } from './factories';
-import { Region, Constructible } from './world';
+import { Factory, Consumer } from './factories';
+import { Region, Constructible, isConstructible } from './world';
 
 
 declare const view: any;
@@ -221,19 +221,250 @@ export class ProductCategory extends NamedElement {
 }
 
 /**
+ * Represents a buff that can be applied to buildings/factories
+ * Provides modifiers for productivity, workforce, and additional outputs
+ */
+export class Buff extends NamedElement {
+    public guid: number;
+    public isStackable: boolean;
+    public workforceModifierInPercent: number;
+    public productivityUpgrade: number;
+    public fuelDurationPercent: number;
+    public replaceInputs: {
+        oldInput: Product;
+        newInput: Product;
+    }[];
+    public replaceWorkforce?: {
+        newWorkforce: Workforce;
+        oldWorkforce: Workforce;
+    };
+    public workforceMaintenanceFactorUpgrade: number;
+    public additionalOutputs: {
+        product: Product;
+        forceProductSameAsFactoryOutput: boolean;
+        additionalOutputCycle: number;
+        amount: number;
+    }[];
+    public additionalWorkforces?: Workforce[];
+
+    /**
+     * Creates a new Buff instance
+     * @param config - Configuration object for the buff
+     * @param assetsMap - Map of all available assets
+     */
+    constructor(config: BuildingBuffConfig, _assetsMap: AssetsMap) {
+        // Validate required parameters
+        if (!config.guid) {
+            throw new Error('Buff GUID is required');
+        }
+        if (!config.name) {
+            throw new Error('Buff name is required');
+        }
+        
+        super(config);
+        this.guid = config.guid;
+        this.isStackable = config.isStackable;
+        this.workforceModifierInPercent = config.workforceModifierInPercent;
+        this.productivityUpgrade = config.productivityUpgrade;
+        this.fuelDurationPercent = config.fuelDurationPercent;
+        this.workforceMaintenanceFactorUpgrade = config.workforceMaintenanceFactorUpgrade;
+        
+        // Look up workforce replacements
+        if (config.replaceWorkforce.oldWorkforce != 0){
+            const newWorkforce = _assetsMap.get(config.replaceWorkforce.newWorkforce);
+            if (!newWorkforce) {
+                throw new Error(`New workforce with GUID ${config.replaceWorkforce.newWorkforce} not found in assetsMap`);
+            }
+            const oldWorkforce = _assetsMap.get(config.replaceWorkforce.oldWorkforce);
+            if (!oldWorkforce) {
+                throw new Error(`Old workforce with GUID ${config.replaceWorkforce.oldWorkforce} not found in assetsMap`);
+            }
+            this.replaceWorkforce = {
+                newWorkforce: newWorkforce as Workforce,
+                oldWorkforce: oldWorkforce as Workforce
+            };
+        }
+        
+        this.replaceInputs = []
+        if (config.replaceInputs) {
+            config.replaceInputs.map((output) => {
+                const oldInput = _assetsMap.get(output.oldInput);
+                if (!oldInput) {
+                    throw new Error(`Product with GUID ${output.oldInput} not found in assetsMap`);
+                }
+                const newInput = _assetsMap.get(output.newInput);
+                if (!newInput) {
+                    throw new Error(`Product with GUID ${output.newInput} not found in assetsMap`);
+                }
+                return {
+                    oldInput: oldInput,
+                    newInput: newInput
+                };
+            });
+        }
+
+        // Look up products for additionalOutputs
+        this.additionalOutputs = [];
+        if (config.additionalOutputs) {
+            this.additionalOutputs = config.additionalOutputs.map(output => {
+                if(output.product == 0)
+                    return null;
+
+                const product = _assetsMap.get(output.product);
+                if (!product) {
+                    throw new Error(`Product with GUID ${output.product} not found in assetsMap`);
+                }
+                return {
+                    product: product as Product,
+                    forceProductSameAsFactoryOutput: output.forceProductSameAsFactoryOutput,
+                    additionalOutputCycle: output.additionalOutputCycle,
+                    amount: output.amount
+                };
+            }).filter(a => a != null);
+        }
+        
+        // Look up workforce for additionalWorkforces
+        if (config.additionalWorkforces) {
+            this.additionalWorkforces = config.additionalWorkforces.map(workforceId => {
+                const workforce = _assetsMap.get(workforceId);
+                if (!workforce) {
+                    throw new Error(`Workforce with GUID ${workforceId} not found in assetsMap`);
+                }
+                return workforce as Workforce;
+            });
+        }
+    }
+}
+
+/**
+ * Represents a patron that provides effects to buildings
+ * Manages patron-specific bonuses and modifications
+ */
+export class Patron extends NamedElement {
+    public guid: number;
+    public localEffects?: {
+        effect: Effect;
+        milestones: any[];
+    }[];
+    public wonder?: Effect;
+
+    /**
+     * Creates a new Patron instance
+     * @param config - Configuration object for the patron
+     * @param assetsMap - Map of all available assets
+     */
+    constructor(config: PatronsConfig, _assetsMap: AssetsMap) {
+        // Validate required parameters
+        if (!config.guid) {
+            throw new Error('Patron GUID is required');
+        }
+        if (!config.name) {
+            throw new Error('Patron name is required');
+        }
+
+        super(config);
+        this.guid = config.guid;
+        
+        // Look up effects for localEffects
+        if (config.localEffects) {
+            this.localEffects = config.localEffects.map(localEffect => {
+                const effect = _assetsMap.get(localEffect.effect);
+                if (!effect) {
+                    throw new Error(`Effect with GUID ${localEffect.effect} not found in assetsMap`);
+                }
+                return {
+                    effect: effect as Effect,
+                    milestones: localEffect.milestones
+                };
+            });
+        }
+        
+        // Look up wonder object
+        if (config.wonder) {
+            const wonder = _assetsMap.get(config.wonder);
+            if (!wonder) {
+                throw new Error(`Wonder with GUID ${config.wonder} not found in assetsMap`);
+            }
+            this.wonder = wonder;
+        }
+    }
+}
+
+/**
+ * Represents an effect that can be applied to buildings
+ * Manages effect-specific buffs and targeting
+ */
+export class Effect extends NamedElement {
+    public guid: number;
+    public buffs: Buff[];
+    public targets?: Constructible[];
+    public effectScope: string;
+    public excludeEffectSourceGUID: boolean;
+
+    public scaling: KnockoutObservable<number>;
+
+    /**
+     * Creates a new Effect instance
+     * @param config - Configuration object for the effect
+     * @param assetsMap - Map of all available assets
+     */
+    constructor(config: EffectConfig, _assetsMap: AssetsMap) {
+        // Validate required parameters
+        if (!config.guid) {
+            throw new Error('Effect GUID is required');
+        }
+        if (!config.name) {
+            throw new Error('Effect name is required');
+        }
+        if (!config.buffs || !Array.isArray(config.buffs)) {
+            throw new Error('Effect buffs array is required');
+        }
+
+        
+        super(config);
+        this.guid = config.guid;
+        this.effectScope = config.effectScope;
+        this.excludeEffectSourceGUID = config.excludeEffectSourceGUID;
+
+        this.scaling = ko.observable(0);
+        
+        // Look up buffs
+        this.buffs = config.buffs.map(buffId => {
+            const buff = _assetsMap.get(buffId);
+            if (!buff) {
+                throw new Error(`Buff with GUID ${buffId} not found in assetsMap`);
+            }
+            return buff as Buff;
+        });
+        
+        // Look up targets (Residences or Consumers/Constructibles)
+        if (config.targets) {
+            this.targets = config.targets.map(targetId => {
+                const target = _assetsMap.get(targetId);
+                if (!target) {
+                    throw new Error(`Target with GUID ${targetId} not found in assetsMap`);
+                }
+                return target as Constructible;
+            });
+        }
+    }
+}
+
+/**
  * Represents an item that can be equipped to factories
  * Provides bonuses and modifications to factory production
  */
 export class Item extends NamedElement {
+    public guid: number;
     public additionalOutputs: Map<Product, number>;
     public replacements?: Map<Product, Product>;
     public replacementArray?: {old: Product, new: Product}[];
-    public factories: Factory[];
+    public factories: Constructible[];
     public extraGoods?: Product[];
     public availableExtraGoods?: KnockoutComputed<Product[]>;
     public replacingWorkforce?: Workforce;
-    public equipments: EquippedItem[];
-    public availableEquipments: KnockoutObservableArray<EquippedItem>;
+    public equipments: AppliedBuff[];
+    public availableEquipments: KnockoutObservableArray<AppliedBuff>;
     public checked: KnockoutComputed<boolean>;
     public visible: KnockoutComputed<boolean>;
 
@@ -243,7 +474,7 @@ export class Item extends NamedElement {
      * @param assetsMap - Map of all available assets
      * @param region - The region this item belongs to
      */
-    constructor(config: any, _assetsMap: AssetsMap, _region: Region) {
+    constructor(config: ItemConfig, _assetsMap: AssetsMap, _region: Region) {
         // Validate required parameters
         if (!config.name) {
             throw new Error('Item name is required');
@@ -251,96 +482,42 @@ export class Item extends NamedElement {
         if (!config.guid) {
             throw new Error('Item GUID is required');
         }
-        if (!config.factories || !Array.isArray(config.factories)) {
-            throw new Error('Item factories array is required');
+        if (!config.targets || !Array.isArray(config.targets)) {
+            throw new Error('Item targets array is required');
         }
 
-        // Prepare config for parent constructor
-        const parentConfig = {
-            guid: config.guid,
-            name: config.name,
-            locaText: config.locaText || {},
-            iconPath: config.iconPath || "",
-            dlcs: config.dlcs || []
-        };
-        
-        super(parentConfig);
+       
+        super(config);
         
         // Explicit assignments
         this.guid = config.guid;
-        this.additionalOutputs = config.additionalOutputs || null;
+        this.additionalOutputs = new Map<Product, number>();
 
-        if (config.replaceInputs) {
-            this.replacements = new Map();
-            this.replacementArray = [];
+        this.factories = (config.targets || []).map((f: number) => _assetsMap.get(f)).filter((f: any) => isConstructible(f)); // ignore not considered buildings, e.g. warehouse
 
-            config.replaceInputs.forEach((r: any) => {
-                if (!r.OldInput) {
-                    throw new Error('ReplaceInputs must have OldInput and NewInput properties');
-                }
-                const oldProduct = _assetsMap.get(parseInt(r.OldInput));
-                if (!oldProduct) {
-                    throw new Error(`Old input product with GUID ${r.OldInput} not found in assetsMap`);
-                }
-                const newProduct = _assetsMap.get(parseInt(r.NewInput));
-                if (!newProduct) {
-                    throw new Error(`New input product with GUID ${r.NewInput} not found in assetsMap`);
-                }
-                this.replacementArray!.push({
-                    old: oldProduct,
-                    new: newProduct
-                });
-                this.replacements!.set(r.OldInput, r.NewInput);
-            });
-        }
-
-        this.factories = config.factories.map((f: number) => {
-            const factory = _assetsMap.get(f);
-            if (!factory) {
-                throw new Error(`Factory with GUID ${f} not found in assetsMap`);
+        this.equipments = [];
+        for (const b of config.buffs){
+            const buff = _assetsMap.get(b);
+            if (!buff) {
+                throw new Error(`Buff with GUID ${b} not found in assetsMap for item ${this.name()} ${this.guid}`);
             }
-            return factory;
-        }).filter((f: any) => !!f);
 
-        if (config.additionalOutputs) {
-            this.extraGoods = [];
-            for (var p of config.additionalOutputs) {
-                if (p.forceProductSameAsFactoryOutput)
-                    for (var f of this.factories)
-                        this.extraGoods!.push(f.getProduct() as Product);
-                else {
-                    const product = _assetsMap.get(parseInt(p.Product));
-                    if (!product) {
-                        throw new Error(`Product with GUID ${p.Product} not found in assetsMap`);
-                    }
-                    this.extraGoods!.push(product);
-                }
-            }
-            this.availableExtraGoods = ko.pureComputed(() => this.extraGoods!.filter((p: Product) => p.available()));
+            for (const f of this.factories)
+                this.equipments.push(new AppliedBuff(this, buff, f, _assetsMap));
+
         }
-
-        if (config.replacingWorkforce) {
-            const workforce = _assetsMap.get(parseInt(config.replacingWorkforce));
-            if (!workforce) {
-                throw new Error(`Workforce with GUID ${config.replacingWorkforce} not found in assetsMap`);
-            }
-            this.replacingWorkforce = workforce;
-        }
-
-        this.equipments =
-            this.factories.map((f: Factory) => new EquippedItem({ item: this, factory: f, icon: config.iconPath, locaText: config.locaText, dlcs: config.dlcs }, _assetsMap));
-        this.availableEquipments = ko.pureComputed(() => this.equipments.filter((e: EquippedItem) => e.factory.available()));
+        this.availableEquipments = ko.pureComputed(() => this.equipments.filter((e: AppliedBuff) => e.available()));
 
         this.checked = ko.pureComputed({
             read: () => {
                 for (var eq of this.equipments)
-                    if (!eq.checked())
+                    if (!eq.scaling())
                         return false;
 
                 return true;
             },
             write: (checked: boolean) => {
-                this.equipments.forEach(e => e.checked(checked));
+                this.equipments.forEach(e => e.scaling(checked ? 1 : 0));
             }
         });
 
@@ -369,65 +546,114 @@ export class Item extends NamedElement {
 
 
 
+
+
 /**
  * Represents an item equipped to a specific factory
  * Manages the relationship between items and factories
  */
-export class EquippedItem extends Option {
-    public item: Item;
-    public factory: Factory;
+export class AppliedBuff {
+    public parent: Item|Effect;
+    public target: Constructible;
+    public buff: Buff;
     public replacements?: Map<Product, Product>;
     public replacementArray?: {old: Product, new: Product}[];
     public replacingWorkforce?: Workforce;
+    public productivityUpgrade: KnockoutObservable<number>;
+    public fuelDurationPercent: KnockoutObservable<number>;
+    public workforceMaintenanceFactorUpgrade: KnockoutObservable<number>;
     public extraGoods?: ExtraGoodProduction[];
+    public available: KnockoutComputed<boolean>;
     public visible: KnockoutComputed<boolean>;
+    public scaling: KnockoutObservable<number>;
+
 
     /**
      * Creates a new EquippedItem instance
      * @param config - Configuration object for the equipped item
      * @param assetsMap - Map of all available assets
      */
-    constructor(config: any, _assetsMap: AssetsMap) {
+    constructor(parent: Item|Effect, buff: Buff, factory: Constructible, _assetsMap: AssetsMap) {
         // Validate required parameters
-        if (!config.item) {
-            throw new Error('EquippedItem item is required');
+        if (!parent) {
+            throw new Error('AppliedBuff parent is required');
         }
-        if (!config.factory) {
-            throw new Error('EquippedItem factory is required');
+        if (!buff) {
+            throw new Error('AppliedBuff buff is required');
         }
-
-        // Prepare config for parent constructor
-        const parentConfig = {
-            guid: config.item.guid + config.factory.guid,
-            name: config.item.name(),
-            locaText: config.locaText || {},
-            iconPath: config.icon || "",
-            dlcs: config.dlcs || []
-        };
-        
-        super(parentConfig);
+        if (!factory) {
+            throw new Error('AppliedBuff factory is required');
+        }
         
         // Explicit assignments
-        this.item = config.item;
-        this.factory = config.factory;
+        this.parent = parent;
+        this.target = factory;
+        this.buff = buff;
+        this.scaling = ko.observable(0); // indicates wheter item/effect is not applied (0), applied (1), multiple times applied (> 1); child class updates this value
 
-        this.lockDLCIfSet(this.checked);
+        if (this.buff.replaceWorkforce && this.target instanceof Consumer && this.target.connectedWorkforce &&
+            this.target.connectedWorkforce.guid == this.buff.replaceWorkforce.oldWorkforce.guid) // better compare guids, if buff is global and uses a different instance of the same workforce
+            this.replacingWorkforce = _assetsMap.get(this.buff.replaceWorkforce.newWorkforce.guid);
 
-        this.replacements = config.item.replacements;
-        this.replacementArray = config.item.replacementArray;
-        this.replacingWorkforce = config.item.replacingWorkforce;
-
-        if (config.item.additionalOutputs) {
+        if (this.buff.additionalOutputs && this.buff.additionalOutputs.length > 0 && this.target instanceof Factory) {
             this.extraGoods = []
-            for (var cfg of config.item.additionalOutputs) {
+            for (let entry of this.buff.additionalOutputs) {
                 try {
-                    var config = $.extend(true, {}, cfg, { item: this, factory: this.factory });
-                    this.extraGoods!.push(new ExtraGoodProduction(config, _assetsMap));
+
+
+                    const product = entry.forceProductSameAsFactoryOutput ? this.target.getProduct() : entry.product;
+                    
+                    if (!product) {
+                        throw new Error(`Product with GUID ${product} not found in assetsMap`);
+                    }
+
+                    // ensure we use the local instance of the product if the buff is global
+                    this.extraGoods!.push(new ExtraGoodProduction(this, entry.amount, entry.additionalOutputCycle,  _assetsMap.get(product.guid), _assetsMap));
                 } catch (e) { }
             }
         }
 
-        this.factory.items.push(this as any);
+        this.productivityUpgrade = ko.pureComputed(() => {
+            return this.scaling() * this.buff.productivityUpgrade;
+        });
+
+        
+        this.fuelDurationPercent = ko.pureComputed(() => {
+            return this.scaling() * this.buff.fuelDurationPercent;
+        });
+
+        
+        this.workforceMaintenanceFactorUpgrade = ko.pureComputed(() => {
+            return this.scaling() * this.buff.workforceMaintenanceFactorUpgrade;
+        });
+
+        this.replacements = new Map();
+        this.replacementArray = [];
+        if (this.buff.replaceInputs) {
+
+            this.buff.replaceInputs.forEach((r: any) => {
+                if (!r.oldInput) {
+                    throw new Error('ReplaceInputs must have OldInput and NewInput properties');
+                }
+                const oldProduct = _assetsMap.get(parseInt(r.OldInput));
+                if (!oldProduct) {
+                    throw new Error(`Old input product with GUID ${r.OldInput} not found in assetsMap`);
+                }
+                const newProduct = _assetsMap.get(parseInt(r.NewInput));
+                if (!newProduct) {
+                    throw new Error(`New input product with GUID ${r.NewInput} not found in assetsMap`);
+                }
+                this.replacementArray!.push({
+                    old: oldProduct,
+                    new: newProduct
+                });
+                this.replacements!.set(r.OldInput, r.NewInput);
+            });
+        }
+
+        this.available = ko.pureComputed(() => {
+            return this.target.available() && this.buff.available();
+        });
 
         this.visible = ko.pureComputed(() => {
             if (!this.available())
@@ -440,8 +666,10 @@ export class EquippedItem extends Option {
             if (!region)
                 return true;
 
-            return this.factory.island.region === region;
+            return this.target.island.region === region;
         });
+
+        this.target.addBuff(this);
     }
 }
 
@@ -450,51 +678,44 @@ export class EquippedItem extends Option {
  * Manages extra goods produced by factories with specific items
  */
 class ExtraGoodProduction {
-    public item: EquippedItem;
+    public item: AppliedBuff;
     public factory: Factory;
-    public Amount: number;
+    public defaultAmount: number;
     public additionalOutputCycle: number;
-    public ForceProductSameAsFactoryOutput: boolean;
-    public Product: number | null;
     public product: Product;
-    public amount: any;
+    public amount: KnockoutComputed<number>;
 
     /**
      * Creates a new ExtraGoodProduction instance
      * @param config - Configuration object for the extra good production
      * @param assetsMap - Map of all available assets
      */
-    constructor(config: any, _assetsMap: AssetsMap) {
+    constructor(appliedBuff: AppliedBuff, defaultAmount: number, additionalOutputCycle: number, product: Product, _assetsMap: AssetsMap) {
         // Validate required parameters
-        if (!config.item) {
+        if (!appliedBuff) {
             throw new Error('ExtraGoodProduction item is required');
         }
-        if (!config.factory) {
-            throw new Error('ExtraGoodProduction factory is required');
-        }
-        if (typeof config.Amount !== 'number') {
+        if (typeof defaultAmount !== 'number') {
             throw new Error('ExtraGoodProduction Amount is required and must be a number');
         }
-        if (typeof config.AdditionalOutputCycle !== 'number') {
+        if (typeof additionalOutputCycle !== 'number') {
             throw new Error('ExtraGoodProduction AdditionalOutputCycle is required and must be a number');
         }
 
         // Explicit assignments
-        this.item = config.item;
-        this.factory = config.factory;
-        this.Amount = config.Amount;
-        this.additionalOutputCycle = config.AdditionalOutputCycle;
-        this.ForceProductSameAsFactoryOutput = config.ForceProductSameAsFactoryOutput || false;
-        this.Product = config.Product || null;
-
-        var product = config.ForceProductSameAsFactoryOutput ? config.factory.getOutputs()[0].Product : config.Product;
-        const productObj = _assetsMap.get(parseInt(product));
-        if (!productObj) {
-            throw new Error(`Product with GUID ${product} not found in assetsMap`);
+        this.item = appliedBuff;
+        const factory = appliedBuff.target;
+        if (! (factory instanceof Factory)){
+            throw new Error('ExtraGoodProduction requires factory as buff target but got ' + appliedBuff.target.name())
         }
-        this.product = productObj;
+        this.factory = factory;
+        this.defaultAmount = defaultAmount;
+        this.additionalOutputCycle = additionalOutputCycle;
 
-        this.amount = ko.computed(() => (this.item.checked() ? 1 : 0) * config.Amount * (this.factory.clipped && this.factory.clipped() ? 2 : 1) * this.factory.inputAmount() / this.additionalOutputCycle);
+
+        this.product = product;
+
+        this.amount = ko.computed(() => this.item.scaling() * defaultAmount * this.factory.inputAmount() / this.additionalOutputCycle);
 
         for (var f of this.product.factories) {
             if (f.extraGoodProductionList) {

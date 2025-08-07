@@ -17,29 +17,8 @@
 
                             </td>
                             <td>
-                                <div data-bind="if: !!$data.clipped">
-                                    <div class="custom-control custom-checkbox" data-bind="visible: !!$data.clipped">
-                                        <input type="checkbox" class="custom-control-input" data-bind="checked: $data.clipped, attr: { id: $data.guid + '-clipped' }">
-                                        <label class="custom-control-label" data-bind="attr: { for: $data.guid + '-clipped', title: 'Clipping' }" src-only>
-                                            Clipping
-                                        </label>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div href="#" data-toggle="tooltip" data-bind="if: $data.percentBoost, attr: {'title' : $root.texts.productionBoost.name}">
-                                    <div class="input-group input-group spinner" style="padding-left: 2rem">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text" data-bind="text:$root.texts.productionBoost.name ">
-                                            </div>
-                                        </div>
-                                        <input class="form-control" type="number" value="100" step="1" min="1" data-bind="value: percentBoost, attr: {id: $data.guid + '-percentBoost-input'}" />
-                                        <div class="input-group-append">
-                                            <div data-bind="component: { name: 'number-input-increment', params: { obs: $data.percentBoost, id: $data.guid + '-percentBoost-input' }}"></div>
-                                            <span class="input-group-text">%</span>
-                                        </div>
-                                    </div>
-                                </div>
+                                <div data-bind="text: formatNumber(100 * $data.boost()) + '%'"></div>
+                                
                             </td>
                         </tr>
                         <tr data-bind="with: $data.workforceDemand">
@@ -48,18 +27,9 @@
                                 <span data-bind="text: $root.texts.workforce.name"></span>
                             </td>
                             <td>
-                                <div class="input-group input-group-short spinner">
-                                    <input class="form-control" type="number" value="100" step="10" min="0" data-bind="value: percentBoost, attr: {id: $parent.guid + '-workforcePercentBoost-input'}" />
-                                    <div class="input-group-append">
-                                        <div data-bind="component: { name: 'number-input-increment', params: { obs: $data.percentBoost, id: $parent.guid + '-workforcePercentBoost-input' }}"></div>
-                                        <span class="input-group-text">%</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
                                 <div>
                                     <span data-bind="text: formatNumber($data.amount())"></span>
-                                    <img class="mr-2 icon-sm" data-bind="attr: { src: $data.workforce().icon ? $data.workforce().icon : null, alt: $data.workforce().name}">
+                                    <img class="mr-2 icon-sm icon-light" data-bind="attr: { src: $data.workforce().icon ? $data.workforce().icon : null, alt: $data.workforce().name}">
                                 </div>
                             </td>
                         </tr>
@@ -124,14 +94,18 @@
                                 <tr>
                                     <td>
                                         <div class="inline-list">
-                                            <div data-bind="component: {name: 'icon-checkbox', params: {asset: $data.item, checked: $data.checked, id: 'fc-' + $data.factory.guid + '-' + $data.item.guid + '-equipped'}}"></div>
-                                            <span class="ml-1" data-bind="text: $data.name, attr: {for: 'fc-' + $data.factory.guid + '-' + $data.item.guid + '-equipped'}"></span> <!-- item name -->
+                                            <div data-bind="component: {name: 'icon-checkbox', params: {asset: $data.parent, checked: $data.scaling, id: 'fc-' + $data.target.guid + '-' + $data.parent.guid + '-equipped'}}"></div>
+                                            <span class="ml-1" data-bind="text: $data.parent.name, attr: {for: 'fc-' + $data.target.guid + '-' + $data.parent.guid + '-equipped'}"></span> <!-- item name -->
                                         </div>
                                     </td>
                                     <td>
-                                        <div>
+                                        <div style="float: right;">
+                                            <!-- productivity -->
+                                            <div data-bind="if: $data.buff.productivityUpgrade != 0">
+                                                <span data-bind="text: formatNumber($data.buff.productivityUpgrade, true) + ' %'"></span>
+                                            </div>
                                             <!-- extra goods -->
-                                            <span data-bind="if: $data.item.extraGoods">
+                                            <span data-bind="if: $data.extraGoods">
                                                 
                                                 <span class="inline-list-centered">
                                                     <img class="icon-sm icon-light mr-2" src="../icons/icon_add_goods_socket_white.png" />
@@ -151,6 +125,13 @@
                                                 <div data-bind="foreach: $data.replacementArray">
                                                     <replacement params="{old: $data.old, new: $data.new}"></replacement>
                                                 </div>
+                                            </div>
+                                            <!-- workforce maintenance -->
+                                            <div data-bind="if: $data.buff.workforceMaintenanceFactorUpgrade != 0">
+                                                <span class="inline-list-centered">
+                                                <span data-bind="text: formatNumber($data.buff.workforceMaintenanceFactorUpgrade, true) + ' %'"></span>
+                                                <img class="icon-sm icon-light" data-bind="attr: { src: $data.target.workforceDemand.workforce().icon ? $data.target.workforceDemand.workforce().icon  : null, alt: $data.target.workforceDemand.workforce().name }" />
+                                                </span>
                                             </div>
                                             <!-- workforce replacement -->
                                             <div data-bind="if: $data.replacingWorkforce && $parent.workforceDemand.defaultWorkforce.guid !== $data.replacingWorkforce">
@@ -285,7 +266,7 @@
                             <tbody data-bind="foreach: $data.extraGoodProductionList.nonZero">
                                 <tr>
                                     <td>
-                                        <img class="icon-sm" data-bind="attr: { src: $data.item.item.icon ? $data.item.item.icon : null, alt: $data.item.name}"> <!-- item icon -->
+                                        <img class="icon-sm" data-bind="attr: { src: $data.item.parent.icon ? $data.item.parent.icon : null, alt: $data.item.parent.name}"> <!-- item icon -->
                                         <img class="icon-sm" data-bind="attr: { src: $data.factory.icon ? $data.factory.icon : null, alt: $data.factory.name}">
                                     </td> <!-- factory icon -->
                                     <td>

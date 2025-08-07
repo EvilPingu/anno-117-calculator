@@ -13,8 +13,8 @@ import {
 } from './types.config';
 
 import { Workforce, ResidenceBuilding, PopulationLevel, PopulationGroup } from './population';
-import { Product, MetaProduct, Item, ProductCategory } from './production';
-import { PublicConsumerBuilding, Module, Factory, Consumer, Buff } from './factories';
+import { Product, MetaProduct, Item, ProductCategory, AppliedBuff, Buff } from './production';
+import { PublicConsumerBuilding, Module, Factory, Consumer } from './factories';
 import { ResidenceEffectView } from './views';
 import { Need, NeedCategory, RecipeList, ResidenceEffect } from './consumption';
 
@@ -241,8 +241,8 @@ export class IslandManager {
         
         // Create other required properties
         this.islandNameInput = ko.observable();
-        this.availableSessions = ko.pureComputed(() => (window as any).view.sessions.filter((s: any) => s.available()));
-        this.metaSession = (window as any).view.sessions[0];
+        this.availableSessions = ko.pureComputed(() => window.view.sessions.filter((s: Session) => s.available()));
+        this.metaSession = window.view.sessions[0];
         this.availableSessions().forEach(session => {
             if (session.region.id == "Meta")
                 this.metaSession = session;
@@ -292,7 +292,7 @@ export class IslandManager {
         // Create islandExists computed
         this.islandExists = ko.computed(() => {
             const name = this.islandNameInput();
-            if (!name || name === 'All Islands' || name === (window as any).view.texts?.allIslands?.name?.())
+            if (!name || name === 'All Islands' || name === window.view.texts?.allIslands?.name?.())
                 return true;
             return false; // Simplified for now
         });
@@ -534,7 +534,7 @@ export class Island {
                 }
                 this.session = session;
             } else {
-                this.session = (window as any).view.sessions[0];
+                this.session = window.view.sessions[0];
             }
         }
         this.region = this.session.region;
@@ -559,6 +559,7 @@ export class Island {
         // procedures to persist inputs
         var persistBool: (obj: any, attributeName: string, storageName?: string) => void;
         var persistInt: (obj: any, attributeName: string, storageName?: string) => void;
+        var persistFloat: (obj: any, attributeName: string, storageName?: string) => void;
         var persistString: (obj: any, attributeName: string, storageName?: string) => void;
         var persistBuildings: (obj: any) => void;
 
@@ -592,6 +593,24 @@ export class Island {
                 }
             }
 
+            persistFloat = (obj: any, attributeName: string, storageName?: string) => {
+                var attr = obj[attributeName];
+                if (attr) {
+                    let id = storageName ? storageName : (obj.guid + "." + attributeName);
+                    if (localStorage.getItem(id) != null)
+                        attr(parseFloat(localStorage.getItem(id)));
+
+                    attr.subscribe((val: any) => {
+                        val = parseFloat(val);
+
+                        if (val == null || !isFinite(val) || isNaN(val))
+                            return;
+
+                        localStorage.setItem(id, val.toString());
+                    });
+                }
+            }
+
             persistString = (obj: any, attributeName: string, storageName?: string) => {
                 var attr = obj[attributeName];
                 if (attr) {
@@ -607,10 +626,11 @@ export class Island {
                 for (let attr of ["constructed", "planned"]){
                     persistInt(obj.buildings as BuildingsCalc, attr, obj.guid + ".buildings." + attr);
                 }
+                persistBool(obj.buildings as BuildingsCalc, "fullyUtilizeConstructed", obj.guid + ".buildings.fullyUtilizeConstructed");
             }
 
         } else {
-            persistBool = persistInt = persistString = persistBuildings = () => { };
+            persistBool = persistInt = persistFloat = persistString = persistBuildings = () => { };
         }
 
         // objects
@@ -680,14 +700,14 @@ export class Island {
         }
 
         for (let consumer of (params.publicServices || [])) {
-            let f = new PublicConsumerBuilding(consumer, assetsMap, literalsMap, this as any);
+            let f = new PublicConsumerBuilding(consumer, assetsMap, literalsMap, this);
             assetsMap.set(f.guid, f);
             this.consumers.push(f);
             this.publicServices.push(f);
         }
 
         for (let consumer of (params.publicRecipeBuildings || [])) {
-            let f = new PublicConsumerBuilding(consumer, assetsMap, literalsMap, this as any);
+            let f = new PublicConsumerBuilding(consumer, assetsMap, literalsMap, this);
             assetsMap.set(f.guid, f);
             this.consumers.push(f);
             this.publicRecipeBuildings.push(f);
@@ -695,23 +715,18 @@ export class Island {
 
         for (let list of (params.recipeLists || [])) {
             if (!list.region || !this.region || list.region === this.region.guid)
-                this.recipeLists.push(new RecipeList(list, assetsMap, this as any));
+                this.recipeLists.push(new RecipeList(list, assetsMap, this));
         }
 
         for (let consumer of (params.modules || [])) {
-            let f = new Module(consumer, assetsMap, literalsMap, this as any);
+            let f = new Module(consumer, assetsMap, literalsMap, this);
             assetsMap.set(f.guid, f);
             this.consumers.push(f);
         }
 
-        for (let buff of (params.palaceBuffs || [])) {
-            let f = new Buff(buff, assetsMap);
-            assetsMap.set(f.guid, f);
-        }
-
-        for (let buff of (params.setBuffs || [])) {
-            let f = new Buff(buff, assetsMap);
-            assetsMap.set(f.guid, f);
+        for (let buff of (params.buildingBuffs || [])) {
+            let b = new Buff(buff, assetsMap);
+            assetsMap.set(b.guid, b);
         }
 
         for (let factory of params.factories) {
@@ -730,31 +745,31 @@ export class Island {
 
         for (let item of (params.items || [])) {
             let i = new Item(item, assetsMap, this.region);
-            if (!(i as any).factories.length)
+            if (!i.factories.length)
                 continue;  // Affects no factories in this region
 
-            assetsMap.set((i as any).guid, i);
+            assetsMap.set(i.guid, i);
             this.items.push(i);
 
-            if ((i as any).replacements)
+            if (i.replacements)
                 this.replaceInputItems.push(i);
 
-            if ((i as any).additionalOutputs)
+            if (i.additionalOutputs)
                 this.extraGoodItems.push(i);
 
             if (localStorage) {
 
-                for (var equip of (i as any).equipments) {
-                    let id = `${(equip.factory as any).guid}[${(i as any).guid}].checked`;
-                    persistBool(equip, "checked", id);
+                for (var equip of i.equipments) {
+                    let id = `${equip.target.guid}[${i.guid}].scaling`;
+                    persistFloat(equip, "scaling", id);
                 }
 
             }
         }
 
-        this.extraGoodItems.sort((a, b) => (a as any).name().localeCompare((b as any).name()));
+        this.extraGoodItems.sort((a, b) => (a ).name().localeCompare((b ).name()));
         view.settings.language.subscribe(() => {
-            this.extraGoodItems.sort((a, b) => (a as any).name().localeCompare((b as any).name()));
+            this.extraGoodItems.sort((a, b) => a.name().localeCompare(b.name()));
         });
 
         // must be set after items so that extraDemand is correctly handled
@@ -784,12 +799,12 @@ export class Island {
         }
 
         for (var b of this.residenceBuildings) {
-            if ((b as any).upgradedBuildingGuid) {
-                const upgradedBuilding = assetsMap.get(parseInt((b as any).upgradedBuildingGuid));
+            if (b.upgradedBuildingGuid) {
+                const upgradedBuilding = assetsMap.get(parseInt(b.upgradedBuildingGuid));
                 if (!upgradedBuilding) {
-                    throw new Error(`Upgraded building with GUID ${(b as any).upgradedBuildingGuid} not found in assetsMap`);
+                    throw new Error(`Upgraded building with GUID ${b.upgradedBuildingGuid} not found in assetsMap`);
                 }
-                (b as any).upgradedBuilding = upgradedBuilding;
+                b.upgradedBuilding = upgradedBuilding;
             }
 
             b.initDemands(assetsMap);
@@ -800,19 +815,19 @@ export class Island {
 
         for (let effect of (params.residenceEffects || [])) {
             let e = new ResidenceEffect(effect, assetsMap);
-            assetsMap.set((e as any).guid, e);
+            assetsMap.set(e.guid, e);
             if (localStorage)
-                localStorage.removeItem(`${(e as any).guid}.checked`);
+                localStorage.removeItem(`${e.guid}.checked`);
         }
 
         for (let b of this.residenceBuildings) {
             {
-                let id = `${(b as any).guid}.effectCoverage`;
+                let id = `${b.guid}.effectCoverage`;
                 if (localStorage.getItem(id) != null)
-                    (b as any).applyEffects(JSON.parse(localStorage.getItem(id)));
+                    b.applyEffects(JSON.parse(localStorage.getItem(id)));
 
-                (b as any).effectCoverage.subscribe(() => {
-                    localStorage.setItem(id, JSON.stringify((b as any).serializeEffects()));
+                b.effectCoverage.subscribe(() => {
+                    localStorage.setItem(id, JSON.stringify(b.serializeEffects()));
                 });
             }
             persistBuildings(b);
@@ -836,7 +851,7 @@ export class Island {
 
         for (let p of this.categories[1].products) {
             for (let b of p.factories) {
-                if (b && typeof (b as any).editable === 'function') {
+                if (b && typeof b.editable === 'function') {
                     b.editable(true);
                 }
             }
@@ -922,4 +937,20 @@ export class Island {
 export interface Constructible extends NamedElement{
     buildings: BuildingsCalc,
     island: Island
+    addBuff(appliedBuff: AppliedBuff) : void;
   }
+
+/**
+ * Type guard function to check if an object implements the Constructible interface
+ * @param obj - The object to check
+ * @returns True if the object implements Constructible interface
+ */
+export function isConstructible(obj: any): obj is Constructible {
+    return obj && 
+           typeof obj === 'object' &&
+           'buildings' in obj &&
+           'island' in obj &&
+           typeof obj.addBuff === 'function' &&
+           typeof obj.available === 'function' &&
+           typeof obj.name === 'function';
+}

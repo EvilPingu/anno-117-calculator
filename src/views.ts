@@ -264,7 +264,7 @@ export class ProductionChainView {
                         }; 
                     }
 
-                    var factory = consumer as any;
+                    var factory = consumer;
 
                     var icon = null;
                     var maxSubAmount = factory.outputAmount ? factory.outputAmount() : factory.inputAmount();

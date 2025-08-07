@@ -1,5 +1,5 @@
-import { createIntInput, NamedElement, ko, BuildingsCalc } from './util';
-import { Product } from './production';
+import { NamedElement, ko, BuildingsCalc } from './util';
+import { AppliedBuff, Product } from './production';
 import { ResidenceNeed, ResidenceEffectEntryCoverage, ResidenceEffectCoverage, ResidenceEffect } from './consumption';
 import { AssetsMap, LiteralsMap } from './types';
 import { 
@@ -31,8 +31,8 @@ export class ResidenceBuilding extends NamedElement implements Constructible{
     public residents: KnockoutComputed<number>;
     public visible: KnockoutComputed<boolean>;
 
-    // public upgradedBuildingGuids: number[];
-    // public upgradedBuildings: ResidenceBuilding[];
+    public upgradedBuildingGuid?: string;
+    public upgradedBuilding?: ResidenceBuilding;
 
     /**
      * Creates a new ResidenceBuilding instance
@@ -206,7 +206,9 @@ export class ResidenceBuilding extends NamedElement implements Constructible{
         this.sortEffectCoverage();
     }
 
-
+    addBuff(_: AppliedBuff): void {
+        // TODO:Use appliedBuffs instead of ResidenceEffectCoverage
+    }
 }
 
 /**
@@ -414,7 +416,7 @@ export class Workforce extends NamedElement{
 export class WorkforceDemand {
     public factory: any;
     public amountPerBuilding: number;
-    public percentBoost: KnockoutObservable<number>;
+    public boost: KnockoutObservable<number>;
     public amount: KnockoutObservable<number>;
     public workforce: KnockoutObservable<any>;
     public defaultWorkforce: any;
@@ -439,13 +441,13 @@ export class WorkforceDemand {
         // Explicit assignments
         this.factory = factory;
         this.amountPerBuilding = amount || 0;
-        this.percentBoost = createIntInput(100, 0);
+        this.boost = ko.observable(1);
         this.amount = ko.observable(0);
         this.workforce = ko.observable(workforce);
         this.defaultWorkforce = workforce;
         this.buildings = 0;
 
-        this.percentBoost.subscribe(() => {
+        this.boost.subscribe(() => {
             this.updateAmount(this.buildings);
         });
 
@@ -475,7 +477,7 @@ export class WorkforceDemand {
     updateAmount(buildings: number): void {
         this.buildings = buildings;
 
-        const perBuilding = Math.ceil(this.amountPerBuilding * this.percentBoost() / 100);
+        const perBuilding = Math.ceil(this.amountPerBuilding * this.boost());
         this.amount(Math.ceil(buildings) * perBuilding);
     }
 } 

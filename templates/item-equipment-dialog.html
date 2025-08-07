@@ -34,7 +34,7 @@
                             <td>
                                 <span data-bind="foreach: $data.availableEquipments" class="inline-list-centered">
 
-                                    <div style="flex-basis: fit-content;" data-bind="component: { name: 'icon-checkbox', params: {asset: $data.factory, checked: $data.checked, id: $data.factory.guid + '-' + $data.item.guid + '-equipped', title: $data.factory.getRegionExtendedName.bind($data.factory)}}"></div>
+                                    <div style="flex-basis: fit-content;" data-bind="component: { name: 'icon-checkbox', params: {asset: $data.target, checked: $data.checked, id: $data.target.guid + '-' + $data.parent.guid + '-equipped', title: $data.target.getRegionExtendedName.bind($data.target)}}"></div>
 
                                 </span>
                             </td>
