@@ -56,6 +56,7 @@ export interface ConsumerConfig extends NamedElementConfig {
     amount: number;
   }[];
   cycleTime: number;
+  aqueductProductivityBuff?: number;
 }
 
 export interface BuffConfig extends NamedElementConfig {

@@ -276,7 +276,7 @@ interface Demand {
     viewModel: function (params: any) {
         this.asset = params.asset;
         this.checked = params.checked || this.asset.checked;
-        if (typeof this.checked() != "boolean"){
+        if (this.checked != null && typeof this.checked() != "boolean"){
             this.scaling = this.checked;
             this.checked = ko.computed({
                 read: () => {return this.scaling() > 0;},

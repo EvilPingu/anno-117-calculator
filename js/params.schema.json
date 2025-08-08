@@ -1254,6 +1254,18 @@
                 "amount"
               ]
             }
+          },
+          "functionalEffects": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "aqueductProductivityBuff": {
+            "type": "integer"
+          },
+          "additionalModule": {
+            "type": "integer"
           }
         },
         "required": [
@@ -1373,6 +1385,12 @@
           },
           "modulesLimit": {
             "type": "integer"
+          },
+          "functionalEffects": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
           }
         },
         "required": [
@@ -1384,7 +1402,8 @@
           "inputs",
           "needsFuelInput",
           "cycleTime",
-          "modulesLimit"
+          "modulesLimit",
+          "functionalEffects"
         ]
       },
       "title": "Module",
@@ -1859,6 +1878,98 @@
       },
       "title": "Patrons",
       "description": "Patrons with effects increased by devotion."
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "guid": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "iconPath": {
+            "type": "string"
+          },
+          "locaText": {
+            "type": "object",
+            "properties": {
+              "english": {
+                "type": "string"
+              },
+              "french": {
+                "type": "string"
+              },
+              "polish": {
+                "type": "string"
+              },
+              "spanish": {
+                "type": "string"
+              },
+              "italian": {
+                "type": "string"
+              },
+              "german": {
+                "type": "string"
+              },
+              "brazilian": {
+                "type": "string"
+              },
+              "russian": {
+                "type": "string"
+              },
+              "simplified_chinese": {
+                "type": "string"
+              },
+              "traditional_chinese": {
+                "type": "string"
+              },
+              "japanese": {
+                "type": "string"
+              },
+              "korean": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "english"
+            ]
+          },
+          "buffs": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "targets": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "effectScope": {
+            "type": "string"
+          },
+          "excludeEffectSourceGUID": {
+            "type": "boolean"
+          },
+          "rarity": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "guid",
+          "name",
+          "buffs",
+          "effectScope",
+          "excludeEffectSourceGUID",
+          "rarity"
+        ]
+      },
+      "title": "Item",
+      "description": "Items equipable in Villa with relevant buffs."
     },
     "icons": {
       "type": "object",
@@ -2418,6 +2529,9 @@
         "data/ui/fhd/base/icon_content/tech_tree/icon_2d_irrigation_aqueduct.png": {
           "type": "string"
         },
+        "data/ui/2kimages/fpp/icons/techs/warehouse_maintenance.png": {
+          "type": "string"
+        },
         "data/ui/2kimages/fpp/icons/techs/charcoal_more.png": {
           "type": "string"
         },
@@ -2490,82 +2604,13 @@
         "data/ui/2kimages/fpp/icons/test/icon_3d_guest_placeholder.png": {
           "type": "string"
         },
+        "data/ui/fhd/base/icon_content/items_specialist/unique/icon_3d_unique_male_005.png": {
+          "type": "string"
+        },
         "data/ui/fhd/base/icon_content/campaign/icon_campaign_elephant.png": {
           "type": "string"
         },
         "data/ui/fhd/base/icon_content/items_specialist/campaign/icon_3d_campaign_elephant_specialist.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/items_specialist/celtic_male/icon_3d_celtic_male_003.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/main/3dicons/specialists/systemic/icon_farmer_106.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/main/3dicons/specialists/icon_boris_franke.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/main/3dicons/specialists/icon_captain_common.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/main/3dicons/scenario/ggj_buff/icon_ggj_buff_sickness.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/main/3dicons/influence/icon_buff_optimisation_gold.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/main/3dicons/limestone_workforce/icon_smiths.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/main/3dicons/limestone_workforce/icon_aldermen.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/main/3dicons/limestone_workforce/icon_waders.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/generic/icon_2d_arrow_down.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/generic/icon_2d_arrow_up.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/city_incident/icon_fighting_fire.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/city_incident/icon_fighting_riot.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/city_incident/icon_fighting_illness.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/fpp/icons/provinces/icon_romanization_48.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/tech_tree/icon_research_progress.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/generic/icon_2d_religion.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/generic/icon_2d_slot_mountain.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/tech_tree/economy/icon_tech_wood_beaver.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/tech_tree/economy/icon_tech_wood_honey.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/tech_tree/economy/icon_tech_wood_bird.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/religion/icon_2d_deity_mercury.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/fpp/icons/techs/warehouse_maintenance.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/items_specialist/unique/icon_3d_unique_male_005.png": {
           "type": "string"
         },
         "data/ui/fhd/base/icon_content/items_specialist/other_male/icon_3d_other_male_003.png": {
@@ -2613,16 +2658,82 @@
         "data/ui/fhd/base/icon_content/items_specialist/roman_male/icon_3d_roman_male_001.png": {
           "type": "string"
         },
+        "data/ui/fhd/base/icon_content/items_specialist/celtic_male/icon_3d_celtic_male_003.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/specialists/systemic/icon_farmer_106.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/specialists/icon_boris_franke.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/specialists/icon_captain_common.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/scenario/ggj_buff/icon_ggj_buff_sickness.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/influence/icon_buff_optimisation_gold.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/portraits/wetlands_resident02_mercators.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_workforce/icon_smiths.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_workforce/icon_aldermen.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/main/3dicons/limestone_workforce/icon_waders.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/generic/icon_2d_arrow_down.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/generic/icon_2d_arrow_up.png": {
+          "type": "string"
+        },
         "data/ui/fhd/base/icon_content/military/icon_built_camp.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/city_incident/icon_fighting_fire.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/city_incident/icon_fighting_riot.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/city_incident/icon_fighting_illness.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/fpp/icons/provinces/icon_romanization_48.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/tech_tree/icon_research_progress.png": {
           "type": "string"
         },
         "data/ui/fhd/base/icon_content/diplomacy/icon_2d_power_struggle.png": {
           "type": "string"
         },
+        "data/ui/fhd/base/icon_content/generic/icon_2d_religion.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/generic/icon_2d_slot_mountain.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/tech_tree/economy/icon_tech_wood_beaver.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/tech_tree/economy/icon_tech_wood_honey.png": {
+          "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/tech_tree/economy/icon_tech_wood_bird.png": {
+          "type": "string"
+        },
         "data/ui/fhd/base/icon_content/tech_tree/civic/icon_tech_warehouse_maintenance.png": {
           "type": "string"
         },
-        "data/ui/2kimages/portraits/wetlands_resident02_mercators.png": {
+        "data/ui/fhd/base/icon_content/religion/icon_2d_deity_mercury.png": {
           "type": "string"
         }
       },
@@ -2812,6 +2923,7 @@
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_charcoal.png",
         "data/ui/fhd/base/icon_content/infrastructure/icon_3d_silos.png",
         "data/ui/fhd/base/icon_content/tech_tree/icon_2d_irrigation_aqueduct.png",
+        "data/ui/2kimages/fpp/icons/techs/warehouse_maintenance.png",
         "data/ui/2kimages/fpp/icons/techs/charcoal_more.png",
         "data/ui/2kimages/fpp/icons/techs/wood_honey.png",
         "data/ui/2kimages/fpp/icons/techs/wood_beaver.png",
@@ -2836,32 +2948,9 @@
         "data/ui/2kimages/portraits/rival_06_concordia.png",
         "data/ui/2kimages/portraits/rival_07_neferneru.png",
         "data/ui/2kimages/fpp/icons/test/icon_3d_guest_placeholder.png",
+        "data/ui/fhd/base/icon_content/items_specialist/unique/icon_3d_unique_male_005.png",
         "data/ui/fhd/base/icon_content/campaign/icon_campaign_elephant.png",
         "data/ui/fhd/base/icon_content/items_specialist/campaign/icon_3d_campaign_elephant_specialist.png",
-        "data/ui/fhd/base/icon_content/items_specialist/celtic_male/icon_3d_celtic_male_003.png",
-        "data/ui/2kimages/main/3dicons/specialists/systemic/icon_farmer_106.png",
-        "data/ui/2kimages/main/3dicons/specialists/icon_boris_franke.png",
-        "data/ui/2kimages/main/3dicons/specialists/icon_captain_common.png",
-        "data/ui/2kimages/main/3dicons/scenario/ggj_buff/icon_ggj_buff_sickness.png",
-        "data/ui/2kimages/main/3dicons/influence/icon_buff_optimisation_gold.png",
-        "data/ui/2kimages/main/3dicons/limestone_workforce/icon_smiths.png",
-        "data/ui/2kimages/main/3dicons/limestone_workforce/icon_aldermen.png",
-        "data/ui/2kimages/main/3dicons/limestone_workforce/icon_waders.png",
-        "data/ui/fhd/base/icon_content/generic/icon_2d_arrow_down.png",
-        "data/ui/fhd/base/icon_content/generic/icon_2d_arrow_up.png",
-        "data/ui/fhd/base/icon_content/city_incident/icon_fighting_fire.png",
-        "data/ui/fhd/base/icon_content/city_incident/icon_fighting_riot.png",
-        "data/ui/fhd/base/icon_content/city_incident/icon_fighting_illness.png",
-        "data/ui/2kimages/fpp/icons/provinces/icon_romanization_48.png",
-        "data/ui/fhd/base/icon_content/tech_tree/icon_research_progress.png",
-        "data/ui/fhd/base/icon_content/generic/icon_2d_religion.png",
-        "data/ui/fhd/base/icon_content/generic/icon_2d_slot_mountain.png",
-        "data/ui/fhd/base/icon_content/tech_tree/economy/icon_tech_wood_beaver.png",
-        "data/ui/fhd/base/icon_content/tech_tree/economy/icon_tech_wood_honey.png",
-        "data/ui/fhd/base/icon_content/tech_tree/economy/icon_tech_wood_bird.png",
-        "data/ui/fhd/base/icon_content/religion/icon_2d_deity_mercury.png",
-        "data/ui/2kimages/fpp/icons/techs/warehouse_maintenance.png",
-        "data/ui/fhd/base/icon_content/items_specialist/unique/icon_3d_unique_male_005.png",
         "data/ui/fhd/base/icon_content/items_specialist/other_male/icon_3d_other_male_003.png",
         "data/ui/fhd/base/icon_content/items_specialist/other_female/icon_3d_other_female_002.png",
         "data/ui/fhd/base/icon_content/items_specialist/celtic_female/icon_3d_celtic_female_004.png",
@@ -2877,105 +2966,35 @@
         "data/ui/fhd/base/icon_content/items_specialist/roman_female/icon_3d_roman_female_006.png",
         "data/ui/fhd/base/icon_content/items_specialist/other_female/icon_3d_other_female_005.png",
         "data/ui/fhd/base/icon_content/items_specialist/roman_male/icon_3d_roman_male_001.png",
+        "data/ui/fhd/base/icon_content/items_specialist/celtic_male/icon_3d_celtic_male_003.png",
+        "data/ui/2kimages/main/3dicons/specialists/systemic/icon_farmer_106.png",
+        "data/ui/2kimages/main/3dicons/specialists/icon_boris_franke.png",
+        "data/ui/2kimages/main/3dicons/specialists/icon_captain_common.png",
+        "data/ui/2kimages/main/3dicons/scenario/ggj_buff/icon_ggj_buff_sickness.png",
+        "data/ui/2kimages/main/3dicons/influence/icon_buff_optimisation_gold.png",
+        "data/ui/2kimages/portraits/wetlands_resident02_mercators.png",
+        "data/ui/2kimages/main/3dicons/limestone_workforce/icon_smiths.png",
+        "data/ui/2kimages/main/3dicons/limestone_workforce/icon_aldermen.png",
+        "data/ui/2kimages/main/3dicons/limestone_workforce/icon_waders.png",
+        "data/ui/fhd/base/icon_content/generic/icon_2d_arrow_down.png",
+        "data/ui/fhd/base/icon_content/generic/icon_2d_arrow_up.png",
         "data/ui/fhd/base/icon_content/military/icon_built_camp.png",
+        "data/ui/fhd/base/icon_content/city_incident/icon_fighting_fire.png",
+        "data/ui/fhd/base/icon_content/city_incident/icon_fighting_riot.png",
+        "data/ui/fhd/base/icon_content/city_incident/icon_fighting_illness.png",
+        "data/ui/2kimages/fpp/icons/provinces/icon_romanization_48.png",
+        "data/ui/fhd/base/icon_content/tech_tree/icon_research_progress.png",
         "data/ui/fhd/base/icon_content/diplomacy/icon_2d_power_struggle.png",
+        "data/ui/fhd/base/icon_content/generic/icon_2d_religion.png",
+        "data/ui/fhd/base/icon_content/generic/icon_2d_slot_mountain.png",
+        "data/ui/fhd/base/icon_content/tech_tree/economy/icon_tech_wood_beaver.png",
+        "data/ui/fhd/base/icon_content/tech_tree/economy/icon_tech_wood_honey.png",
+        "data/ui/fhd/base/icon_content/tech_tree/economy/icon_tech_wood_bird.png",
         "data/ui/fhd/base/icon_content/tech_tree/civic/icon_tech_warehouse_maintenance.png",
-        "data/ui/2kimages/portraits/wetlands_resident02_mercators.png"
+        "data/ui/fhd/base/icon_content/religion/icon_2d_deity_mercury.png"
       ],
       "title": "Icon",
       "description": "Icon data URLs indexed by icon identifier"
-    },
-    "items": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "guid": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string"
-          },
-          "iconPath": {
-            "type": "string"
-          },
-          "locaText": {
-            "type": "object",
-            "properties": {
-              "english": {
-                "type": "string"
-              },
-              "french": {
-                "type": "string"
-              },
-              "polish": {
-                "type": "string"
-              },
-              "spanish": {
-                "type": "string"
-              },
-              "italian": {
-                "type": "string"
-              },
-              "german": {
-                "type": "string"
-              },
-              "brazilian": {
-                "type": "string"
-              },
-              "russian": {
-                "type": "string"
-              },
-              "simplified_chinese": {
-                "type": "string"
-              },
-              "traditional_chinese": {
-                "type": "string"
-              },
-              "japanese": {
-                "type": "string"
-              },
-              "korean": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "english"
-            ]
-          },
-          "buffs": {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            }
-          },
-          "targets": {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            }
-          },
-          "effectScope": {
-            "type": "string"
-          },
-          "excludeEffectSourceGUID": {
-            "type": "boolean"
-          },
-          "rarity": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "guid",
-          "name",
-          "buffs",
-          "effectScope",
-          "excludeEffectSourceGUID",
-          "rarity"
-        ]
-      },
-      "title": "Item",
-      "description": "Items equipable in Villa with relevant buffs."
     }
   },
   "required": [
@@ -2998,35 +3017,13 @@
     "effects",
     "techs",
     "patrons",
-    "effects",
-    "icons",
-    "effects",
-    "icons",
-    "buildingBuffs",
-    "effects",
-    "techs",
-    "patrons",
     "items",
     "icons",
-    "buildingBuffs",
-    "effects",
-    "techs",
-    "patrons",
-    "items",
+    "factories",
+    "modules",
     "icons",
-    "buildingBuffs",
-    "effects",
-    "techs",
-    "patrons",
-    "items",
-    "icons",
-    "buildingBuffs",
-    "effects",
-    "techs",
-    "patrons",
-    "items",
-    "icons",
-    "buildingBuffs",
+    "factories",
+    "modules",
     "buildingBuffs",
     "effects",
     "techs",

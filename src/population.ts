@@ -333,6 +333,8 @@ export class PopulationGroup extends NamedElement{
     public region: Region;
     public populationLevels: PopulationLevel[];
 
+    public visible: KnockoutComputed<boolean>;
+
     constructor(config: PopulationGroupConfig, assetsMap: AssetsMap, literalsMap: LiteralsMap){
         super(config);
         this.guid = config.guid;
@@ -345,6 +347,16 @@ export class PopulationGroup extends NamedElement{
             }
             return level;
         });
+
+        this.visible = ko.pureComputed(() => {
+            if (!this.available())
+                return false;
+
+            if (this.region.id != "Meta" && this.region.id != this.populationLevels[0].island.region.id)
+                return false;
+
+            return true;
+        })
     }
 }
 
@@ -427,9 +439,8 @@ export class WorkforceDemand {
      * @param factory - The factory that requires this workforce
      * @param workforce - The workforce type
      * @param amount - Amount of workforce per building
-     * @param percentBoost - Percentage boost for the workforce
      */
-    constructor(factory: any, workforce: any, amount: number, _percentBoost: number) {
+    constructor(factory: any, workforce: any, amount: number) {
         // Validate required parameters
         if (!factory) {
             throw new Error('WorkforceDemand factory is required');

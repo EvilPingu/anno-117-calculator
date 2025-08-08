@@ -180,6 +180,9 @@ export interface FactoryConfig {
     product: number;
     amount: number;
   }[];
+  functionalEffects?: number[];
+  aqueductProductivityBuff?: number;
+  additionalModule?: number;
 }
 
 // Module configuration interface
@@ -196,6 +199,7 @@ export interface ModuleConfig {
   needsFuelInput: boolean;
   cycleTime: number;
   modulesLimit: number;
+  functionalEffects: number[];
 }
 
 // BuildingBuff configuration interface
@@ -261,12 +265,6 @@ export interface PatronsConfig {
   wonder?: number;
 }
 
-// Icon configuration interface
-export interface IconConfig {
-  [iconPath: string]: string;
-
-}
-
 // Item configuration interface
 export interface ItemConfig {
   guid: number;
@@ -278,6 +276,12 @@ export interface ItemConfig {
   effectScope: string;
   excludeEffectSourceGUID: boolean;
   rarity: string;
+}
+
+// Icon configuration interface
+export interface IconConfig {
+  [iconPath: string]: string;
+
 }
 
 // Root configuration interface combining all parameter types
@@ -302,6 +306,6 @@ export interface ParamsConfig {
   effects: EffectConfig[];
   techs: TechConfig[];
   patrons: PatronsConfig[];
-  icons: IconConfig;
   items: ItemConfig[];
+  icons: IconConfig;
 }

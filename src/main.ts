@@ -11,6 +11,8 @@ import { AssetsMap, LiteralsMap } from './types';
 import { DarkMode, ResidencePresenter } from './views';
 import { ConstantsConfig, NeedConsumptionConfig } from './types.config';
 import { Island, Region, Session } from './world';
+import { Effect } from './production';
+import { NPCTrader } from './trade';
 
 declare const $: any;
 declare const window: any;
@@ -352,10 +354,20 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
         selection.subscribe((val ) => localStorage.setItem(id, val.id as string));
     }
 
+    // Set up global effects
+    for (let effect of (params.effects || [])) {
+        if (!effect.effectScope.endsWith("Meta"))
+            continue
+
+        const r = new Effect(effect, (window as any).view.assetsMap);
+        (window as any).view.assetsMap.set(r.guid, r);
+    }
+    
+
     // Set up regions
     (window as any).view.regions = [];
     for (let region of (params.regions || [])) {
-        const r = new (require('./world').Region)(region);
+        const r = new Region(region);
         (window as any).view.assetsMap.set(r.guid, r);
         (window as any).view.literalsMap.set(r.id, r);
         (window as any).view.regions.push(r);
@@ -364,7 +376,7 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
     // Set up sessions
     (window as any).view.sessions = [];
     for (let session of (params.sessions || [])) {
-        const s = new (require('./world').Session)(session, (window as any).view.assetsMap);
+        const s = new Session(session, params.effects || [], (window as any).view.assetsMap);
         (window as any).view.assetsMap.set(s.guid, s);
         (window as any).view.sessions.push(s);
     }
@@ -380,7 +392,7 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
     // Set up NPC traders
     (window as any).view.productsToTraders = new Map();
     for (let t of (params.traders || [])) {
-        const trader = new (require('./trade').NPCTrader)(t);
+        const trader = new NPCTrader(t);
 
         for (let r of t.goodsProduction) {
             const route = Object.assign({}, r, { trader: trader });

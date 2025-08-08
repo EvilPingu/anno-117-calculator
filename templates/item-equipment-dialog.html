@@ -2,50 +2,83 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 data-bind="text: $root.texts.itemsEquipped.name">Items equipped</h4>
+                <h4 data-bind="text: $root.texts.effect.name">Effect</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
             </div>
             <div class="modal-body">
                 <table class="table">
                     <thead style="text-align: center">
-                    <th></th>
-                    <th></th>
-                    <th data-bind="text: $root.texts.extraGoods.name">Extra Goods</th>
-                    <th data-bind="text: $root.texts.productionBuildings.name">Production Buildings</th>
-                    <th data-bind="text: $root.texts.all.name">All</th>
-                    </thead>
-                    <tbody data-bind="foreach: $root.selectedExtraGoodItems">
-                        <tr data-bind="visible: $data.visible">
-                            <td><img class="icon-sm" src="../icons/icon_marketplace_2d_light.png" data-bind="attr: { src: $data.icon ? $data.icon : null}"></td> <!-- item icon -->
+                    <tbody data-bind="foreach: $root.island().availableEffects">
+                        <tr>
+                            <td> 
+                                <div data-bind="if:$data.isStackable">
+                                    <div class="ui-fchain-item-boost">
+                                        <div href="#" data-toggle="tooltip">
+                                            <div class="input-group input-group-sm mb-3 spinner">
+                                                <input class="form-control" type="number" value="0" step="1" min="0" data-bind="value:  $data.scaling, attr: {id: $data.guid + '-scaling-input'}" />
+                                                <div class="input-group-append">
+                                                    <div data-bind="component: { name: 'number-input-increment', params: { obs: $data.scaling, id: $data.guid + '-scaling-input' }}"></div>
+                                                    <span class="input-group-text">x</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-bind="if: !$data.isStackable">
+                                    <div data-bind="component:{name:'icon-checkbox', params:{asset: $data, checked: $data.scaling}}"></div>
+                                </div> 
+                            </td>
                             <td data-bind="text: $data.name"></td> <!-- item name -->
                             <td>
-                                <span data-bind="foreach: $data.extraGoods" class="inline-list-centered">
-                                    <!-- icon extra goods -->
-                                    <span style="flex: 100 1 auto;"></span>
-
-                                    <span style="flex: auto;" data-bind="visible: $data.visible()">
-                                        <img src="../icons/icon_marketplace_2d_light.png" width="25" height="25" data-bind="attr: { src: $data.icon ? $data.icon  : null, alt: $data.name}" />
-                                    </span>
-
-                                    <span style="flex: 100 1 auto;"></span>
-                                </span>
+                                <div class="inline-list-centered" data-bind="foreach: $data.targets">
+                                    <img class="mr-2 icon-sm" data-bind="attr: { src: $data.icon ? $data.icon : null, alt: $data.name}, title: $data.getRegionExtendedName()">
+                                </div>
                             </td>
                             <td>
-                                <span data-bind="foreach: $data.availableEquipments" class="inline-list-centered">
+                                <div class="inline-list" data-bind="foreach: $data.buffs">
+                                    <!-- productivity -->
+                                    <div data-bind="if: $data.productivityUpgrade != 0">
+                                        <span data-bind="text: formatNumber($data.productivityUpgrade, true) + ' %'"></span>
+                                    </div>
+                                    <!-- fuel upgrade-->
+                                    <div data-bind="if: $data.fuelDurationPercent != 0">
+                                        <span data-bind="text: formatNumber($data.fuelDurationPercent, true) + ' % s per coal'"></span>
+                                    </div>
+                                    <!-- extra goods -->
+                                    <span data-bind="if: $data.additionalOutputs && $data.additionalOutputs.length">
+                                        
+                                        <span class="inline-list-centered">
+                                            <img class="icon-sm icon-light mr-2" src="../icons/icon_add_goods_socket_white.png" />
+                                            <!-- ko foreach: $data.additionalOutputs -->
+                                            <span style="flex: 100 1 auto;"></span>
 
-                                    <div style="flex-basis: fit-content;" data-bind="component: { name: 'icon-checkbox', params: {asset: $data.target, checked: $data.checked, id: $data.target.guid + '-' + $data.parent.guid + '-equipped', title: $data.target.getRegionExtendedName.bind($data.target)}}"></div>
+                                            <span style="flex: auto;" daba-bind="visible: $data.product.visible()">
+                                                <img class="icon-sm" data-bind="attr: { src: $data.product.icon ? $data.product.icon  : null, alt: $data.product.name }" />
+                                            </span>
 
-                                </span>
-                            </td>
-
-                            <td>
-                                <span>
-                                    <span class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" data-bind="checked: $data.checked, attr: { id: $data.guid + '-check-all' }">
-                                        <label class="custom-control-label" data-bind="attr: { for: $data.guid + '-check-all' }" src-only style="vertical-align: top;"> </label>
+                                            <span style="flex: 100 1 auto;"></span>
+                                            <!-- /ko -->
+                                        </span>
                                     </span>
-                                </span>
+                                    <!-- input replacements -->
+                                    <div data-bind="if: $data.replaceInputs">
+                                        <div data-bind="foreach: $data.replaceInputs">
+                                            <replacement params="{old: $data.oldInput, new: $data.newInput}"></replacement>
+                                        </div>
+                                    </div>
+                                    <!-- workforce maintenance -->
+                                    <div data-bind="if: $data.workforceMaintenanceFactorUpgrade != 0">
+                                        <span class="inline-list-centered">
+                                            <span data-bind="text: formatNumber($data.workforceMaintenanceFactorUpgrade, true) + ' %'"></span>
+                                            <img class="icon-sm icon-light" data-bind="attr: { src: $root.island().workforce[0].icon ? $root.island().workforce[0].icon  : null, alt: $root.island().workforce[0].name }" />
+                                        </span>
+                                    </div>
+                                    <!-- workforce replacement -->
+                                    <div data-bind="if: $data.replaceWorkforce">
+                                        <replacement params="{old: $data.replaceWorkforce.oldWorkforce, new: $data.replaceWorkforce.newWorkforce}"></replacement>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                     </tbody>

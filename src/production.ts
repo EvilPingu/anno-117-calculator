@@ -395,11 +395,15 @@ export class Patron extends NamedElement {
  * Manages effect-specific buffs and targeting
  */
 export class Effect extends NamedElement {
+
     public guid: number;
+    public buffGuids: number[];
     public buffs: Buff[];
-    public targets?: Constructible[];
+    public targets: Constructible[];
+    public targetGuids?: number[];
     public effectScope: string;
     public excludeEffectSourceGUID: boolean;
+    public isStackable: boolean;
 
     public scaling: KnockoutObservable<number>;
 
@@ -425,28 +429,44 @@ export class Effect extends NamedElement {
         this.guid = config.guid;
         this.effectScope = config.effectScope;
         this.excludeEffectSourceGUID = config.excludeEffectSourceGUID;
+        this.buffGuids = config.buffs;
+        this.buffs = []; // only for displaying
+        this.targets = [];
+        if(config.targets)
+            this.targetGuids = config.targets;
 
         this.scaling = ko.observable(0);
-        
+        this.isStackable = false;
+ 
+    }
+
+    // for session and global buffs this method is called mutliple times on the same object
+    applyBuffs(assetsMap: AssetsMap) {
+        if(this.targetGuids == null)
+            return;
+
         // Look up buffs
-        this.buffs = config.buffs.map(buffId => {
-            const buff = _assetsMap.get(buffId);
+        const buffs = this.buffGuids.map(buffId => {
+            const buff = assetsMap.get(buffId);
             if (!buff) {
                 throw new Error(`Buff with GUID ${buffId} not found in assetsMap`);
             }
+            if (buff.isStackable)
+                this.isStackable = true;
             return buff as Buff;
         });
+        if (this.buffs.length == 0)
+            this.buffs = buffs;
         
         // Look up targets (Residences or Consumers/Constructibles)
-        if (config.targets) {
-            this.targets = config.targets.map(targetId => {
-                const target = _assetsMap.get(targetId);
-                if (!target) {
-                    throw new Error(`Target with GUID ${targetId} not found in assetsMap`);
-                }
-                return target as Constructible;
-            });
-        }
+
+        const targets = this.targetGuids.map(targetId => assetsMap.get(targetId) ).filter(t => isConstructible(t));
+        if (this.targets.length == 0)
+            this.targets = targets;
+
+        for (const target of targets)
+            for (const buff of buffs)
+                new AppliedBuff(this, buff, target, assetsMap) // constructor stores created object in target
     }
 }
 
@@ -502,8 +522,9 @@ export class Item extends NamedElement {
                 throw new Error(`Buff with GUID ${b} not found in assetsMap for item ${this.name()} ${this.guid}`);
             }
 
-            for (const f of this.factories)
-                this.equipments.push(new AppliedBuff(this, buff, f, _assetsMap));
+            for (const f of this.factories){
+                this.equipments.push(new AppliedBuff(this, buff, f, _assetsMap, false));
+            }
 
         }
         this.availableEquipments = ko.pureComputed(() => this.equipments.filter((e: AppliedBuff) => e.available()));
@@ -545,7 +566,64 @@ export class Item extends NamedElement {
 }
 
 
+/**
+ * Represents an item equipped to a specific factory
+ * Manages the relationship between items and factories
+ */
+export class AqueductBuff {
+    public target: Constructible;
+    public buff: Buff;
+    public productivityUpgrade: KnockoutObservable<number>;
+    public available: KnockoutComputed<boolean>;
+    public visible: KnockoutComputed<boolean>;
+    public scaling: KnockoutObservable<number>;
 
+
+    /**
+     * Creates a new EquippedItem instance
+     * @param config - Configuration object for the equipped item
+     * @param assetsMap - Map of all available assets
+     */
+    constructor(buff: Buff, factory: Constructible, _assetsMap: AssetsMap) {
+        // Validate required parameters
+        if (!buff) {
+            throw new Error('AppliedBuff buff is required');
+        }
+        if (!factory) {
+            throw new Error('AppliedBuff factory is required');
+        }
+        
+        // Explicit assignments
+        this.target = factory;
+        this.buff = buff;
+        this.scaling = ko.observable(0); // indicates wheter item/effect is not applied (0), applied (1), multiple times applied (> 1); child class updates this value
+
+
+        this.productivityUpgrade = ko.pureComputed(() => {
+            return this.scaling() * this.buff.productivityUpgrade;
+        });
+
+ 
+        this.available = ko.pureComputed(() => {
+            return this.target.available() && this.buff.available();
+        });
+
+        this.visible = ko.pureComputed(() => {
+            if (!this.available())
+                return false;
+
+            if (!view.island || !view.island())
+                return true;
+
+            var region = view.island().region;
+            if (!region)
+                return true;
+
+            return this.target.island.region === region;
+        });
+
+    }
+}
 
 
 /**
@@ -572,8 +650,9 @@ export class AppliedBuff {
      * Creates a new EquippedItem instance
      * @param config - Configuration object for the equipped item
      * @param assetsMap - Map of all available assets
+     * @param useParentScaling - use the sacling attribute from parent instead of creating a new observable
      */
-    constructor(parent: Item|Effect, buff: Buff, factory: Constructible, _assetsMap: AssetsMap) {
+    constructor(parent: Item|Effect, buff: Buff, factory: Constructible, _assetsMap: AssetsMap, useParentScaling=true) {
         // Validate required parameters
         if (!parent) {
             throw new Error('AppliedBuff parent is required');
@@ -589,7 +668,14 @@ export class AppliedBuff {
         this.parent = parent;
         this.target = factory;
         this.buff = buff;
-        this.scaling = ko.observable(0); // indicates wheter item/effect is not applied (0), applied (1), multiple times applied (> 1); child class updates this value
+        if(useParentScaling){
+            if (!(this.parent instanceof Effect)){
+                throw new Error(`useParentScaling was set but parent with GUID ${this.parent.guid} was not an Effect`);
+            }
+            this.scaling = this.parent.scaling;
+        }
+        else
+            this.scaling = ko.observable(0); // indicates wheter item/effect is not applied (0), applied (1), multiple times applied (> 1); child class updates this value
 
         if (this.buff.replaceWorkforce && this.target instanceof Consumer && this.target.connectedWorkforce &&
             this.target.connectedWorkforce.guid == this.buff.replaceWorkforce.oldWorkforce.guid) // better compare guids, if buff is global and uses a different instance of the same workforce

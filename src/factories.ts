@@ -1,6 +1,6 @@
-import { createIntInput, NamedElement, ACCURACY, EPSILON, ko, BuildingsCalc } from './util';
+import { NamedElement, ACCURACY, EPSILON, ko, BuildingsCalc } from './util';
 import { Workforce, WorkforceDemand } from './population';
-import { Demand, AppliedBuff, ExtraGoodProductionList, Product } from './production';
+import { Demand, AppliedBuff, ExtraGoodProductionList, Product, AqueductBuff, Item } from './production';
 import { TradeList } from './trade';
 import { 
     ConsumerConfig, 
@@ -28,6 +28,7 @@ export class Consumer extends NamedElement{
     public island: Island;
 
     public items: AppliedBuff[];
+    public buffs: AppliedBuff[]; // from items and other effects, for calculation
     public inputDemandsMap: Map<Product, Demand>;
     public inputDemands: KnockoutObservableArray<Demand>;
     public buildingInputDemands: KnockoutObservableArray<Demand>;
@@ -46,8 +47,8 @@ export class Consumer extends NamedElement{
     public workforceDemandSubscription?: KnockoutComputed<void>;
     public fuelSubscription?: KnockoutComputed<void>;
     public product!: Product | null;
+    public aqueductBuff?: AqueductBuff;
 
-    public percentBoost?: KnockoutObservable<number>; // Added for dynamic assignment
 
     /**
      * Creates a new Consumer instance
@@ -80,6 +81,7 @@ export class Consumer extends NamedElement{
             this.associatedRegions.push(literalsMap.get(r) as Region);
  
         this.items = [];
+        this.buffs = [];
         this.inputDemandsMap = new Map();
         this.inputDemands = ko.observableArray([]);
         this.buildingInputDemands = ko.observableArray([]);
@@ -135,6 +137,13 @@ export class Consumer extends NamedElement{
         }
 
 
+        if (config.aqueductProductivityBuff != null){
+            const buff = assetsMap.get(config.aqueductProductivityBuff);
+            if (!buff) {
+                throw new Error(`AqueductProductivityBuff with GUID ${config.aqueductProductivityBuff} not found in assetsMap`);
+            }
+            this.aqueductBuff = new AqueductBuff(buff, this, assetsMap);     
+        }
 
         this.availableItems = ko.pureComputed(() => this.items.filter(i => i.available()));
     }
@@ -146,7 +155,9 @@ export class Consumer extends NamedElement{
      */
     initDemands(assetsMap: AssetsMap): void {
         this.boostSubscription = ko.computed(() => {
-            const percentBuff = this.items.reduce((a:number, b: AppliedBuff)=> a+b.productivityUpgrade() , 0);
+            var percentBuff = this.buffs.reduce((a:number, b: AppliedBuff)=> a+b.productivityUpgrade() , 0);
+            if (this.aqueductBuff != null)
+                percentBuff += this.aqueductBuff.productivityUpgrade();
             const factor = Math.max(ACCURACY, percentBuff / 100 + 1);
             this.boost(factor);
         });
@@ -162,10 +173,10 @@ export class Consumer extends NamedElement{
             for (let product of this.defaultInputs.keys())
                 inputs.set(product, this.defaultInputs.get(product) as number);
 
-            const items = this.items.filter(item => item.replacements && item.scaling()).sort((a, b) => a.buff.guid as number - (b.buff.guid as number));
+            const buffs = this.buffs.filter(item => item.replacements && item.scaling()).sort((a, b) => a.buff.guid as number - (b.buff.guid as number));
             
-            for (const item of items) {
-                for (const replacement of item.replacements || []) {
+            for (const buff of buffs) {
+                for (const replacement of buff.replacements || []) {
                     if (inputs.has(replacement[0])) {
                         const factor = inputs.get(replacement[0]) as number;
                         inputs.delete(replacement[0]);
@@ -216,7 +227,7 @@ export class Consumer extends NamedElement{
 
             this.buildingInputDemands.push(new Demand(product, this, assetsMap));
             this.fuelSubscription = ko.computed(() => {
-                const percentBuff = this.items.reduce((a:number, b: AppliedBuff)=> a+b.fuelDurationPercent() , 0);
+                const percentBuff = this.buffs.reduce((a:number, b: AppliedBuff)=> a+b.fuelDurationPercent() , 0);
                 const factor = percentBuff / 100 + 1;
 
                 let amount = this.buildings.utilized() * this.cycleTime / (factor * cycleTime) / this.boost();
@@ -240,20 +251,19 @@ export class Consumer extends NamedElement{
         this.workforceDemand = new WorkforceDemand(
             this, 
             this.connectedWorkforce,
-            this.maintenances.get(this.connectedWorkforce) as number,
-            100
+            this.maintenances.get(this.connectedWorkforce) as number
         );
 
         this.workforceDemandSubscription = ko.computed(() => {
             // for workforce replacement, the last applied item matters
-            const items = this.items.filter(item => item.replacingWorkforce && (item.replacingWorkforce as any) != this.connectedWorkforce && item.scaling()).sort((a, b) => b.parent.guid as number - (a.parent.guid as number));
-            if (items.length && this.workforceDemand) {
-                this.workforceDemand.updateWorkforce(items[0].replacingWorkforce);
+            const buffs = this.buffs.filter(item => item.replacingWorkforce && (item.replacingWorkforce as any) != this.connectedWorkforce && item.scaling()).sort((a, b) => b.parent.guid as number - (a.parent.guid as number));
+            if (buffs.length && this.workforceDemand) {
+                this.workforceDemand.updateWorkforce(buffs[0].replacingWorkforce);
             } else if (this.workforceDemand) {
                 this.workforceDemand.updateWorkforce(null);
             }
 
-            const percentBuff = this.items.reduce((a:number, b: AppliedBuff)=> a+b.workforceMaintenanceFactorUpgrade() , 0);
+            const percentBuff = this.buffs.reduce((a:number, b: AppliedBuff)=> a+b.workforceMaintenanceFactorUpgrade() , 0);
             const factor = Math.max(0, percentBuff / 100 + 1);
             this.workforceDemand.boost(factor);
         });
@@ -287,7 +297,10 @@ export class Consumer extends NamedElement{
     }
 
     addBuff(appliedBuff: AppliedBuff){
-        this.items.push(appliedBuff)
+        this.buffs.push(appliedBuff)
+
+        if(appliedBuff.parent instanceof Item)
+            this.items.push(appliedBuff);
     }
 }
 
@@ -309,7 +322,7 @@ export class Module extends Consumer {
      * @param island - The island this module belongs to
      */
     constructor(config: any, assetsMap: AssetsMap, literalsMap: LiteralsMap, island: Island) {
-        super(config, assetsMap, literalsMap, island);
+        super({...config, maintenances: []}, assetsMap, literalsMap, island);
         
         // Module-specific initialization
         this.additionalOutputCycle = config.additionalOutputCycle || 0;
@@ -419,6 +432,7 @@ export class Factory extends Consumer {
     public visible: KnockoutComputed<boolean>;
     public buildingSubscription?: KnockoutComputed<void>;
 
+
     /**
      * Creates a new Factory instance
      * @param config - Configuration object for the factory
@@ -494,11 +508,7 @@ export class Factory extends Consumer {
 
         this.inputAmountByExtraGoods = ko.observable(0);
 
-        this.percentBoost = createIntInput(100, 1);
-        this.percentBoost.subscribe(() => {
-            if (this.percentBoost)
-                this.boost(this.percentBoost() / 100);
-        });
+
 
         /*
         if (config.module) {
@@ -557,41 +567,7 @@ export class Factory extends Consumer {
             }
         }
 
-        if (config.palaceBuff) {
-            const palaceBuff = assetsMap.get(parseInt(config.palaceBuff));
-            if (!palaceBuff) {
-                throw new Error(`Palace buff with GUID ${config.palaceBuff} not found in assetsMap`);
-            }
-            this.palaceBuff = palaceBuff;
-            this.palaceBuffChecked = ko.observable(false);
-            if (this.palaceBuff && this.palaceBuffChecked) {
-                this.palaceBuff.lockDLCIfSet(this.palaceBuffChecked);
 
-                this.palaceBuffExtraGoods = ko.pureComputed(() => {
-                    if (!this.palaceBuffChecked || !this.palaceBuffChecked())
-                        return 0;
-                    return this.inputAmount() / this.palaceBuff!.additionalOutputCycle;
-                });
-            }
-        }
-
-        if (config.setBuff) {
-            const setBuff = assetsMap.get(parseInt(config.setBuff));
-            if (!setBuff) {
-                throw new Error(`Set buff with GUID ${config.setBuff} not found in assetsMap`);
-            }
-            this.setBuff = setBuff;
-            this.setBuffChecked = ko.observable(false);
-            if (this.setBuff && this.setBuffChecked) {
-                this.setBuff.lockDLCIfSet(this.setBuffChecked);
-
-                this.setBuffExtraGoods = ko.pureComputed(() => {
-                    if (!this.setBuffChecked || !this.setBuffChecked())
-                        return 0;
-                    return this.inputAmount() / this.setBuff!.additionalOutputCycle;
-                });
-            }
-        }
 
         this.extraGoodFactor = ko.computed(() => {
             let factor = 1;

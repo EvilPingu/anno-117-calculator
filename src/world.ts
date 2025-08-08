@@ -7,13 +7,14 @@ import {
     LiteralsMap,
 } from './types';
 import { 
+    EffectConfig,
     RegionConfig, 
     SessionConfig, 
 
 } from './types.config';
 
 import { Workforce, ResidenceBuilding, PopulationLevel, PopulationGroup } from './population';
-import { Product, MetaProduct, Item, ProductCategory, AppliedBuff, Buff } from './production';
+import { Product, MetaProduct, Item, ProductCategory, AppliedBuff, Buff, Effect } from './production';
 import { PublicConsumerBuilding, Module, Factory, Consumer } from './factories';
 import { ResidenceEffectView } from './views';
 import { Need, NeedCategory, RecipeList, ResidenceEffect } from './consumption';
@@ -171,8 +172,9 @@ export class Session extends NamedElement {
     public region: Region;
     public islands: KnockoutObservableArray<Island>;
     public workforce: Workforce[] = [];
+    public effects: Effect[] = [];
     
-    constructor(config: SessionConfig, assetsMap: AssetsMap) {
+    constructor(config: SessionConfig, effectsConfig: EffectConfig[], assetsMap: AssetsMap) {
         // Validate config before calling super
         if (!config) {
             throw new Error('Session config is required');
@@ -195,6 +197,8 @@ export class Session extends NamedElement {
         }
         this.region = region as Region;
         this.islands = ko.observableArray([]);
+
+        this.effects = effectsConfig.filter(e => e.effectScope.endsWith("Session")).map(e => new Effect(e, assetsMap))
     }
     
         /**
@@ -486,6 +490,9 @@ export class Island {
     public recipeLists: RecipeList[];
     public workforce: Workforce[];
 
+    public allEffects: Effect[];
+    public availableEffects: KnockoutObservableArray<Effect>;
+
     public assetsMap: AssetsMap;
     public literalsMap: LiteralsMap;
     public products: Product[];
@@ -544,6 +551,9 @@ export class Island {
         var assetsMap = new Map() as AssetsMap;
         for (var key of view.assetsMap.keys())
             assetsMap.set(key, view.assetsMap.get(key));
+
+        for (var effect of this.session.effects)
+            assetsMap.set(effect.guid, effect);
 
         var literalsMap = new Map() as LiteralsMap;
         for (var key of view.literalsMap.keys())
@@ -735,13 +745,30 @@ export class Island {
             this.consumers.push(f);
             this.factories.push(f);
 
+            if (f.aqueductBuff){
+                persistFloat(f.aqueductBuff, "scaling", `${f.guid}.aqueductBuff.checked`)
+            }
             persistBool(f.extraGoodProductionList, "checked", `${f.guid}.extraGoodProductionList.checked`);
         }
 
-
-
         if (isNew)
             setDefaultFixedFactories(assetsMap);
+
+
+        this.allEffects = [];
+        // Set up island effects
+        for (let effect of (params.effects || [])) {
+            if (!assetsMap.has(effect.guid)){              
+            
+                const e = new Effect(effect, assetsMap);
+                assetsMap.set(e.guid, e);
+            }
+            const e = assetsMap.get(effect.guid) as Effect;
+            e.applyBuffs(assetsMap);
+            this.allEffects.push(e);
+        }
+        this.availableEffects = ko.pureComputed(() => this.allEffects.filter(e => e.available()));
+
 
         for (let item of (params.items || [])) {
             let i = new Item(item, assetsMap, this.region);
@@ -790,8 +817,7 @@ export class Island {
         }
 
         for (let group of params.populationGroups) {
-            if (this.region.id != "Meta" && this.region.id != group.region)
-                continue;
+            
 
             let g = new PopulationGroup(group, assetsMap, literalsMap);
             assetsMap.set(g.guid, g);

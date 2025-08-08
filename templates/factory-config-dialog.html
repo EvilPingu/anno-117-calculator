@@ -15,6 +15,12 @@
                             <td>
                                 <div data-bind="component: { name: 'constructed-buildings-input', params: $data}"></div>
 
+                                 <!-- aqueduct buff -->
+                                <div data-bind="with: $data.aqueductBuff" style="float: right;">
+                                    <div class="inline-list">
+                                        <div data-bind="component: {name: 'icon-checkbox', params: {asset: $data.buff, checked: $data.scaling, id: $data.target.guid + '-aqueduct-buff'}}"></div>
+                                    </div>
+                                </div>
                             </td>
                             <td>
                                 <div data-bind="text: formatNumber(100 * $data.boost()) + '%'"></div>
@@ -129,8 +135,8 @@
                                             <!-- workforce maintenance -->
                                             <div data-bind="if: $data.buff.workforceMaintenanceFactorUpgrade != 0">
                                                 <span class="inline-list-centered">
-                                                <span data-bind="text: formatNumber($data.buff.workforceMaintenanceFactorUpgrade, true) + ' %'"></span>
-                                                <img class="icon-sm icon-light" data-bind="attr: { src: $data.target.workforceDemand.workforce().icon ? $data.target.workforceDemand.workforce().icon  : null, alt: $data.target.workforceDemand.workforce().name }" />
+                                                    <span data-bind="text: formatNumber($data.buff.workforceMaintenanceFactorUpgrade, true) + ' %'"></span>
+                                                    <img class="icon-sm icon-light" data-bind="attr: { src: $data.target.workforceDemand.workforce().icon ? $data.target.workforceDemand.workforce().icon  : null, alt: $data.target.workforceDemand.workforce().name }" />
                                                 </span>
                                             </div>
                                             <!-- workforce replacement -->
