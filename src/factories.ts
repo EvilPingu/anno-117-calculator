@@ -15,40 +15,59 @@ import { FactoryConfig, ModuleConfig } from './types.config';
 /**
  * Base class for all consumers in the game
  * Represents buildings that consume goods and require workforce
+ * 
+ * CONSUMER vs FACTORY DISTINCTION:
+ * - Consumer: Base class for all buildings that consume resources (population buildings, public buildings, factories)
+ * - Factory: Extends Consumer, specifically produces goods that other consumers can use
+ * - PublicConsumerBuilding: Extends Consumer, provides services to population but doesn't produce goods
+ * - Module: Extends Consumer, provides buffs to factories they're attached to
  */
 export class Consumer extends NamedElement{
+    // === BASIC PROPERTIES ===
     public guid: number;
     public isFactory: boolean;
-    public needsFuelInput: boolean;
-    public defaultInputs: Map<Product, number>;
+    public island: Island;
     public associatedRegions: Region[];
 
+    // === PRODUCTION CONFIGURATION ===
+    public needsFuelInput: boolean;
+    public defaultInputs: Map<Product, number>;
+    public cycleTime: number;
     public maintenances: Map<Product|Workforce, number>;
     public connectedWorkforce?: Workforce;
-    public cycleTime: number;
-    public island: Island;
 
-    public items: AppliedBuff[];
-    public buffs: AppliedBuff[]; // from items and other effects, for calculation
+    // === BUFF SYSTEM ===
+    public items: AppliedBuff[];           // Applied item effects
+    public buffs: AppliedBuff[];           // All applied effects (items + other sources)
+    public aqueductBuff?: AqueductBuff;    // Special aqueduct productivity buff
+    public modules: Module[];              // Attached modules (for factories)
+
+    // === INPUT DEMAND SYSTEM ===
     public inputDemandsMap: Map<Product, Demand>;
     public inputDemands: KnockoutObservableArray<Demand>;
     public inputDemandFuel?: Demand;
     public workforceDemand!: WorkforceDemand;
-    public boost: KnockoutObservable<number>;
-    public boostSubscription!: KnockoutComputed<void>;
-    public editable: KnockoutObservable<boolean>;
-    public buildings: BuildingsCalc;
-    public useinputAmountByExistingBuildings: KnockoutObservable<boolean>;
-    public inputAmountByOutput: KnockoutObservable<number>;
-    public inputAmountByExistingBuildings: KnockoutComputed<number>;
-    public inputAmount: KnockoutComputed<number>;
-    public availableItems!: KnockoutComputed<AppliedBuff[]>;
-    public buildingsSubscription!: KnockoutComputed<void>;
-    public inputDemandsSubscription!: KnockoutComputed<void>;
-    public workforceDemandSubscription?: KnockoutComputed<void>;
-    public product!: Product | null;
-    public aqueductBuff?: AqueductBuff;
-    public modules: Module[];
+
+    // === AMOUNT CALCULATION ===
+    public boost: KnockoutObservable<number>;                    // Productivity multiplier from buffs
+    public inputAmountByOutput: KnockoutObservable<number>;      // Required input based on desired output
+    public inputAmountByExistingBuildings: KnockoutComputed<number>; // Required input based on constructed buildings
+    public inputAmount: KnockoutComputed<number>;                // Final calculated input amount
+    public useinputAmountByExistingBuildings: KnockoutObservable<boolean>; // Whether to use existing buildings for calculation
+
+    // === BUILDING MANAGEMENT ===
+    public buildings: BuildingsCalc;       // Building count calculations (constructed/required/utilized)
+    public editable: KnockoutObservable<boolean>; // Whether user can edit this consumer
+
+    // === REACTIVE SUBSCRIPTIONS ===
+    public boostSubscription!: KnockoutComputed<void>;           // Updates boost from buffs
+    public buildingsSubscription!: KnockoutComputed<void>;       // Updates building requirements
+    public inputDemandsSubscription!: KnockoutComputed<void>;    // Updates input demands based on replacements
+    public workforceDemandSubscription?: KnockoutComputed<void>; // Updates workforce demand from buffs
+
+    // === UI/DISPLAY ===
+    public availableItems!: KnockoutComputed<AppliedBuff[]>;     // Items available for this consumer
+    public product!: Product | null;                             // Primary product (for factories)
 
 
     /**
@@ -312,15 +331,20 @@ export class Consumer extends NamedElement{
 
 /**
  * Represents a module that can be attached to factories
+ * Modules provide buffs to their parent factory when activated
  */
 export class Module extends Consumer {
+    // === MODULE-SPECIFIC PROPERTIES ===
+    public factory: Factory;                               // Parent factory this module is attached to
+    public checked: KnockoutObservable<boolean>;           // Whether module is activated
+    public visible: KnockoutComputed<boolean>;             // Whether module is visible in UI
 
-    public factory: Factory;
-    public checked: KnockoutObservable<boolean>;
-    public visible: KnockoutComputed<boolean>;
-    public triggeredBuffsGuids: number[];
-    public triggeredBuffs: AppliedBuff[];
-    public constructedSubscription: KnockoutComputed<void>;
+    // === BUFF MANAGEMENT ===
+    public triggeredBuffsGuids: number[];                  // GUIDs of buffs this module provides
+    public triggeredBuffs: AppliedBuff[];                  // Actual buff instances applied to factory
+
+    // === REACTIVE SUBSCRIPTIONS ===
+    public constructedSubscription: KnockoutComputed<void>; // Updates constructed buildings based on factory
     
     /**
      * Creates a new Module instance
@@ -381,14 +405,18 @@ export class Module extends Consumer {
 }
 
 /**
- * Represents a public consumer building
+ * Represents a public consumer building (schools, hospitals, fire stations, etc.)
+ * These buildings provide services to population but don't produce goods for consumption chains
  */
 export class PublicConsumerBuilding extends Consumer {
-    public product: Product | null;
-    public fixedFactory: KnockoutObservable<Factory | null>;
-    public fixedFactorySubscription: KnockoutComputed<void>;
-    public goodConsumptionUpgrade?: Product; // Added for dynamic assignment
-    public recipeName?: KnockoutComputed<string>; // Added for dynamic assignment
+    // === PUBLIC BUILDING PROPERTIES ===
+    public product: Product | null;                              // Associated product/service (if any)
+    public fixedFactory: KnockoutObservable<Factory | null>;     // Factory this building is fixed to (for recipes)
+    public fixedFactorySubscription: KnockoutComputed<void>;     // Reactive binding to fixed factory
+
+    // === OPTIONAL RECIPE SYSTEM ===
+    public goodConsumptionUpgrade?: Product;                     // Product used for consumption upgrades
+    public recipeName?: KnockoutComputed<string>;                // Display name for recipe variants
 
     /**
      * Creates a new PublicConsumerBuilding instance
@@ -433,33 +461,49 @@ export class PublicConsumerBuilding extends Consumer {
 
 
 /**
- * Represents a factory that produces goods
- * Extends Consumer to provide factory-specific functionality
+ * Represents a factory that produces goods for consumption by other consumers
+ * Extends Consumer to provide production chain functionality
+ * 
+ * KEY DIFFERENCE FROM CONSUMER:
+ * - Consumer: Consumes resources (inputs) for internal use (population needs, public services)
+ * - Factory: Consumes resources (inputs) to PRODUCE goods (outputs) that feed other consumers
+ * - Factory outputs become inputs for other consumers in the production chain
  */
 export class Factory extends Consumer {
-    public isFactory: boolean;
+    // === FACTORY IDENTIFICATION ===
+    public isFactory: boolean;                              // Always true for Factory instances
 
+    // === PRODUCTION OUTPUTS ===
+    public outputs: Product[];                              // Products this factory produces
 
-    public outputs: Product[];
-    public demands: KnockoutObservableArray<Demand>;
-    public tradeList: TradeList;
-    public extraGoodProductionList: ExtraGoodProductionList;
-    public extraGoodProductionHistory: [number, Date][];
-    public extraGoodProductionAmount: KnockoutComputed<number>;
-    public totalDemands: KnockoutComputed<number>;
-    public externalProduction: KnockoutComputed<number>;
-    public inputAmountByExtraGoods: KnockoutObservable<number>;
-    public inputAmount: KnockoutComputed<number>;
-    public extraGoodFactor: KnockoutComputed<number>;
-    public outputAmount: KnockoutComputed<number>;
-    public substitutableOutputAmount: KnockoutComputed<number>;
-    public isHighlightedAsMissing: KnockoutComputed<boolean>;
-    public requiredInputAmountSubscription?: KnockoutComputed<void>;
-    public useInputAmountByExistingBuildingsSubscription?: KnockoutComputed<void>;
-    public overProduction: KnockoutComputed<number>;
-    public extraGoodsDisplayAmount?: KnockoutComputed<number>;
-    public visible: KnockoutComputed<boolean>;
-    public buildingSubscription?: KnockoutComputed<void>;
+    // === DEMAND MANAGEMENT ===
+    public demands: KnockoutObservableArray<Demand>;        // Other consumers demanding this factory's output
+    public totalDemands: KnockoutComputed<number>;          // Total demand from all consumers
+
+    // === EXTERNAL PRODUCTION SOURCES ===
+    public tradeList: TradeList;                            // Trade routes providing/consuming this product
+    public extraGoodProductionList: ExtraGoodProductionList; // Extra goods (items) providing additional output
+    public extraGoodProductionHistory: [number, Date][];    // History for cycle breaking in extra goods
+    public extraGoodProductionAmount: KnockoutComputed<number>; // Amount from extra goods
+    public externalProduction: KnockoutComputed<number>;    // Total from trade + extra goods
+
+    // === PRODUCTION CALCULATION ===
+    public inputAmountByExtraGoods: KnockoutObservable<number>; // Input required for extra goods
+    public inputAmount: KnockoutComputed<number>;            // Total input required (overrides Consumer)
+    public extraGoodFactor: KnockoutComputed<number>;        // Multiplier from extra goods affecting this factory
+    public outputAmount: KnockoutComputed<number>;           // Total output produced
+    public substitutableOutputAmount: KnockoutComputed<number>; // Output that can be substituted
+    public overProduction: KnockoutComputed<number>;         // Excess production over demand
+
+    // === UI/DISPLAY ===
+    public isHighlightedAsMissing: KnockoutComputed<boolean>; // Whether to highlight missing buildings
+    public extraGoodsDisplayAmount?: KnockoutComputed<number>; // Extra goods amount for display
+    public visible: KnockoutComputed<boolean>;               // Whether factory is visible in UI
+
+    // === REACTIVE SUBSCRIPTIONS ===
+    public requiredInputAmountSubscription?: KnockoutComputed<void>; // Updates input requirements
+    public useInputAmountByExistingBuildingsSubscription?: KnockoutComputed<void>; // Updates building usage mode
+    public buildingSubscription?: KnockoutComputed<void>;    // Additional building calculations
 
 
     /**

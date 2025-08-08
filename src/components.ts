@@ -541,6 +541,59 @@ interface Demand {
             </tbody>
          </table>`
 }); 
+
+/**
+ * Buff display component for showing effect buffs
+ * Displays various types of buffs including productivity, fuel upgrades, extra goods, replacements, etc.
+ * @param params - Component parameters
+ * @param params.buffs - Array of buff objects to display
+ */
+(ko as any).components.register('buff-display', {
+    viewModel: function (params: any) {
+        this.buffs = params.buffs;
+        this.texts = window.view.texts;
+    }, template:
+        `<div class="inline-list" data-bind="foreach: buffs">
+            <!-- productivity -->
+            <div data-bind="if: $data.productivityUpgrade != 0">
+                <span data-bind="text: formatNumber($data.productivityUpgrade, true) + ' %'"></span>
+            </div>
+            <!-- fuel upgrade-->
+            <div data-bind="if: $data.fuelDurationPercent != 0">
+                <span data-bind="text: formatNumber($data.fuelDurationPercent, true) + ' % s per coal'"></span>
+            </div>
+            <!-- extra goods -->
+            <span data-bind="if: $data.additionalOutputs && $data.additionalOutputs.length">
+                <span class="inline-list-centered">
+                    <img class="icon-sm icon-light mr-2" src="icons/icon_add_goods_socket_white.png" />
+                    <!-- ko foreach: $data.additionalOutputs -->
+                    <span style="flex: 100 1 auto;"></span>
+                    <span style="flex: auto;" data-bind="if: !!$data.product && $data.product.visible()">
+                        <img class="icon-sm" data-bind="attr: { src: $data.product && $data.product.icon ? $data.product.icon  : '?', alt: $data.product?.name }" />
+                    </span>
+                    <span style="flex: 100 1 auto;"></span>
+                    <!-- /ko -->
+                </span>
+            </span>
+            <!-- input replacements -->
+            <div data-bind="if: $data.replaceInputs">
+                <div data-bind="foreach: $data.replaceInputs">
+                    <replacement params="{old: $data.oldInput, new: $data.newInput}"></replacement>
+                </div>
+            </div>
+            <!-- workforce maintenance -->
+            <div data-bind="if: $data.workforceMaintenanceFactorUpgrade != 0">
+                <span class="inline-list-centered">
+                    <span data-bind="text: formatNumber($data.workforceMaintenanceFactorUpgrade, true) + ' %'"></span>
+                    <img class="icon-sm icon-light" data-bind="attr: { src: $root.island().workforce[0].icon ? $root.island().workforce[0].icon  : null, alt: $root.island().workforce[0].name }" />
+                </span>
+            </div>
+            <!-- workforce replacement -->
+            <div data-bind="if: $data.replaceWorkforce">
+                <replacement params="{old: $data.replaceWorkforce.oldWorkforce, new: $data.replaceWorkforce.newWorkforce}"></replacement>
+            </div>
+        </div>`
+});
 }
 
 // Export the function so it can be called from main.ts

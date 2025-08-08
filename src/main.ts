@@ -475,6 +475,10 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
         (window as any).view.selectedExtraGoodItems((window as any).view.island().extraGoodItems);
     });
 
+    $('#patron-selection-dialog').on('show.bs.modal', () => {
+        // No specific setup needed as the dialog directly binds to island observables
+    });
+
     $('*').on('hidden.bs.modal', () => {
         const input = $(':focus');
         if (input.length)

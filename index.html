@@ -59,6 +59,7 @@
     <div data-bind="template: 'settings-dialog'"></div>
     <div data-bind="template: 'download-dialog'"></div>
     <div data-bind="template: 'item-equipment-dialog'"></div>
+    <div data-bind="template: 'patron-selection-dialog'"></div>
     <div data-bind="template: 'factory-choose-dialog'"></div>
     <div data-bind="template: 'island-management-dialog'"></div>
     <div data-bind="template: 'island-rename-dialog'"></div>
@@ -78,6 +79,9 @@
                 </button>
                 <button type="button" class="btn">
                     <img data-toggle="modal" data-target="#item-equipment-dialog" class="icon-navbar" src="./icons/icon_add_goods_socket_white.png" />
+                </button>
+                <button type="button" class="btn">
+                    <img data-toggle="modal" data-target="#patron-selection-dialog" class="icon-navbar" src="./icons/icon_2d_religion_belief_0.webp" />
                 </button>
             </div>
             <div class="input-group input-group-sm" data-bind="visible: $root.islands().length > 1" style="width: unset;">

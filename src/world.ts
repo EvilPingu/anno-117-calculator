@@ -14,7 +14,7 @@ import {
 } from './types.config';
 
 import { Workforce, ResidenceBuilding, PopulationLevel, PopulationGroup } from './population';
-import { Product, MetaProduct, Item, ProductCategory, AppliedBuff, Buff, Effect } from './production';
+import { Product, MetaProduct, Item, ProductCategory, AppliedBuff, Buff, Effect, Patron } from './production';
 import { PublicConsumerBuilding, Factory, Consumer } from './factories';
 import { ResidenceEffectView } from './views';
 import { Need, NeedCategory, RecipeList, ResidenceEffect } from './consumption';
@@ -492,6 +492,12 @@ export class Island {
 
     public allEffects: Effect[];
     public availableEffects: KnockoutObservableArray<Effect>;
+    
+    public availablePatrons: Patron[];
+    public selectedPatron: KnockoutObservable<Patron | null>;
+    public devotion: KnockoutObservable<number>;
+    public availablePatronEffects: KnockoutComputed<Effect[]>;
+    public patronEffects: Effect[];
 
     public assetsMap: AssetsMap;
     public literalsMap: LiteralsMap;
@@ -660,6 +666,11 @@ export class Island {
         this.extraGoodItems = [];
         this.recipeLists = [];
         this.workforce = [];
+        
+        // Initialize patron-related properties
+        this.availablePatrons = [];
+        this.selectedPatron = ko.observable(null);
+        this.devotion = ko.observable(0);
 
         let products: Product[] = [];
         for (let product of params.products) {
@@ -753,7 +764,44 @@ export class Island {
                 this.allEffects.push(e);
             }
         }
-        this.availableEffects = ko.pureComputed(() => this.allEffects.filter(e => e.available()));
+        this.availableEffects = ko.pureComputed(() => this.allEffects.filter(e => e.available() && this.patronEffects.indexOf(e) == -1 ));
+        
+        // Set up patrons
+        this.patronEffects = [];
+        for (let patron of (params.patrons || [])) {
+            let p = new Patron(patron, assetsMap);
+            assetsMap.set(p.guid, p);
+            this.availablePatrons.push(p);
+            p.localEffects?.forEach(group => this.patronEffects.push(group.effect))
+        }
+        
+        // Set up computed property for available patron effects based on current patron and devotion
+        this.availablePatronEffects = ko.computed(() => {
+            const patron = this.selectedPatron();
+            const devotionLevel = this.devotion();
+            
+            // Reset all patron effects scaling to 0 when no patron or no devotion
+            for (const effect of this.patronEffects) {
+                effect.scaling(0);
+            }
+            
+            if (!patron || !patron.localEffects || devotionLevel <= 0) return [];
+            
+            const effects: Effect[] = [];
+            for (const localEffect of patron.localEffects) {
+                // Find the highest milestone that the devotion level meets (milestones are ordered ascending)
+                const achievedMilestones = localEffect.milestones.filter((m: any) => devotionLevel >= m.devotion);
+                if (achievedMilestones.length === 0) continue; // No milestone achieved
+                
+                const milestone = achievedMilestones[achievedMilestones.length - 1]; // Take the last (highest) one
+                
+                const effect = localEffect.effect;
+                // Set the effect scaling based on milestone
+                effect.scaling(milestone.buffScaling);
+                effects.push(effect);
+            }
+            return effects;
+        });
 
 
         for (let item of (params.items || [])) {
@@ -808,6 +856,25 @@ export class Island {
                     (f: Factory | null) => f ? localStorage.setItem(id, f.guid.toString()) : localStorage.removeItem(id));
             }
         });
+
+        // Persist patron selection and devotion - effects buffs are applied with other effects
+        if (localStorage) {
+            // Persist selected patron by GUID
+            if (localStorage.getItem("selectedPatron") != null) {
+                const patronGuid = parseInt(localStorage.getItem("selectedPatron"));
+                const patron = this.availablePatrons.find(p => p.guid === patronGuid);
+                if (patron) {
+                    this.selectedPatron(patron);
+                }
+            }
+            this.selectedPatron.subscribe((patron: Patron | null) => {
+                localStorage.setItem("selectedPatron", patron ? patron.guid.toString() : "");
+            });
+            
+            // Persist devotion level
+            persistInt(this, "devotion", "devotion");
+        
+        }
 
         for (let level of params.populationLevels) {
             let l = new PopulationLevel(level, assetsMap, this);
