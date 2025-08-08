@@ -1,6 +1,7 @@
 import { NamedElement, ACCURACY, EPSILON, ko, BuildingsCalc } from './util';
 import { Workforce, WorkforceDemand } from './population';
-import { Demand, AppliedBuff, ExtraGoodProductionList, Product, AqueductBuff, Item } from './production';
+import { Demand, ExtraGoodProductionList, Product, AqueductBuff, Item, Buff } from './production';
+import { AppliedBuff } from './buffs';
 import { TradeList } from './trade';
 import { 
     ConsumerConfig, 
@@ -8,7 +9,7 @@ import {
     LiteralsMap,
 } from './types';
 import { Island, Region } from './world';
-import { FactoryConfig } from './types.config';
+import { FactoryConfig, ModuleConfig } from './types.config';
 
 
 /**
@@ -31,7 +32,7 @@ export class Consumer extends NamedElement{
     public buffs: AppliedBuff[]; // from items and other effects, for calculation
     public inputDemandsMap: Map<Product, Demand>;
     public inputDemands: KnockoutObservableArray<Demand>;
-    public buildingInputDemands: KnockoutObservableArray<Demand>;
+    public inputDemandFuel?: Demand;
     public workforceDemand!: WorkforceDemand;
     public boost: KnockoutObservable<number>;
     public boostSubscription!: KnockoutComputed<void>;
@@ -45,9 +46,9 @@ export class Consumer extends NamedElement{
     public buildingsSubscription!: KnockoutComputed<void>;
     public inputDemandsSubscription!: KnockoutComputed<void>;
     public workforceDemandSubscription?: KnockoutComputed<void>;
-    public fuelSubscription?: KnockoutComputed<void>;
     public product!: Product | null;
     public aqueductBuff?: AqueductBuff;
+    public modules: Module[];
 
 
     /**
@@ -84,7 +85,9 @@ export class Consumer extends NamedElement{
         this.buffs = [];
         this.inputDemandsMap = new Map();
         this.inputDemands = ko.observableArray([]);
-        this.buildingInputDemands = ko.observableArray([]);
+
+        // Initialize modules array
+        this.modules = [];
 
         this.boost = ko.observable(1);
         this.editable = ko.observable(false);
@@ -202,7 +205,7 @@ export class Consumer extends NamedElement{
                     this.inputDemandsMap.delete(p);
                     d.updateAmount(amount);
                 } else {
-                    d = new Demand(p, this,assetsMap, inputs.get(p));
+                    d = new Demand(p, this,assetsMap, ko.observable(inputs.get(p)));
                     d.updateAmount(amount);
                     demands.push(d);
                     map.set(p, d);
@@ -225,15 +228,18 @@ export class Consumer extends NamedElement{
             }
             let cycleTime = window.view.constants.fuelProductionTime as number;
 
-            this.buildingInputDemands.push(new Demand(product, this, assetsMap));
-            this.fuelSubscription = ko.computed(() => {
+            const fuelFactor = ko.pureComputed(() => {
                 const percentBuff = this.buffs.reduce((a:number, b: AppliedBuff)=> a+b.fuelDurationPercent() , 0);
                 const factor = percentBuff / 100 + 1;
 
-                let amount = this.buildings.utilized() * this.cycleTime / (factor * cycleTime) / this.boost();
-                this.buildingInputDemands()[0].updateAmount(amount);
+                return this.cycleTime / (factor * cycleTime) / this.boost();
             });
+            this.inputDemandFuel = new Demand(product, this, assetsMap, fuelFactor);
+            this.buildings.utilized.subscribe(buildings => this.inputDemandFuel!.updateAmount(buildings));
         }
+
+        this.modules.forEach(m => m.initDemands(assetsMap));
+        // demand for modules is updated when their number of constructed buildings is updated, see constructor of Module
 
         this.createWorkforceDemand();
     }
@@ -308,34 +314,58 @@ export class Consumer extends NamedElement{
  * Represents a module that can be attached to factories
  */
 export class Module extends Consumer {
-    public additionalOutputCycle: number;
-    public productivityUpgrade: number;
-    public workforceAmountUpgrade?: { Value: number } | undefined;
-
+    public factory: Factory;
     public checked: KnockoutObservable<boolean>;
     public visible: KnockoutComputed<boolean>;
+    public triggeredBuffs: AppliedBuff[];
+    public constructedSubscription: KnockoutComputed<void>;
     
     /**
      * Creates a new Module instance
      * @param config - Configuration object for the module
      * @param assetsMap - Map of all available assets
      * @param island - The island this module belongs to
+     * @param factory - The factory this module is attached to
      */
-    constructor(config: any, assetsMap: AssetsMap, literalsMap: LiteralsMap, island: Island) {
-        super({...config, maintenances: []}, assetsMap, literalsMap, island);
+    constructor(config: ModuleConfig, assetsMap: AssetsMap, literalsMap: LiteralsMap, factory: Factory) {
+        super({...config, maintenances: []}, assetsMap, literalsMap, factory.island);
         
         // Module-specific initialization
-        this.additionalOutputCycle = config.additionalOutputCycle || 0;
-        this.productivityUpgrade = config.productivityUpgrade || 0;
-        this.workforceAmountUpgrade = config.workforceAmountUpgrade;
-
-
-        // Module-specific initialization
         this.isFactory = false;
+        this.factory = factory;
+        this.triggeredBuffs = [];
 
         this.checked = ko.observable(false);
         this.lockDLCIfSet(this.checked);
-        this.visible = ko.pureComputed(() => !!config && this.available());
+        this.visible = ko.pureComputed(() => this.available());
+
+        // Create AppliedBuff if factory is provided and module has functional effects
+        for (const buffGuid of config.buffs) {
+            const buff = assetsMap.get(buffGuid) as Buff;
+            if(buff != null){
+                const appliedBuff = new AppliedBuff(
+                    this,
+                    buff,
+                    factory,
+                    assetsMap,
+                    false // Don't use parent scaling
+                );
+                // Initially set scaling to 0 (unchecked)
+                appliedBuff.scaling(0);
+                this.triggeredBuffs.push(appliedBuff);
+            }            
+        }
+
+        // Set up checked observable subscription for buff scaling
+        this.checked.subscribe((checked: boolean) => {
+            for (const triggeredBuff of this.triggeredBuffs) {
+                triggeredBuff.scaling(checked ? 1 : 0);
+            }
+        });
+
+        this.constructedSubscription = ko.computed(() => {
+            this.buildings.constructed(this.checked() ? this.factory.buildings.utilized() : 0);
+        })
     }
     
     getInputs(): Map<Product, number> {
@@ -438,8 +468,9 @@ export class Factory extends Consumer {
      * @param config - Configuration object for the factory
      * @param assetsMap - Map of all available assets
      * @param island - The island this factory belongs to
+     * @param moduleConfigs - Optional module configurations from params
      */
-    constructor(config: FactoryConfig, assetsMap: AssetsMap, literalsMap: LiteralsMap, island: Island) {
+    constructor(config: FactoryConfig, assetsMap: AssetsMap, literalsMap: LiteralsMap, island: Island, moduleConfigs?: ModuleConfig[]) {
         super(config, assetsMap, literalsMap, island);
         
         // Explicit assignments
@@ -509,92 +540,29 @@ export class Factory extends Consumer {
         this.inputAmountByExtraGoods = ko.observable(0);
 
 
-
-        /*
-        if (config.module) {
-            const module = assetsMap.get(parseInt(config.module));
-            if (!module) {
-                throw new Error(`Module with GUID ${config.module} not found in assetsMap`);
-            }
-            this.module = module;
-            this.moduleChecked = ko.observable(false);
-            if (this.module && this.module.lockDLCIfSet && this.moduleChecked) {
-                this.module.lockDLCIfSet(this.moduleChecked);
-                const workforceUpgrade = this.module.workforceAmountUpgrade ? this.module.workforceAmountUpgrade.Value : 0;
-                this.moduleChecked.subscribe(() => {
-                    const checked = this.moduleChecked && this.moduleChecked();
-                    if (checked) {
-                        if (this.percentBoost)
-                            this.percentBoost(parseInt(this.percentBoost() as any) + this.module!.productivityUpgrade);
-                        if (this.workforceDemand)
-                            this.workforceDemand.percentBoost(this.workforceDemand.percentBoost() + workforceUpgrade);
-                    } else {
-                        if (this.percentBoost) {
-                            const val = Math.max(1, parseInt(this.percentBoost() as any) - this.module!.productivityUpgrade);
-                            this.percentBoost(val);
-                        }
-
-                        if (this.workforceDemand)
-                            this.workforceDemand.percentBoost(Math.max(0, this.workforceDemand.percentBoost() - workforceUpgrade));
-                    }
-                });
-                this.moduleExtraGoods = ko.pureComputed(() => this.moduleChecked && this.moduleChecked() ? this.inputAmount() / this.module!.additionalOutputCycle : 0);
+        
+        // Create Module instance if factory has additionalModule
+        if (config.additionalModule && moduleConfigs) {
+            const moduleConfig = moduleConfigs.find(m => m.guid === config.additionalModule);
+            if (moduleConfig) {
+                const module = new Module(moduleConfig, assetsMap, literalsMap, this);
+                this.modules.push(module);
+                
             }
         }
-
-        if (config.fertilizerModule) {
-            const fertilizerModule = assetsMap.get(parseInt(config.fertilizerModule));
-            if (!fertilizerModule) {
-                throw new Error(`Fertilizer module with GUID ${config.fertilizerModule} not found in assetsMap`);
-            }
-            this.fertilizerModule = fertilizerModule;
-            this.fertilizerModuleChecked = ko.observable(false);
-            if (this.fertilizerModule && this.fertilizerModule.lockDLCIfSet && this.fertilizerModuleChecked) {
-                this.fertilizerModule.lockDLCIfSet(this.fertilizerModuleChecked);
-                this.fertilizerModuleChecked.subscribe(() => {
-                    const checked = this.fertilizerModuleChecked && this.fertilizerModuleChecked();
-                    if (checked) {
-                        if (this.percentBoost)
-                            this.percentBoost(parseInt(this.percentBoost() as any) + this.fertilizerModule!.productivityUpgrade);
-                    } else {
-                        if (this.percentBoost) {
-                            const val = Math.max(1, parseInt(this.percentBoost() as any) - this.fertilizerModule!.productivityUpgrade);
-                            this.percentBoost(val);
-                        }
-                    }
-                });
-                this.fertilizerModuleExtraGoods = ko.pureComputed(() => this.fertilizerModuleChecked && this.fertilizerModuleChecked() ? this.inputAmount() / this.fertilizerModule!.additionalOutputCycle : 0);
-            }
-        }
-
-
 
         this.extraGoodFactor = ko.computed(() => {
             let factor = 1;
 
-            for (const m of ["module", "fertilizerModule"]) {
-                const module = (this as any)[m];
-                const checked = (this as any)[m + "Checked"];
-
-                if (module && checked && checked() && module.additionalOutputCycle)
-                    factor += 1 / module.additionalOutputCycle;
-            }
-
-            if (this.palaceBuff && this.palaceBuffChecked && this.palaceBuffChecked())
-                factor += 1 / this.palaceBuff.additionalOutputCycle;
-
-            if (this.setBuff && this.setBuffChecked && this.setBuffChecked())
-                factor += 1 / this.setBuff.additionalOutputCycle;
 
             if (this.extraGoodProductionList && this.extraGoodProductionList.selfEffecting && this.extraGoodProductionList.checked())
                 for (const e of this.extraGoodProductionList.selfEffecting())
-                    if (e.item.checked())
-                        factor += (e.Amount || 1) / e.additionalOutputCycle;
+                    factor += e.item.scaling() * e.defaultAmount / e.additionalOutputCycle;
 
             return factor;
         });
-*/
-        this.extraGoodFactor = ko.computed(() => 1);
+
+
 
         this.outputAmount = ko.pureComputed(() => {
             const diff = Math.max(this.inputAmountByExtraGoods() * this.extraGoodFactor(), 
@@ -698,6 +666,8 @@ export class Factory extends Consumer {
         this.buildings.utilized.subscribe((b: number) => {
             if (this.workforceDemand)
                 this.workforceDemand.updateAmount(b);
+
+
 
              /*
             for (const m of ["module", "fertilizerModule"]) {

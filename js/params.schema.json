@@ -1255,7 +1255,7 @@
               ]
             }
           },
-          "functionalEffects": {
+          "buffs": {
             "type": "array",
             "items": {
               "type": "integer"
@@ -1386,7 +1386,7 @@
           "modulesLimit": {
             "type": "integer"
           },
-          "functionalEffects": {
+          "buffs": {
             "type": "array",
             "items": {
               "type": "integer"
@@ -1403,7 +1403,7 @@
           "needsFuelInput",
           "cycleTime",
           "modulesLimit",
-          "functionalEffects"
+          "buffs"
         ]
       },
       "title": "Module",
@@ -3011,17 +3011,6 @@
     "products",
     "workforce",
     "productFilters",
-    "factories",
-    "modules",
-    "buildingBuffs",
-    "effects",
-    "techs",
-    "patrons",
-    "items",
-    "icons",
-    "factories",
-    "modules",
-    "icons",
     "factories",
     "modules",
     "buildingBuffs",

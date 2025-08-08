@@ -129,14 +129,8 @@ function generateTypeScriptInterfaces() {
         const title = propertySchema.title || propertyName;
         const interfaceName = title + 'Config';
         
-        output += `// ${title} configuration interface\n`;
-        
-        // Handle inheritance for ModuleConfig
-        if (interfaceName === 'ModuleConfig') {
-            output += `export interface ${interfaceName} extends Omit<ConsumerConfig, 'inputs'> {\n`;
-        } else {
-            output += `export interface ${interfaceName} {\n`;
-        }
+        output += `// ${title} configuration interface\n`;        
+        output += `export interface ${interfaceName} {\n`;
 
         if (propertySchema.type === 'array') {
             if (propertySchema.items && propertySchema.items.type === 'string') {

@@ -2,8 +2,11 @@ import { NamedElement, EPSILON, ko, dummyObservableArray } from './util';
 import {  AssetsMap } from './types';
 import { ProductConfig, BuildingBuffConfig, PatronsConfig, EffectConfig, ItemConfig } from './types.config';
 import { Workforce } from './population';
-import { Factory, Consumer } from './factories';
 import { Region, Constructible, isConstructible } from './world';
+
+import type { Factory } from './factories';
+import { AppliedBuff, ExtraGoodProduction } from './buffs';
+export { AppliedBuff, ExtraGoodProduction };
 
 
 declare const view: any;
@@ -107,22 +110,23 @@ export class MetaProduct extends NamedElement {
  * Manages the relationship between consumers and the products they need
  */
 export class Demand {
-    public factor: number;
     public consumer: Constructible;
     public amount: KnockoutObservable<number>;
     public product: Product;
     public factory: KnockoutObservable<Factory>;
+    public factor: KnockoutComputed<number>;
 
     /**
      * Creates a new Demand instance
-     * @param config - Configuration object for the demand
+     * @param product - The product being demanded
+     * @param consumer - The consumer creating the demand
      * @param assetsMap - Map of all available assets
      */
-    constructor(product: Product, consumer: Constructible,  _assetsMap: AssetsMap, factor: number = 1) {
+    constructor(product: Product, consumer: Constructible,  _assetsMap: AssetsMap, observableFactor: KnockoutComputed<number>) {
 
-        this.factor = factor || 1;
         this.product = product;
         this.consumer = consumer;
+        this.factor = observableFactor;
 
         this.amount = ko.observable(0);
 
@@ -166,11 +170,13 @@ export class Demand {
      * @param amount - The new amount
      */
     updateAmount(amount: number): void {
-        amount *= this.factor;
-        if (Math.abs(this.amount() - amount) >= EPSILON)
-            this.amount(amount);
+        const adjustedAmount = amount * this.factor();
+        if (Math.abs(this.amount() - adjustedAmount) >= EPSILON) {
+            this.amount(adjustedAmount);
+        }
     }
 }
+
 
 /**
  * Represents a category of products
@@ -626,193 +632,7 @@ export class AqueductBuff {
 }
 
 
-/**
- * Represents an item equipped to a specific factory
- * Manages the relationship between items and factories
- */
-export class AppliedBuff {
-    public parent: Item|Effect;
-    public target: Constructible;
-    public buff: Buff;
-    public replacements?: Map<Product, Product>;
-    public replacementArray?: {old: Product, new: Product}[];
-    public replacingWorkforce?: Workforce;
-    public productivityUpgrade: KnockoutObservable<number>;
-    public fuelDurationPercent: KnockoutObservable<number>;
-    public workforceMaintenanceFactorUpgrade: KnockoutObservable<number>;
-    public extraGoods?: ExtraGoodProduction[];
-    public available: KnockoutComputed<boolean>;
-    public visible: KnockoutComputed<boolean>;
-    public scaling: KnockoutObservable<number>;
 
-
-    /**
-     * Creates a new EquippedItem instance
-     * @param config - Configuration object for the equipped item
-     * @param assetsMap - Map of all available assets
-     * @param useParentScaling - use the sacling attribute from parent instead of creating a new observable
-     */
-    constructor(parent: Item|Effect, buff: Buff, factory: Constructible, _assetsMap: AssetsMap, useParentScaling=true) {
-        // Validate required parameters
-        if (!parent) {
-            throw new Error('AppliedBuff parent is required');
-        }
-        if (!buff) {
-            throw new Error('AppliedBuff buff is required');
-        }
-        if (!factory) {
-            throw new Error('AppliedBuff factory is required');
-        }
-        
-        // Explicit assignments
-        this.parent = parent;
-        this.target = factory;
-        this.buff = buff;
-        if(useParentScaling){
-            if (!(this.parent instanceof Effect)){
-                throw new Error(`useParentScaling was set but parent with GUID ${this.parent.guid} was not an Effect`);
-            }
-            this.scaling = this.parent.scaling;
-        }
-        else
-            this.scaling = ko.observable(0); // indicates wheter item/effect is not applied (0), applied (1), multiple times applied (> 1); child class updates this value
-
-        if (this.buff.replaceWorkforce && this.target instanceof Consumer && this.target.connectedWorkforce &&
-            this.target.connectedWorkforce.guid == this.buff.replaceWorkforce.oldWorkforce.guid) // better compare guids, if buff is global and uses a different instance of the same workforce
-            this.replacingWorkforce = _assetsMap.get(this.buff.replaceWorkforce.newWorkforce.guid);
-
-        if (this.buff.additionalOutputs && this.buff.additionalOutputs.length > 0 && this.target instanceof Factory) {
-            this.extraGoods = []
-            for (let entry of this.buff.additionalOutputs) {
-                try {
-
-
-                    const product = entry.forceProductSameAsFactoryOutput ? this.target.getProduct() : entry.product;
-                    
-                    if (!product) {
-                        throw new Error(`Product with GUID ${product} not found in assetsMap`);
-                    }
-
-                    // ensure we use the local instance of the product if the buff is global
-                    this.extraGoods!.push(new ExtraGoodProduction(this, entry.amount, entry.additionalOutputCycle,  _assetsMap.get(product.guid), _assetsMap));
-                } catch (e) { }
-            }
-        }
-
-        this.productivityUpgrade = ko.pureComputed(() => {
-            return this.scaling() * this.buff.productivityUpgrade;
-        });
-
-        
-        this.fuelDurationPercent = ko.pureComputed(() => {
-            return this.scaling() * this.buff.fuelDurationPercent;
-        });
-
-        
-        this.workforceMaintenanceFactorUpgrade = ko.pureComputed(() => {
-            return this.scaling() * this.buff.workforceMaintenanceFactorUpgrade;
-        });
-
-        this.replacements = new Map();
-        this.replacementArray = [];
-        if (this.buff.replaceInputs) {
-
-            this.buff.replaceInputs.forEach((r: any) => {
-                if (!r.oldInput) {
-                    throw new Error('ReplaceInputs must have OldInput and NewInput properties');
-                }
-                const oldProduct = _assetsMap.get(parseInt(r.OldInput));
-                if (!oldProduct) {
-                    throw new Error(`Old input product with GUID ${r.OldInput} not found in assetsMap`);
-                }
-                const newProduct = _assetsMap.get(parseInt(r.NewInput));
-                if (!newProduct) {
-                    throw new Error(`New input product with GUID ${r.NewInput} not found in assetsMap`);
-                }
-                this.replacementArray!.push({
-                    old: oldProduct,
-                    new: newProduct
-                });
-                this.replacements!.set(r.OldInput, r.NewInput);
-            });
-        }
-
-        this.available = ko.pureComputed(() => {
-            return this.target.available() && this.buff.available();
-        });
-
-        this.visible = ko.pureComputed(() => {
-            if (!this.available())
-                return false;
-
-            if (!view.island || !view.island())
-                return true;
-
-            var region = view.island().region;
-            if (!region)
-                return true;
-
-            return this.target.island.region === region;
-        });
-
-        this.target.addBuff(this);
-    }
-}
-
-/**
- * Represents additional goods production from equipped items
- * Manages extra goods produced by factories with specific items
- */
-class ExtraGoodProduction {
-    public item: AppliedBuff;
-    public factory: Factory;
-    public defaultAmount: number;
-    public additionalOutputCycle: number;
-    public product: Product;
-    public amount: KnockoutComputed<number>;
-
-    /**
-     * Creates a new ExtraGoodProduction instance
-     * @param config - Configuration object for the extra good production
-     * @param assetsMap - Map of all available assets
-     */
-    constructor(appliedBuff: AppliedBuff, defaultAmount: number, additionalOutputCycle: number, product: Product, _assetsMap: AssetsMap) {
-        // Validate required parameters
-        if (!appliedBuff) {
-            throw new Error('ExtraGoodProduction item is required');
-        }
-        if (typeof defaultAmount !== 'number') {
-            throw new Error('ExtraGoodProduction Amount is required and must be a number');
-        }
-        if (typeof additionalOutputCycle !== 'number') {
-            throw new Error('ExtraGoodProduction AdditionalOutputCycle is required and must be a number');
-        }
-
-        // Explicit assignments
-        this.item = appliedBuff;
-        const factory = appliedBuff.target;
-        if (! (factory instanceof Factory)){
-            throw new Error('ExtraGoodProduction requires factory as buff target but got ' + appliedBuff.target.name())
-        }
-        this.factory = factory;
-        this.defaultAmount = defaultAmount;
-        this.additionalOutputCycle = additionalOutputCycle;
-
-
-        this.product = product;
-
-        this.amount = ko.computed(() => this.item.scaling() * defaultAmount * this.factory.inputAmount() / this.additionalOutputCycle);
-
-        for (var f of this.product.factories) {
-            if (f.extraGoodProductionList) {
-                f.extraGoodProductionList.entries.push(this as any);
-
-                if (f == this.factory)
-                    f.extraGoodProductionList.selfEffecting.push(this as any);
-            }
-        }
-    }
-}
 
 /**
  * Manages a list of extra goods production for a factory
@@ -821,9 +641,9 @@ class ExtraGoodProduction {
 export class ExtraGoodProductionList {
     public factory: Factory;
     public checked: KnockoutObservable<boolean>;
-    public selfEffecting: any;
-    public entries: any;
-    public nonZero: any;
+    public selfEffecting: KnockoutObservableArray<ExtraGoodProduction>;
+    public entries: KnockoutObservableArray<ExtraGoodProduction>;
+    public nonZero: KnockoutComputed<ExtraGoodProduction[]>;
     public amount: KnockoutComputed<number>;
     public amountWithSelf: KnockoutComputed<number>;
 
@@ -859,6 +679,6 @@ export class ExtraGoodProductionList {
                 total += i.amount();
 
             return total;
-        })
+        });
     }
 } 

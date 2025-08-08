@@ -356,7 +356,8 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
 
     // Set up global effects
     for (let effect of (params.effects || [])) {
-        if (!effect.effectScope.endsWith("Meta"))
+        // create Module owner effects here so that they are avaiable in the constructor of Modules
+        if (!effect.effectScope.endsWith("Meta") && effect.effectScope != "ModuleOwner")
             continue
 
         const r = new Effect(effect, (window as any).view.assetsMap);

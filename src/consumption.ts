@@ -125,7 +125,7 @@ export class ResidenceNeed {
 
     initDemands(assetsMap: AssetsMap){
         if (!this.need.product.isAbstract){
-            this.demand = new Demand(this.need.product, this.residence, assetsMap);
+            this.demand = new Demand(this.need.product, this.residence, assetsMap, ko.observable(1));
             this.demand.updateAmount(this.amount());
             this.amount.subscribe(val => (this.demand as Demand).updateAmount(val));
         }

@@ -180,7 +180,7 @@ export interface FactoryConfig {
     product: number;
     amount: number;
   }[];
-  functionalEffects?: number[];
+  buffs?: number[];
   aqueductProductivityBuff?: number;
   additionalModule?: number;
 }
@@ -199,7 +199,7 @@ export interface ModuleConfig {
   needsFuelInput: boolean;
   cycleTime: number;
   modulesLimit: number;
-  functionalEffects: number[];
+  buffs: number[];
 }
 
 // BuildingBuff configuration interface

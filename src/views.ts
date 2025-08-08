@@ -2,7 +2,7 @@ import { ACCURACY, BuildingsCalc, formatNumber, ko, NamedElement } from './util'
 import { PopulationGroup, PopulationLevel, ResidenceBuilding, Workforce } from './population';
 import { ResidenceEffectCoverage, ResidenceEffect, ResidenceNeed, NeedCategory, Need } from './consumption';
 import { ProductCategory, Product, Demand } from './production';
-import { Consumer, Factory } from './factories';
+import { Consumer, Factory, Module } from './factories';
 
 
 declare const $: any;
@@ -230,17 +230,17 @@ export class Template {
  * Creates hierarchical tree structures for visualizing factory dependencies
  */
 export class ProductionChainView {
-    public factory: any;
-    public amount: any;
+    public factory: KnockoutObservable<Consumer>;
+    public amount: KnockoutObservable<number> | null;
     public tree: any;
-    public breadth: any;
+    public breadth: KnockoutObservable<number>;
 
     /**
      * Creates a new ProductionChainView instance
      * @param factory - The factory to create a chain for
      * @param amount - Optional amount to base calculations on
      */
-    constructor(factory: any, amount: any = null) {
+    constructor(factory: KnockoutObservable<Consumer>, amount: KnockoutObservable<number> | null = null) {
         // Validate required parameters
         if (!factory) {
             throw new Error('ProductionChainView factory is required');
@@ -260,7 +260,7 @@ export class ProductionChainView {
                             'amount': amount,
                             'factory': consumer,
                             'buildings': amount * consumer.cycleTime / 60 / consumer.boost(),
-                            'children': consumer.inputDemands().map((d: any) => traverse(d.factory(), amount)).filter((d: any) => d)
+                            'children': consumer.inputDemands().map((d) => traverse(d.factory(), amount * d.factor())).filter((d) => d)
                         }; 
                     }
 
@@ -287,21 +287,33 @@ export class ProductionChainView {
                     }
 
                     var inputAmount = amount / (factory.extraGoodFactor?.() || 1);
+                    const buildings = inputAmount * consumer.cycleTime / 60 / factory.boost();
+                    var children = factory.inputDemands().map((d) => traverse(d.factory(), inputAmount * d.factor())).filter((d) => d);
+
+                    var buildingDemands = factory.modules.flatMap(m => m.checked() ? m.inputDemands() : []);
+                    for (const d of buildingDemands)
+                        children.push(traverse(d.factory(), buildings * d.factor() * 60 / (d.consumer as Module).cycleTime))
+
+                    if (factory.inputDemandFuel)
+                        children.push(traverse(factory.inputDemandFuel.factory(), buildings * factory.inputDemandFuel.factor());
+ 
+
                     return {
                         'amount': amount,
                         'factory': factory,
-                        'buildings': inputAmount * consumer.cycleTime / 60 / factory.boost(),
-                        'children': factory.inputDemands().map((d: any) => traverse(d.factory(), inputAmount * d.factor)).filter((d: any) => d)
+                        'buildings': buildings,
+                        'children': children
                     };           
 
             };
 
             var amount = this.amount;
+            const consumer = this.factory();
+            if (amount == null && consumer instanceof Factory)
+                amount = consumer.outputAmount;
             if (amount == null)
-                amount = this.factory().outputAmount;
-            if (amount == null)
-                amount = this.factory().inputAmount;
-            return traverse(this.factory(), amount());
+                amount = consumer.inputAmount;
+            return traverse(consumer, amount());
              
         });
 

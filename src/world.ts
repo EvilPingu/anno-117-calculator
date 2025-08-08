@@ -15,7 +15,7 @@ import {
 
 import { Workforce, ResidenceBuilding, PopulationLevel, PopulationGroup } from './population';
 import { Product, MetaProduct, Item, ProductCategory, AppliedBuff, Buff, Effect } from './production';
-import { PublicConsumerBuilding, Module, Factory, Consumer } from './factories';
+import { PublicConsumerBuilding, Factory, Consumer } from './factories';
 import { ResidenceEffectView } from './views';
 import { Need, NeedCategory, RecipeList, ResidenceEffect } from './consumption';
 
@@ -728,19 +728,13 @@ export class Island {
                 this.recipeLists.push(new RecipeList(list, assetsMap, this));
         }
 
-        for (let consumer of (params.modules || [])) {
-            let f = new Module(consumer, assetsMap, literalsMap, this);
-            assetsMap.set(f.guid, f);
-            this.consumers.push(f);
-        }
-
         for (let buff of (params.buildingBuffs || [])) {
             let b = new Buff(buff, assetsMap);
             assetsMap.set(b.guid, b);
         }
 
         for (let factory of params.factories) {
-            let f = new Factory(factory, assetsMap, literalsMap, this);
+            let f = new Factory(factory, assetsMap, literalsMap, this, params.modules);
             assetsMap.set(f.guid, f);
             this.consumers.push(f);
             this.factories.push(f);
@@ -749,6 +743,11 @@ export class Island {
                 persistFloat(f.aqueductBuff, "scaling", `${f.guid}.aqueductBuff.checked`)
             }
             persistBool(f.extraGoodProductionList, "checked", `${f.guid}.extraGoodProductionList.checked`);
+            
+            // Persist module checked state
+            for (const module of f.modules) {
+                persistBool(module, "checked", `${f.guid}.module[${module.guid}].checked`);
+            }
         }
 
         if (isNew)
@@ -763,9 +762,12 @@ export class Island {
                 const e = new Effect(effect, assetsMap);
                 assetsMap.set(e.guid, e);
             }
+            
             const e = assetsMap.get(effect.guid) as Effect;
-            e.applyBuffs(assetsMap);
-            this.allEffects.push(e);
+            if(e.effectScope != "ModuleOwner"){
+                e.applyBuffs(assetsMap);
+                this.allEffects.push(e);
+            }
         }
         this.availableEffects = ko.pureComputed(() => this.allEffects.filter(e => e.available()));
 
