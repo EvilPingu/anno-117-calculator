@@ -276,15 +276,16 @@ interface Demand {
     viewModel: function (params: any) {
         this.asset = params.asset;
         this.checked = params.checked || this.asset.checked;
+        this.id = params.id || this.asset.guid;
+        this.title = params.title || this.asset.name
         if (this.checked != null && typeof this.checked() != "boolean"){
             this.scaling = this.checked;
             this.checked = ko.computed({
                 read: () => {return this.scaling() > 0;},
-                write: val => {this.scaling(val ? 1 : 0);}
+                write: (val: boolean) => {this.scaling(val ? 1 : 0);}
             }) as KnockoutComputed<boolean>;
         }
-        this.id = params.id || this.asset.guid;
-        this.title = params.title || this.asset.name
+        
     }, template:
         `<div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input" data-bind="checked: checked, attr: { 'id': id, 'title': title() }">

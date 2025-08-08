@@ -671,22 +671,6 @@ export class Island {
 
                 products.push(p);
                 assetsMap.set(p.guid, p);
-
-                if (p.factories.length > 1)
-                    this.multiFactoryProducts.push(p);
-
-                if (localStorage) {
-                    let id = p.guid + ".fixedFactory";
-                    if (localStorage.getItem(id) != null) {
-                        const factory = assetsMap.get(parseInt(localStorage.getItem(id)));
-                        if (!factory) {
-                            throw new Error(`Factory with GUID ${localStorage.getItem(id)} not found in assetsMap`);
-                        }
-                        p.fixedFactory(factory);
-                    }
-                    p.fixedFactory.subscribe(
-                        (f: Factory | null) => f ? localStorage.setItem(id, f.guid.toString()) : localStorage.removeItem(id));
-                }
             }
         }
 
@@ -801,9 +785,28 @@ export class Island {
             this.extraGoodItems.sort((a, b) => a.name().localeCompare(b.name()));
         });
 
-        // must be set after items so that extraDemand is correctly handled
+
         this.consumers.forEach(f => {
             f.initDemands(assetsMap);
+        });
+
+        products.forEach(p => {
+            if (p.factories.length > 1)
+                this.multiFactoryProducts.push(p);
+            
+
+            if (localStorage) {
+                let id = p.guid + ".fixedFactory";
+                if (localStorage.getItem(id) != null) {
+                    const factory = assetsMap.get(parseInt(localStorage.getItem(id)));
+                    if (!factory) {
+                        throw new Error(`Factory with GUID ${localStorage.getItem(id)} not found in assetsMap`);
+                    }
+                    p.fixedFactory(factory);
+                }
+                p.fixedFactory.subscribe(
+                    (f: Factory | null) => f ? localStorage.setItem(id, f.guid.toString()) : localStorage.removeItem(id));
+            }
         });
 
         for (let level of params.populationLevels) {
@@ -963,6 +966,7 @@ export class Island {
 } 
 
 export interface Constructible extends NamedElement{
+    associatedRegions: Region[];
     buildings: BuildingsCalc,
     island: Island
     addBuff(appliedBuff: AppliedBuff) : void;

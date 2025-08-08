@@ -466,7 +466,7 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
 
     // Set up modal event handlers
     $('#factory-choose-dialog').on('show.bs.modal', () => {
-        (window as any).view.selectedMultiFactoryProducts((window as any).view.island().multiFactoryProducts
+        (window as any).view.selectedMultiFactoryProducts((window.view.island() as Island).multiFactoryProducts
             .filter((p: any) => p.availableFactories().length > 1)
             .sort((a: any, b: any) => a.name().localeCompare(b.name())));
     });

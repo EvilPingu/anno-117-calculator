@@ -142,10 +142,10 @@ export class Demand {
      */
     updateFixedProductFactory(f: Factory | null): void {
         if (f == null) { // find factory in the same region as consumer
-            let region = this.consumer.island.region;
+            let region = this.consumer.associatedRegions[0];
             if (region) {
                 for (let fac of this.product.factories) {
-                    if (fac.island.region === region) {
+                    if (fac.associatedRegions.indexOf(region) != -1) {
                         f = fac;
                         break;
                     }
@@ -313,11 +313,8 @@ export class Buff extends NamedElement {
         this.additionalOutputs = [];
         if (config.additionalOutputs) {
             this.additionalOutputs = config.additionalOutputs.map(output => {
-                if(output.product == 0)
-                    return null;
-
                 const product = _assetsMap.get(output.product);
-                if (!product) {
+                if (!product && !output.forceProductSameAsFactoryOutput) {
                     throw new Error(`Product with GUID ${output.product} not found in assetsMap`);
                 }
                 return {

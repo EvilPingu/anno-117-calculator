@@ -22,7 +22,7 @@ export class ResidenceBuilding extends NamedElement implements Constructible{
     public guid: number;
     public populationLevel: PopulationLevel;
     public island: Island;
-    public regions: Region[];
+    public associatedRegions: Region[];
     public buildings: BuildingsCalc;
     public allEffects: Map<number, ResidenceEffect>;
     public effectCoverage: KnockoutObservableArray<ResidenceEffectCoverage>;
@@ -61,7 +61,7 @@ export class ResidenceBuilding extends NamedElement implements Constructible{
         // Explicit assignments
 
         this.island = island;
-        this.regions = config.associatedRegions.map(r => (window as any).view.literalsMap.get(r));
+        this.associatedRegions = config.associatedRegions.map(r => (window as any).view.literalsMap.get(r));
         //this.upgradedBuildingGuids = config.possibleUpgrades;
         const populationLevel = assetsMap.get(config.populationLevel);
         if (!populationLevel) {

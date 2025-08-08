@@ -295,7 +295,7 @@ export class ProductionChainView {
                         children.push(traverse(d.factory(), buildings * d.factor() * 60 / (d.consumer as Module).cycleTime))
 
                     if (factory.inputDemandFuel)
-                        children.push(traverse(factory.inputDemandFuel.factory(), buildings * factory.inputDemandFuel.factor());
+                        children.push(traverse(factory.inputDemandFuel.factory(), buildings * factory.inputDemandFuel.factor()));
  
 
                     return {
@@ -456,7 +456,7 @@ export class ResidenceEffectView {
 
         this.need = need;
         if (need instanceof ResidenceNeed && need.demand) {
-            this.productionChain = new ProductionChainView(need.demand.factory, need.demand.amount);
+            this.productionChain = new ProductionChainView(need.demand.factory as any, need.demand.amount);
         } else {
             this.productionChain = null;
         }

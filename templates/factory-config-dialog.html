@@ -40,53 +40,19 @@
                             </td>
                         </tr>
 
-                        <!-- ko if: $data.setBuff -->
+ 
+                        <!-- ko foreach: $data.modules.filter(m => m.visible()) -->
                         <tr>
-                            <!-- extra goods set -->
-                            <td colspan="2">
-                                <div class="inline-list">
-                                    <div data-bind="component: {name: 'icon-checkbox', params: {asset: $data.setBuff, checked: $data.setBuffChecked, id: $data.guid + '-setBuff'}}"></div>
-                                    <span class="ml-1" data-bind="text: $data.setBuff.name"></span>
-                                </div>
-                            </td>
-                            <td>
-                                <div data-bind="component: {name: 'additional-output', params: {amount: $data.setBuffExtraGoods}}"></div>
-                            </td>
-                        </tr>
-						<!-- /ko -->
-                        <!-- ko if: $data.palaceBuff && $data.palaceBuff.visible() -->
-                        <tr>
-                            <!-- extra goods palace -->
-                            <td colspan="2">
-                                <div class="inline-list">
-                                    <div data-bind="component: {name: 'icon-checkbox', params: {asset: $data.palaceBuff, checked: $data.palaceBuffChecked, id: $data.guid + '-palaceBuff'}}"></div>
-                                    <span class="ml-1" data-bind="text: $data.palaceBuff.name"></span>
-                                </div>
-                            </td>
-                            <td>
-                                <div data-bind="component: {name: 'additional-output', params: {amount: $data.palaceBuffExtraGoods}}"></div>
-                            </td>
-                        </tr>
-                        <!-- /ko -->
-                        <!-- ko foreach: ["module", "fertilizerModule"].filter(m => $data[m] && $data[m].visible()) -->
-                        <tr data-bind="withProperties: {module: $parent[$data], moduleChecked: $parent[$data + 'Checked'], moduleDemand: $parent[$data + 'Demand'], moduleExtraGoods: $parent[$data + 'ExtraGoods']}">
                             <!-- extra goods module -->
 
                             <td>
                                 <div class="inline-list">
-                                    <div data-bind="component: {name: 'icon-checkbox', params: {asset: module, checked: moduleChecked, id: $parent.guid + '-' + $data}}"></div>
-                                    <span class="ml-1" data-bind="text: module.name"></span>
+                                    <div data-bind="component: {name: 'icon-checkbox', params: {asset: $data, checked: $data.checked, id: $parent.guid + '-' + $data.guid}}"></div>
+                                    <span class="ml-1" data-bind="text: $data.name"></span>
                                 </div>
                             </td>
                             <td>
-                                <div>
-                                    <img class="mr-2 icon-sm" data-bind="attr: { src: moduleDemand.product.icon ? moduleDemand.product.icon : null, alt: moduleDemand.product.name}">
-                                    <img class="icon-sm icon-light ml-1" src="../icons/icon_marketplace_2d_light.png" data-bind="attr: {title: $root.texts.consumption.name}">
-                                    <span data-bind="text: formatNumber(moduleDemand.amount())"></span><span> t/min</span>
-                                </div>
-                            </td>
-                            <td>
-                                <div data-bind="component: {name: 'additional-output', params: {amount: moduleExtraGoods}}"></div>
+                                <!--<div data-bind="component: {name: 'additional-output', params: {amount: moduleExtraGoods}}"></div> -->
                             </td>
                         </tr>
                         <!-- /ko -->

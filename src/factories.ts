@@ -285,7 +285,7 @@ export class Consumer extends NamedElement{
             return this.name();
         }
 
-        return `${this.name()} (${this.island.region.name() || 'Unknown Region'})`;
+        return `${this.name()} (${this.associatedRegions[0].name() || 'Unknown Region'})`;
     }
 
     /**
@@ -314,9 +314,11 @@ export class Consumer extends NamedElement{
  * Represents a module that can be attached to factories
  */
 export class Module extends Consumer {
+
     public factory: Factory;
     public checked: KnockoutObservable<boolean>;
     public visible: KnockoutComputed<boolean>;
+    public triggeredBuffsGuids: number[];
     public triggeredBuffs: AppliedBuff[];
     public constructedSubscription: KnockoutComputed<void>;
     
@@ -334,19 +336,28 @@ export class Module extends Consumer {
         this.isFactory = false;
         this.factory = factory;
         this.triggeredBuffs = [];
+        this.triggeredBuffsGuids = config.buffs
 
         this.checked = ko.observable(false);
         this.lockDLCIfSet(this.checked);
         this.visible = ko.pureComputed(() => this.available());
 
+
+
+        this.constructedSubscription = ko.computed(() => {
+            this.buildings.constructed(this.checked() ? this.factory.buildings.utilized() : 0);
+        })
+    }
+
+    applyBuffs(assetsMap: AssetsMap): void {
         // Create AppliedBuff if factory is provided and module has functional effects
-        for (const buffGuid of config.buffs) {
+        for (const buffGuid of this.triggeredBuffsGuids) {
             const buff = assetsMap.get(buffGuid) as Buff;
             if(buff != null){
                 const appliedBuff = new AppliedBuff(
                     this,
                     buff,
-                    factory,
+                    this.factory,
                     assetsMap,
                     false // Don't use parent scaling
                 );
@@ -362,10 +373,6 @@ export class Module extends Consumer {
                 triggeredBuff.scaling(checked ? 1 : 0);
             }
         });
-
-        this.constructedSubscription = ko.computed(() => {
-            this.buildings.constructed(this.checked() ? this.factory.buildings.utilized() : 0);
-        })
     }
     
     getInputs(): Map<Product, number> {
@@ -431,8 +438,8 @@ export class PublicConsumerBuilding extends Consumer {
  */
 export class Factory extends Consumer {
     public isFactory: boolean;
-    public canClip: boolean;
-    public clipped: KnockoutObservable<boolean>;
+
+
     public outputs: Product[];
     public demands: KnockoutObservableArray<Demand>;
     public tradeList: TradeList;
@@ -443,14 +450,6 @@ export class Factory extends Consumer {
     public externalProduction: KnockoutComputed<number>;
     public inputAmountByExtraGoods: KnockoutObservable<number>;
     public inputAmount: KnockoutComputed<number>;
-    public module?: Module;
-    public moduleChecked?: KnockoutObservable<boolean>;
-    public moduleExtraGoods?: KnockoutComputed<number>;
-    public moduleDemand?: Demand;
-    public fertilizerModule?: Module;
-    public fertilizerModuleChecked?: KnockoutObservable<boolean>;
-    public fertilizerModuleExtraGoods?: KnockoutComputed<number>;
-    public fertilizerModuleDemand?: Demand;
     public extraGoodFactor: KnockoutComputed<number>;
     public outputAmount: KnockoutComputed<number>;
     public substitutableOutputAmount: KnockoutComputed<number>;
@@ -475,8 +474,6 @@ export class Factory extends Consumer {
         
         // Explicit assignments
         this.isFactory = true;
-        this.canClip = false;
-        this.clipped = ko.observable(false);
         this.outputs = []
         for (let entry of config.outputs) {
             const product = assetsMap.get(entry.product);
@@ -645,44 +642,17 @@ export class Factory extends Consumer {
     initDemands(assetsMap: AssetsMap): void {
         super.initDemands(assetsMap);
 
+        this.modules.forEach(m => m.applyBuffs(assetsMap));
+
         this.product = this.getProduct();
         if (!this.icon && this.product)
             this.icon = this.product.icon as string;
 
-        /*
-        for (const m of ["module", "fertilizerModule"]) {
-            const module = (this as any)[m];
-
-            if (module) {
-                (this as any)[m + "Demand"] = new (require('./production').Demand)({ 
-                    guid: module.getInputs()[0].Product, 
-                    consumer: this, 
-                    module: module 
-                }, assetsMap);
-            }
-        }
-        */
 
         this.buildings.utilized.subscribe((b: number) => {
             if (this.workforceDemand)
                 this.workforceDemand.updateAmount(b);
 
-
-
-             /*
-            for (const m of ["module", "fertilizerModule"]) {
-                const module = (this as any)[m];
-                const checked = (this as any)[m + "Checked"];
-                const demand = (this as any)[m + "Demand"];
-
-                if (module) {
-                    if (checked && checked())
-                        demand.updateAmount(b * 60 / module.cycleTime);
-                    else
-                        demand.updateAmount(0);
-                }
-            }
-                */
         });
     }
 
@@ -724,12 +694,4 @@ export class Factory extends Consumer {
 
 
     // inputAmount is now handled as a computed property in the constructor
-
-    /**
-     * Gets the extended name including region information
-     * @returns The extended name
-     */
-    getRegionExtendedName(): string {
-        return `${this.name()} (${this.island.region.name()})`;
-    }
 } 

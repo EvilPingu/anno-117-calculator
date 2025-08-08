@@ -324,7 +324,6 @@ nav {
     flex-flow: column;
     height: 6rem;
     justify-content: space-between;
-    margin: -0.75rem 0rem;
 }
 
 .ui-fchain-item-attribute-group .mb-3 {

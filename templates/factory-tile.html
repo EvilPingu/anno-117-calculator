@@ -61,9 +61,9 @@
                 </div>
 
                 <!-- modules -->
-                 <!-- ko foreach: $data.modules-->
+                 <!-- ko foreach: $data.instance().modules-->
                  <div class="inline-list">
-                    <div data-bind="component: {name: 'icon-checkbox', params: {asset: $data, checked: $data.checked, id: $parent.guid + '-' + $data.guid + '-module-checked'}}"></div>
+                    <div data-bind="component: {name: 'icon-checkbox', params: {asset: $data, checked: $data.checked, id: $parent.guid + '-' + $data.guid + '-module-checked-tile'}}"></div>
                 </div>
                 <!-- /ko -->
 
