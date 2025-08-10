@@ -111,7 +111,9 @@ export class MetaProduct extends NamedElement {
  */
 export class Demand {
     public consumer: Constructible;
+    private consumerAmount: KnockoutObservable<number>;
     public amount: KnockoutObservable<number>;
+    public amountSubscription: KnockoutComputed<void>;
     public product: Product;
     public factory: KnockoutObservable<Factory>;
     public factor: KnockoutComputed<number>;
@@ -128,7 +130,14 @@ export class Demand {
         this.consumer = consumer;
         this.factor = observableFactor;
 
+        this.consumerAmount = ko.observable(0); // set by consumer when calling updateAmount
         this.amount = ko.observable(0);
+        this.amountSubscription = ko.computed(() => {
+            const adjustedAmount = this.consumerAmount() * this.factor();
+            if (Math.abs(this.amount() - adjustedAmount) >= EPSILON) {
+                return this.amount(adjustedAmount);
+            }
+        });
 
         this.factory = ko.observable(null);
         this.updateFixedProductFactory(this.product.fixedFactory());
@@ -170,10 +179,7 @@ export class Demand {
      * @param amount - The new amount
      */
     updateAmount(amount: number): void {
-        const adjustedAmount = amount * this.factor();
-        if (Math.abs(this.amount() - adjustedAmount) >= EPSILON) {
-            this.amount(adjustedAmount);
-        }
+        this.consumerAmount(amount);
     }
 }
 
