@@ -91,9 +91,13 @@ npm run dev
 
 ### Migration Commands
 
-- `npm run migrate` - TypeScript migration helper
 - `npm run fix-types` - Auto-fix TypeScript errors
 - `npm run generate-types` - Generate type definitions from params
+
+### Claude Code commands (assuming a Clude Code CLI is running)
+- `/analyze <feature>` - When implementing a new feature, let Claude reflect about its architectural knowledge and process steps
+- `/wrap-up` - When feature implementation / debugging is completed or at the end of a session, store the new insights in memory files (Claude.md)
+- `/resume` - Continue with an existing session
 
 ## Adding Parameters and Game Data
 

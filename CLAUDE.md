@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Anno 1800 Calculator is a web-based calculator for the computer game Anno 1800, built to compute production chains and resource consumption based on population requirements. The project is currently undergoing migration from JavaScript to TypeScript.
+Anno 117 Calculator is a web-based calculator for the computer game Anno 117, built to compute production chains and resource consumption based on population requirements. The migration from JavaScript to TypeScript has been completed, with legacy JavaScript files in the `js/` directory serving as reference only.
 
 ## Development Commands
 
@@ -34,7 +34,7 @@ The project maintains both JavaScript (legacy) and TypeScript (target) versions:
 - **main.ts** - Application entry point, initializes knockout bindings and global state
 - **types.ts** - Comprehensive type definitions for all interfaces and configurations
 - **util.ts** - Base classes (NamedElement, DLC, Option) and utility functions
-- **params.ts** - Game configuration data (generated from Anno 1800 assets)
+- **params.ts** - Game configuration data (generated from Anno 117 assets)
 - **population.ts** - Population management and residence calculations
 - **factories.ts** - Production building and factory logic
 - **world.ts** - Session, region, and island management
@@ -42,6 +42,8 @@ The project maintains both JavaScript (legacy) and TypeScript (target) versions:
 - **views.ts** - UI view models and dialogs
 - **components.ts** - Knockout component registration
 - **i18n.ts** - Internationalization and text management
+- **production.ts** - Product, Demand, and Buff management classes
+- **buffs.ts** - AppliedBuff and ExtraGoodProduction classes (separated to resolve circular imports)
 
 ### Key Design Patterns
 - **Knockout.js MVVM** - Uses observables for reactive UI updates
@@ -54,27 +56,17 @@ HTML templates are loaded from `templates/` directory via webpack context and re
 
 ## TypeScript Migration Status
 
-The project is partially migrated to TypeScript. Key considerations:
-
-### Migration Guidelines
-- Prefer editing TypeScript files in `src/` over JavaScript files in `js/`
-- Use explicit type annotations and avoid `any` types where possible
-- Replace `$.extend()` patterns with explicit property assignments
-- Add proper error handling and validation in constructors
-- Use configuration interfaces defined in `types.ts`
+Migration completed. Legacy JavaScript files in `js/` are reference-only.
 
 ### Build Process
-- Webpack bundles TypeScript source from `src/main.ts`
-- TypeScript compiler outputs to `dist/` with declaration files
-- Knockout and jQuery remain as external dependencies via webpack aliases
+- Entry: `src/main.ts` → Output: `dist/calculator.bundle.js`
+- External deps: Knockout, jQuery, Bootstrap loaded globally
+- Templates loaded via webpack's require.context()
 
-### Critical Architecture Notes
-- **Global Dependencies**: Knockout, jQuery, and Bootstrap are loaded globally
-- **AMD Compatibility**: Some modules still use AMD require() for Knockout compatibility  
-- **Template Loading**: Uses webpack's require.context() to load HTML templates
-- **State Persistence**: Uses localStorage for configuration persistence
-- **Asset Loading**: Game configuration loaded from generated params files
-
+## Key Files
+- @src/main.ts:292 - `init()` function, main initialization sequence
+- @src/types.ts - Type definitions for all interfaces
+- @docs/DEVELOPER_GUIDE.md - Complete development documentation
 ## Testing and Validation
 
 Always run type checking after making changes:
@@ -87,36 +79,26 @@ For build validation:
 npm run build
 ```
 
-## Deprecated Features (DO NOT MIGRATE)
+## Architecture Notes
+- `types.config.ts` is generated - never edit directly
+- Use `number-input-increment` for numeric inputs
+- Most assets created per island; regions/sessions/buffs are global
+- Circular imports: production.ts → buffs.ts ← factories.ts
 
-The following features from the original JavaScript files are no longer required and should NOT be migrated to TypeScript:
+## Critical Initialization Order (world.ts:518)
+1. Create objects (consumers, factories, products)
+2. `f.initDemands(assetsMap)` - factories register in products  
+3. `e.applyBuffs(assetsMap)` - effects create AppliedBuff for targets
+4. `persistBuildings()` - load saved configurations
 
-1. **CommuterWorkforce** - Deprecated workforce management feature
-2. **Powerplant** - Deprecated power plant management feature  
-3. **PopulationReader** - Server communication for Anno game data is no longer needed
-4. **clipped property** - Factory clipping functionality has been removed
+## Debugging Knockout Errors
+- **Template errors**: Check `ko.templates` object, add null checks
+- **Effects missing**: Wrong initialization order (applyBuffs before initDemands)  
+- **Components broken**: Call registerComponents() before ko.applyBindings()
 
-When working on the migration, ignore any references to these features in the original JavaScript files.
-
-## Key Files to Understand
-
-1. **src/main.ts:276** - `init()` function contains the main application initialization sequence
-2. **src/types.ts** - Comprehensive type definitions for all major interfaces
-3. **docs/MIGRATION_GUIDE.md** - Detailed migration documentation
-4. **webpack.config.js** - Build configuration with TypeScript support
-
-## Code Style and Best Practices
-
-- Use `!` for lazy-initialized variables
-
-## Migration Reminders
-
-- **Type Replacement Guideline**: 
-  - Do not replace types by `any`
-
+Quick debug: `console.log(Object.keys(ko.templates), window.view.island().factories[0].buffs.length)`
 ## Generated File Notes
-- `types.config.ts` is generated by scripts/generate-config-types.js. Never edit it.
-- Use number-input-increment for number input components
+
 - Items create AppliedBuff for each target. This tracks whether the effect is applied to the specific factory in AppliedBuff.scaling (knockout observable storing a float).
 - Initialization order in island constructor is important. Buffs register in factories. Factories register in products. Therefore, initDemands and applyBuffs exist to establish the links after objects are created. Only after that values are loaded from localStorage (as part of calling the persist* method)
 - Most assets are created for each island. Only some (regions, seesions, buffs, need categories) only exist once globally.
