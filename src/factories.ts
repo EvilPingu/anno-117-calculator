@@ -177,11 +177,29 @@ export class Consumer extends NamedElement{
      */
     initDemands(assetsMap: AssetsMap): void {
         this.boostSubscription = ko.computed(() => {
-            var percentBuff = this.buffs.reduce((a:number, b: AppliedBuff)=> a+b.productivityUpgrade() , 0);
+            // Separate module buffs (multiplicative) from other buffs (additive)
+            let additivePercentBuff = 0;
+            let multiplicativeFactor = 1;
+            
+            for (const buff of this.buffs) {
+                if (this.isModuleBuff(buff)) {
+                    // Module buffs are multiplicative - each adds to the multiplier
+                    multiplicativeFactor *= (1 + buff.productivityUpgrade() / 100);
+                } else {
+                    // Non-module buffs remain additive
+                    additivePercentBuff += buff.productivityUpgrade();
+                }
+            }
+            
+            // Add aqueduct buff to additive buffs
             if (this.aqueductBuff != null)
-                percentBuff += this.aqueductBuff.productivityUpgrade();
-            const factor = Math.max(ACCURACY, percentBuff / 100 + 1);
-            this.boost(factor);
+                additivePercentBuff += this.aqueductBuff.productivityUpgrade();
+            
+            // Combine additive and multiplicative factors
+            const additiveFactor = Math.max(ACCURACY, additivePercentBuff / 100 + 1);
+            const totalFactor = additiveFactor * multiplicativeFactor;
+            
+            this.boost(Math.max(ACCURACY, totalFactor));
         });
 
         this.inputDemandsSubscription = ko.computed(() => {
@@ -326,6 +344,15 @@ export class Consumer extends NamedElement{
 
         if(appliedBuff.parent instanceof Item)
             this.items.push(appliedBuff);
+    }
+
+    /**
+     * Determines if an applied buff comes from a module
+     * @param appliedBuff - The applied buff to check
+     * @returns True if the buff comes from a module
+     */
+    isModuleBuff(appliedBuff: AppliedBuff): boolean {
+        return appliedBuff.parent instanceof Module;
     }
 }
 

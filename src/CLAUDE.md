@@ -49,6 +49,13 @@ When encountering "missing" properties that exist at runtime:
 - Add them as properly typed optional properties: `public property?: Type`
 - Common example: `ResidenceBuilding` needs `upgradedBuildingGuid?: string` and `upgradedBuilding?: ResidenceBuilding`
 
+## Module Integration Architecture
+- **Module Creation**: Modules are created in Factory constructor when `config.additionalModule` exists
+- **AppliedBuff Creation**: Moved from Factory to Module constructor - modules create their own AppliedBuffs
+- **Buff Scaling**: Module `checked` observable controls buff scaling (0 = inactive, 1 = active)
+- **Persistence**: Module state persisted using `persistBool` pattern in Island constructor
+- **Circular Imports**: AppliedBuff moved to separate `buffs.ts` file to resolve Factory ↔ Production circular dependency
+
 ### Object Lookup Best Practices
 1. Always validate the result of `_assetsMap.get(id)` before using
 2. Use descriptive error messages that include the GUID and context
@@ -91,5 +98,23 @@ Avoid: `(() => {...})` or `((val as boolean) => {...})`
 ## Class Hierarchy
 - **Consumer**: Base class (inputs only, final consumption)
 - **Factory**: Extends Consumer (inputs + outputs, produces for other consumers)  
-- **Module**: Extends Consumer (provides conditional buffs)
+- **Module**: Extends Consumer (provides conditional buffs with multiplicative bonuses)
 - **PublicConsumerBuilding**: Extends Consumer (services, no production)
+
+## Productivity Bonus System
+
+### Multiplicative vs Additive Calculation
+The productivity boost calculation uses a mixed approach:
+- **Module buffs**: Multiplicative - each module buff multiplies the existing productivity
+- **All other buffs**: Additive - items, effects, and aqueduct buffs add together
+
+### Implementation Pattern
+See the implementation in `src/factories.ts:179-203` in the `Consumer.initDemands()` method and the helper method `isModuleBuff()` at `src/factories.ts:354-356`.
+
+This approach prevents modules from having diminishing returns when stacked with other productivity bonuses.
+
+### BuildingDemand Pattern
+- **BuildingDemand**: Subclass of Demand that accepts `KnockoutObservable<number>` as factor
+- **Dynamic Scaling**: `updateAmount()` method multiplies base amount by observable factor
+- **Usage**: Used for fuel consumption demands where factor changes based on buff calculations
+- **Factor Removal**: Base Demand class no longer has static factor property - moved to BuildingDemand observable
