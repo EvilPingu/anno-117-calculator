@@ -9,17 +9,17 @@ You are an experienced Product Manager specializing in game utility applications
 
 Bugs:
 1. Global and session effects are not persisted
-2. The productivity buff from silo is multiplicative and not additive
-3. Banning needs should be associated with population level and not residence
+2. Banning needs should be associated with population level and not residence
 
 The following major reworks are planned:
 1. New branding: use colours and icons from 117
 2. Add debugging for knockout bindings to check type and log bound asset (for debugging only)
-3. Presenter statt templates. Add SummaryIsland (Holds observable array of islands, displayed factories and demands are sum of those islands, create default ones for all sessions -> plan for this when reworking the presenter). Use island as template for new ones (new optional parameter for island constructor, used to set default values for observables)
-4. consumption/production bars
-5. Make a supplier interface for for factory, extra goods, trade routes, passive trade.
-6. All demands include a factory so far. This should be changed that the demand only includes the product. Per product and island the user can pick the default supplier: factory, trade route, passive trade, or extra good (if applicable). Passive trade is treated as a joker: It can fulfill arbitrary demands without generating new demands. All suppliers have a default production amount (e.g. from existing factories, the amount manually set for the trade route, or the extra good already produced), if that is insufficient, the demand for the selected supplier should be increased accordingly. When trade routes are selected as default supplier, the manually entered value is treated (and renamed to minAmount). Updating the value can go above but not below this amount. If there is no trade rout, a new one is created with minAmount = 0. If supplier is changed, trade routes with minAmount = 0 are deleted.
-7. Save config in persistantStorage instead of localStorage
+3. When creating a new island: optionally choose a template island. When initializing the new one, all configurable values (except for those in BuildingCalc) are copied from the template. Use the persistance methods to achieve it with few code additions.
+4. Presenter instead of templates. Add SummaryIsland (Holds observable array of islands, displayed factories and demands are sum of those islands, create default ones for all sessions -> plan for this when reworking the presenter). Use island as template for new ones (new optional parameter for island constructor, used to set default values for observables)
+5. consumption/production bars
+6. Make a supplier interface for for factory, extra goods, trade routes, passive trade.
+7. All demands include a factory so far. This should be changed that the demand only includes the product. Per product and island the user can pick the default supplier: factory, trade route, passive trade, or extra good (if applicable). Passive trade is treated as a joker: It can fulfill arbitrary demands without generating new demands. All suppliers have a default production amount (e.g. from existing factories, the amount manually set for the trade route, or the extra good already produced), if that is insufficient, the demand for the selected supplier should be increased accordingly. When trade routes are selected as default supplier, the manually entered value is treated (and renamed to minAmount). Updating the value can go above but not below this amount. If there is no trade rout, a new one is created with minAmount = 0. If supplier is changed, trade routes with minAmount = 0 are deleted.
+8. Save config in persistantStorage instead of localStorage
 
 When managing this transition, you will:
 1. Break down major reworks into manageable phases with clear milestones
