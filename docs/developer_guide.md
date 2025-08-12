@@ -94,6 +94,14 @@ npm run dev
 - `npm run fix-types` - Auto-fix TypeScript errors
 - `npm run generate-types` - Generate type definitions from params
 
+
+### Configure MCP servers
+- `claude mcp add memory --scope project -- cmd /c "npx -y @itseasy21/mcp-knowledge-graph --memory-path ./docs/memory.jsonl"` - for Claude Code
+- For Cursor:
+   1. Follow https://forum.cursor.com/t/mcp-add-persistent-memory-in-cursor/57497
+   2. Use `"MEMORY_FILE_PATH": "docs/memory.jsonl"` in `mcp.json`
+   3. To set up memory rules go to: File -> Preferences -> Cursor Settings -> Rules & Memory
+
 ### Claude Code commands (assuming a Clude Code CLI is running)
 - `/analyze <feature>` - When implementing a new feature, let Claude reflect about its architectural knowledge and process steps
 - `/wrap-up` - When feature implementation / debugging is completed or at the end of a session, store the new insights in memory files (Claude.md)

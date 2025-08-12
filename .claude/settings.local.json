@@ -8,8 +8,13 @@
       "Bash(rm:*)",
       "Bash(npx tsc:*)",
       "Bash(node:*)",
-      "Bash(npm run generate-types:*)"
+      "Bash(npm run generate-types:*)",
+      "mcp__memory__search_nodes",
+      "mcp__memory__create_entities"
     ],
     "deny": []
-  }
+  },
+  "enabledMcpjsonServers": [
+    "memory"
+  ]
 }

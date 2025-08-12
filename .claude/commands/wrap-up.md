@@ -37,7 +37,7 @@ If during your session:
 
 ...that is relevant, was not known initially, and should be persisted, add it to the appropriate `CLAUDE.md` (for shared context) or 
 `CLAUDE.local.md` (for private notes) file. If the information is relevant for a subdirectory only, 
-place or update it in the `CLAUDE.md` file within that subdirectory.
+place or update it in the `CLAUDE.md` file within that subdirectory. If it is structured information (e.g. relationship between classes, variables, or knockout observables, store it in "memory" - a model context protocol server for storing a knowledge graph)
 
 When specific information belongs to a particular subcomponent, ensure you place it in the CLAUDE file for that component.
 For example: 
