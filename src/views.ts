@@ -7,16 +7,8 @@ import { Consumer, Factory, Module } from './factories';
 
 declare const $: any;
 declare const view: any;
+declare const window: any;
 
-// Proper window interface extension
-declare global {
-    interface Window {
-        view: {
-            selectedResidenceEffectView: (view: ResidenceEffectView) => void;
-            [key: string]: any;
-        };
-    }
-}
 
 
 /**

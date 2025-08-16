@@ -79,6 +79,21 @@ For build validation:
 npm run build
 ```
 
+## UI Design Guidelines (IMPLEMENTED)
+
+### Template Styling Standards
+- **Use Project-Specific Classes**: Prefer `inline-list-centered` over `d-flex align-items-center` for consistency with project styles
+- **Residents Display Pattern**: Always display total residents as read-only text with `formatNumber()`, never as number input
+- **Icon-First Design**: Use visual icons (`icon_resource_population.png`, `icon_house_white.png`) instead of text headers
+- **Conditional Content**: Show residence type names only when multiple residences exist per population level
+- **Visual Hierarchy**: Distinguish editable inputs (buildings) from calculated displays (residents) through styling
+
+### Table Header Improvements
+- Remove traditional table headers for cleaner UI
+- Use `table-striped table-fixed` classes for consistent column widths  
+- Implement icon-based column identification
+- Apply subtle backgrounds (`rgba(0,0,0,0.05)`) for grouping related information
+
 ## Architecture Notes
 - `types.config.ts` is generated - never edit directly
 - Use `number-input-increment` for numeric inputs
@@ -103,3 +118,4 @@ Quick debug: `console.log(Object.keys(ko.templates), window.view.island().factor
 - Initialization order in island constructor is important. Buffs register in factories. Factories register in products. Therefore, initDemands and applyBuffs exist to establish the links after objects are created. Only after that values are loaded from localStorage (as part of calling the persist* method)
 - Most assets are created for each island. Only some (regions, seesions, buffs, need categories) only exist once globally.
 - Avoid to use `as any` casts when generating code. Do not use them to fix typescript errors.
+- Use inline-list* classes from styles.css when creating floating divs.

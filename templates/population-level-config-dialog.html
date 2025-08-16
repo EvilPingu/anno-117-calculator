@@ -7,48 +7,41 @@
 
             </div>
             <div class="modal-body">
-                <!-- Population Level Summary -->
-                <div class="mb-3">
-                    <div class="input-group" style="max-width: 15rem;">
-                        <div class="input-group-prepend" data-bind="attr: {title: $root.texts.residents.name()}">
-                            <div class="input-group-text">
-                                <img class="icon-sm icon-light" src="../icons/icon_resource_population.png" />
-                            </div>
-                        </div>
-                        <span class="form-control" data-bind="text: formatNumber($data.instance().residents())"></span>
+                <!-- Population Level Summary with Total Residents -->
+                <div class="d-flex justify-content-between align-items-center mb-3 p-3" style="background-color: rgba(0,0,0,0.05); border-radius: 8px;">
+                    <h5 class="mb-0" data-bind="text: $data.instance().name()"></h5>
+                    <div class="inline-list-centered">
+                        <img class="icon-sm icon-light mr-2" src="../icons/icon_resource_population.png" data-bind="attr: {title: $root.texts.residents.name()}" />
+                        <strong data-bind="text: formatNumber($data.instance().residents())"></strong>
                     </div>
                 </div>
 
                 <!-- Residence Buildings Table -->
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Residence Type</th>
-                            <th>Buildings</th>
-                            <th>Residents</th>
-                            <th>Effects</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
+                <table class="table table-striped table-fixed">
                     <tbody data-bind="foreach: $data.instance().allResidences">
                         <tr>
-                            <td>
+                            <!-- ko if: $parent.instance().allResidences().length > 1 -->
+                            <td style="width: 25%;">
                                 <span data-bind="text: $data.name()"></span>
                             </td>
-                            <td>
+                            <!-- /ko -->
+                            <td style="width: 30%;">
                                 <div data-bind="component: { name: 'constructed-buildings-input', params: $data}"></div>
                             </td>
-                            <td>
-                                <span data-bind="text: formatNumber($data.residents())"></span>
+                            <td style="width: 20%;">
+                                <div class="inline-list-centered">
+                                    <img class="icon-sm icon-light mr-2" src="../icons/icon_resource_population.png" />
+                                    <span data-bind="text: formatNumber($data.residents())"></span>
+                                </div>
                             </td>
-                            <td data-bind="visible: $data.buildings.constructed() > 0">
+                            <td style="width: 15%;" data-bind="visible: $data.buildings.constructed() > 0">
                                 <div class="inline-list" data-bind="foreach: $data.effectCoverage">
                                     <div data-bind="attr: {title: formatPercentage(100 * $data.coverage()).substr(1) + ' ' + $data.residenceEffect.name()}">
                                         <img class="icon-sm" data-bind="attr: {src: $data.residenceEffect.icon}" />
                                     </div>
                                 </div>
                             </td>
-                            <td>
+                            <td style="width: 10%; justify-content: right">
                                 <button type="button" class="btn btn-light btn-sm">
                                     <img data-toggle="modal" data-target="#residence-effect-dialog" class="icon-sm icon-light" src="../icons/icon_marketplace_2d_light.png" data-bind="click: () => $data.prepareResidenceEffectView()" />
                                 </button>
