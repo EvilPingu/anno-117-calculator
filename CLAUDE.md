@@ -102,3 +102,4 @@ Quick debug: `console.log(Object.keys(ko.templates), window.view.island().factor
 - Items create AppliedBuff for each target. This tracks whether the effect is applied to the specific factory in AppliedBuff.scaling (knockout observable storing a float).
 - Initialization order in island constructor is important. Buffs register in factories. Factories register in products. Therefore, initDemands and applyBuffs exist to establish the links after objects are created. Only after that values are loaded from localStorage (as part of calling the persist* method)
 - Most assets are created for each island. Only some (regions, seesions, buffs, need categories) only exist once globally.
+- Avoid to use `as any` casts when generating code. Do not use them to fix typescript errors.

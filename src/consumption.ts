@@ -1,5 +1,5 @@
 import { NamedElement, ko } from './util';
-import { ResidenceBuilding, } from './population';
+import { ResidenceBuilding, PopulationLevel } from './population';
 import { AssetsMap, LiteralsMap, ResidenceNeedConfig } from './types';
 import { NeedCategoryConfig, NeedConfig } from './types.config';
 import { Demand, Product } from './production';
@@ -68,6 +68,98 @@ export class Need {
 }
 
 /**
+ * Extended PopulationLevelNeed with UI properties for template binding
+ */
+export interface PopulationLevelNeedWithUI extends PopulationLevelNeed {
+    totalResidents: KnockoutComputed<number>;
+    totalAmount: KnockoutComputed<number>;
+    prepareResidenceEffectView: () => void;
+}
+
+/**
+ * Represents a need for a population level
+ * Manages activation state for all residences of the same population tier
+ */
+export class PopulationLevelNeed {
+    public populationLevel: PopulationLevel;
+    public need: Need;
+    public checked: KnockoutObservable<boolean>;
+    public hidden: KnockoutComputed<boolean>;
+    public notes: KnockoutObservable<string>;
+    public available: KnockoutComputed<boolean>;
+    public residents!: KnockoutComputed<number>;
+
+    /**
+     * Creates a new PopulationLevelNeed instance
+     * @param need - The need this population level need represents
+     * @param populationLevel - The population level this need belongs to
+     */
+    constructor(need: Need, populationLevel: PopulationLevel) {
+        // Validate required parameters
+        if (!need) {
+            throw new Error('PopulationLevelNeed need is required');
+        }
+        if (!populationLevel) {
+            throw new Error('PopulationLevelNeed populationLevel is required');
+        }
+
+        this.populationLevel = populationLevel;
+        this.need = need;
+        
+        this.checked = ko.observable(true); // Default to activated
+        this.notes = ko.observable("");
+        this.hidden = ko.computed(() => false);
+        this.available = ko.pureComputed(() => this.need.available());
+        
+        // Calculate residents gained from this specific need
+        this.residents = ko.pureComputed(() => {
+            if (!this.checked()) return 0;
+            
+            // Sum residents from all residences for this specific need
+            return this.populationLevel.allResidences().reduce((sum: number, residence: ResidenceBuilding) => {
+                const residenceNeed = residence.needsMap.get(this.need.guid);
+                return sum + (residenceNeed ? residenceNeed.residents() : 0);
+            }, 0);
+        });
+    }
+
+    /**
+     * Gets the name of this need
+     */
+    name(): string {
+        return this.need.product.name();
+    }
+
+    /**
+     * Gets the product associated with this need
+     */
+    get product() {
+        return this.need.product;
+    }
+
+    /**
+     * Checks if this need is inactive (hidden or unavailable)
+     */
+    isInactive(): boolean {
+        return this.hidden() || !this.available();
+    }
+
+    /**
+     * Checks if this need is banned (not checked)
+     */
+    banned(): boolean {
+        return !this.checked();
+    }
+
+    /**
+     * Gets a unique ID for this need
+     */
+    get id(): string {
+        return `${this.populationLevel.guid}-need-${this.need.guid}`;
+    }
+}
+
+/**
  * Represents a need for a specific residence building
  * Manages the relationship between a residence and its consumption needs
  */
@@ -75,12 +167,13 @@ export class ResidenceNeed {
     public residence: ResidenceBuilding; 
     public need: Need; 
     public needConsumptionRate: number;
-    public checked: KnockoutObservable<boolean>;
+    public checked: KnockoutComputed<boolean>; // Now computed from population level
     public hidden: KnockoutComputed<boolean>;
     public amount: KnockoutComputed<number>;
     public residents: KnockoutComputed<number>;
     public available: KnockoutComputed<boolean>;
     public demand?: Demand;
+    public notes: KnockoutComputed<string>; // Now computed from population level
 
 
     /**
@@ -103,7 +196,26 @@ export class ResidenceNeed {
         this.need = need;
         this.needConsumptionRate = config.needConsumptionRate || 0;
 
-        this.checked = ko.observable(false);
+        // Delegate checked state to population level
+        this.checked = ko.pureComputed({
+            read: () => {
+                const populationLevelNeed = this.residence.populationLevel.getNeed(this.need.guid);
+                return populationLevelNeed ? populationLevelNeed.checked() : true; // Default to true if no population-level need
+            },
+            write: (value: boolean) => {
+                const populationLevelNeed = this.residence.populationLevel.getNeed(this.need.guid);
+                if (populationLevelNeed) {
+                    populationLevelNeed.checked(value);
+                }
+            }
+        });
+
+        // Delegate notes to population level
+        this.notes = ko.pureComputed(() => {
+            const populationLevelNeed = this.residence.populationLevel.getNeed(this.need.guid);
+            return populationLevelNeed ? populationLevelNeed.notes() : "";
+        });
+
         this.hidden = ko.computed(() => false);
 
         this.amount = ko.pureComputed(() => {
@@ -121,6 +233,59 @@ export class ResidenceNeed {
         })
 
         this.available = ko.pureComputed(() => this.need.available() && this.residence.available())
+    }
+
+    /**
+     * Gets the name of this need
+     */
+    name(): string {
+        return this.need.product.name();
+    }
+
+    /**
+     * Gets the product associated with this need
+     */
+    get product() {
+        return this.need.product;
+    }
+
+    /**
+     * Checks if this need is inactive (hidden or unavailable)
+     */
+    isInactive(): boolean {
+        return this.hidden() || !this.available();
+    }
+
+    /**
+     * Checks if this need is banned (not checked)
+     */
+    banned(): boolean {
+        return !this.checked();
+    }
+
+    /**
+     * Gets a unique ID for this need
+     */
+    get id(): string {
+        return `${this.residence.guid}-need-${this.need.guid}`;
+    }
+
+    /**
+     * Prepares the residence effect view for this need
+     */
+    prepareResidenceEffectView(): void {
+        const populationLevelNeed = this.residence.populationLevel.getNeed(this.need.guid);
+        if (populationLevelNeed) {
+            // Create residence effect view using all residences of the population level
+            const heading = `${this.residence.populationLevel.name()}: ${this.need.product.name}`;
+            (window as any).view.selectedResidenceEffectView(
+                new (window as any).ResidenceEffectView(
+                    this.residence.populationLevel.allResidences(), 
+                    heading, 
+                    this
+                )
+            );
+        }
     }
 
     initDemands(assetsMap: AssetsMap){

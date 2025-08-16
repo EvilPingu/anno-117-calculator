@@ -1,6 +1,6 @@
 import { NamedElement, ko, BuildingsCalc } from './util';
 import { AppliedBuff, Product } from './production';
-import { ResidenceNeed, ResidenceEffectEntryCoverage, ResidenceEffectCoverage, ResidenceEffect } from './consumption';
+import { ResidenceNeed, PopulationLevelNeed, ResidenceEffectEntryCoverage, ResidenceEffectCoverage, ResidenceEffect } from './consumption';
 import { AssetsMap, LiteralsMap } from './types';
 import { 
     PopulationLevelConfig, 
@@ -209,6 +209,46 @@ export class ResidenceBuilding extends NamedElement implements Constructible{
     addBuff(_: AppliedBuff): void {
         // TODO:Use appliedBuffs instead of ResidenceEffectCoverage
     }
+
+    /**
+     * Gets visible need categories for this residence's population level
+     */
+    visibleNeedCategories(): any[] {
+        // This method should return need categories grouped by the population level needs
+        const categories = new Map();
+        
+        for (const populationNeed of this.populationLevel.getVisibleNeeds()) {
+            const category = populationNeed.need.category;
+            if (!categories.has(category.guid)) {
+                categories.set(category.guid, {
+                    ...category,
+                    visibleResidenceNeeds: []
+                });
+            }
+            
+            // Get the corresponding residence need for this population need
+            const residenceNeed = this.needsMap.get(populationNeed.need.guid);
+            if (residenceNeed) {
+                categories.get(category.guid).visibleResidenceNeeds.push(residenceNeed);
+            }
+        }
+        
+        return Array.from(categories.values());
+    }
+
+    /**
+     * Prepares the residence effect view for this residence
+     */
+    prepareResidenceEffectView(): void {
+        const heading = this.populationLevel.name();
+        (window as any).view.selectedResidenceEffectView(
+            new (window as any).ResidenceEffectView(
+                this.populationLevel.allResidences(), 
+                heading, 
+                null
+            )
+        );
+    }
 }
 
 /**
@@ -229,6 +269,10 @@ export class PopulationLevel extends NamedElement {
     public availableResidences?: KnockoutComputed<any[]>;
     public canEdit?: KnockoutComputed<boolean>;
     public hotkey: KnockoutObservable<string | null>;
+
+    // Population-level need management
+    public needsMap: Map<number, PopulationLevelNeed>;
+    public needs: PopulationLevelNeed[];
 
 
     /**
@@ -261,6 +305,10 @@ export class PopulationLevel extends NamedElement {
         this.notes = ko.observable("");
         this.residences = [];
         this.hotkey = ko.observable(null);
+
+        // Initialize population-level need management
+        this.needsMap = new Map();
+        this.needs = [];
 
         // Skyscraper levels and special residences removed for simplified calculation
         // All population now uses the base residence building only
@@ -308,6 +356,39 @@ export class PopulationLevel extends NamedElement {
     addResidence(residence: ResidenceBuilding){
         this.allResidences.push(residence);
         this.residences = this.allResidences();
+
+        // Initialize population-level needs from the first residence
+        if (this.needsMap.size === 0 && residence.needsMap.size > 0) {
+            for (const residenceNeed of residence.needsMap.values()) {
+                const populationLevelNeed = new PopulationLevelNeed(residenceNeed.need, this);
+                this.needsMap.set(residenceNeed.need.guid, populationLevelNeed);
+                this.needs.push(populationLevelNeed);
+            }
+        }
+    }
+
+    /**
+     * Gets a population-level need by GUID
+     * @param needGuid - The GUID of the need to retrieve
+     */
+    getNeed(needGuid: number): PopulationLevelNeed | undefined {
+        return this.needsMap.get(needGuid);
+    }
+
+    /**
+     * Checks if a need is activated for this population level
+     * @param needGuid - The GUID of the need to check
+     */
+    isNeedActivated(needGuid: number): boolean {
+        const need = this.needsMap.get(needGuid);
+        return need ? need.checked() : false;
+    }
+
+    /**
+     * Gets all visible (available) population-level needs
+     */
+    getVisibleNeeds(): PopulationLevelNeed[] {
+        return this.needs.filter(need => need.available() && !need.hidden());
     }
 
 

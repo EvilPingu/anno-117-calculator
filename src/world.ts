@@ -955,12 +955,14 @@ export class Island {
         }
 
         for (let r of this.residenceBuildings) {
-            
             persistString(r, "notes");
+        }
 
-            for (let n of r.needsMap.values()) {
-                persistBool(n, "checked", `${r.guid}[${n.need.guid}].checked`);
-                persistString(n, "notes", `${r.guid}[${n.need.guid}].notes`);
+        // Persist population-level needs instead of residence-level needs
+        for (let populationLevel of this.populationLevels) {
+            for (let need of populationLevel.needs) {
+                persistBool(need, "checked", `${populationLevel.guid}[${need.need.guid}].checked`);
+                persistString(need, "notes", `${populationLevel.guid}[${need.need.guid}].notes`);
             }
         }
 

@@ -156,3 +156,99 @@ island.effect.${effectGuid}.scaling          // Island effects (via persistFloat
 - All persistence is scoped with localStorage keys: ${scope}.${obj.guid}.${attributeName}
 - Global objects (regions, sessions, effects) now have persistence for their scaling states
 - Island-level persistence happens in Island constructor using persistBuildings() flow
+
+## Population-Level Need Management (IMPLEMENTED)
+
+### Architecture Transformation
+**Before**: Individual residence-level need activation (ResidenceNeed.checked observable per building)
+**After**: Population-level need activation (PopulationLevelNeed.checked observable shared across all residences)
+
+### Key Classes Created/Modified
+**PopulationLevelNeed** (consumption.ts:74-139):
+- Centralized need management for entire population tier
+- Properties: checked, notes, available, hidden observables
+- Methods: name(), isInactive(), banned(), prepareResidenceEffectView()
+- Each PopulationLevel has needsMap: Map<number, PopulationLevelNeed>
+
+**PopulationLevel** (population.ts:233-355):
+- Added needsMap and needs array for population-level need management
+- Methods: getNeed(), isNeedActivated(), getVisibleNeeds()
+- Needs initialized when first residence is added via addResidence()
+
+**ResidenceNeed** (consumption.ts:145-261):
+- checked and notes properties now computed observables delegating to PopulationLevel
+- Maintains all calculation logic (amount, residents, demands)
+- Preserved UI compatibility through delegation pattern
+
+### Persistence Changes
+**Storage Pattern**: Changed from `${residenceGuid}[${needGuid}].checked` to `${populationLevelGuid}[${needGuid}].checked`
+**Location**: Island constructor persistence (world.ts:961-967) now iterates PopulationLevel.needs instead of ResidenceBuilding.needsMap
+
+### UI Architecture (IMPLEMENTED)
+**ResidencePresenter** (views.ts:747-793):
+- Added populationNeedCategories computed observable
+- Creates need categories from population-level needs with aggregated totalResidents() and totalAmount()
+- Preserves methods by adding properties directly to PopulationLevelNeed objects (avoids object spread)
+
+**Template Structure** (templates/population-level-config-dialog.html):
+- Population summary section with total residents across all residences
+- Residence buildings table showing individual buildings with controls
+- Population-level needs section with single checkbox per need type
+- Proper binding context: $root.texts for localization, $data.need.product for asset icons
+
+### Critical Implementation Patterns
+**Object Method Preservation**: NEVER use object spread (`...obj`) with Knockout objects as it loses method references
+**Template Binding Context**: Use $root.texts for localization, formatNumber/formatPercentage as global functions
+**Delegation Pattern**: ResidenceNeed observables delegate to PopulationLevel for single source of truth
+**Dynamic Property Addition**: Add computed properties directly to existing objects to preserve methods
+
+## Need Categorization Architecture (IMPLEMENTED)
+
+### Category Identification Issue
+**Problem**: Need categories use `id` as unique identifier, NOT `guid`
+**Root Cause**: `NeedCategory` extends `NamedElement` which has optional `guid?: number`, but categories are identified by their `id: string` property
+**Critical Fix**: Always use `category.id` for Map keys when grouping needs by category
+
+```typescript
+// WRONG - causes all needs to appear under same category
+if (!categories.has(category.guid)) {
+    categories.set(category.guid, categoryObj);
+}
+
+// CORRECT - properly groups needs by category
+if (!categories.has(category.id)) {
+    categories.set(category.id, categoryObj);
+}
+```
+
+### Two-Way Observable Delegation Pattern
+**Problem**: Population-level need changes not reflected in residence-level consumption
+**Solution**: ResidenceNeed.checked must be writable computed observable with delegation
+
+```typescript
+// WRONG - read-only delegation breaks consumption
+this.checked = ko.pureComputed(() => {
+    const populationLevelNeed = this.residence.populationLevel.getNeed(this.need.guid);
+    return populationLevelNeed ? populationLevelNeed.checked() : false;
+});
+
+// CORRECT - two-way binding enables proper consumption
+this.checked = ko.pureComputed({
+    read: () => {
+        const populationLevelNeed = this.residence.populationLevel.getNeed(this.need.guid);
+        return populationLevelNeed ? populationLevelNeed.checked() : true;
+    },
+    write: (value: boolean) => {
+        const populationLevelNeed = this.residence.populationLevel.getNeed(this.need.guid);
+        if (populationLevelNeed) {
+            populationLevelNeed.checked(value);
+        }
+    }
+});
+```
+
+### Key Implementation Details
+- **Category Mapping**: Use `category.id` string identifiers, not `category.guid` numbers
+- **Delegation Direction**: PopulationLevelNeed is the source of truth, ResidenceNeed delegates to it
+- **Default Values**: When population-level need doesn't exist, default to `true` (activated) to maintain backward compatibility
+- **Consumption Flow**: ResidenceNeed.amount() calculations depend on ResidenceNeed.checked() delegation working properly
