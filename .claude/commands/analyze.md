@@ -14,7 +14,7 @@ You make a plan:
    - Naming conventions and code organization
 * How does the feature integrate into the overall flow of managing knockout observables and setting up the calculator?
 * Which new classes and methods need to be added. How can existing code be efficiently be reused?
-* Update your memory with the captured insights: 
+* Update CLAUDE.md with the captured insights: 
    - Key architectural decisions
    - Important implementation details but avoid lengthy examples. Refer to the code instead.
    - Common patterns used throughout the code

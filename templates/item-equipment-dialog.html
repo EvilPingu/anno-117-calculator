@@ -29,6 +29,7 @@
                                     <div data-bind="component:{name:'icon-checkbox', params:{asset: $data, checked: $data.scaling}}"></div>
                                 </div> 
                             </td>
+                            <td data-bind="text: $data.effectScope"></td>
                             <td data-bind="text: $data.name"></td> <!-- item name -->
                             <td>
                                 <div class="inline-list-centered" data-bind="foreach: $data.targets">
