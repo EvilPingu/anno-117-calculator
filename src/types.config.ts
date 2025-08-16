@@ -240,6 +240,7 @@ export interface EffectConfig {
   targets?: number[];
   effectScope: string;
   excludeEffectSourceGUID: boolean;
+  effectDuration: number;
 }
 
 // Tech configuration interface

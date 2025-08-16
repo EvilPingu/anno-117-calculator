@@ -413,6 +413,7 @@ export class Effect extends NamedElement {
     public effectScope: string;
     public excludeEffectSourceGUID: boolean;
     public isStackable: boolean;
+    public effectDuration?: number; // duration of the event in seconds
 
     public scaling: KnockoutObservable<number>;
 
@@ -443,6 +444,9 @@ export class Effect extends NamedElement {
         this.targets = [];
         if(config.targets)
             this.targetGuids = config.targets;
+
+        if(config.effectDuration > 0)
+            this.effectDuration = config.effectDuration;
 
         this.scaling = ko.observable(0);
         this.isStackable = false;

@@ -30,6 +30,9 @@
                                 </div> 
                             </td>
                             <td data-bind="text: $data.effectScope"></td>
+                            <td data-bind="if: $data.effectDuration">
+                                <span data-bind="text: formatNumber($data.effectDuration / 3600)"></span><span>h</span>
+                            </td>
                             <td data-bind="text: $data.name"></td> <!-- item name -->
                             <td>
                                 <div class="inline-list-centered" data-bind="foreach: $data.targets">

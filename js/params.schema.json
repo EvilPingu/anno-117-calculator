@@ -1659,6 +1659,9 @@
           },
           "excludeEffectSourceGUID": {
             "type": "boolean"
+          },
+          "effectDuration": {
+            "type": "integer"
           }
         },
         "required": [
@@ -1666,7 +1669,8 @@
           "name",
           "buffs",
           "effectScope",
-          "excludeEffectSourceGUID"
+          "excludeEffectSourceGUID",
+          "effectDuration"
         ]
       },
       "title": "Effect",
@@ -2718,6 +2722,9 @@
         "data/ui/fhd/base/icon_content/generic/icon_2d_religion.png": {
           "type": "string"
         },
+        "data/ui/fhd/base/icon_content/religion/icon_2d_deity_mercury.png": {
+          "type": "string"
+        },
         "data/ui/fhd/base/icon_content/generic/icon_2d_slot_mountain.png": {
           "type": "string"
         },
@@ -2731,9 +2738,6 @@
           "type": "string"
         },
         "data/ui/fhd/base/icon_content/tech_tree/civic/icon_tech_warehouse_maintenance.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/religion/icon_2d_deity_mercury.png": {
           "type": "string"
         }
       },
@@ -2986,12 +2990,12 @@
         "data/ui/fhd/base/icon_content/tech_tree/icon_research_progress.png",
         "data/ui/fhd/base/icon_content/diplomacy/icon_2d_power_struggle.png",
         "data/ui/fhd/base/icon_content/generic/icon_2d_religion.png",
+        "data/ui/fhd/base/icon_content/religion/icon_2d_deity_mercury.png",
         "data/ui/fhd/base/icon_content/generic/icon_2d_slot_mountain.png",
         "data/ui/fhd/base/icon_content/tech_tree/economy/icon_tech_wood_beaver.png",
         "data/ui/fhd/base/icon_content/tech_tree/economy/icon_tech_wood_honey.png",
         "data/ui/fhd/base/icon_content/tech_tree/economy/icon_tech_wood_bird.png",
-        "data/ui/fhd/base/icon_content/tech_tree/civic/icon_tech_warehouse_maintenance.png",
-        "data/ui/fhd/base/icon_content/religion/icon_2d_deity_mercury.png"
+        "data/ui/fhd/base/icon_content/tech_tree/civic/icon_tech_warehouse_maintenance.png"
       ],
       "title": "Icon",
       "description": "Icon data URLs indexed by icon identifier"
@@ -3014,6 +3018,12 @@
     "factories",
     "modules",
     "buildingBuffs",
+    "effects",
+    "techs",
+    "patrons",
+    "items",
+    "icons",
+    "effects",
     "effects",
     "techs",
     "patrons",
