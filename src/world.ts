@@ -199,6 +199,24 @@ export class Session extends NamedElement {
         this.islands = ko.observableArray([]);
 
         this.effects = effectsConfig.filter(e => e.effectScope.endsWith("Session")).map(e => new Effect(e, assetsMap))
+
+        // Set up persistence for session effects
+        if (typeof localStorage !== 'undefined') {
+            for (const effect of this.effects) {
+                const storageKey = `session.${this.guid}.effect.${effect.guid}.scaling`;
+                
+                // Load saved scaling value
+                const savedValue = localStorage.getItem(storageKey);
+                if (savedValue != null) {
+                    effect.scaling(parseFloat(savedValue));
+                }
+                
+                // Subscribe to changes for automatic saving
+                effect.scaling.subscribe((val: number) => {
+                    localStorage.setItem(storageKey, val.toString());
+                });
+            }
+        }
     }
     
         /**
@@ -765,6 +783,11 @@ export class Island {
             }
         }
         this.availableEffects = ko.pureComputed(() => this.allEffects.filter(e => e.available() && this.patronEffects.indexOf(e) == -1 ));
+
+        // Set up persistence for island effects
+        for (const effect of this.allEffects) {
+            persistFloat(effect, "scaling", `island.effect.${effect.guid}.scaling`);
+        }
         
         // Set up patrons
         this.patronEffects = [];

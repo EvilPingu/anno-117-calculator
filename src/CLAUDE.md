@@ -118,3 +118,41 @@ This approach prevents modules from having diminishing returns when stacked with
 - **Dynamic Scaling**: `updateAmount()` method multiplies base amount by observable factor
 - **Usage**: Used for fuel consumption demands where factor changes based on buff calculations
 - **Factor Removal**: Base Demand class no longer has static factor property - moved to BuildingDemand observable
+
+## Effects Persistence Architecture (IMPLEMENTED)
+
+### Three-Tier Effect Persistence System
+**Global Effects** (main.ts:369-384):
+- Storage key pattern: `global.effect.${effectGuid}.scaling`
+- Persisted after creation during initialization
+- Uses direct localStorage.getItem/setItem with observable subscriptions
+
+**Session Effects** (world.ts:203-218):
+- Storage key pattern: `session.${sessionGuid}.effect.${effectGuid}.scaling`
+- Persisted in Session constructor after effect creation
+- Uses TypeScript-safe localStorage existence checking
+
+**Island Effects** (world.ts:786-789):
+- Storage key pattern: `island.effect.${effectGuid}.scaling`
+- Uses existing `persistFloat(effect, "scaling", ...)` helper pattern
+- Integrated into Island constructor persistence flow
+
+### Implementation Details
+- **Effect Scaling**: All effects use `scaling: KnockoutObservable<number>` (0=inactive, 1=active)
+- **Automatic Persistence**: Observable subscriptions save changes immediately to localStorage
+- **Type Safety**: Proper null checking for localStorage.getItem() results
+- **Backward Compatible**: No changes to existing Effect class interface
+- **Consistent Pattern**: All three levels follow same observable subscription pattern
+
+### Storage Key Structure
+```
+global.effect.${effectGuid}.scaling          // Global effects
+session.${sessionGuid}.effect.${effectGuid}.scaling  // Session effects  
+island.effect.${effectGuid}.scaling          // Island effects (via persistFloat)
+```
+
+### Core Architecture
+- Factory/building persistence uses helper functions: persistBool, persistInt, persistFloat, persistString
+- All persistence is scoped with localStorage keys: ${scope}.${obj.guid}.${attributeName}
+- Global objects (regions, sessions, effects) now have persistence for their scaling states
+- Island-level persistence happens in Island constructor using persistBuildings() flow

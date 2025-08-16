@@ -355,6 +355,7 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
     }
 
     // Set up global effects
+    const globalEffects: any[] = [];
     for (let effect of (params.effects || [])) {
         // create Module owner effects here so that they are avaiable in the constructor of Modules
         if (!effect.effectScope.endsWith("Meta") && effect.effectScope != "ModuleOwner")
@@ -362,6 +363,25 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
 
         const r = new Effect(effect, (window as any).view.assetsMap);
         (window as any).view.assetsMap.set(r.guid, r);
+        globalEffects.push(r);
+    }
+
+    // Set up persistence for global effects
+    if (localStorage) {
+        for (const effect of globalEffects) {
+            const storageKey = `global.effect.${effect.guid}.scaling`;
+            
+            // Load saved scaling value
+            const savedValue = localStorage.getItem(storageKey);
+            if (savedValue != null) {
+                effect.scaling(parseFloat(savedValue));
+            }
+            
+            // Subscribe to changes for automatic saving
+            effect.scaling.subscribe((val: number) => {
+                localStorage.setItem(storageKey, val.toString());
+            });
+        }
     }
     
 
