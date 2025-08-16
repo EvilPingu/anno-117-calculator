@@ -35,8 +35,13 @@
                             </td>
                             <td data-bind="text: $data.name"></td> <!-- item name -->
                             <td>
-                                <div class="inline-list-centered" data-bind="foreach: $data.targets">
-                                    <img class="mr-2 icon-sm" data-bind="attr: { src: $data.icon ? $data.icon : null, alt: $data.name}, title: $data.getRegionExtendedName()">
+                                <div data-bind="if: $data.targets.length > 128" style="text-align: center;">
+                                    All
+                                </div>
+                                <div data-bind="if: $data.targets.length <= 128">
+                                    <div class="inline-list-centered" data-bind="foreach: $data.targets">
+                                        <img class="mr-2 icon-sm" data-bind="attr: { src: $data.icon ? $data.icon : null, alt: $data.name}, title: $data.getRegionExtendedName()">
+                                    </div>
                                 </div>
                             </td>
                             <td>

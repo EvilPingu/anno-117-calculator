@@ -15,7 +15,7 @@
                     <label class="col-sm-2 col-form-label" data-bind="text: $root.texts.devotion.name">Devotion:</label>
                     <div class="col-sm-4">
                         <div class="input-group input-group-sm spinner">
-                            <input class="form-control" type="number" value="0" step="1" min="0" max="100" data-bind="value: $data.devotion, attr: {id: 'devotion-input'}" />
+                            <input class="form-control" type="number" value="0" step="1" min="0" data-bind="value: $data.devotion, attr: {id: 'devotion-input'}" />
                             <div class="input-group-append">
                                 <div data-bind="component: { name: 'number-input-increment', params: { obs: $data.devotion, id: 'devotion-input' }}"></div>
                             </div>

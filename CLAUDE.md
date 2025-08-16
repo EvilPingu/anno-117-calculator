@@ -112,6 +112,40 @@ npm run build
 - **Components broken**: Call registerComponents() before ko.applyBindings()
 
 Quick debug: `console.log(Object.keys(ko.templates), window.view.island().factories[0].buffs.length)`
+## Design System and Typography
+
+### Font Configuration
+- **Primary Font**: Pelago (`pelago-regular.otf`) for all body text and UI elements
+- **Heading Font**: Albertus Nova for headings (h1, legends) and special emphasis
+- **Base Font Size**: 16px (increased from 14px for better readability)
+- **Font Loading**: Use `@font-face` with `font-display: swap` for performance
+- **Letter Spacing**: Applied subtle letter-spacing to improve readability
+
+### Color Scheme (Warm Earth Tones)
+- **Body Background**: `#d4b89b` (warm brown)
+- **Navbar Background**: `#ffe9de` (light peachy cream)
+- **Input Fields**: `#c4a485` (darker tone, ~10% darker than body)
+- **Modal Dialogs**: Dark blue theme
+  - Content: `#2c3e50` (medium dark blue)
+  - Header/Footer: `#1a252f` (darker blue)
+  - Text: `#ecf0f1` (light blue-gray)
+- **UI Components**: Semi-transparent navbar color `rgba(255, 233, 222, 0.9)`
+
+### CSS Component Patterns
+- **Form Controls**: Use consistent background `#c4a485` and border `#abb8c3`
+- **Custom Selects**: Match form control styling for consistency
+- **Modal Separation**: Dark blue modals contrast with warm main theme
+- **Button Text Color**: CRITICAL - Button text color should be white/light, not transparent
+- **Number Input Increment**: Maintain consistent width (16px) across light/dark modes
+
+### Font Size Hierarchy
+- **Body**: 16px (Pelago)
+- **H1**: 40px (Albertus Nova)
+- **Legends**: 22px (Albertus Nova)
+- **UI Components**: 13-14px (factory names, amounts, etc.)
+- **Small Text**: 11-12px (load indicators, help text)
+- **Input Groups**: 0.8rem
+
 ## Generated File Notes
 
 - Items create AppliedBuff for each target. This tracks whether the effect is applied to the specific factory in AppliedBuff.scaling (knockout observable storing a float).
