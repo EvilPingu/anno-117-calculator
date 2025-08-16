@@ -1,6 +1,6 @@
 import { ACCURACY, BuildingsCalc, formatNumber, ko, NamedElement } from './util';
 import { PopulationGroup, PopulationLevel, ResidenceBuilding, Workforce } from './population';
-import { ResidenceEffectCoverage, ResidenceEffect, ResidenceNeed, NeedCategory, Need, PopulationLevelNeedWithUI } from './consumption';
+import { ResidenceEffectCoverage, ResidenceEffect, ResidenceNeed, NeedCategory, Need, PopulationLevelNeed } from './consumption';
 import { ProductCategory, Product, Demand } from './production';
 import { Consumer, Factory, Module } from './factories';
 
@@ -394,7 +394,7 @@ export class ResidenceEffectView {
     public allEffects: ResidenceEffect[];
     public aggregates: KnockoutObservableArray<ResidenceEffectAggregate>;
     public unusedEffects: KnockoutObservableArray<ResidenceEffect>;
-    public need: ResidenceNeed | null;
+    public need: PopulationLevelNeed | null;
     public productionChain: ProductionChainView | null;
     public selectedEffect: KnockoutObservable<ResidenceEffect>;
     public region: string | null = null;
@@ -405,7 +405,7 @@ export class ResidenceEffectView {
      * @param heading - Optional heading for the view
      * @param need - Optional specific need to focus on
      */
-    constructor(residences: ResidenceBuilding[], heading: string | null = null, need: ResidenceNeed | null = null) {
+    constructor(residences: ResidenceBuilding[], heading: string | null = null, need: PopulationLevelNeed | null = null) {
         // Validate required parameters
         if (!residences || !Array.isArray(residences)) {
             throw new Error('ResidenceEffectView residences array is required');
@@ -608,7 +608,8 @@ class ResidenceNeedPresenter {
     public parent: NeedCategoryPresenter;
     public guid: number;
     public id: string;
-    private instance: KnockoutObservable<ResidenceNeed | undefined>;
+    public residentsPerResidence: number;
+    private instance: KnockoutObservable<PopulationLevelNeed | undefined>;
     public name: KnockoutObservable<string>;
     public visible: KnockoutComputed<boolean>;
     public amount: KnockoutComputed<number>;
@@ -621,16 +622,17 @@ class ResidenceNeedPresenter {
         this.parent = parent;
         this.guid = need.guid;
         this.id = "residence-" + this.guid;
+        this.residentsPerResidence = need.residents;
         this.instance = ko.observable();
         this.name = ko.pureComputed(() => need.product.name());
         this.visible =  ko.pureComputed(() => !!this.instance());
         this.product = ko.pureComputed(() => need.product);
         this.amount = ko.pureComputed(() => {
             let inst = this.instance();
-            if(inst == null || !inst.demand)
+            if(inst == null)
                 return 0;
 
-            return (inst.demand as Demand).amount();
+            return inst.amount();
         });
         this.checked = ko.pureComputed({
             read: () => this.instance()?.checked(),
@@ -650,7 +652,7 @@ class ResidenceNeedPresenter {
         });
     }
 
-    update(need?: ResidenceNeed){
+    update(need?: PopulationLevelNeed){
         this.instance(need);
     }
     
@@ -707,10 +709,6 @@ export class ResidencePresenter{
     public needCategories: NeedCategoryPresenter[];
     public visibleNeedCategories: KnockoutObservableArray<NeedCategoryPresenter>;
     public effectCoverage: KnockoutObservableArray<ResidenceEffectCoverage>;
-    
-    // Population-level properties
-    public populationNeedCategories: KnockoutComputed<any[]>;
-    public populationLevelNeeds: KnockoutComputed<any[]> = ko.pureComputed(() => []);
 
 
     constructor(needCategories: NeedCategory[], populationLevel: PopulationLevel){
@@ -734,61 +732,17 @@ export class ResidencePresenter{
             this.needCategories.push(presCat);
         }
 
-        this.residence.subscribe(residence => {
-            if(!(residence instanceof ResidenceBuilding))
+        this.instance.subscribe(populationLevel => {
+            if(!(populationLevel instanceof PopulationLevel))
                 return;
 
             for (var presNeed of this.residenceNeeds){
-                presNeed.update(residence.needsMap.get(presNeed.guid));
+                presNeed.update(populationLevel.needsMap.get(presNeed.guid));
             }
         });
 
         this.visibleNeedCategories = ko.pureComputed(() => this.needCategories.filter(n => n.visible()));
 
-        // Set up population-level need categories
-        this.populationNeedCategories = ko.pureComputed(() => {
-            const populationLevel = this.instance();
-            if (!populationLevel) return [];
-
-            const categories = new Map();
-            
-            for (const populationNeed of populationLevel.getVisibleNeeds()) {
-                const category = populationNeed.need.category;
-                if (!categories.has(category.id)) {
-                    categories.set(category.id, {
-                        id: category.id,
-                        name: category.name,
-                        checked: ko.observable(true), // Default to checked for categories
-                        populationLevelNeeds: []
-                    });
-                }
-                
-                // Add computed properties to the population need directly
-                const populationNeedWithUI = populationNeed as PopulationLevelNeedWithUI;
-                populationNeedWithUI.totalResidents = ko.pureComputed(() => {
-                    return populationNeed.residents();
-                });
-                
-                populationNeedWithUI.totalAmount = ko.pureComputed(() => {
-                    if (!populationNeed.checked()) return 0;
-                    return populationLevel.allResidences().reduce((sum: number, residence: ResidenceBuilding) => {
-                        const residenceNeed = residence.needsMap.get(populationNeed.need.guid);
-                        return sum + (residenceNeed ? residenceNeed.amount() : 0);
-                    }, 0);
-                });
-                
-                populationNeedWithUI.prepareResidenceEffectView = () => {
-                    const heading = `${populationLevel.name()}: ${populationNeed.need.product.name()}`;
-                    window.view.selectedResidenceEffectView(
-                        new ResidenceEffectView(populationLevel.allResidences(), heading, null)
-                    );
-                };
-                
-                categories.get(category.id).populationLevelNeeds.push(populationNeed);
-            }
-            
-            return Array.from(categories.values());
-        });
     }
 
     update(populationLevel: PopulationLevel){

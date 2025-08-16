@@ -53,30 +53,30 @@
 
 
                 <!-- Population Level Needs -->
-                <div data-bind="foreach: $data.populationNeedCategories()">
+                <div data-bind="foreach: $data.visibleNeedCategories()">
                     <collapsible params="id: $data.id, heading: $data.name, data: $data, checkbox: $data.checked">
                         <table class="table table-striped table-fixed">
-                            <tbody data-bind="foreach: $data.populationLevelNeeds">
+                            <tbody data-bind="foreach: $data.visibleResidenceNeeds">
                                 <tr data-bind="css:{inactive: $data.isInactive()}">
                                     <td>
                                         <span class="custom-control custom-checkbox" data-bind="title: $data.name()">
                                             <input type="checkbox" class="custom-control-input" data-bind="checked: $data.checked, disabled: $data.isInactive(), attr: { id: $data.id + '-checked' }">
                                             <label class="custom-control-label" data-bind="attr: { for: $data.id + '-checked' }" src-only style="vertical-align: top;">
                                                 <span class="mr-2">
-                                                    <span data-bind="component: { name: 'asset-icon', params: $data.need.product}"></span>
+                                                    <span data-bind="component: { name: 'asset-icon', params: $data.product}"></span>
                                                     <span data-bind="text: $data.name()"></span>
                                                 </span>
                                             </label>
                                         </span>
                                     </td>
-                                    <td>
+                                    <td data-bind="if: $data.residentsPerResidence > 0">
                                         <img class="icon-sm icon-light" src="../icons/icon_resource_population.png" />
-                                        <span class="ml-1" data-bind="text: formatNumber($data.totalResidents())"></span>
+                                        <span class="ml-1" data-bind="text: formatNumber($data.residents())"></span>
                                     </td>
                                     <td>
                                         <div class="inline-list" style="justify-content: right">
-                                            <div data-bind="if: $data.totalAmount">
-                                                <span data-bind="text: formatNumber($data.totalAmount()) + ' t/min'"></span>
+                                            <div data-bind="if: $data.amount">
+                                                <span data-bind="text: formatNumber($data.amount()) + ' t/min'"></span>
                                             </div>
                                             <button class="btn btn-light btn-sm ml-2" data-bind="click: () => {$data.prepareResidenceEffectView()}" data-toggle="modal" data-target="#residence-effect-dialog">
                                                 <img class="icon-sm icon-light" src="../icons/icon_marketplace_2d_light.png" />

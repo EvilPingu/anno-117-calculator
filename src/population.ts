@@ -357,14 +357,16 @@ export class PopulationLevel extends NamedElement {
         this.allResidences.push(residence);
         this.residences = this.allResidences();
 
-        // Initialize population-level needs from the first residence
-        if (this.needsMap.size === 0 && residence.needsMap.size > 0) {
-            for (const residenceNeed of residence.needsMap.values()) {
-                const populationLevelNeed = new PopulationLevelNeed(residenceNeed.need, this);
-                this.needsMap.set(residenceNeed.need.guid, populationLevelNeed);
-                this.needs.push(populationLevelNeed);
-            }
+        // initialize population level needs as the union of all residence needs
+        for (const residenceNeed of residence.needsMap.values()) {
+            if (this.needsMap.has(residenceNeed.need.guid))
+                continue;
+
+            const populationLevelNeed = new PopulationLevelNeed(residenceNeed.need, this);
+            this.needsMap.set(residenceNeed.need.guid, populationLevelNeed);
+            this.needs.push(populationLevelNeed);
         }
+
     }
 
     /**

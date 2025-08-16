@@ -68,15 +68,6 @@ export class Need {
 }
 
 /**
- * Extended PopulationLevelNeed with UI properties for template binding
- */
-export interface PopulationLevelNeedWithUI extends PopulationLevelNeed {
-    totalResidents: KnockoutComputed<number>;
-    totalAmount: KnockoutComputed<number>;
-    prepareResidenceEffectView: () => void;
-}
-
-/**
  * Represents a need for a population level
  * Manages activation state for all residences of the same population tier
  */
@@ -88,6 +79,7 @@ export class PopulationLevelNeed {
     public notes: KnockoutObservable<string>;
     public available: KnockoutComputed<boolean>;
     public residents!: KnockoutComputed<number>;
+    public amount!: KnockoutComputed<number>;
 
     /**
      * Creates a new PopulationLevelNeed instance
@@ -121,6 +113,21 @@ export class PopulationLevelNeed {
                 return sum + (residenceNeed ? residenceNeed.residents() : 0);
             }, 0);
         });
+
+        // Calculate residents gained from this specific need
+        this.amount = ko.pureComputed(() => {
+            if (!this.checked()) return 0;
+            
+            // Sum residents from all residences for this specific need
+            return this.populationLevel.allResidences().reduce((sum: number, residence: ResidenceBuilding) => {
+                const residenceNeed = residence.needsMap.get(this.need.guid);
+                return sum + (residenceNeed ? residenceNeed.amount() : 0);
+            }, 0);
+        });
+
+        this.checked.subscribe(checked => {
+            this.populationLevel.allResidences().forEach(r => r.needsMap.get(this.need.guid)?.checked(checked));
+        })
     }
 
     /**
@@ -168,12 +175,10 @@ export class ResidenceNeed {
     public need: Need; 
     public needConsumptionRate: number;
     public checked: KnockoutComputed<boolean>; // Now computed from population level
-    public hidden: KnockoutComputed<boolean>;
     public amount: KnockoutComputed<number>;
     public residents: KnockoutComputed<number>;
     public available: KnockoutComputed<boolean>;
     public demand?: Demand;
-    public notes: KnockoutComputed<string>; // Now computed from population level
 
 
     /**
@@ -196,27 +201,8 @@ export class ResidenceNeed {
         this.need = need;
         this.needConsumptionRate = config.needConsumptionRate || 0;
 
-        // Delegate checked state to population level
-        this.checked = ko.pureComputed({
-            read: () => {
-                const populationLevelNeed = this.residence.populationLevel.getNeed(this.need.guid);
-                return populationLevelNeed ? populationLevelNeed.checked() : true; // Default to true if no population-level need
-            },
-            write: (value: boolean) => {
-                const populationLevelNeed = this.residence.populationLevel.getNeed(this.need.guid);
-                if (populationLevelNeed) {
-                    populationLevelNeed.checked(value);
-                }
-            }
-        });
+        this.checked = ko.observable(true); // set from populationLevelNeed which is constructed later({
 
-        // Delegate notes to population level
-        this.notes = ko.pureComputed(() => {
-            const populationLevelNeed = this.residence.populationLevel.getNeed(this.need.guid);
-            return populationLevelNeed ? populationLevelNeed.notes() : "";
-        });
-
-        this.hidden = ko.computed(() => false);
 
         this.amount = ko.pureComputed(() => {
             if(!this.checked())
@@ -253,7 +239,7 @@ export class ResidenceNeed {
      * Checks if this need is inactive (hidden or unavailable)
      */
     isInactive(): boolean {
-        return this.hidden() || !this.available();
+        return !this.available();
     }
 
     /**
