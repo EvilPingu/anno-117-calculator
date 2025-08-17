@@ -604,7 +604,7 @@ export class CollapsibleStates {
     }
 } 
 
-class ResidenceNeedPresenter {
+class PopulationLevelNeedPresenter {
     public parent: NeedCategoryPresenter;
     public guid: number;
     public id: string;
@@ -667,35 +667,35 @@ class NeedCategoryPresenter {
     public name: KnockoutObservable<string>;
     public visible: KnockoutComputed<boolean>;
     public checked: KnockoutComputed<boolean>;
-    public residenceNeeds: KnockoutObservableArray<ResidenceNeedPresenter>;
-    public visibleResidenceNeeds: KnockoutObservableArray<ResidenceNeedPresenter>;
+    public populationLevelNeeds: KnockoutObservableArray<PopulationLevelNeedPresenter>;
+    public visiblePopulationLevelNeeds: KnockoutObservableArray<PopulationLevelNeedPresenter>;
 
     constructor(parent: ResidencePresenter, needCategory: NeedCategory){
         this.parent = parent;
         this.id = "residence-" + needCategory.id;
 
         this.name = ko.pureComputed(() => needCategory.name());
-        this.residenceNeeds = ko.observableArray();
-        this.visible = ko.pureComputed(() => this.residenceNeeds().filter(n => n.visible()).length > 0);
-        this.visibleResidenceNeeds = ko.pureComputed(() => this.residenceNeeds().filter(n => n.visible()));
+        this.populationLevelNeeds = ko.observableArray();
+        this.visible = ko.pureComputed(() => this.populationLevelNeeds().filter(n => n.visible()).length > 0);
+        this.visiblePopulationLevelNeeds = ko.pureComputed(() => this.populationLevelNeeds().filter(n => n.visible()));
 
         this.checked = ko.pureComputed({
             read: () => {
-                for (var n of this.visibleResidenceNeeds())
+                for (var n of this.visiblePopulationLevelNeeds())
                     if (!n.checked())
                         return false;
 
                 return true;
             },
             write: (checked: boolean) => {
-                for (var n of this.visibleResidenceNeeds())
+                for (var n of this.visiblePopulationLevelNeeds())
                     n.checked(checked);
             }
         })
     }
 
-    addNeed(need: ResidenceNeedPresenter){
-        this.residenceNeeds.push(need);
+    addNeed(need: PopulationLevelNeedPresenter){
+        this.populationLevelNeeds.push(need);
     }
 }
 
@@ -705,7 +705,7 @@ export class ResidencePresenter{
     public buildings: KnockoutObservable<BuildingsCalc>;
     public name: KnockoutObservable<string>;
     public residents: KnockoutObservable<string>;
-    private residenceNeeds: ResidenceNeedPresenter[];
+    private populationLevelNeeds: PopulationLevelNeedPresenter[];
     public needCategories: NeedCategoryPresenter[];
     public visibleNeedCategories: KnockoutObservableArray<NeedCategoryPresenter>;
     public effectCoverage: KnockoutObservableArray<ResidenceEffectCoverage>;
@@ -718,16 +718,16 @@ export class ResidencePresenter{
         this.name = ko.pureComputed(() => this.instance() ? this.instance().name() : "");
         this.residents = ko.pureComputed(() => this.instance() ? formatNumber(this.instance().residents()) : "0");
         this.buildings = ko.pureComputed(() => this.instance() ? this.instance().residences[0].buildings : null);
-        this.residenceNeeds = [];
+        this.populationLevelNeeds = [];
         this.needCategories = [];
         this.effectCoverage = ko.pureComputed(() => this.residence() ? this.residence().effectCoverage() : []);
 
         for (let category of needCategories){
             let presCat = new NeedCategoryPresenter(this, category);
             for (let need of category.needs){
-                let presNeed = new ResidenceNeedPresenter(presCat, need);
+                let presNeed = new PopulationLevelNeedPresenter(presCat, need);
                 presCat.addNeed(presNeed);
-                this.residenceNeeds.push(presNeed);
+                this.populationLevelNeeds.push(presNeed);
             }
             this.needCategories.push(presCat);
         }
@@ -736,7 +736,7 @@ export class ResidencePresenter{
             if(!(populationLevel instanceof PopulationLevel))
                 return;
 
-            for (var presNeed of this.residenceNeeds){
+            for (var presNeed of this.populationLevelNeeds){
                 presNeed.update(populationLevel.needsMap.get(presNeed.guid));
             }
         });

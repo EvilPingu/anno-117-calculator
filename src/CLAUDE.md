@@ -252,3 +252,24 @@ this.checked = ko.pureComputed({
 - **Delegation Direction**: PopulationLevelNeed is the source of truth, ResidenceNeed delegates to it
 - **Default Values**: When population-level need doesn't exist, default to `true` (activated) to maintain backward compatibility
 - **Consumption Flow**: ResidenceNeed.amount() calculations depend on ResidenceNeed.checked() delegation working properly
+
+### Object Method Preservation Pattern
+**Critical Implementation Detail**: User's fix preserves Knockout observable methods by avoiding object spread
+
+**Problem**: Object spread (`...obj`) loses method references from Knockout observables
+**Solution**: Direct property addition to existing objects
+```typescript
+// WRONG - loses Knockout methods
+const extended = { ...populationLevelNeed, totalResidents, totalAmount };
+
+// CORRECT - preserves methods by direct assignment
+populationLevelNeed.totalResidents = totalResidents;
+populationLevelNeed.totalAmount = totalAmount;
+populationLevelNeed.prepareResidenceEffectView = prepareResidenceEffectView;
+```
+
+### Template Integration Improvements
+**UI Binding Context**: Fixed template binding to work with presenter pattern
+- Proper use of `$root.texts` for localization
+- Global function calls: `formatNumber()`, `formatPercentage()` without $root prefix  
+- Correct data context navigation: `$data.need.product` for asset properties

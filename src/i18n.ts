@@ -910,7 +910,7 @@ Siehe folgenden Link für weitere Informationen: `,
 <span class="btn-group bg-dark mr-2 float-left">
 <button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_marketplace_2d_light.png" /></button>
 <button class="btn text-light"><span class="fa fa-cogs"></span></button>
-<button type="button" class="btn"><img data-toggle="modal" data-target="#item-equipment-dialog" class="icon-navbar" src="icons/icon_add_goods_socket_white.png" /></button>
+<button type="button" class="btn"><img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="icons/icon_add_goods_socket_white.png" /></button>
 </span>
 <p>Die Buttons hierfür befinden sich links in der Navigationsleiste.</p><br/>
 
@@ -1005,7 +1005,7 @@ Siehe folgenden Link für weitere Informationen: `,
 <span class="btn-group bg-dark mr-2 float-left">
 <button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_newspaper.png" /></button>
 <button class="btn text-light"><span class="fa fa-cogs"></span></button>
-<button type="button" class="btn"><img data-toggle="modal" data-target="#item-equipment-dialog" class="icon-navbar" src="icons/icon_add_goods_socket_white.png" /></button>
+<button type="button" class="btn"><img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="icons/icon_add_goods_socket_white.png" /></button>
 </span>
 <p>这些图标在网页左上角</p><br/>
 
@@ -1098,7 +1098,7 @@ Siehe folgenden Link für weitere Informationen: `,
 <span class="btn-group bg-dark mr-2 float-left">
 <button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_newspaper.png" /></button>
 <button class="btn text-light"><span class="fa fa-cogs"></span></button>
-<button type="button" class="btn"><img data-toggle="modal" data-target="#item-equipment-dialog" class="icon-navbar" src="icons/icon_add_goods_socket_white.png" /></button>
+<button type="button" class="btn"><img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="icons/icon_add_goods_socket_white.png" /></button>
 </span>
 <p>The buttons are found in the left of the navigation bar.</p><br/>
 

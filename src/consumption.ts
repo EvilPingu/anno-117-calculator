@@ -69,6 +69,7 @@ export class Need {
 
 /**
  * Represents a need for a population level
+ * Aggregates Residence needs in terms of consumption and residents
  * Manages activation state for all residences of the same population tier
  */
 export class PopulationLevelNeed {
@@ -168,7 +169,8 @@ export class PopulationLevelNeed {
 
 /**
  * Represents a need for a specific residence building
- * Manages the relationship between a residence and its consumption needs
+ * Manages the relationship between a residence and its consumption needs. Creates the demand.
+ * Activation is handeled by PopulationLevelNeed
  */
 export class ResidenceNeed {
     public residence: ResidenceBuilding; 

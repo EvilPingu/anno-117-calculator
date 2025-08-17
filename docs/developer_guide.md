@@ -532,6 +532,67 @@ For slow binding updates or infinite loops:
 
 Remember: Most binding errors stem from initialization order issues. Always ensure objects exist before trying to link them or apply effects.
 
+## Presenter Pattern Architecture
+
+The application uses a sophisticated Presenter pattern to decouple data models from UI templates, particularly evident in the population management system implemented by the user.
+
+### ResidencePresenter Class
+
+**Purpose**: Acts as a view model adapter between PopulationLevel data and UI templates
+**Key Features**:
+- **Instance Management**: Maintains observable reference to current PopulationLevel via `instance` property
+- **Computed Properties**: Provides reactive UI-friendly properties like `name()`, `residents()`, `buildings()`
+- **Need Management**: Creates and manages arrays of ResidenceNeedPresenter and NeedCategoryPresenter objects
+- **Update Pattern**: `update(populationLevel)` method allows dynamic switching of underlying data
+
+### ResidenceNeedPresenter Class
+
+**Purpose**: Presents individual needs within the UI with proper delegation to PopulationLevelNeed
+**Key Architecture**:
+- **Delegation Pattern**: All reactive properties delegate to the underlying PopulationLevelNeed instance
+- **UI State Management**: Provides `visible`, `checked`, `amount`, `residents` as computed observables
+- **Instance Binding**: Uses `instance: KnockoutObservable<PopulationLevelNeed | undefined>` for dynamic binding
+- **Write Delegation**: Implements two-way binding for `checked` property that writes back to PopulationLevelNeed
+
+### NeedCategoryPresenter Class
+
+**Purpose**: Groups ResidenceNeedPresenter objects by category with aggregate behavior
+**Features**:
+- **Category-Level Checking**: Implements select-all/unselect-all behavior across need category
+- **Visibility Management**: Shows/hides categories based on whether they contain visible needs
+- **Collection Management**: Maintains `residenceNeeds` array and filtered `visibleResidenceNeeds`
+
+### Construction Order and Class Interactions
+
+**Critical Order (Island Constructor - world.ts:902-967)**:
+1. **PopulationLevel Creation** (lines 902-906): Population levels created first with empty need management
+2. **ResidenceBuilding Creation** (lines 908-912): Residence buildings created and linked to population levels  
+3. **Need Initialization** (lines 922-932): `residence.initDemands()` creates ResidenceNeed objects
+4. **Population-Level Need Creation** (lines 356-370): In `PopulationLevel.addResidence()`, PopulationLevelNeed objects created
+5. **Presenter Creation** (lines 714-750): ResidencePresenter objects built from need categories and populate their nested arrays
+
+### Template Integration Patterns
+
+**Factory-Tile Template**: Uses Template class pattern for hierarchical data access
+- Access pattern: `$data.instance().modules` where `$data` is Template and `instance()` resolves to actual Factory
+- UI binding: `visible: $data.instance().visible` uses Template delegation to underlying asset
+- Module iteration: `foreach: $data.instance().modules` accesses reactive module arrays
+
+**Factory-Config-Dialog Template**: Direct binding to selected factory
+- Binding context: `with: $root.selectedFactory()` establishes factory as data context
+- Property access: `$data.name`, `$data.boost()`, `$data.modules` direct to factory properties
+- Collapsible sections: Uses knockout component system for expandable UI sections
+
+### Presenter Pattern Benefits
+
+1. **Separation of Concerns**: Templates bind to presenter properties, not raw data models
+2. **Computed Property Optimization**: Presenters provide optimized computed observables for UI-specific calculations
+3. **Dynamic Data Binding**: `update()` methods allow presenters to switch underlying data without template changes
+4. **Type Safety**: Presenter classes provide strongly-typed interfaces for template binding
+5. **UI State Management**: Presenters handle UI-specific state that shouldn't pollute data models
+
+
+
 ## Testing and Validation
 
 Always run type checking after changes:

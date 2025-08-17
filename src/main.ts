@@ -44,7 +44,6 @@ declare const require: any;
     selectedFactory: ko.observable(null),
     selectedPopulationLevel: ko.observable(null),
     selectedMultiFactoryProducts: ko.observable([]),
-    selectedExtraGoodItems: ko.observable([]),
     selectedResidenceEffectView: ko.observable(null),
     island: ko.observable(null),
     islands: ko.observableArray([]),
@@ -447,7 +446,6 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
     (window as any).view.selectedPopulationLevel = ko.observable((window as any).view.island().populationLevels[0]);
     (window as any).view.productionChain = new (require('./views').ProductionChainView)((window as any).view.selectedFactory);
     (window as any).view.selectedMultiFactoryProducts = ko.observable((window as any).view.island().multiFactoryProducts);
-    (window as any).view.selectedExtraGoodItems = ko.observable((window as any).view.island().extraGoodItems);
     (window as any).view.selectedResidenceEffectView = ko.observable(new (require('./views').ResidenceEffectView)([(window as any).view.island().residenceBuildings[0]]));
 
     // Set up trade manager
@@ -489,10 +487,6 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
         (window as any).view.selectedMultiFactoryProducts((window.view.island() as Island).multiFactoryProducts
             .filter((p: any) => p.availableFactories().length > 1)
             .sort((a: any, b: any) => a.name().localeCompare(b.name())));
-    });
-
-    $('#item-equipment-dialog').on('show.bs.modal', () => {
-        (window as any).view.selectedExtraGoodItems((window as any).view.island().extraGoodItems);
     });
 
     $('#patron-selection-dialog').on('show.bs.modal', () => {

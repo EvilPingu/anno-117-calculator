@@ -15,9 +15,9 @@ declare const window: any;
 export const ko = require("knockout");
 require("knockout-amd-helpers");
 
-// Set up module context for dynamic imports
-const moduleContext = (require as any).context(".", true);
-const templateContext = (require as any).context("../templates", true);
+// Set up module context for dynamic imports - exclude .md files
+const moduleContext = (require as any).context(".", true, /^(?!.*\.md$).*$/);
+const templateContext = (require as any).context("../templates", true, /\.html$/);
 
 /**
  * Custom module loader for Knockout AMD helpers
