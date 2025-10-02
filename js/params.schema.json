@@ -722,12 +722,6 @@
               "type": "string"
             }
           },
-          "possibleUpgrades": {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            }
-          },
           "populationLevel": {
             "type": "integer"
           },
@@ -746,6 +740,12 @@
               "required": [
                 "need"
               ]
+            }
+          },
+          "possibleUpgrades": {
+            "type": "array",
+            "items": {
+              "type": "integer"
             }
           }
         },
@@ -1192,6 +1192,24 @@
               "type": "string"
             }
           },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "product": {
+                  "type": "integer"
+                },
+                "amount": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "product",
+                "amount"
+              ]
+            }
+          },
           "needsFuelInput": {
             "type": "boolean"
           },
@@ -1236,24 +1254,6 @@
           },
           "modulesLimit": {
             "type": "integer"
-          },
-          "inputs": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "product": {
-                  "type": "integer"
-                },
-                "amount": {
-                  "type": "integer"
-                }
-              },
-              "required": [
-                "product",
-                "amount"
-              ]
-            }
           },
           "buffs": {
             "type": "array",
@@ -1966,6 +1966,7 @@
         "required": [
           "guid",
           "name",
+          "locaText",
           "buffs",
           "effectScope",
           "excludeEffectSourceGUID",
@@ -1978,12 +1979,6 @@
     "icons": {
       "type": "object",
       "properties": {
-        "data/ui/2kimages/fpp/assets/main_menu_flow/symbol_heartlands_280.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/fpp/assets/main_menu_flow/symbol_wetlands_fp_280.png": {
-          "type": "string"
-        },
         "data/ui/fhd/base/icon_content/hud_minimap/icon_minimap_world_map.png": {
           "type": "string"
         },
@@ -2053,12 +2048,6 @@
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_chariot.png": {
           "type": "string"
         },
-        "data/ui/fhd/base/icon_content/building/icon_public_barrows_celtic.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/building/icon_public_ceremonial_ground_celtic.png": {
-          "type": "string"
-        },
         "data/ui/fhd/base/icon_content/production_goods/icon_3d_beer_goods.png": {
           "type": "string"
         },
@@ -2080,25 +2069,13 @@
         "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier2_plebeian.png": {
           "type": "string"
         },
-        "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier3_equites.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier4_patrician.png": {
-          "type": "string"
-        },
         "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_roman_tier2_mercator.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_roman_tier3_noble.png": {
           "type": "string"
         },
         "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_tier1_wader.png": {
           "type": "string"
         },
         "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_tier2_smith.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_tier3_aldermen.png": {
           "type": "string"
         },
         "data/ui/4k/base/icon_content/generic/icon_2d_villa.png": {
@@ -2488,25 +2465,13 @@
         "data/ui/2kimages/main/icons/limestone_workforce/icon_plebeian_2d.png": {
           "type": "string"
         },
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_equites_2d.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_patrician_2d.png": {
-          "type": "string"
-        },
         "data/ui/2kimages/main/icons/limestone_workforce/icon_mercators_2d.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_nobles_2d.png": {
           "type": "string"
         },
         "data/ui/2kimages/main/icons/limestone_workforce/icon_waders_2d.png": {
           "type": "string"
         },
         "data/ui/2kimages/main/icons/limestone_workforce/icon_smiths_2d.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_aldermen_2d.png": {
           "type": "string"
         },
         "data/ui/fhd/base/icon_content/generic/icon_2d_filter_goods_consumption.png": {
@@ -2584,37 +2549,7 @@
         "data/ui/fhd/base/icon_content/infrastructure/icon_3d_resource_forest.png": {
           "type": "string"
         },
-        "data/ui/2kimages/portraits/rival_01_dorian.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/portraits/rival_02_tarragon.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/portraits/rival_04_licia.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/portraits/rival_05_athr.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/portraits/rival_03_zarai.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/portraits/rival_06_concordia.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/portraits/rival_07_neferneru.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/fpp/icons/test/icon_3d_guest_placeholder.png": {
-          "type": "string"
-        },
         "data/ui/fhd/base/icon_content/items_specialist/unique/icon_3d_unique_male_005.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/campaign/icon_campaign_elephant.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/items_specialist/campaign/icon_3d_campaign_elephant_specialist.png": {
           "type": "string"
         },
         "data/ui/fhd/base/icon_content/items_specialist/other_male/icon_3d_other_male_003.png": {
@@ -2668,19 +2603,10 @@
         "data/ui/2kimages/main/3dicons/specialists/systemic/icon_farmer_106.png": {
           "type": "string"
         },
-        "data/ui/2kimages/main/3dicons/specialists/icon_boris_franke.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/main/3dicons/specialists/icon_captain_common.png": {
-          "type": "string"
-        },
         "data/ui/2kimages/main/3dicons/scenario/ggj_buff/icon_ggj_buff_sickness.png": {
           "type": "string"
         },
         "data/ui/2kimages/main/3dicons/influence/icon_buff_optimisation_gold.png": {
-          "type": "string"
-        },
-        "data/ui/2kimages/portraits/wetlands_resident02_mercators.png": {
           "type": "string"
         },
         "data/ui/2kimages/main/3dicons/limestone_workforce/icon_smiths.png": {
@@ -2722,9 +2648,6 @@
         "data/ui/fhd/base/icon_content/generic/icon_2d_religion.png": {
           "type": "string"
         },
-        "data/ui/fhd/base/icon_content/religion/icon_2d_deity_mercury.png": {
-          "type": "string"
-        },
         "data/ui/fhd/base/icon_content/generic/icon_2d_slot_mountain.png": {
           "type": "string"
         },
@@ -2739,11 +2662,12 @@
         },
         "data/ui/fhd/base/icon_content/tech_tree/civic/icon_tech_warehouse_maintenance.png": {
           "type": "string"
+        },
+        "data/ui/fhd/base/icon_content/religion/icon_2d_deity_mercury.png": {
+          "type": "string"
         }
       },
       "required": [
-        "data/ui/2kimages/fpp/assets/main_menu_flow/symbol_heartlands_280.png",
-        "data/ui/2kimages/fpp/assets/main_menu_flow/symbol_wetlands_fp_280.png",
         "data/ui/fhd/base/icon_content/hud_minimap/icon_minimap_world_map.png",
         "data/ui/fhd/base/icon_content/attributes/icon_2d_population.png",
         "data/ui/fhd/base/icon_content/attributes/icon_2d_income.png",
@@ -2767,8 +2691,6 @@
         "data/ui/2kimages/main/3dicons/goods_limestone/drinking_horns.png",
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_clan_shields.png",
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_chariot.png",
-        "data/ui/fhd/base/icon_content/building/icon_public_barrows_celtic.png",
-        "data/ui/fhd/base/icon_content/building/icon_public_ceremonial_ground_celtic.png",
         "data/ui/fhd/base/icon_content/production_goods/icon_3d_beer_goods.png",
         "data/ui/2kimages/main/3dicons/limestone_production_goods/icon_garum.png",
         "data/ui/fhd/base/icon_content/building/icon_3d_public_roman_gambling_house.png",
@@ -2776,13 +2698,9 @@
         "data/ui/fhd/base/icon_content/building/icon_3d_residence.png",
         "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier1_libertus.png",
         "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier2_plebeian.png",
-        "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier3_equites.png",
-        "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier4_patrician.png",
         "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_roman_tier2_mercator.png",
-        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_roman_tier3_noble.png",
         "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_tier1_wader.png",
         "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_tier2_smith.png",
-        "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_tier3_aldermen.png",
         "data/ui/4k/base/icon_content/generic/icon_2d_villa.png",
         "data/ui/4k/base/icon_content/generic/icon_2d_storage_capacity.png",
         "data/ui/4k/base/icon_content/generic/icon_2d_religion.png",
@@ -2912,13 +2830,9 @@
         "data/ui/2kimages/main/3dicons/limestone_public_building/icon_town_hall_celtic.png",
         "data/ui/2kimages/main/icons/limestone_workforce/icon_libertus_2d.png",
         "data/ui/2kimages/main/icons/limestone_workforce/icon_plebeian_2d.png",
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_equites_2d.png",
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_patrician_2d.png",
         "data/ui/2kimages/main/icons/limestone_workforce/icon_mercators_2d.png",
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_nobles_2d.png",
         "data/ui/2kimages/main/icons/limestone_workforce/icon_waders_2d.png",
         "data/ui/2kimages/main/icons/limestone_workforce/icon_smiths_2d.png",
-        "data/ui/2kimages/main/icons/limestone_workforce/icon_aldermen_2d.png",
         "data/ui/fhd/base/icon_content/generic/icon_2d_filter_goods_consumption.png",
         "data/ui/fhd/base/icon_content/generic/icon_2d_filter_goods_construction.png",
         "data/ui/fhd/base/icon_content/generic/icon_2d_filter_goods_raw.png",
@@ -2944,17 +2858,7 @@
         "data/ui/fhd/base/icon_content/religion/icon_2d_deity_neptune.png",
         "data/ui/fhd/base/icon_content/religion/icon_2d_deity_epona.png",
         "data/ui/fhd/base/icon_content/infrastructure/icon_3d_resource_forest.png",
-        "data/ui/2kimages/portraits/rival_01_dorian.png",
-        "data/ui/2kimages/portraits/rival_02_tarragon.png",
-        "data/ui/2kimages/portraits/rival_04_licia.png",
-        "data/ui/2kimages/portraits/rival_05_athr.png",
-        "data/ui/2kimages/portraits/rival_03_zarai.png",
-        "data/ui/2kimages/portraits/rival_06_concordia.png",
-        "data/ui/2kimages/portraits/rival_07_neferneru.png",
-        "data/ui/2kimages/fpp/icons/test/icon_3d_guest_placeholder.png",
         "data/ui/fhd/base/icon_content/items_specialist/unique/icon_3d_unique_male_005.png",
-        "data/ui/fhd/base/icon_content/campaign/icon_campaign_elephant.png",
-        "data/ui/fhd/base/icon_content/items_specialist/campaign/icon_3d_campaign_elephant_specialist.png",
         "data/ui/fhd/base/icon_content/items_specialist/other_male/icon_3d_other_male_003.png",
         "data/ui/fhd/base/icon_content/items_specialist/other_female/icon_3d_other_female_002.png",
         "data/ui/fhd/base/icon_content/items_specialist/celtic_female/icon_3d_celtic_female_004.png",
@@ -2972,11 +2876,8 @@
         "data/ui/fhd/base/icon_content/items_specialist/roman_male/icon_3d_roman_male_001.png",
         "data/ui/fhd/base/icon_content/items_specialist/celtic_male/icon_3d_celtic_male_003.png",
         "data/ui/2kimages/main/3dicons/specialists/systemic/icon_farmer_106.png",
-        "data/ui/2kimages/main/3dicons/specialists/icon_boris_franke.png",
-        "data/ui/2kimages/main/3dicons/specialists/icon_captain_common.png",
         "data/ui/2kimages/main/3dicons/scenario/ggj_buff/icon_ggj_buff_sickness.png",
         "data/ui/2kimages/main/3dicons/influence/icon_buff_optimisation_gold.png",
-        "data/ui/2kimages/portraits/wetlands_resident02_mercators.png",
         "data/ui/2kimages/main/3dicons/limestone_workforce/icon_smiths.png",
         "data/ui/2kimages/main/3dicons/limestone_workforce/icon_aldermen.png",
         "data/ui/2kimages/main/3dicons/limestone_workforce/icon_waders.png",
@@ -2990,12 +2891,12 @@
         "data/ui/fhd/base/icon_content/tech_tree/icon_research_progress.png",
         "data/ui/fhd/base/icon_content/diplomacy/icon_2d_power_struggle.png",
         "data/ui/fhd/base/icon_content/generic/icon_2d_religion.png",
-        "data/ui/fhd/base/icon_content/religion/icon_2d_deity_mercury.png",
         "data/ui/fhd/base/icon_content/generic/icon_2d_slot_mountain.png",
         "data/ui/fhd/base/icon_content/tech_tree/economy/icon_tech_wood_beaver.png",
         "data/ui/fhd/base/icon_content/tech_tree/economy/icon_tech_wood_honey.png",
         "data/ui/fhd/base/icon_content/tech_tree/economy/icon_tech_wood_bird.png",
-        "data/ui/fhd/base/icon_content/tech_tree/civic/icon_tech_warehouse_maintenance.png"
+        "data/ui/fhd/base/icon_content/tech_tree/civic/icon_tech_warehouse_maintenance.png",
+        "data/ui/fhd/base/icon_content/religion/icon_2d_deity_mercury.png"
       ],
       "title": "Icon",
       "description": "Icon data URLs indexed by icon identifier"
@@ -3018,12 +2919,6 @@
     "factories",
     "modules",
     "buildingBuffs",
-    "effects",
-    "techs",
-    "patrons",
-    "items",
-    "icons",
-    "effects",
     "effects",
     "techs",
     "patrons",

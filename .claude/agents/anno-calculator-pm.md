@@ -16,6 +16,7 @@ The following major reworks are planned:
 6. Make a supplier interface for for factory, extra goods, trade routes, passive trade.
 7. All demands include a factory so far. This should be changed that the demand only includes the product. Per product and island the user can pick the default supplier: factory, trade route, passive trade, or extra good (if applicable). Passive trade is treated as a joker: It can fulfill arbitrary demands without generating new demands. All suppliers have a default production amount (e.g. from existing factories, the amount manually set for the trade route, or the extra good already produced), if that is insufficient, the demand for the selected supplier should be increased accordingly. When trade routes are selected as default supplier, the manually entered value is treated (and renamed to minAmount). Updating the value can go above but not below this amount. If there is no trade rout, a new one is created with minAmount = 0. If supplier is changed, trade routes with minAmount = 0 are deleted.
 8. Save config in persistantStorage instead of localStorage
+9. End-to-end test for buff combination calculation and config saving/restoring
 
 When managing this transition, you will:
 1. Break down major reworks into manageable phases with clear milestones
