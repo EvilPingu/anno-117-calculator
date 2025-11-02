@@ -8,7 +8,7 @@
             <div class="modal-body" data-bind="with: $root.island()">
                 <!-- Patron Selection and Devotion in one row -->
                 <div class="form-group row">
-                    <label class="col-sm-2 col-form-label" data-bind="text: $root.texts.selectedPatron.name">Selected Patron:</label>
+                    <label class="col-sm-2 col-form-label" data-bind="text: $root.texts.currentPatron.name">Selected Patron:</label>
                     <div class="col-sm-4">
                         <select class="form-control" data-bind="options: $data.availablePatrons, optionsText: 'name', value: $data.selectedPatron, optionsCaption: 'None'"></select>
                     </div>

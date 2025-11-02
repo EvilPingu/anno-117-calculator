@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 data-bind="text: $root.texts.effect.name">Effect</h4>
+                <h4 data-bind="text: $root.texts.effects.name">Effect</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
             </div>
@@ -36,7 +36,7 @@
                             <td data-bind="text: $data.name"></td> <!-- item name -->
                             <td>
                                 <div data-bind="if: $data.targetsIsAllProduction" style="text-align: center;">
-                                    All
+                                    <span data-bind="text: $root.texts.allBuildings.name"></span>
                                 </div>
                                 <div data-bind="if: !$data.targetsIsAllProduction">
                                     <div class="inline-list-centered" data-bind="foreach: $data.targets">

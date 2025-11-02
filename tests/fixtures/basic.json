@@ -5,13 +5,11 @@
     "selectedPatron": "",
     "islandName": "Alle Inseln",
     "versionCalculator": "1",
-    "settings.needUnlockConditions": "1",
     "3087.buildings.constructed": "0",
     "tradeRoutes": "[]",
     "session": "37135",
     "settings.hideProductionBoost": "0",
     "settings.hideNames": "1",
-    "settings.utilizeExistingFactories": "1",
     "debug.enabled": "true",
     "npcTradeRoutes": "[]",
     "settings.decimalsForBuildings": "1"

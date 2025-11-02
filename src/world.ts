@@ -269,7 +269,7 @@ export class IslandManager {
             if (session.region.id == "Meta")
                 this.metaSession = session;
         })
-        this.sessionInput = ko.observable();
+        this.sessionInput = ko.observable(this.metaSession);
         this.renameIsland = ko.observable();
         this.params = params;
         

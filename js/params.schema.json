@@ -2924,6 +2924,82 @@
       ],
       "title": "Icon",
       "description": "Icon data URLs indexed by icon identifier"
+    },
+    "texts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "lineID": {
+            "type": "integer"
+          },
+          "locaText": {
+            "type": "object",
+            "properties": {
+              "english": {
+                "type": "string"
+              },
+              "french": {
+                "type": "string"
+              },
+              "polish": {
+                "type": "string"
+              },
+              "spanish": {
+                "type": "string"
+              },
+              "italian": {
+                "type": "string"
+              },
+              "german": {
+                "type": "string"
+              },
+              "brazilian": {
+                "type": "string"
+              },
+              "russian": {
+                "type": "string"
+              },
+              "simplified_chinese": {
+                "type": "string"
+              },
+              "traditional_chinese": {
+                "type": "string"
+              },
+              "japanese": {
+                "type": "string"
+              },
+              "korean": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "english",
+              "french",
+              "polish",
+              "spanish",
+              "italian",
+              "german",
+              "brazilian",
+              "russian",
+              "simplified_chinese",
+              "traditional_chinese",
+              "japanese",
+              "korean"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "lineID",
+          "locaText"
+        ]
+      },
+      "title": "Text",
+      "description": "Texts from the game with localization."
     }
   },
   "required": [
@@ -2956,6 +3032,11 @@
     "techs",
     "patrons",
     "items",
-    "icons"
+    "icons",
+    "texts",
+    "texts",
+    "texts",
+    "texts",
+    "texts"
   ]
 }

@@ -19,7 +19,7 @@ test.describe('Population Needs Calculation Tests', () => {
   });
 
 
-  test('need consumption updates when checked state changes', async ({ page }) => {
+  test('good consumption updates when checked state changes', async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
 

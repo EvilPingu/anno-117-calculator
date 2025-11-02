@@ -18,11 +18,11 @@ The following major reworks are planned:
 9. End-to-end test for buff combination calculation and config saving/restoring
 
 Minor improvements before release:
-* Icons, texts (meta region)
+* Icons
 * Remove newspaper button
 * Add checkbox: Fully utilize factory
-* Remove negative events from effects dialog
-* Group effects by source (discovery, releigion, festival)
+* Production boost on factory tile
+* Group effects by source (discovery, religion, festival)
 * Per factory add param: showSessionIcon (true if multiple factories with same icon)
 * Init behaviours: start - no needs selected; otherwise all and global buffs
 * Help text

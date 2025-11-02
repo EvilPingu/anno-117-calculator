@@ -88,7 +88,7 @@ export class ViewMode {
      */
     start(): void {
         view.settings.missingBuildingsHighlight.checked(true);
-        view.settings.needUnlockConditions.checked(true);
+        //view.settings.needUnlockConditions.checked(true);
     }
 
     /**
@@ -412,7 +412,7 @@ export class ResidenceEffectView {
         }
 
         // Explicit assignments
-        this.heading = heading || window.view.texts.needConsumption.name;
+        this.heading = heading || window.view.texts.goodsConsumption.name;
         this.residences = residences.filter(r => r.available());
         this.percentCoverage = ko.observable(100);
 

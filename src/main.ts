@@ -9,7 +9,7 @@ if (typeof require !== 'undefined') {
 }
 import { AssetsMap, LiteralsMap } from './types';
 import { DarkMode, ResidencePresenter } from './views';
-import { ConstantsConfig, NeedConsumptionConfig } from './types.config';
+import { ConstantsConfig, NeedConsumptionConfig, TextConfig } from './types.config';
 import { Island, Region, Session } from './world';
 import { Effect } from './production';
 import { NPCTrader } from './trade';
@@ -113,6 +113,7 @@ if (debugLogBindings === 'true') {
 for (const code in languageCodes) {
     if (navigator.language.startsWith(code)) {
         (window as any).view.settings.language(languageCodes[code]);
+        break;
     }
 }
 
@@ -608,6 +609,15 @@ $(document).ready(function () {
     // Note: locaTexts parsing is handled in the i18n module
     
     // Parse the texts - create NamedElement instances for each text entry
+    for (let text of (window as any).params.texts as TextConfig[]) {
+        console.log(text);
+        (window as any).view.texts[text.name] = new (require('./util').NamedElement)({ 
+            name: text.name, 
+            guid: text.lineID,
+            locaText: text.locaText 
+        });
+    }
+
     for (let attr in locaTexts) {
         (window as any).view.texts[attr] = new (require('./util').NamedElement)({ 
             name: attr, 

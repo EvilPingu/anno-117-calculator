@@ -16413,18 +16413,18 @@ if(window.params == null)window.params={
       "guid": 37135,
       "iconPath": "data/ui/fhd/base/icon_content/hud_minimap/icon_minimap_world_map.png",
       "locaText": {
-        "brazilian": null,
-        "english": "NO LOCA MetaSession",
-        "french": null,
-        "german": null,
-        "italian": null,
-        "japanese": null,
-        "korean": null,
-        "polish": null,
-        "russian": null,
-        "simplified_chinese": null,
-        "spanish": null,
-        "traditional_chinese": null
+        "brazilian": "Global",
+        "english": "Global",
+        "french": "Global",
+        "german": "Global",
+        "italian": "Globale",
+        "japanese": "​世界",
+        "korean": "​전역",
+        "polish": "Globalnie",
+        "russian": "Глобально",
+        "simplified_chinese": "​全局",
+        "spanish": "Global",
+        "traditional_chinese": "​全域"
       },
       "name": "Province Worldmap",
       "region": 37136
@@ -16631,6 +16631,638 @@ if(window.params == null)window.params={
         "traditional_chinese": "​承​運​官"
       },
       "name": "Tech Civic -1 3 Warehouse Maintenance"
+    }
+  ],
+  "texts": [
+    {
+      "lineID": -6904082780390519730,
+      "locaText": {
+        "brazilian": "Construções afetadas",
+        "english": "Affected Buildings",
+        "french": "Bâtiments affectés",
+        "german": "Betroffene Gebäude",
+        "italian": "Edifici interessati",
+        "japanese": "​影響​を​受ける​施設",
+        "korean": "​영향을 ​받는 ​건물",
+        "polish": "Budynki objęte efektem",
+        "russian": "Затронутые постройки",
+        "simplified_chinese": "​受​影响​建筑",
+        "spanish": "Edificios afectados",
+        "traditional_chinese": "​受​影響​建築"
+      },
+      "name": "affectedBuildings"
+    },
+    {
+      "lineID": -6915762395677959303,
+      "locaText": {
+        "brazilian": "Todos",
+        "english": "All",
+        "french": "Tous",
+        "german": "Alle",
+        "italian": "Tutte",
+        "japanese": "​すべて",
+        "korean": "​전체",
+        "polish": "Wszystkie",
+        "russian": "Все",
+        "simplified_chinese": "​全部",
+        "spanish": "Todo",
+        "traditional_chinese": "​全部"
+      },
+      "name": "all"
+    },
+    {
+      "lineID": -6905197213145912196,
+      "locaText": {
+        "brazilian": "Todas as construções",
+        "english": "All Buildings",
+        "french": "Tous les bâtiments",
+        "german": "Alle Gebäude",
+        "italian": "Tutti gli edifici",
+        "japanese": "​すべて​の​施設",
+        "korean": "​모든 ​건물",
+        "polish": "Wszystkie budynki",
+        "russian": "Все постройки",
+        "simplified_chinese": "​所有​建筑",
+        "spanish": "Todos los edificios",
+        "traditional_chinese": "​所有​建築"
+      },
+      "name": "allBuildings"
+    },
+    {
+      "lineID": -6901911865748271091,
+      "locaText": {
+        "brazilian": "Todas as ilhas",
+        "english": "All Islands",
+        "french": "Toutes les îles",
+        "german": "Alle Inseln",
+        "italian": "Tutte le isole",
+        "japanese": "​すべて​の​島",
+        "korean": "​모든 ​섬",
+        "polish": "Wszystkie wyspy",
+        "russian": "Все острова",
+        "simplified_chinese": "​所有​岛屿",
+        "spanish": "Todas las islas",
+        "traditional_chinese": "​所有​島嶼"
+      },
+      "name": "allIslands"
+    },
+    {
+      "lineID": -6911313214704811434,
+      "locaText": {
+        "brazilian": "Aplicar",
+        "english": "Apply",
+        "french": "Appliquer",
+        "german": "Anwenden",
+        "italian": "Applica",
+        "japanese": "​適用",
+        "korean": "​적용",
+        "polish": "Zastosuj",
+        "russian": "Применить",
+        "simplified_chinese": "​应用",
+        "spanish": "Aplicar",
+        "traditional_chinese": "​套用"
+      },
+      "name": "apply"
+    },
+    {
+      "lineID": -6908820605821366843,
+      "locaText": {
+        "brazilian": "Crença",
+        "english": "Belief",
+        "french": "Foi",
+        "german": "Glauben",
+        "italian": "Credenza",
+        "japanese": "​信仰",
+        "korean": "​신념",
+        "polish": "Wiara",
+        "russian": "Верования",
+        "simplified_chinese": "​信仰",
+        "spanish": "Fe",
+        "traditional_chinese": "​信仰"
+      },
+      "name": "belief"
+    },
+    {
+      "lineID": -6907330109749815048,
+      "locaText": {
+        "brazilian": "Impulsos",
+        "english": "Buffs",
+        "french": "Bonus",
+        "german": "Buffs",
+        "italian": "Buff",
+        "japanese": "​バフ",
+        "korean": "​강화 ​효과",
+        "polish": "Premie",
+        "russian": "Усиления",
+        "simplified_chinese": "​增益",
+        "spanish": "Ventajas",
+        "traditional_chinese": "​增益"
+      },
+      "name": "buffs"
+    },
+    {
+      "lineID": -6917203094771649915,
+      "locaText": {
+        "brazilian": "Construções",
+        "english": "Buildings",
+        "french": "Bâtiments",
+        "german": "Gebäude",
+        "italian": "Edifici",
+        "japanese": "​建物",
+        "korean": "​건물",
+        "polish": "Budynki",
+        "russian": "Постройки",
+        "simplified_chinese": "​建筑",
+        "spanish": "Edificios",
+        "traditional_chinese": "​建築"
+      },
+      "name": "buildings"
+    },
+    {
+      "lineID": -6915627349826723809,
+      "locaText": {
+        "brazilian": "Confirmar",
+        "english": "Confirm",
+        "french": "Confirmer",
+        "german": "Bestätigen",
+        "italian": "Conferma",
+        "japanese": "​確認",
+        "korean": "​확인",
+        "polish": "Potwierdź",
+        "russian": "Подтвердить",
+        "simplified_chinese": "​确认",
+        "spanish": "Confirmar",
+        "traditional_chinese": "​確認"
+      },
+      "name": "confirm"
+    },
+    {
+      "lineID": -6902845924876156586,
+      "locaText": {
+        "brazilian": "Tuberculose",
+        "english": "Consumption",
+        "french": "Consommation",
+        "german": "Verbrauch",
+        "italian": "Consumo",
+        "japanese": "​消費",
+        "korean": "​폐결핵",
+        "polish": "Wyczerpanie",
+        "russian": "Истощение",
+        "simplified_chinese": "​痨​病",
+        "spanish": "Tisis",
+        "traditional_chinese": "​無力"
+      },
+      "name": "consumption"
+    },
+    {
+      "lineID": -6913489339087789708,
+      "locaText": {
+        "brazilian": "Patrono atual",
+        "english": "Current Patron",
+        "french": "Dieu tutélaire actuel",
+        "german": "Aktuelle Schutzgottheit",
+        "italian": "Divinità attuale",
+        "japanese": "​現在​の​祭神",
+        "korean": "​현재 ​수호신",
+        "polish": "Aktualny patron",
+        "russian": "Текущий покровитель",
+        "simplified_chinese": "​当前​守​护​神",
+        "spanish": "Tutelaje actual",
+        "traditional_chinese": "​目前​守護神"
+      },
+      "name": "currentPatron"
+    },
+    {
+      "lineID": -6913943659840406396,
+      "locaText": {
+        "brazilian": "Devoção / Crença",
+        "english": "Devotion / Belief",
+        "french": "Dévotion / Foi",
+        "german": "Verehrung/Glauben",
+        "italian": "Devozione/Credenza",
+        "japanese": "​信仰 / ​信心",
+        "korean": "​신앙심 / ​신념",
+        "polish": "Pobożność / Wiara",
+        "russian": "Почитание / верования",
+        "simplified_chinese": "​虔诚/​信仰",
+        "spanish": "Devoción / Fe",
+        "traditional_chinese": "​虔誠 / ​信仰"
+      },
+      "name": "devotion"
+    },
+    {
+      "lineID": -6912820157918341621,
+      "locaText": {
+        "brazilian": "Baixar",
+        "english": "Download",
+        "french": "Télécharger",
+        "german": "Herunterladen",
+        "italian": "Scarica",
+        "japanese": "​ダウンロード",
+        "korean": "​다운로드",
+        "polish": "Pobierz",
+        "russian": "Скачать",
+        "simplified_chinese": "​下载",
+        "spanish": "Descargar",
+        "traditional_chinese": "​下載"
+      },
+      "name": "download"
+    },
+    {
+      "lineID": -6902234897441092053,
+      "locaText": {
+        "brazilian": "Efeito",
+        "english": "Effect",
+        "french": "Effet",
+        "german": "Effekt",
+        "italian": "Effetto",
+        "japanese": "​効果",
+        "korean": "​효과",
+        "polish": "Efekt",
+        "russian": "Эффект",
+        "simplified_chinese": "​效果",
+        "spanish": "Efecto",
+        "traditional_chinese": "​效果"
+      },
+      "name": "effect"
+    },
+    {
+      "lineID": -6902362035358284768,
+      "locaText": {
+        "brazilian": "Efeitos",
+        "english": "Effects",
+        "french": "Effets",
+        "german": "Effekte",
+        "italian": "Effetti",
+        "japanese": "​効果",
+        "korean": "​효과",
+        "polish": "Efekty:",
+        "russian": "Эффект",
+        "simplified_chinese": "​效果",
+        "spanish": "Efectos",
+        "traditional_chinese": "​效果"
+      },
+      "name": "effects"
+    },
+    {
+      "lineID": -6900061796493286420,
+      "locaText": {
+        "brazilian": null,
+        "english": "Extra Goods  ",
+        "french": null,
+        "german": null,
+        "italian": null,
+        "japanese": null,
+        "korean": null,
+        "polish": null,
+        "russian": null,
+        "simplified_chinese": null,
+        "spanish": null,
+        "traditional_chinese": null
+      },
+      "name": "extraGoods"
+    },
+    {
+      "lineID": -6910306885876902499,
+      "locaText": {
+        "brazilian": "Global",
+        "english": "Global",
+        "french": "Global",
+        "german": "Global",
+        "italian": "Globale",
+        "japanese": "​世界",
+        "korean": "​전역",
+        "polish": "Globalnie",
+        "russian": "Глобально",
+        "simplified_chinese": "​全局",
+        "spanish": "Global",
+        "traditional_chinese": "​全域"
+      },
+      "name": "global"
+    },
+    {
+      "lineID": -6900227375200473257,
+      "locaText": {
+        "brazilian": "Efeitos globais",
+        "english": "Global Effects",
+        "french": "Effets globaux",
+        "german": "Globale Effekte",
+        "italian": "Effetti globali",
+        "japanese": "​世界​効果",
+        "korean": "​전역 ​효과",
+        "polish": "Efekty globalne",
+        "russian": "Глобальные эффекты",
+        "simplified_chinese": "​全局​效果",
+        "spanish": "Efectos globales",
+        "traditional_chinese": "​全域​效果"
+      },
+      "name": "globalEffects"
+    },
+    {
+      "lineID": -6916926126237868583,
+      "locaText": {
+        "brazilian": "Consumo de mercadorias",
+        "english": "Goods Consumption",
+        "french": "Consommation de marchandises",
+        "german": "Warenverbrauch",
+        "italian": "Consumo di merci",
+        "japanese": "​品物​の​消費",
+        "korean": "​물품 ​소비량",
+        "polish": "Konsumpcja towarów",
+        "russian": "Потребление товаров",
+        "simplified_chinese": "​物资​消耗",
+        "spanish": "Consumo de productos",
+        "traditional_chinese": "​貨物​消耗"
+      },
+      "name": "goodsConsumption"
+    },
+    {
+      "lineID": -6906640699676227597,
+      "locaText": {
+        "brazilian": "Ajuda",
+        "english": "Help",
+        "french": "Aide",
+        "german": "Hilfe",
+        "italian": "Aiuto",
+        "japanese": "​ヘルプ",
+        "korean": "​도움말",
+        "polish": "Pomoc",
+        "russian": "Помощь",
+        "simplified_chinese": "​帮助",
+        "spanish": "Ayuda",
+        "traditional_chinese": "​協助"
+      },
+      "name": "help"
+    },
+    {
+      "lineID": -6910251369175148580,
+      "locaText": {
+        "brazilian": "Idioma",
+        "english": "Language",
+        "french": "Langue",
+        "german": "Sprache",
+        "italian": "Lingua",
+        "japanese": "​言語",
+        "korean": "​언어",
+        "polish": "Język",
+        "russian": "Язык",
+        "simplified_chinese": "​语言",
+        "spanish": "Idioma",
+        "traditional_chinese": "​語言"
+      },
+      "name": "language"
+    },
+    {
+      "lineID": -6901164581421416158,
+      "locaText": {
+        "brazilian": "Consumo de Necessidades",
+        "english": "Need Consumption",
+        "french": "Consommation du bien",
+        "german": "Verbrauch der Bedürfnisse",
+        "italian": "Bisogno di consumo",
+        "japanese": "​需要​の​消費",
+        "korean": "​물품 ​요구량",
+        "polish": "Potrzebna konsumpcja",
+        "russian": "Потребление",
+        "simplified_chinese": "​需求​消耗​程度",
+        "spanish": "Consumo de necesidades",
+        "traditional_chinese": "​需求​消耗​程度"
+      },
+      "name": "needConsumption"
+    },
+    {
+      "lineID": -6904053276046802194,
+      "locaText": {
+        "brazilian": "Deus Patrono",
+        "english": "Patron God",
+        "french": "Dieu tutélaire",
+        "german": "Schutzgottheit",
+        "italian": "Divinità protettrice",
+        "japanese": "​祭神",
+        "korean": "​수호신",
+        "polish": "Opiekuńcze bóstwo",
+        "russian": "Божество-покровитель",
+        "simplified_chinese": "​守​护​神",
+        "spanish": "Deidad tutelar",
+        "traditional_chinese": "​守護神"
+      },
+      "name": "patron"
+    },
+    {
+      "lineID": -6916892856177889166,
+      "locaText": {
+        "brazilian": "Efeito de Patrono Exaltado",
+        "english": "Exalted Patron Effect",
+        "french": "Effet du dieu tutélaire exalté",
+        "german": "„Erhabene Schutzgottheit“-Effekt",
+        "italian": "Effetto divinità eccelsa",
+        "japanese": "​高位​祭神​の​効果",
+        "korean": "​고귀한 ​수호신 ​효과",
+        "polish": "Podniosły efekt patrona",
+        "russian": "Эффект главного покровителя",
+        "simplified_chinese": "​敬奉​守​护​神​的​效果",
+        "spanish": "Efecto de deidad exaltada",
+        "traditional_chinese": "​崇高​守護神​效果"
+      },
+      "name": "patronEffects"
+    },
+    {
+      "lineID": -6914202634429573508,
+      "locaText": {
+        "brazilian": "Produção",
+        "english": "Production",
+        "french": "Production",
+        "german": "Produktion",
+        "italian": "Produzione",
+        "japanese": "​生産",
+        "korean": "​생산",
+        "polish": "Produkcja",
+        "russian": "Производство",
+        "simplified_chinese": "​生产",
+        "spanish": "Producción",
+        "traditional_chinese": "​生產"
+      },
+      "name": "production"
+    },
+    {
+      "lineID": -6914034826827989276,
+      "locaText": {
+        "brazilian": "Construtor de cidades",
+        "english": "Production Buildings",
+        "french": "Bâtiments de production",
+        "german": "Produktionsgebäude",
+        "italian": "Edifici produttivi",
+        "japanese": "​生産​施設",
+        "korean": "​생산 ​건물",
+        "polish": "Budynki produkcyjne",
+        "russian": "Производственные постройки",
+        "simplified_chinese": "​生产​建筑",
+        "spanish": "Edificios de producción",
+        "traditional_chinese": "​生產​建築"
+      },
+      "name": "productionBuildings"
+    },
+    {
+      "lineID": -6910138230344138817,
+      "locaText": {
+        "brazilian": "Cadeia de produção",
+        "english": "Production Chain",
+        "french": "Chaîne de production",
+        "german": "Produktionskette",
+        "italian": "Catena di produzione",
+        "japanese": "​生産​チェーン",
+        "korean": "​생산 ​사슬",
+        "polish": "Łańcuch produkcyjny",
+        "russian": "Производственная цепочка",
+        "simplified_chinese": "​生产​链",
+        "spanish": "Cadena de producción",
+        "traditional_chinese": "​生產​鏈"
+      },
+      "name": "productionChain"
+    },
+    {
+      "lineID": -6899952445988598006,
+      "locaText": {
+        "brazilian": "Serviços públicos",
+        "english": "Public Services",
+        "french": "Services publics",
+        "german": "Öffentliche Dienste",
+        "italian": "Servizi pubblici",
+        "japanese": "​公共​サービス",
+        "korean": "​공공 ​서비스",
+        "polish": "Usługi publiczne",
+        "russian": "Общественные здания",
+        "simplified_chinese": "​公共​服务",
+        "spanish": "Servicios públicos",
+        "traditional_chinese": "​公共​服務"
+      },
+      "name": "publicBuildings"
+    },
+    {
+      "lineID": -6908559383606239043,
+      "locaText": {
+        "brazilian": "Residências",
+        "english": "Residences",
+        "french": "Résidences",
+        "german": "Wohnhäuser",
+        "italian": "Residenze",
+        "japanese": "​住居",
+        "korean": "​주거지",
+        "polish": "Domostwa",
+        "russian": "Жилые дома",
+        "simplified_chinese": "​住所",
+        "spanish": "Residencias",
+        "traditional_chinese": "​住所"
+      },
+      "name": "residences"
+    },
+    {
+      "lineID": -6904910280097787367,
+      "locaText": {
+        "brazilian": null,
+        "english": "Residents",
+        "french": null,
+        "german": null,
+        "italian": null,
+        "japanese": null,
+        "korean": null,
+        "polish": null,
+        "russian": null,
+        "simplified_chinese": null,
+        "spanish": null,
+        "traditional_chinese": null
+      },
+      "name": "residents"
+    },
+    {
+      "lineID": -6909909211298253262,
+      "locaText": {
+        "brazilian": "Configurações",
+        "english": "Settings",
+        "french": "Paramètres",
+        "german": "Einstellungen",
+        "italian": "Impostazioni",
+        "japanese": "​設定",
+        "korean": "​설정",
+        "polish": "Ustawienia",
+        "russian": "Настройки",
+        "simplified_chinese": "​设置",
+        "spanish": "Ajustes",
+        "traditional_chinese": "​設定"
+      },
+      "name": "settings"
+    },
+    {
+      "lineID": -6912046064850205942,
+      "locaText": {
+        "brazilian": "Total",
+        "english": "Total",
+        "french": "Total",
+        "german": "Gesamt",
+        "italian": "Totale",
+        "japanese": "​合計",
+        "korean": "​합계",
+        "polish": "Razem",
+        "russian": "Всего",
+        "simplified_chinese": "​总计",
+        "spanish": "Total",
+        "traditional_chinese": "​總計"
+      },
+      "name": "total"
+    },
+    {
+      "lineID": -6915569607474692589,
+      "locaText": {
+        "brazilian": "Rotas comerciais",
+        "english": "Trade Routes",
+        "french": "Routes commerciales",
+        "german": "Handelsrouten",
+        "italian": "Rotte commerciali",
+        "japanese": "​取引​ルート",
+        "korean": "​무역로",
+        "polish": "Szlaki handlowe",
+        "russian": "Торговые маршруты",
+        "simplified_chinese": "​贸易​路线",
+        "spanish": "Rutas de comercio",
+        "traditional_chinese": "​貿易​路線"
+      },
+      "name": "tradeRoutes"
+    },
+    {
+      "lineID": -6905498542987856790,
+      "locaText": {
+        "brazilian": "Efeito de Religião",
+        "english": "Religion Effect",
+        "french": "Effet (religion)",
+        "german": "Religionseffekt",
+        "italian": "Effetto religione",
+        "japanese": "​宗教​の​効果",
+        "korean": "​종교 ​효과",
+        "polish": "Efekt religijny",
+        "russian": "Эффект религии",
+        "simplified_chinese": "​宗教​效果",
+        "spanish": "Efecto de religión",
+        "traditional_chinese": "​宗教​效果"
+      },
+      "name": "wonderEffect"
+    },
+    {
+      "lineID": -6907309872814266407,
+      "locaText": {
+        "brazilian": "Mundo",
+        "english": "World",
+        "french": "Monde",
+        "german": "Welt",
+        "italian": "Mondo",
+        "japanese": "​世界",
+        "korean": "​세계",
+        "polish": "Świat",
+        "russian": "Мир",
+        "simplified_chinese": "​世界",
+        "spanish": "Mundo",
+        "traditional_chinese": "​世界"
+      },
+      "name": "world"
     }
   ],
   "workforce": [

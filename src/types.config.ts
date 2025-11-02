@@ -286,6 +286,13 @@ export interface IconConfig {
 
 }
 
+// Text configuration interface
+export interface TextConfig {
+  name: string;
+  lineID: number;
+  locaText: LocaTextConfig;
+}
+
 // Root configuration interface combining all parameter types
 export interface ParamsConfig {
   constants: ConstantsConfig;
@@ -310,4 +317,5 @@ export interface ParamsConfig {
   patrons: PatronsConfig[];
   items: ItemConfig[];
   icons: IconConfig;
+  texts: TextConfig[];
 }

@@ -1,141 +1,48 @@
 // @ts-check
 
+/** Codes are processed in the order they are listed here and the first match is used. */
 export const languageCodes: Record<string, string> = {
     'en': 'english',
     'de': 'german',
+    'zh_TW': 'chinese_traditional',
+    'zh_HK': 'chinese_traditional',
+    'zh_HANT': 'chinese_traditional',
+    'zh': 'chinese_simplified',
     'fr': 'french',
+    'es': 'spanish',
+    'pt-br': 'brazilian',
     'ru': 'russian',
     'ko': 'korean',
-    'ja': 'japanese',
-    'zh': 'chinese',
-    'it': 'italien',
-    'es': 'spanish',
+    'ja': 'japanese',    
+    'it': 'italien',    
     'pl': 'polish'
 }
 
 export const texts: Record<string, Record<string, string>> = {
-    allIslands: {
-        "french": "Toutes les îles",
-        "english": "All Islands",
-        "italian": "Tutte le isole",
-        "chinese": "所有岛屿",
-        "spanish": "Todas las islas",
-        "japanese": "すべての島",
-        "taiwanese": "所有島嶼",
-        "polish": "Wszystkie wyspy",
-        "german": "Alle Inseln",
-        "korean": "모든 섬",
-        "russian": "Все острова"
-    },
     residents: {
         "french": "Résidents",
         "english": "Residents",
         "italian": "Residenti",
-        "chinese": "居民",
+        "simplified_chinese": "居民",
         "spanish": "Residentes",
         "japanese": "住民",
-        "taiwanese": "居民",
+        "traditional_chinese": "居民",
         "polish": "Mieszkańcy",
         "german": "Einwohner",
         "korean": "주민",
         "russian": "Жители"
     },
-    residences: {
-        "chinese": "住所",
-        "english": "Residences",
-        "french": "Résidences",
-        "german": "Wohngebäude",
-        //"guid": 22976,
-        "italian": "Residenze",
-        "japanese": "住居",
-        "korean": "주거지",
-        "polish": "Domy mieszkalne",
-        "russian": "Жилые здания",
-        "spanish": "Residencias",
-        "taiwanese": "住所"
-    },
-    buildings: {
-        "english": "Buildings",
-        //"guid": 22659,
-        "polish": "Budynki",
-        "spanish": "Edificios",
-        "taiwanese": "建築",
-        "german": "Gebäude",
-        "chinese": "建筑",
-        "italian": "Edifici",
-        "korean": "건물",
-        "french": "Bâtiments",
-        "japanese": "建物",
-        "russian": "Сооружения"
-    },
-    skyscrapers: {
-        "english": "Skyscrapers",
-        //"guid": 131726,
-        "spanish": "Rascacielos",
-        "chinese": "摩天大楼",
-        "korean": "마천루",
-        "japanese": "高層ビル",
-        "taiwanese": "摩天大樓",
-        "french": "Gratte-ciel",
-        "polish": "Wieżowce",
-        "german": "Wolkenkratzer",
-        "italian": "Grattacieli",
-        "russian": "Небоскребы"
-    },
+ 
     workforce: {
         chinese: "所需劳动力",
         english: "Required Workforce",
         german: "Benötigte Arbeitskraft",
         korean: "필요한 인력"
     },
-    productionBoost: {
-        "french": "Productivité",
-        "brazilian": "Production",
-        "english": "Productivity",
-        "portuguese": "Production",
-        "italian": "Produzione",
-        "chinese": "生产力",
-        "spanish": "Productividad",
-        "japanese": "生産性",
-        "taiwanese": "生產力",
-        "polish": "Wydajność",
-        "german": "Produktivität",
-        "korean": "생산성",
-        "russian": "Производительность"
-    },
-    production: {
-        "chinese": "生产",
-        "english": "Production",
-        "french": "Production",
-        "german": "Produktion",
-        //"guid": 22362,
-        "italian": "Produzione",
-        "japanese": "生産",
-        "korean": "생산",
-        "polish": "Produkcja",
-        "russian": "Производство",
-        "spanish": "Producción",
-        "taiwanese": "生產"
-    },
-    reset: {
-        "english": "Reset",
-        "french": "Réinitialiser",
-        "german": "Zurücksetzen",
-        "korean": "재설정",
-        "portuguese": "Reset",
-        "brazilian": "Reset",
-        "taiwanese": "重設",
-        "chinese": "重设",
-        "spanish": "Reiniciar",
-        "italian": "Azzera",
-        "russian": "Сбросить",
-        "polish": "Wyzeruj",
-        "japanese": "リセット"
-    },
     itemsEquipped: {
         "english": "Items Equipped",
-        "chinese": "已装备物品",
-        "taiwanese": "已裝備物品",
+        "simplified_chinese": "已装备物品",
+        "traditional_chinese": "已裝備物品",
         "italian": "Oggetti in uso",
         "spanish": "Objetos equipados",
         "german": "Ausgerüstete Items",
@@ -145,23 +52,10 @@ export const texts: Record<string, Record<string, string>> = {
         "japanese": "装備したアイテム",
         "russian": "Используемые предметы"
     },
-    productionBuildings: {
-        "english": "Production Buildings",
-        "chinese": "生产建筑",
-        "taiwanese": "生產建築",
-        "italian": "Edifici produttivi",
-        "spanish": "Edificios de producción",
-        "german": "Produktionsgebäude",
-        "polish": "Budynki produkcyjne",
-        "french": "Bâtiments de production",
-        "korean": "생산 건물",
-        "japanese": "生産施設",
-        "russian": "Производственные здания"
-    },
     extraGoods: {
         "english": "Extra Goods",
-        "chinese": "额外货物",
-        "taiwanese": "額外貨物",
+        "simplified_chinese": "额外货物",
+        "traditional_chinese": "額外貨物",
         "italian": "Merci aggiuntive",
         "spanish": "Bienes extra",
         "german": "Zusatzwaren",
@@ -171,62 +65,10 @@ export const texts: Record<string, Record<string, string>> = {
         "japanese": "追加品物",
         "russian": "Дополнительные товары"
     },
-    total: {
-        "english": "Total",
-        "chinese": "总计",
-        "taiwanese": "總計",
-        "italian": "Totale",
-        "spanish": "Total",
-        "german": "Gesamt",
-        "polish": "Razem",
-        "french": "Total",
-        "korean": "합계",
-        "japanese": "合計",
-        "russian": "Всего"
-    },
-    "all": {
-        "english": "All",
-        "chinese": "全部",
-        "taiwanese": "全部",
-        "italian": "Tutti",
-        "spanish": "Todo",
-        "german": "Alle",
-        "polish": "Wszystko",
-        "french": "Toutes",
-        "korean": "모두",
-        "japanese": "すべて",
-        "russian": "Все"
-    },
-    "effect": {
-        "english": "Effect",
-        "chinese": "效果",
-        "taiwanese": "效果",
-        "italian": "Effetto",
-        "spanish": "Efecto",
-        "german": "Effekte",
-        "polish": "Efekt",
-        "french": "Effet",
-        "korean": "효과",
-        "japanese": "効果",
-        "russian": "Эффект"
-    },
-    "patron": {
-        "english": "Patron",
-        "chinese": "资助人",
-        "taiwanese": "資助人",
-        "italian": "Patrono",
-        "spanish": "Patrón",
-        "german": "Patron",
-        "polish": "Patron",
-        "french": "Patron",
-        "korean": "수호자",
-        "japanese": "パトロン",
-        "russian": "Покровитель"
-    },
     "devotion": {
         "english": "Devotion",
-        "chinese": "虔诚度",
-        "taiwanese": "虔誠度",
+        "simplified_chinese": "虔诚度",
+        "traditional_chinese": "虔誠度",
         "italian": "Devozione",
         "spanish": "Devoción",
         "german": "Hingabe",
@@ -236,36 +78,11 @@ export const texts: Record<string, Record<string, string>> = {
         "japanese": "献身度",
         "russian": "Преданность"
     },
-    "selectedPatron": {
-        "english": "Selected Patron",
-        "chinese": "选择的资助人",
-        "taiwanese": "選擇的資助人",
-        "italian": "Patrono Selezionato",
-        "spanish": "Patrón Seleccionado",
-        "german": "Gewählter Patron",
-        "polish": "Wybrany Patron",
-        "french": "Patron Sélectionné",
-        "korean": "선택된 수호자",
-        "japanese": "選択されたパトロン",
-        "russian": "Выбранный покровитель"
-    },
-    "patronEffects": {
-        "english": "Patron Effects",
-        "chinese": "资助人效果",
-        "taiwanese": "資助人效果",
-        "italian": "Effetti del Patrono",
-        "spanish": "Efectos del Patrón",
-        "german": "Patron-Effekte",
-        "polish": "Efekty Patrona",
-        "french": "Effets du Patron",
-        "korean": "수호자 효과",
-        "japanese": "パトロン効果",
-        "russian": "Эффекты покровителя"
-    },
+
     "milestone": {
         "english": "Milestone",
-        "chinese": "里程碑",
-        "taiwanese": "里程碑",
+        "simplified_chinese": "里程碑",
+        "traditional_chinese": "里程碑",
         "italian": "Traguardo",
         "spanish": "Hito",
         "german": "Meilenstein",
@@ -277,8 +94,8 @@ export const texts: Record<string, Record<string, string>> = {
     },
     "devotionRequired": {
         "english": "Devotion Required",
-        "chinese": "需要虔诚度",
-        "taiwanese": "需要虔誠度",
+        "simplified_chinese": "需要虔诚度",
+        "traditional_chinese": "需要虔誠度",
         "italian": "Devozione Richiesta",
         "spanish": "Devoción Requerida",
         "german": "Benötigte Hingabe",
@@ -290,8 +107,8 @@ export const texts: Record<string, Record<string, string>> = {
     },
     "scaling": {
         "english": "Scaling",
-        "chinese": "缩放",
-        "taiwanese": "縮放",
+        "simplified_chinese": "缩放",
+        "traditional_chinese": "縮放",
         "italian": "Scala",
         "spanish": "Escala",
         "german": "Skalierung",
@@ -301,47 +118,9 @@ export const texts: Record<string, Record<string, string>> = {
         "japanese": "スケーリング",
         "russian": "Масштабирование"
     },
-    "targets": {
-        "english": "Targets",
-        "chinese": "目标",
-        "taiwanese": "目標",
-        "italian": "Obiettivi",
-        "spanish": "Objetivos",
-        "german": "Ziele",
-        "polish": "Cele",
-        "french": "Cibles",
-        "korean": "대상",
-        "japanese": "ターゲット",
-        "russian": "Цели"
-    },
-    "buffs": {
-        "english": "Buffs",
-        "chinese": "增益",
-        "taiwanese": "增益",
-        "italian": "Bonus",
-        "spanish": "Beneficios",
-        "german": "Boni",
-        "polish": "Wzmocnienia",
-        "french": "Améliorations",
-        "korean": "버프",
-        "japanese": "バフ",
-        "russian": "Бонусы"
-    },
-    "wonderEffect": {
-        "english": "Wonder Effect",
-        "chinese": "奇观效果",
-        "taiwanese": "奇觀效果",
-        "italian": "Effetto Meraviglia",
-        "spanish": "Efecto de Maravilla",
-        "german": "Weltwunder-Effekt",
-        "polish": "Efekt Cudu",
-        "french": "Effet de Merveille",
-        "korean": "불가사의 효과",
-        "japanese": "世界遺産効果",
-        "russian": "Эффект чуда света"
-    },
+
     "bonusResidents": {
-        "chinese": "额外居民",
+        "simplified_chinese": "额外居民",
         "english": "Bonus Residents",
         "french": "Habitants supplémentaires",
         "german": "Zusätzliche Einwohner",
@@ -352,10 +131,10 @@ export const texts: Record<string, Record<string, string>> = {
         "polish": "Dodatkowi mieszkańcy",
         "russian": "Дополнительное количество жителей",
         "spanish": "Bonificación de residentes",
-        "taiwanese": "額外居民"
+        "traditional_chinese": "額外居民"
     },
     "bonusSupply": {
-        "chinese": "额外供给",
+        "simplified_chinese": "额外供给",
         "english": "Bonus Supply",
         "french": "Bonus de ravitaillement",
         "german": "Zusatzversorgung",
@@ -366,10 +145,10 @@ export const texts: Record<string, Record<string, string>> = {
         "polish": "Dodatkowe zaopatrzenie",
         "russian": "Дополнительное снабжение",
         "spanish": "Bonificación de suministros",
-        "taiwanese": "額外供給"
+        "traditional_chinese": "額外供給"
     },
     "reduceConsumption": {
-        "chinese": "降低消耗量",
+        "simplified_chinese": "降低消耗量",
         "english": "Reduce Consumption",
         "french": "Réduire la consommation",
         "german": "Verbrauch reduzieren",
@@ -380,80 +159,14 @@ export const texts: Record<string, Record<string, string>> = {
         "polish": "Zredukuj konsumpcję",
         "russian": "Снижение уровня потребления",
         "spanish": "Reducir consumo",
-        "taiwanese": "降低消耗量"
+        "traditional_chinese": "降低消耗量"
     },
-    "needConsumption": {
-        "english": "Need Consumption",
-        "chinese": "需求消耗程度",
-        "taiwanese": "需求消耗程度",
-        "italian": "Bisogno di consumo",
-        "spanish": "Consumo de necesidad",
-        "german": "Verbrauch der Bedürfnisse",
-        "polish": "Potrzebna konsumpcja",
-        "french": "Consommation du bien",
-        "korean": "물품 요구량",
-        "japanese": "需要の消費",
-        "russian": "Потребление"
-    },
-    "basicNeeds": {
-        "english": "Basic Need",
-        //"guid": 11708,
-        "polish": "Potrzeba podstawowa",
-        "spanish": "Necesidad básica",
-        "taiwanese": "基本需求",
-        "german": "Grundbedürfnis",
-        "chinese": "基本需求",
-        "italian": "Bisogno di base",
-        "korean": "생필품",
-        "french": "Besoin fondamental",
-        "japanese": "基本的な需要",
-        "russian": "Базовая потребность"
-    },
-    "luxuryNeeds": {
-        "english": "Luxury Need",
-        //"guid": 11706,
-        "polish": "Potrzeba luksusowa",
-        "spanish": "Necesidad de lujo",
-        "taiwanese": "奢侈品",
-        "german": "Luxusbedürfnis",
-        "chinese": "奢侈品",
-        "italian": "Bisogno di lusso",
-        "korean": "사치품",
-        "french": "Besoin de luxe",
-        "japanese": "高級品の需要",
-        "russian": "Потребность в роскоши"
-    },
-    "lifestyleNeeds": {
-        "chinese": "生活需求",
-        "english": "Lifestyle Needs",
-        "french": "Besoins de confort",
-        "german": "Lebensqualität",
-        //"guid": 2291,
-        "italian": "Bisogni di stile di vita",
-        "japanese": "ライフスタイルの需要",
-        "korean": "일용품 요구",
-        "polish": "Potrzeby stylu życia",
-        "russian": "Персональные потребности",
-        "spanish": "Necesidades de estilo de vida",
-        "taiwanese": "生活需求"
-    },
-    "reducedNeeds": {
-        "english": "Reduced Needs",
-        "chinese": "减少需求物",
-        "taiwanese": "減少需求物",
-        "italian": "Bisogni ridotti",
-        "spanish": "Necesidades reducidas",
-        "german": "Bedürfnis-​Malus",
-        "polish": "Zredukowane potrzeby",
-        "french": "Besoins réduits",
-        "korean": "요구량 감소",
-        "japanese": "減少した需要",
-        "russian": "Сниженные потребности"
-    },
+
+
     "islands": {
         "english": "Islands",
-        "chinese": "岛屿",
-        "taiwanese": "島嶼",
+        "simplified_chinese": "岛屿",
+        "traditional_chinese": "島嶼",
         "italian": "Isole",
         "spanish": "Islas",
         "german": "Inseln",
@@ -463,50 +176,10 @@ export const texts: Record<string, Record<string, string>> = {
         "japanese": "島",
         "russian": "Острова"
     },
-    "apply": {
-        "english": "Apply",
-        "chinese": "应用",
-        "taiwanese": "套用",
-        "italian": "Applica",
-        "spanish": "Aplicar",
-        "german": "Anwenden",
-        "polish": "Zastosuj",
-        "french": "Appliquer",
-        "korean": "적용",
-        "japanese": "適用",
-        "russian": "Применить"
-    },
-    "confirm": {
-        "english": "Confirm",
-        //"guid": 118171,
-        "chinese": "确认",
-        "taiwanese": "確認",
-        "italian": "Conferma",
-        "spanish": "Confirmar",
-        "german": "Bestätigen",
-        "polish": "Potwierdź",
-        "french": "Confirmer",
-        "korean": "확인",
-        "japanese": "認める",
-        "russian": "Подтвердить"
-    },
-    "world": {
-        "english": "The World",
-        "chinese": "世界",
-        "taiwanese": "世界",
-        "italian": "Il mondo",
-        "spanish": "El mundo",
-        "german": "Die Welt",
-        "polish": "Świat",
-        "french": "Le Monde",
-        "korean": "세계",
-        "japanese": "世界",
-        "russian": "Мир"
-    },
     "deleteAll": {
         "english": "Delete All",
-        "chinese": "删除全部",
-        "taiwanese": "刪除全部",
+        "simplified_chinese": "删除全部",
+        "traditional_chinese": "刪除全部",
         "italian": "Cancella tutto",
         "spanish": "Borrar todo",
         "german": "Alles löschen",
@@ -515,46 +188,6 @@ export const texts: Record<string, Record<string, string>> = {
         "korean": "모두 삭제",
         "japanese": "すべて削除する",
         "russian": "Удалить все"
-    },
-    "consumption": {
-        "english": "Consumption",
-        "chinese": "消耗",
-        "taiwanese": "消耗",
-        "italian": "Consumo",
-        "spanish": "Consumo",
-        "german": "Verbrauch",
-        "polish": "Konsumpcja",
-        "french": "Consommation",
-        "korean": "소비량",
-        "japanese": "消費",
-        "russian": "Потребление"
-    },
-    "totalCapacity": {
-        "english": "Total Capacity",
-        "chinese": "总容量",
-        "taiwanese": "總容量",
-        "italian": "Capienza totale",
-        "spanish": "Capacidad total",
-        "german": "Gesamtkapazität",
-        "polish": "Pojemność całkowita",
-        "french": "Capacité totale",
-        "korean": "총 수용량",
-        "japanese": "総収容能力",
-        "russian": "Общая вместимость"
-    },
-    "supplyEffects": {
-        "english": "Supply Effects",
-        // "guid": 11938,
-        "polish": "Efekty zaopatrzenia",
-        "spanish": "Efectos de suministro",
-        "taiwanese": "供給效果",
-        "german": "Versorgungseffekte",
-        "chinese": "供给效果",
-        "italian": "Effetti offerta",
-        "korean": "공급 효과",
-        "french": "Effets de l'approvisionnement",
-        "japanese": "供給効果",
-        "russian": "Влияние снабжения"
     },
     requiredNumberOfBuildings: {
         english: "Required Number of Buildings",
@@ -583,8 +216,8 @@ export const texts: Record<string, Record<string, string>> = {
     },
     tonsPerMinute: {
         "english": "Tons per minute (t/min)",
-        "chinese": "每分钟吨数（吨／分钟）",
-        "taiwanese": "每分鐘噸數（噸／分鐘）",
+        "simplified_chinese": "每分钟吨数（吨／分钟）",
+        "traditional_chinese": "每分鐘噸數（噸／分鐘）",
         "italian": "Tonnellate al minuto (t/min)",
         "spanish": "Toneladas por minuto (t/min)",
         "german": "Tonnen pro Minute (t/min)",
@@ -594,38 +227,9 @@ export const texts: Record<string, Record<string, string>> = {
         "japanese": "トン毎分 (トン/分)",
         "russian": "Тонн в минуту (т./мин.)"
     },
-    publicBuildings: {
-        "english": "Public Buildings",
-        "polish": "Budynki użyteczności publicznej",
-        "spanish": "Edificios públicos",
-        "taiwanese": "公共建築",
-        "german": "Öffentliche Gebäude",
-        "chinese": "公共建筑",
-        "italian": "Edifici pubblici",
-        "korean": "공공건물",
-        "french": "Bâtiments publics",
-        "japanese": "公共施設",
-        "russian": "Общественные здания"
-    },
-    outputAmount: {
-        english: "Plain building output without extra goods",
-        german: "Reiner Gebäudeoutput ohne Zusatzwaren",
-    },
-    extraNeed: {
-        english: "Extra Demand",
-        german: "Zusatzbedarf"
-    },
     showIslandOnCreation: {
         english: "After creating a new island display it",
         german: "Nach dem Erstellen einer neuen Insel diese anzeigen"
-    },
-    applyGlobally: {
-        english: "Apply Globally",
-        german: "Global anwenden"
-    },
-    overproduction: {
-        english: "Overproduction",
-        german: "Überproduktion"
     },
     importDeficit: {
         english: "Import deficit",
@@ -635,114 +239,7 @@ export const texts: Record<string, Record<string, string>> = {
         english: "Export overproduction",
         german: "Überproduktion exportieren"
     },
-    loadingSpeed: {
-        "english": "Loading Speed",
-        "chinese": "装货速度",
-        "taiwanese": "裝貨速度",
-        "italian": "Velocità caricamento",
-        "spanish": "Velocidad de carga",
-        "german": "Ladegeschwindigkeit",
-        "polish": "Szybkość załadunku",
-        "french": "Vitesse de chargement",
-        "korean": "화물 선적 속도",
-        "japanese": "積み込み速度",
-        "russian": "Скорость погрузки"
-    },
-    "tradeRoutes": {
-        "english": "Trade Routes",
-        "chinese": "贸易航线",
-        "taiwanese": "貿易航線",
-        "italian": "Rotte commerciali",
-        "spanish": "Rutas de comercio",
-        "german": "Handelsrouten",
-        "polish": "Szlaki handlowe",
-        "french": "Routes commerciales",
-        "korean": "무역로",
-        "japanese": "取引ルート",
-        "russian": "Торговые маршруты"
-    },
-    "docklands": {
-        "english": "Docklands",
-        //"guid": 410083,
-        "polish": "Okno na świat",
-        "spanish": "Zona portuaria",
-        "taiwanese": "港灣",
-        "german": "Speicherstadt",
-        "chinese": "港湾",
-        "italian": "Area portuale",
-        "korean": "부둣가",
-        "french": "Zone portuaire",
-        "japanese": "港湾地区",
-        "russian": "Доки"
-    },
-    exportPyramid: {
-        "english": "Your Specialty Exports",
-        "polish": "Specjalizacje eksportowe",
-        "spanish": "Tus especialidades de exportación",
-        "taiwanese": "你的專屬出口貨物",
-        "german": "Exportwaren-Pyramide",
-        "chinese": "你的专属出口货物",
-        "italian": "Le tue esportazioni di specialità",
-        "korean": "전문 수출품",
-        "french": "Vos exportations ",
-        "japanese": "あなたの名産輸出品",
-        "russian": "Специализация экспорта"
-    },
-    maxResidents: {
-        "english": "Max. Residents",
-        //"guid": 2322,
-        "polish": "Maks. liczba mieszkańców",
-        "spanish": "Residentes máx.",
-        "taiwanese": "最大居民數量",
-        "german": "Einwohner (max.)",
-        "chinese": "最大居民数量",
-        "italian": "Max. residenti",
-        "korean": "최대 주민 수",
-        "french": "Habitants max.",
-        "japanese": "最大住民数",
-        "russian": "Макс. кол-во жителей"
-    },
-    perHouse: {
-        "english": "Per house",
-        //"guid": 17435,
-        "polish": "na dom",
-        "spanish": "Por cada casa",
-        "taiwanese": "每棟房屋",
-        "german": "Pro Wohnhaus",
-        "chinese": "每栋房屋",
-        "italian": "Per dimora",
-        "korean": "세대 당",
-        "french": "Par maison",
-        "japanese": "1件当たり",
-        "russian": "За дом"
-    },
-    "panoramaEffect": {
-        "chinese": "全景效果",
-        "english": "Panorama Effect",
-        "french": "Effet panoramique",
-        "german": "Panoramaeffekt",
-        //"guid": 137260,
-        "italian": "Effetto Panorama",
-        "japanese": "パノラマ効果",
-        "korean": "전경 효과",
-        "polish": "Efekt panoramy",
-        "russian": "Степень живописности",
-        "spanish": "Efecto panorama",
-        "taiwanese": "全景效果"
-    },
-    language: {
-        "english": "Text Language",
-        "chinese": "文本语言",
-        "taiwanese": "文字語言",
-        "italian": "Lingua testo",
-        "spanish": "Idioma del texto",
-        "german": "Textsprache",
-        "polish": "Język napisów",
-        "french": "Langue des textes",
-        "korean": "텍스트 언어",
-        "japanese": "テキスト言語",
-        "russian": "Язык текста"
-    },
+
     islandName: {
         english: "New island name",
         german: "Neuer Inselname",
@@ -754,17 +251,6 @@ export const texts: Record<string, Record<string, string>> = {
         german: "Ausgewählte Insel",
         korean: "선택된 섬"
     },
-    settings: {
-        english: "Settings",
-        german: "Einstellungen",
-        korean: "설정"
-    },
-    help: {
-        chinese: "帮助",
-        english: "Help",
-        german: "Hilfe",
-        korean: "도움말"
-    },
     chooseFactories: {
         english: "Modify Production Chains",
         german: "Modifiziere Produktionsketten",
@@ -774,15 +260,6 @@ export const texts: Record<string, Record<string, string>> = {
         english: "Automatic: same region as consumer",
         german: "Automatisch: gleichen Region wie Verbraucher",
         korean: "자동 : 소비자와 동일한 지역"
-    },
-    consumptionModifier: {
-        english: "Modify the percental amount of consumption for this tier and product",
-        german: "Verändere die prozentuale Verbrauchsmenge für diese Ware und Bevölkerungsstufe",
-        korean: "이 계층 및 제품의 사용량(백분율)을 수정하십시요"
-    },
-    useInput: {
-        english: "Use as input on main page",
-        german: "Verwende als Eingabe auf der Hauptseite"
     },
     notes: {
         english: "Note",
@@ -817,16 +294,8 @@ export const texts: Record<string, Record<string, string>> = {
         english: "All settings and DLCs are enabled.",
         german: "Alle Einstellungen und DLCs sind aktiviert."
     },
-    panoramaEffectNotConsidered: {
-        english: "The panorama effect is not considered.",
-        german: "Der Panoramaeffekt wird nicht berücksichtigt."
-    },
+
     // calculator and server management
-    download: {
-        english: "Downloads",
-        german: "Downloads",
-        korean: "다운로드"
-    },
     downloadConfig: {
         english: "Import / Export configuration.",
         german: "Konfiguration importieren / exportieren.",
@@ -836,37 +305,6 @@ export const texts: Record<string, Record<string, string>> = {
         english: "Download the calculator (source code of this website) to run it locally. To do so, extract the archive and double click index.html.",
         german: "Lade den Warenrechner (Quellcode dieser Seite) herunter, um ihn lokal auszuführen. Zum Ausführen, extrahiere das Archiv und doppelklicke auf index.html.",
         korean: "Anno 계산기 (이 웹 사이트의 소스 코드)를 다운로드 하여 로컬로 실행 하십시오. 압축을 풀고 index.html 실행 하십시오."
-    },
-    downloadCalculatorServer: {
-        english: `Download a standalone executable that reads the statistics while playing the game. Usage:
-1. Download server application and calculator (using the source code from above).
-2. Start Anno 1800 with the graphics setting "Windowed Full Screen".
-3. Start server (Server.exe) and open downloaded calculator (index.html) - make sure that Anno does not get minimized.
-4. Expand the population statistics (global or island) or open the statistics screen (finance, production) to update the values in the calculator.
-
- See the following link for more information: `,
-        german: `Lade eine ausführbare Datei herunter, die beim Spielen die Statistik erfasst. Verwendung:
-1. Lade die Serveranwendung und den Warenrechner (siehe obiger Quellcode) herunter.
-2. Starte Anno 1800 mit der Graphikeinstellung "Vollbild im Fenstermodus".
-3. Führe den Server (Server.exe) aus und öffne den heruntergeladenen Warenrechner (index.html) - stelle sicher, dass Anno nicht minimiert wird.
-4. Klappe die Bevölkerungsstatistiken (global oder inselweit) aus oder öffne das Statistikmenü (Finanzen, Produktion), um die Werte im Warenrechner zu aktualisieren.
-
-Siehe folgenden Link für weitere Informationen: `,
-        korean: `게임을 하는 동안 현재 인구 수를 읽는 실행 파일을 다운로드 하십시오. 방법:
-1. 서버 프로그램 및 계산기를 다운로드 하십시오. (위의 소스 코드 사용).
-2. Anno 1800을 실행 하십시오.
-3. 서버 (Server.exe)를 실행하고 다운로드한 Anno1800 계산기 (index.html)를 엽니다.
-4. 인구 통계 (모든 섬 또는 일부 섬)를 펼쳐서 열거나 통계 화면 (금융, 생산, 인구)을 열어 계산기의 값을 업데이트하십시오.
-  자세한 내용은 다음 링크를 참조하십시오: `
-    },
-    downloadSavegameVisualizer: {
-        english: `A tool to extract island layouts, mall coverage, round trip times, and consumption effect coverage from savegames. Please follow the instructions in the Getting Started section carefully:`,
-        german: `Ein Tool zum Auslesen von Insellayouts, Abdeckung von Einkaufspassagen, Rundenzeiten von Handelsrouten und Abdeckung von Verbrauchseffekten aus Spielständen. Bitte die Anweisungen im Abschnitt Getting Started genau befolgen:`
-    },
-    serverUpdate: {
-        english: "A new server version is available. Click the download button.",
-        german: "Eine neue Serverversion ist verfügbar. Klicke auf den Downloadbutton.",
-        korean: "새로운 서버 버전을 사용할 수 있습니다. 다운로드 버튼을 클릭하십시오."
     },
     calculatorUpdate: {
         english: "A new calculator version is available. Click the download button.",
@@ -1010,7 +448,7 @@ Siehe folgenden Link für weitere Informationen: `,
 <p>这些图标在网页左上角</p><br/>
 
 <span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_newspaper.png" /></button></span>
-<p>Apart from the <b>newspaper</b> other effects can be applied that <b>change the need consumption</b>, e.g. zoo sets, palace effects, items, and public building effects from the <b>tourist season DLC</b>. While effects and items are activated per island, the newspaper is global. To simplify the configuration of multiple islands, the button <b>Apply globally</b> copies all consumption effects to all other islands und replaces existing ones.</p><br/>
+<p>Apart from the <b>newspaper</b> other effects can be applied that <b>change the good consumption</b>, e.g. zoo sets, palace effects, items, and public building effects from the <b>tourist season DLC</b>. While effects and items are activated per island, the newspaper is global. To simplify the configuration of multiple islands, the button <b>Apply globally</b> copies all consumption effects to all other islands und replaces existing ones.</p><br/>
 
 <span class="float-left btn-group bg-dark mr-2"><button class="btn text-light"><span class="fa fa-cogs"></span></button></span>
 <p>In this dialog one can choose which product should be produced by which factory, in case several factories produce the same product. By default, the <b>same region policy</b> is selected. By example, this means that the wood for distilleries is produced in the New World while the wood for sewing machines is produced in the Old World.</p><br/>
@@ -1021,7 +459,7 @@ Siehe folgenden Link für weitere Informationen: `,
 <h5>Inselverwaltung und Handelsrouten</h5>
 <div class="input-group mb-2" style=" max-width: 300px; "> <div class="input-group-prepend"> <span class="input-group-text" >Selected Island</span> </div> <select name="islands" class="custom-select" ><option value="">All Islands</option></select> <div class="input-group-append"> <button class="btn btn-secondary" > <span class="fa fa-cog"> </span> </button> </div> </div>
 <span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_map.png"> </button></span>
-<p>First, one must open the <b>island management dialog</b> by clicking the cogwheel. One can create new islands there. When using the <b>server application</b> suggestions for new islands get listed (based on those island names the server has seen on the statistics screen). After creating the first island three new control elements show up in the center of the navigation bar: Switch island, open island management, and open trade route management. New islands are associated with a <b>session</b>. The session influences which population levels, factories, items and need consumption effects show up. The button <b>Delete All</b> resets the calculator to its initial state.</p><br/>
+<p>First, one must open the <b>island management dialog</b> by clicking the cogwheel. One can create new islands there. When using the <b>server application</b> suggestions for new islands get listed (based on those island names the server has seen on the statistics screen). After creating the first island three new control elements show up in the center of the navigation bar: Switch island, open island management, and open trade route management. New islands are associated with a <b>session</b>. The session influences which population levels, factories, items and good consumption effects show up. The button <b>Delete All</b> resets the calculator to its initial state.</p><br/>
 
 <div class="ui-fchain-item" style="width: 100%"> <div class="mb-3 inline-list-stretched" > <div class="custom-control custom-checkbox"> <input type="checkbox" class="custom-control-input" > <label class="custom-control-label" src-only="" style="vertical-align: top;" for="45-npcRoute-checked"> <img class="icon-sm" src="data:image/png;base64,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" > <span >Sir Archibald Blake</span> </label> </div> <div> <span >7</span> <span> t/min</span> </div> <div class="custom-control custom-checkbox"> <input type="checkbox" class="custom-control-input" > <label class="custom-control-label" src-only="" style="vertical-align: top;" for="77-npcRoute-checked"> <img class="icon-sm" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAASs0lEQVRoge2aaXCcxZ3GZQeCNDMazWhmNDpGo7nvS9JobkmjkUbS6D5tWZIly7Ik27ItWZZlfMkysuXbGB/gGMxhA74CBMLhEMCQBAIhm4TdrYQECkI2u0mlkpBKAgkBzW8/LFRtUQGyAZP9kKeqq6u63rfe59f/f7/d1d0pKf/UP/X5C1jw19quXLlyzd/yLnDN+/XCD9cfenbhh9s+rA++eeXKlWv+mq/PXMACv98gttksjymzdcnxtlBypM6XVGerk9kKVdKiNSY3tlb87uJUr/l9qKtv6u+RRm3aWea0JSM2PVGnnragmdagld6Yi3VtAfrrvaxsinJ0bHEyarf/clW8ojwlJeX/H4xD5/hNkcFEdaGFUruOoToLLSFLcnOvl12DYQ6vreTymRFuGo/TXFpIXk5+stpmfmFmZuZjU+tzlV7vyrJr7Umn1ki9101zwJrsiFgYTLhYGvewvT/Cs/d2sXkwyJaBcHJ9RzH91W5cek2yqsjy1ExKyj8eBlhgVbu/WWL2UOYqpKbYTXWhmaFaD6sai7hhsCx5764GvryvhemBKMfGK1jbUphc3eROtodMuDQqEjbrA//wyFy/arkuNyv/3Yg/wPEdM9ywdgV7R7uYaIsyWO9muMnLkQ21vHiul8klUQ6sjLKlO0BbyEZL0ITPmE/EZXvLpyvo/ocAMDOzcGTZyKGN45vf/cbXn+DXb7zGj7/7Lb73xDmevXiUyxfuZM2yDv7w8BxvXNzG6S3t7F1Zx87+MrZ0h+mu8BC26glaTYTcrmRzRehEZ2fnFz53iHi05b+WLRnklkMH+PXLL7F3ywTdrTXJX7z6PE2N1Vz40j5ev3WC+eeO8fZ3buKtF27k3W8c5J6pbjZ2VVLvc7Eo4qbR56GvsZbP/XcMKQuWL+raXldVl1zc1syJuWnefPVFpsdXsGtyhDuP7uKNoyvZ3lrKr24bJfm1Od557ibefnoff7q8i3ceneXi3HounNjNosoQ5R47ndWxhz5XiP8BYaHbWpRc3JggEvAyt3E0+fhdh3jx4dsJuuzcd2ofPz4wTHdthPn7d/DOV3fw9sMzvH3/Jt55dJp3HtrJz28b54UnH+CGybXEI4FkY2VlSUpKSkpXebj0c4GIRqPXdDUt2uY2O5JbVw8SjQR44u4TbBjq5vuP3cnJA9t4/QeP8Is7pnjpxHp+eW6WN8/v4C9nN/KnB2b407lN/Pr0OD8/tZ7nbxzjyPREcnp01Xs+i0WWkpKS0hnyLv1g1v9w+UxBYqGYvr6qMtlcG+XU3i1MDPUlX3rsbh65dR8P3DLHMxePMV0bYW11gN0NAXq9durdRjY3lfGdXSt4fnsfR0c6aAg4aY8FGGqp4fb9u5KbhpYPOQza6qOdtuRnZvajemRmZmZhoqIq2dVay6redo7NTnHlws28/NRFXn7iAq889yC7p0bYEY9wc08jdX4PQ4lqYjYT7S4bD6zv5ebBDhoLXWxurODosjaihS6mRpezdc2KpFmvr+3y2+Y/M5CPUjQYvb8xHmOou43JoS62Twzz74/dxU+ff5An7zqEx27jzOo+DjVU8Oj1w3z7pm1cWr+Ku1f1src1yoVVnZyfXMZkWxO1iVqai9wELWZW93Vyz407k53N8dbpViszMzMLr2pqlfpL713cEGe4u5nhxXX0ddbz+JnDvPHNSyxqqMaidXF+qIv37tjACzes4w+XjvHnr5zg3w6v4/xggmOtlbxycoqvz67lq5MjPHtwA2PVATaPLuXWvdfTVlNxvj+ie+/i1Z5LSv2h26tLfdRHffS3VNKaiHFy/wyn923ha3cex2cpYmXQx6vbljF/fob5Rw/y1oP7ee+rB/jXg+s4M9zEb548wpW9q3n+pil+eGobh3oTlAcK2b5mKX63NVnnKkhOj9RWXlWQynCEWMiLv9jJ+mUdDC1po7GmkifvPcmrzz1CyF7IUq+bu1qjfGdiES9tbuE3t23gB9sXMVETYENZMd/eOsA9Yz18//Aoz8/2MxAsYmRJE8OLEhQo5TQ4lNy4qWHiqoLUlpbNjw10sXagg0ObV3HX/i08fPIAt+7ZxuU7jlMbDNPhcXKoJsz9PTX8aHMPz6+p562LN3B6qp+BlhhxfyFnx7t5YCTB3QPVNHk9nNqxmrmxbqx52bS6lRzfkDh9VUGqwpF3V/a2sX20j1vnJpL3HJnmypkjvPTQXdy9dxt+h4vOSICtVRF2V0V4YqCenzxwM9+9fJ7fvfwMD9+2h3sObuHxS6d4YtdqDjaGmR1fxt1717N3fAlulWx+uS+Xs9cnfnLVlislJdHseGlpsqelmvGBTvZvGubMvimevPMgZ/duZHF9NTWlpfTUVDLVXMNIeYTf/upnHN2zmWiJm6aQhxWRQgbDRTTVRJnbOsl4ZSnbR3u5cbKf7UPtePIzOdxl5fH9bX/8qCX9ZwIY9Pjno0Efvc2VrOquZ6S7gUvHpzm1e4ob1o/S2VDP9vHVzE2s4NtPPcSGNQP0+4u41FvD2eFWDndUsbshzD0D9bhNTg7smsFh1jGxtJ4D65fizpNwW5+ZJ3dE3/3UZj9K5f7y6agvhNNqw+uy0dscY/uqLtYsbeXxs4fZOrqMYLGPhuoahvu6mBgZ5L4Tuzh34zTn5zbwo6+d4+LOEU6O9XB800q6IgFKPCXUV0U5uHEZt2xegTtHyiK3iqe3ed/7KB+fOiK1ZVXvtVTG6GmqT27sa+bmbavYvnIRPzi/nzv3jHPx6AwBTzFeVzHN9Qm2TY7z+o++y3++9n1++r0nee7iLTxycIJLs2u5cHI/R/fvwF8SYGljjAMbl/PM7bNYdfmYrZY/T29b+1w8Hs79VIY/LGBBZajsdGs8zuJEBTZdPmt7Wvj6yZ3sHevllcunuH33Wk7OjtHVWE1edj42o5WBnm6O7JnlP378Pd781Wv88F+e4ulLx7lz/yTfeuIrnD55hK7mOmbH+tm6qovLt+6kqiJCUXFRsqoivOgzhfgApKyk7NlgYSEt8XLa62Ks6W3m7L5J7tiznvtu2szx6VH2bRzgm5eOkZdbgE6tw24009xYz+kTR3jlped48dnLfOPRe3j+6Qd56rEvMzW2mrJACSuXNCZry7yc2beeew9v4u65MY7vnLj54/z83TDFnuKWYpebpspKeptqqQiVcMvMOr5yyzTHtg1x9sAGbr9hlEdOz6FSaVCr9Bg1ZsxaPSuXL2Pfzm1cuOs4d992kAfPfYkTh3dTURomEvASCXqpq/ATLraxaXkj9x3bys71fe9clfVW1BOVhEqCTyTKK5NRv48Sj4NNKxZxenaMPWs6OTzRzdTyJi4e205OjpoClQ59gRWd2oLVYqeqrJSejkb27tjAoV2baKqtRJ9vxWUxU+iw0VkdJlBoY93SeuIBBydmN1z4VIY/hnpBLBSb9Xv999pNlt+b9XoMKjU6tZpzh6dY3VXLoS3DNEYaiboTaFRGTBo7JrUDU4ELk96Cw2IiXOLB73XQ11iF01hMoSmATltAT2Oc8f7m5IYVbcxuXD7f3Fh1VXdTFgALHFrbDx0aA558LSG1lkqNlpGmGKU6LV5TMS3BbppDvbgM/2PUqfNiVjvR5ZrR5RsoNBdT7XZi1XspMoWwGq3P9HU0nVrRVn3zknjw9bKyktDVhEgBFniMjtf8RiueXC2+PA0BVQFVGi1xt5N+m51FVifVrnLqfV30V6xJhuwx/JYygtYoxYYgBdl6fMYQDksNxZYqGvxtxLxl2PILfltqteZc9V0UYIFVZTUa5Op5a7qSkFZNWG+kQaOlU6+nXqOl1WBk0O6k3eqmrqicJeEhxhKbWVE1RrN/CTFHgiXBQZaWDhMumqQmuof2yiaCJgMGpZJSi2W+1OUqupocCzTS/McMmaqkIzOXEmkOMVkO1RI5/a4CuvQ6WvUG2s0Wet1uVheVsLyimmaHlz2LDzFRt4XtrXNM1e1gPL4l2elfRmVwjPqKL1ET248lV0m5WkW90UiN0TifSCSu+98d+Kndz8zMLHSqnTq9WP0XfXo2FnEWXqmSaKaSOrmSNpmCRdJMZhs8DJhNLA6FmCwqTq5xe1juKGKJo5jFbi9TdVtZV7mJmaZ93NByhP0dR/E5l1Bdto+aipuIVczg1ajptljotNmo0Wr5AOJTg4TN4XSbVI9Vqp33SNQUSXIIZCqJyZTUyxW0KLLokstZqpDTkylnf6WBQaOBnT4fg3Yb3RYrXVYnqwOlLHMUs6ttjnsGLiT3tZ7gxs47GIyNUugcIhw+QqLuAP1L1lOqzqfVYqFeryNuMs1/6oh0dnZ+QSdVz9slGtzSXAxSGeFMBQl5FrUyOS0yGZ0KOT0KBcvkCoayFCzPlHOo3MASg4llQT/jhR4GXE7GXR76rQ56LU7WlW9lruUoI+WTbG7eTVOwn2h0ktr4apqbt1KmVtNhMtFusZAwGknIZPN1atXLnZ2dX/x7OBboFNrjpgwVjgwlPmkWpZJMrFIpVTIZLQo5TTIZHXI5PQolfQoFKxRyBhVymiVy5iI22owGpkp89Fut9Fgs9Nmc7PX66LLbuK3vDJOJWQ52nWRl3To87lac9g6CwW20mww067SscrloNBpZXFhIQi6nQiJJJuym4f8Thd1u/6ImPTdpzcjGKc4kLJFRniEhJpHgkEqolctpkMupy5TTLlPQIcuiWy5nqUxGr0xGmSKbVp2edqORpd5iFpvN1Gg0DNoddFtsrAmXs6Z6ir7StfTFVmIxxfC4xwgEpihUZjHqdtJjMjHqdtPpcZOQSKiRy4lIJPPVZnPsb46GRqa+qSBdiU2swJaegT9DQiQjg0hGBnGJBF9GBs1yJTGpnCqpgprMLBJSGU2ZMpoypTRKpYxXFtBpsdDnctJgMNJgNNJgNNFmMdNrt7O2eZjWkh6Wx9cy2LKGhupOutv3Y5JlUq3R0Od2s6iokHa3my6zgbg8i9JMGfEC9R//1jGzMEeUncwXybCKM7GJxBSmpxMSi/GJxZSIxejFYrwZmQQlcnwSOaVSBUFxJmViKXGJhMqMDALpGSytMBHKyyOkUtFusdBgMhHX6ojr9DS4HCypWspAbBVDDcPYnW20VXThzMqmyWCgQqul2umk3mqjqyxETK4kIlVQlpeXvL67W/qJMCa1SZctyprPFUoxp0uxC9NxikSUiMUUpafjTRdTlJ6BMk1AsSQLe3ombrEMV7oUT7qEgDiDoFhMUCxGL5VQVqBN+lQqImoNofx8IhYLzSYTMY2WCrORmKOeBl8Hicrl1JTUUaDMosFgoN5soUJrpNpkpqrQQ5lMiU8iJ5Sjmh9pqyv7RBClWDWWna4kW5CBUSTBLhRhFApxidJxCEVYhUJswgy0wgyMIhl6USY6gRSjSIpJmIFLJKZIJKZQJKJIJKK3NA+/SkWH3Y5PlU9YXUAgX03AbCam1TLc0ULc00BnvJvuql4sublEtVr8eSrCWj1hs5WYw41fqsQtVeBXqWkLB+742HNGYEHaFyU/UwqVZKWJ0QnF2IQidAIBZoEIu0iMIU2IPk2MRiBBkpqOVqRAJZCiFcrQCjIwCtKxC9OxC0XYhSI0qULKdQW4cnIoNJmoMpqSYbWGCq0ef76amiIPzWV1hBwVRD2VaPJyiGk0lOn1BDQa/AU6giYrXnkeHkUuIa2RmNv1+4+9JQEsTLs2480soRJFajoFAjFmgQhdmgCdQIhZJEadKkKVlo5KICFLICFfpCBbkIlakEm+IIOCtHQMaULMQhEmgQiLUITXlEVYraEoL58SVQElGi1hdQHe3DziNgtRm5VEsIPaYA0ulQqnMosSjRabMhu3RkfAZsev0uKU51FmceDXmT/+yAFYmHqt5C9Zohxkqemo3jelSROQlyqgIE2IKjWdnLQMcgUy8kRZKIRylAI5eUI5eWkSVGliNGlC9GlCdO8XvVBM3KKhKCcPn1pDwGAkqjdSZrVSZDJiV+aQCARoj7egzlbgys6lSK3GrtPh1Zso9xTiVxtwyPNpCIQoMdj45NS6VvZLhSiXzFQRuakitGlC1KkCcq9LIzdVRL5ATFaaBEWajCxhFlKBAoVAgVIgJ0eQSU5qBtlfFOJUaTFIFDjyNBSr8sgWi7Eqs9HLsjDl5OLIziNoNlOq0WHPycPnsBEPVpArlWKVZ1GYo8KhKkhGHC78Ngd+nRlXro5EIEKJycHw8PC1nzBGMn+qEGYjTRWRnSqiIE1EXqqAnOsEKK8TkpeWgVIgRS6QoRRlIxHIkQmykAvkKAWZKK4TY9OYMOdr8Joc2NR6ghZXUp0qJGTIQ5upwKzMQS9XolerKZBIMGRlETKZKTKZUGdlYVHkoFfmYssvwKI34Lc5KdIYKdJYaItVEbC55xOlpeEP+/9vFEZP+OuTE9oAAAAASUVORK5CYII=" > <span >Old Nate</span> </label> </div> <div> <span >5</span> <span> t/min</span> </div> </div><table class="table table-striped table-sm" > <tbody ></tbody> </table> <form class="form form-inline" style="justify-content: space-between"> <select name="islands" class="custom-select" ><option value="">The Old World - Goldfurth</option></select> <div style="display: flex"> <div class="mr-2"> <img class="icon-sm icon-light" src="icons/icon_transporter_loading_light.png"> </div> <div class="custom-control custom-switch"> <input type="checkbox" class="custom-control-input" > <label class="custom-control-label" for="create-trade-route-export-checkbox"> <img class="icon-sm icon-light" src="icons/icon_transporter_unloading_light.png"> </label> </div> </div> <div class="input-group input-group-short spinner"> <input step="0.1" class="form-control" type="number" value="0" > <div class="input-group-append"> <span class="input-group-text">t/min</span> </div> </div> <button class="btn btn-sm btn-light" disabled=""> <span class="fa fa-plus"></span> </button> </form> </div>
 
@@ -1103,7 +541,7 @@ Siehe folgenden Link für weitere Informationen: `,
 <p>The buttons are found in the left of the navigation bar.</p><br/>
 
 <span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_newspaper.png" /></button></span>
-<p>Apart from the <b>newspaper</b> other effects can be applied that <b>change the need consumption</b>, e.g. zoo sets, palace effects, items, and public building effects from the <b>tourist season DLC</b>. While effects and items are activated per island, the newspaper is global. To simplify the configuration of multiple islands, the button <b>Apply globally</b> copies all consumption effects to all other islands und replaces existing ones.</p><br/>
+<p>Apart from the <b>newspaper</b> other effects can be applied that <b>change the good consumption</b>, e.g. zoo sets, palace effects, items, and public building effects from the <b>tourist season DLC</b>. While effects and items are activated per island, the newspaper is global. To simplify the configuration of multiple islands, the button <b>Apply globally</b> copies all consumption effects to all other islands und replaces existing ones.</p><br/>
 
 <span class="float-left btn-group bg-dark mr-2"><button class="btn text-light"><span class="fa fa-cogs"></span></button></span>
 <p>In this dialog one can choose which product should be produced by which factory, in case several factories produce the same product. By default, the <b>same region policy</b> is selected. By example, this means that the wood for distilleries is produced in the New World while the wood for sewing machines is produced in the Old World.</p><br/>
@@ -1114,7 +552,7 @@ Siehe folgenden Link für weitere Informationen: `,
 <h5>Island and Trade Route Management</h5>
 <div class="input-group mb-2" style=" max-width: 300px; "> <div class="input-group-prepend"> <span class="input-group-text" >Selected Island</span> </div> <select name="islands" class="custom-select" ><option value="">All Islands</option></select> <div class="input-group-append"> <button class="btn btn-secondary" > <span class="fa fa-cog"> </span> </button> </div> </div>
 <span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_map.png"> </button></span>
-<p>First, one must open the <b>island management dialog</b> by clicking the cogwheel. One can create new islands there. When using the <b>server application</b> suggestions for new islands get listed (based on those island names the server has seen on the statistics screen). After creating the first island three new control elements show up in the center of the navigation bar: Switch island, open island management, and open trade route management. New islands are associated with a <b>session</b>. The session influences which population levels, factories, items and need consumption effects show up. The button <b>Delete All</b> resets the calculator to its initial state.</p><br/>
+<p>First, one must open the <b>island management dialog</b> by clicking the cogwheel. One can create new islands there. When using the <b>server application</b> suggestions for new islands get listed (based on those island names the server has seen on the statistics screen). After creating the first island three new control elements show up in the center of the navigation bar: Switch island, open island management, and open trade route management. New islands are associated with a <b>session</b>. The session influences which population levels, factories, items and good consumption effects show up. The button <b>Delete All</b> resets the calculator to its initial state.</p><br/>
 
 <div class="ui-fchain-item" style="width: 100%"> <div class="mb-3 inline-list-stretched" > <div class="custom-control custom-checkbox"> <input type="checkbox" class="custom-control-input" > <label class="custom-control-label" src-only="" style="vertical-align: top;" for="45-npcRoute-checked"> <img class="icon-sm" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAPoklEQVRoge2XaWxc13WAqcZFXNuSKIqc4ezz3rzZ932Gw+GsnOGQGg634ZAUF1HcREqiRO2yFlIWJdm0JdvanNhurHiJ5cqOZTiwrXiR62yom6RJW6AougQNmqRpgKIN0KKII3790QYoEFtVWllEgXzA+3vv+d45595zq6p+y2/5f8mqZDJ514ZUyt1XKFTKLZnoSgf0G3Nk+9ix47unbnzn5Sf56+tX+MrnTjA/M8yhqQF2jFRY6fhuic5cku62DIfGezl7YIqBQpxKPsbccGn5rS+eZu/kILGAe7lcytiMqvqPHty/7ZcrHfOvEfV4fpGJeOlJhxloiTNcTOA1aghZBXoyUV59aomeQgqrZCAd8tBbSHFidoS5wZ53VixoYFVVVVVVpb3wT6fn91NpzeCQBMwGPc1hD81hO9mIG6NajlPSMdGVW+7ORvG67XQ1xynnm9jYmuby2ePMbxvk6O4tN/6nvT41gk7pl9mQl12jFY7MTnJmYe9yJuJFJq/Drq1Dr6gl4TYh1a9nqC2xXGlpJBHyLA+0ZTg0OcBYZzPTQ52U0lH6C013tnfa0+lfRNxeok4XDT4PYbeTJr+LcibKnpFOzs7v4v6ZYeYHcvzklVPceOMxOlNBRjuybNvYwUAxz4ndWxjrylMuNGHUKfDaTPQUUv9+xySKxeI93fkWgk4PiVAIv81CwGnBbdDitxrI+O2MFBPMDZU4PpjhX68uwvee5dBAMzO9LRydqvDIzs38ybVXyDcF+b27P0vMbqCnLXPTbNz20io0pjYXm2KMlDYQsNlpbgjhs0j4rQIugxafRSJsl+htjpANOLhxbYnla6f52fNHqSQDHJms0BqxU0qFGeoscGq6D7tRTz4RJp+Obbutwd6MrkxmpiOTYNdwhWwogFGjIRXyUWjwkfC7yIa8FKJuio0+9CoFv3jjEfjgHLz7KMtfnuf7Z7aQC9jYUozz1olJvnZhL3pFHYVEmJnhrttbWjdLY393tz3lD5AOhog4XSR8LuJeN8PteQY3NDNYSNCZjlNpyfB3lw7x1hPznDsyzbnDE/zg6b18dHkf//jMft5eGOXUjiGOb+1jU3szJqOR8f5++W0VuRkLCwu/kw1HiHt8xJxOPEYjbU0xJno6ObV7O0MtSbLxRk6UE2wuNvLlyVZe2tTGcIOH+bybvzw9zZW5fg4MdHC+K8Vkk5uzuzZTVVX16R6vH0chFsclmQlabVj0EplgAEkvolOJqOs13F9KMNsW5Wx7HLegpdfvYCpgZybq4BsHRzi5ZZCBxhADYRdjyTAnN5XubKP/itZU6m2HYCZqd+AVjbgFAbdgoMnjZTbXwJNDbTza0cRcU5i1a1Zz6dAclyb7ONCS5Jvzk5zfNUFfqonBcomlLUM8sKln5WYvj9lTCnvCk3K57iOP0cpgsZW418eF0W5emujgUGuGC+UOnuvrZD6b4Oun9vO1o7P84QNb+ejSIa4/tsD9uSY+eO48Lz14aGWHyP3NuW88lk2yN50gGwrQGW/gqaESb8z28e0Tc1zfP8yfPjDBhwdG+YsnDvP3X1jk/aMz/NvTB3h9cY6rO4Z4cW6UV0/uWZnS+hVLifiPlvJJeqxWNubT7Osvcbozz+XRIl/fO8iPz+/nhw/t5OfPHOanzxzjkXKeSxvb+OfPH+CFI7N88OBuvnl8O89M965sRnb29CQXUjEOJ6IcyMY5MrWRxQ1JPl9p5vn+PFeHCvz5ye387ImDLBYTPD1a5Fv3j/HdQ4Nc/9wDnK7kef/IFj6/d2Ll3ydbgwEeqXRwqJjn5I4xDhfTLHZkuFhp4bneHNf3DHJ5qpe/euYE31+cZXdbnEqDi5aojxcPTPH8dC9Lo+XllfaoSiaTd+1LJTgz0M2RLSPsas2wty3Fqa4c5yotPD1Z5isHJpgd7uLqhXmuXjxMORfj9IFxZjeVmcs38PjMyEvAqo/7bmuw/33Bj9uoXC5/ZrSlwOLOmRsTuRw725o52NvKYm+BnfkYuzd38uyDe3j8yFbmxvvIRQO0Z2PsHW1npqtApdg6dSt731aRT6JcLn9macfMLze35RlvyTLb0cL8cA/7Snn+6JWznD26jcm0jzcnBnh3UydXJ0aw6RVs68uxua/rEx9Ut5Vb/SuS1t6ze6SfkeYsY4Uc+/p7OLFlkD84P09j2MvxShujTWG6Am7GMjGyAQdL+zffuUa/FRFg1UCxh5jdSSkSoZKI05ds5PBID2eP7WTHhixPzGzi7dPHePPhBZ4+uJ2U18ausfIninxqPXKzhRcWFu7aNjxCk9ONy2Qh7bTRFvAw1JLi+Yf28djWTVw/e5L3Li7x/NFdvHzqKHtG+vnSuVMrk5FPOllMMu3y/qkx9k+NEzEYqK9X4xZ1xBwWVOtrmOvM8dS+bVzYPc2uSpGHt43zwmOnluvWK1g6fLD1joncLBsKmRqb1oBLrWfnyAA7h/u4+uQ5DPUKJLUag0qBwygQcZrIRbzEfS62DJSximYMWgmbIK38hVhVVVVl0+gQ5AocGh0RnZ6M2cjBzQN8+eISzz+6iEFZj6BWYdYqcRk0+KwmGj0+/FY3QbuTdy49uvIierkSp15PxGzAqqrHqtbQIArLAa2Wc0fmOLJlkGvPnOXqEw8znvQznW/AbTYRtLmxCUa+/sLFD6uq7sBgeDN0cvkNm1qPU6siZNSR85hxaeQYVWrsGj0xvZ7xVCNn9k1zdLKfKxeXWNhcZlOqEYdkZaa7DatWZGt399+smEjQ6j9uVQu49Hr8kg6/qCbvkch5TeTdRsxKDQ16PTqlFrsoUrSItDcFKERC7GtLcvnMArN9RXrTKSImG4cnhn58xyVsGgGrSotLqyMkiXi0SiKSipzTQJvXiKSoYzDlxaxQ45OMbN+QZySfZVN7nqRR4EQ2SpfdRMTjoDtgI+WwEzVbeWC674U7IpCPRmtsGgGf3oBNpSFkEGi0SIQlLQ1GDXmHjpJPohx1kncL7GgPMtzRilOjx63Tsi/ixqBW4hfVPPvgQRotIt2pKB1BG2aViF8U2eC3M1ks3vOpCACrUqHosEMtLvsFiZBBwqxQ0GgxkrCbiJv1JCw6Ci6Rdr+JStSBV1DywHCCPaUALqWMslVgb1uCZMhFzGvDJaho91jY4LEw2Ojg8bkRQpKRyVKWgsdyY7g9+d5tF4m5Ak/Y1QIhg4mwQSIqSUQMehI2I1mnmWaHRNamI2tV0+6TqDQ4afdb6ApLTBR8nBrN4NcoGC/l2DrcRV9blrnxAWImHb1+23JvzMmLh0bpjEeIiGraww7CVt3tHSQbvN5ddo1AUJAIiRIxk5GExUiTSaTgsdEecNLisZB1GshYdeTdRjZ4jLT7LKScBhaHkrx+YpwjA0k+d3QnXekGPnz9S7z/yiVefupRii4jHqPA2fECZ6ZL6Gtr6Y37lnNuIym7SERS4RMVc/9nEZtGICBIxExmopKRJrOJuNlIwiwynAySskko1q1FtvZe7vndu2h2SrS4RIo+C6WQg4G4gdmOAIujaYbbW7jy1ON8+6tX+d57r/G3H767/GfvvbbcZNJxtNLEFw/2MT+QJGnWsCFoJ2nRELdoCQuKW7swP+kMN+t0eHQCEclI3Gym0WQiaTGRsJpJWkT8ehV+rZKIoKC7wUPKqiNlFWj1GGnzGmlzGxhribKr5OHoxjgXZ7J84yuXaW0K8sM/fofvfvUK28eGKSXCzG9McWw4w8PTbQiydXREHCTtAgmbnrBRg1NT99H/6uUoyhR4BYGQQaJBMpG0mMk4LMTNImm7kYzdSECvohR20WDV0+w0kHaKpO0G0naBnE1LZ9BC0SMx3mzhYDnCwqYM8xsbufbCk/z0+x/wo++8y0++/Q7fee1ZeuNWHprMs6ccY7rNT9ampdktEbPoCYj1BEQlv/Glqa6pxanVEZJMhCQTSZuFrMNCg1kiaTWQshloNGoRaqtJOiSSTomUTU/WpiNl1ZGw6Gi2C7Q4BTqDVkayEeb7Y7y+UOHV46O8sHSAqNPIq1de4rtvvMjOTf30J+y8eXqKl44NsKfcQNiqptVnIm7V4RcUeHRybBrZP9yyhE4m+7lZqcKpF/HoJXyiRMJmodFiosGoJ2XRkbGLJG0C9Wvvoa/RTdIukrLqyNr0ZOx6EmYNOYdIwWWg1SPRGbAymnFwYjDGq/f38vhsBztGevnBt97k95eO8vZz5xjLunnnwWEuzLZxZWGAcqOduFlD3CrgFZS4tDLsmrpb6xVljeyaXi7HqdXhN0gERCNBSSIqCcTMIg1GLUGdnFannoxFg379fdTe+1m6onaSVh1Ji4akRUfiv6RaXSIFj4musJ2sx8RUwcfhvijXFvu4/tgUe8YH+N5bl3nt6TNU4laODWe4fLifh8abGSv40NZWk/MY8eiV2DVyzKo67KJw+mYOqzS1tf8iyuqwq1UY5EqCBgMJu42kzULSJtFk0dMgqQjrZbiU68ha1Xg1ddSvuRtdzX0kzDqazBqSVj1xk5oms5q0RUuLy0BHwEIl6uTlg93sK8fY2RnkcF+MkyNx3r/yBSqtKbZvCHBkIM729sDyjo4gkxsaUKyrxqNT4NIpsGlkmOprMKllN89K7eo1KNauwyiX49Hp8YsCHp2OrNNK2m4kaTMQk9REhXps8rUEtXWE9TJM8hrU1ffS4pZoMmmIGVXEjCoSZi0pi5qsTUuLS6TkN+PUyhlM2NndE+PysV52l4Icmx0m6rTQGTVzuL+RiZyL7cUA093NCHXrMdXX4tIpcGjkGJV1iPJ1nywCrKq5bw11q9eiql6PVCfHoVITNUmI8noazQJpm0ijUYNfKyOglWGqW0tIUOBQyjDL11Nzz93ETFpiJi1BSUuDSUPSrCFt1ZKx6Sh6jeTdEi5NDb1RC+d3lLgwneP8dIG4x8JUq5/dXSGmWr1szjpIec3EXCIGWS1+gxarqg6zYj2irBqXRffx44vBYJDV3LeG2tXV1K9dh7amDkkmx6FS0WAUsKnk+LQKElaBiKjEr1Mh1dXi1qhw6zTYlErqVq9GqF1HRNIQNWhoMGmJSmoaTRqaLFoydh05u472qJlKwo5Yt4aDfXEubEnSlwmScWmZbvMwmHayszdDPmglF7RRu2Y1br0Si7IWQ91axLpq9PXVH58VpVxeqrlvLbLV1dSvqUFbsx6xTo4kk+FQ1+PVKnFp6nGqZYRFFU61EqNchlhbh1Onw6pSoayuZv0995J2SAT0SgKiiqCgICQoCBvqiUj/WXJpn5WeJic9CS9WZTVjLV6yAQv7yhEWhzMMplxE7QY2Zn1szPqoW7sGUVaDQVaDUFuNvrYa3frVvybyH+6Ro+OjJPtgAAAAAElFTkSuQmCC" > <span >Sir Archibald Blake</span> </label> </div> <div> <span >7</span> <span> t/min</span> </div> <div class="custom-control custom-checkbox"> <input type="checkbox" class="custom-control-input" > <label class="custom-control-label" src-only="" style="vertical-align: top;" for="77-npcRoute-checked"> <img class="icon-sm" src="data:image/png;base64,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" > <span >Old Nate</span> </label> </div> <div> <span >5</span> <span> t/min</span> </div> </div><table class="table table-striped table-sm" > <tbody ></tbody> </table> <form class="form form-inline" style="justify-content: space-between"> <select name="islands" class="custom-select" ><option value="">The Old World - Goldfurth</option></select> <div style="display: flex"> <div class="mr-2"> <img class="icon-sm icon-light" src="icons/icon_transporter_loading_light.png"> </div> <div class="custom-control custom-switch"> <input type="checkbox" class="custom-control-input" > <label class="custom-control-label" for="create-trade-route-export-checkbox"> <img class="icon-sm icon-light" src="icons/icon_transporter_unloading_light.png"> </label> </div> </div> <div class="input-group input-group-short spinner"> <input step="0.1" class="form-control" type="number" value="0" > <div class="input-group-append"> <span class="input-group-text">t/min</span> </div> </div> <button class="btn btn-sm btn-light" disabled=""> <span class="fa fa-plus"></span> </button> </form> </div>
 
@@ -1166,7 +604,7 @@ export const options: Record<string, any> = {
     "decimalsForBuildings": {
         "name": "Show number of buildings with decimals",
         "locaText": {
-            chinese: "建筑数量显示为小数模式",
+            "simplified_chinese": "建筑数量显示为小数模式",
             "english": "Show number of buildings with decimals",
             "german": "Zeige Nachkommastellen bei der Gebäudeanzahl",
             "korean": "건물 수를 소수점 단위로 표시"
@@ -1198,25 +636,18 @@ export const options: Record<string, any> = {
     "missingBuildingsHighlight": {
         "name": "Highlight missing buildings",
         "locaText": {
-            chinese: "高亮缺失的建筑",
+            "simplified_chinese": "高亮缺失的建筑",
             "english": "Highlight missing buildings",
             "german": "Fehlende Gebäude hervorheben",
             "korean": "부족한 건물 강조"
         }
     },
-    "utilizeExistingFactories": {
-        "name": "Fully utilize existing factories",
-        "locaText": {
-            "english": "Fully utilize existing factories even when output is not needed",
-            "german": "Vorhandene Fabriken voll auslasten selbst wenn die produzierte Menge nicht benötigt wird"
-        }
-    },
-    "needUnlockConditions": {
-        "name": "Consider unlock conditions for needs",
-        "locaText": {
-            "english": "Consider unlock conditions for needs",
-            "german": "Freischaltbedingungen der Bedürfnisse berücksichtigen",
-        }
-    },
+    // "needUnlockConditions": {
+    //     "name": "Consider unlock conditions for needs",
+    //     "locaText": {
+    //         "english": "Consider unlock conditions for needs",
+    //         "german": "Freischaltbedingungen der Bedürfnisse berücksichtigen",
+    //     }
+    // },
 };
 
