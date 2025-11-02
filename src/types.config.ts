@@ -112,12 +112,12 @@ export interface ResidenceBuildingConfig {
   iconPath: string;
   locaText: LocaTextConfig;
   associatedRegions: string[];
-  possibleUpgrades?: number[];
   populationLevel: number;
   needsList: {
     need: number;
     needConsumptionRate?: number;
   }[];
+  possibleUpgrades?: number[];
 }
 
 // PopulationLevel configuration interface
@@ -165,6 +165,10 @@ export interface FactoryConfig {
   iconPath: string;
   locaText: LocaTextConfig;
   associatedRegions: string[];
+  inputs?: {
+    product: number;
+    amount: number;
+  }[];
   needsFuelInput: boolean;
   outputs: {
     product: number;
@@ -176,10 +180,6 @@ export interface FactoryConfig {
   }[];
   cycleTime: number;
   modulesLimit: number;
-  inputs?: {
-    product: number;
-    amount: number;
-  }[];
   buffs?: number[];
   aqueductProductivityBuff?: number;
   additionalModule?: number;
@@ -271,7 +271,7 @@ export interface ItemConfig {
   guid: number;
   name: string;
   iconPath?: string;
-  locaText?: LocaTextConfig;
+  locaText: LocaTextConfig;
   buffs: number[];
   targets?: number[];
   effectScope: string;

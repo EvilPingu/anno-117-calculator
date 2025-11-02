@@ -1654,6 +1654,9 @@
               "type": "integer"
             }
           },
+          "targetsIsAllProduction": {
+            "type": "boolean"
+          },
           "effectScope": {
             "type": "string"
           },
@@ -1668,6 +1671,7 @@
           "guid",
           "name",
           "buffs",
+          "targetsIsAllProduction",
           "effectScope",
           "excludeEffectSourceGUID",
           "effectDuration"
@@ -1979,6 +1983,12 @@
     "icons": {
       "type": "object",
       "properties": {
+        "data/ui/2kimages/fpp/assets/main_menu_flow/symbol_heartlands_280.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/fpp/assets/main_menu_flow/symbol_wetlands_fp_280.png": {
+          "type": "string"
+        },
         "data/ui/fhd/base/icon_content/hud_minimap/icon_minimap_world_map.png": {
           "type": "string"
         },
@@ -2516,9 +2526,6 @@
         "data/ui/fhd/base/icon_content/generic/icon_2d_productivity.png": {
           "type": "string"
         },
-        "data/ui/2kimages/main/icons/limestone_generic/icon_exclamation_mark.png": {
-          "type": "string"
-        },
         "data/ui/fhd/base/icon_content/colosseum/icon_3d_buff_colosseum_small_bronze.png": {
           "type": "string"
         },
@@ -2547,6 +2554,27 @@
           "type": "string"
         },
         "data/ui/fhd/base/icon_content/infrastructure/icon_3d_resource_forest.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/portraits/rival_01_dorian.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/portraits/rival_02_tarragon.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/portraits/rival_04_licia.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/portraits/rival_05_athr.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/portraits/rival_03_zarai.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/portraits/rival_06_concordia.png": {
+          "type": "string"
+        },
+        "data/ui/2kimages/portraits/rival_07_neferneru.png": {
           "type": "string"
         },
         "data/ui/fhd/base/icon_content/items_specialist/unique/icon_3d_unique_male_005.png": {
@@ -2603,10 +2631,10 @@
         "data/ui/2kimages/main/3dicons/specialists/systemic/icon_farmer_106.png": {
           "type": "string"
         },
-        "data/ui/2kimages/main/3dicons/scenario/ggj_buff/icon_ggj_buff_sickness.png": {
+        "data/ui/2kimages/main/3dicons/influence/icon_buff_optimisation_gold.png": {
           "type": "string"
         },
-        "data/ui/2kimages/main/3dicons/influence/icon_buff_optimisation_gold.png": {
+        "data/ui/2kimages/portraits/wetlands_resident02_mercators.png": {
           "type": "string"
         },
         "data/ui/2kimages/main/3dicons/limestone_workforce/icon_smiths.png": {
@@ -2618,19 +2646,10 @@
         "data/ui/2kimages/main/3dicons/limestone_workforce/icon_waders.png": {
           "type": "string"
         },
-        "data/ui/fhd/base/icon_content/generic/icon_2d_arrow_down.png": {
-          "type": "string"
-        },
         "data/ui/fhd/base/icon_content/generic/icon_2d_arrow_up.png": {
           "type": "string"
         },
         "data/ui/fhd/base/icon_content/military/icon_built_camp.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/city_incident/icon_fighting_fire.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/city_incident/icon_fighting_riot.png": {
           "type": "string"
         },
         "data/ui/fhd/base/icon_content/city_incident/icon_fighting_illness.png": {
@@ -2668,6 +2687,8 @@
         }
       },
       "required": [
+        "data/ui/2kimages/fpp/assets/main_menu_flow/symbol_heartlands_280.png",
+        "data/ui/2kimages/fpp/assets/main_menu_flow/symbol_wetlands_fp_280.png",
         "data/ui/fhd/base/icon_content/hud_minimap/icon_minimap_world_map.png",
         "data/ui/fhd/base/icon_content/attributes/icon_2d_population.png",
         "data/ui/fhd/base/icon_content/attributes/icon_2d_income.png",
@@ -2847,7 +2868,6 @@
         "data/ui/2kimages/fpp/icons/techs/wood_beaver.png",
         "data/ui/2kimages/fpp/icons/techs/wood_bird.png",
         "data/ui/fhd/base/icon_content/generic/icon_2d_productivity.png",
-        "data/ui/2kimages/main/icons/limestone_generic/icon_exclamation_mark.png",
         "data/ui/fhd/base/icon_content/colosseum/icon_3d_buff_colosseum_small_bronze.png",
         "data/ui/fhd/base/icon_content/colosseum/icon_3d_buff_colosseum_small_silver.png",
         "data/ui/fhd/base/icon_content/religion/icon_2d_deity_ceres.png",
@@ -2858,6 +2878,13 @@
         "data/ui/fhd/base/icon_content/religion/icon_2d_deity_neptune.png",
         "data/ui/fhd/base/icon_content/religion/icon_2d_deity_epona.png",
         "data/ui/fhd/base/icon_content/infrastructure/icon_3d_resource_forest.png",
+        "data/ui/2kimages/portraits/rival_01_dorian.png",
+        "data/ui/2kimages/portraits/rival_02_tarragon.png",
+        "data/ui/2kimages/portraits/rival_04_licia.png",
+        "data/ui/2kimages/portraits/rival_05_athr.png",
+        "data/ui/2kimages/portraits/rival_03_zarai.png",
+        "data/ui/2kimages/portraits/rival_06_concordia.png",
+        "data/ui/2kimages/portraits/rival_07_neferneru.png",
         "data/ui/fhd/base/icon_content/items_specialist/unique/icon_3d_unique_male_005.png",
         "data/ui/fhd/base/icon_content/items_specialist/other_male/icon_3d_other_male_003.png",
         "data/ui/fhd/base/icon_content/items_specialist/other_female/icon_3d_other_female_002.png",
@@ -2876,16 +2903,13 @@
         "data/ui/fhd/base/icon_content/items_specialist/roman_male/icon_3d_roman_male_001.png",
         "data/ui/fhd/base/icon_content/items_specialist/celtic_male/icon_3d_celtic_male_003.png",
         "data/ui/2kimages/main/3dicons/specialists/systemic/icon_farmer_106.png",
-        "data/ui/2kimages/main/3dicons/scenario/ggj_buff/icon_ggj_buff_sickness.png",
         "data/ui/2kimages/main/3dicons/influence/icon_buff_optimisation_gold.png",
+        "data/ui/2kimages/portraits/wetlands_resident02_mercators.png",
         "data/ui/2kimages/main/3dicons/limestone_workforce/icon_smiths.png",
         "data/ui/2kimages/main/3dicons/limestone_workforce/icon_aldermen.png",
         "data/ui/2kimages/main/3dicons/limestone_workforce/icon_waders.png",
-        "data/ui/fhd/base/icon_content/generic/icon_2d_arrow_down.png",
         "data/ui/fhd/base/icon_content/generic/icon_2d_arrow_up.png",
         "data/ui/fhd/base/icon_content/military/icon_built_camp.png",
-        "data/ui/fhd/base/icon_content/city_incident/icon_fighting_fire.png",
-        "data/ui/fhd/base/icon_content/city_incident/icon_fighting_riot.png",
         "data/ui/fhd/base/icon_content/city_incident/icon_fighting_illness.png",
         "data/ui/2kimages/fpp/icons/provinces/icon_romanization_48.png",
         "data/ui/fhd/base/icon_content/tech_tree/icon_research_progress.png",
@@ -2919,6 +2943,15 @@
     "factories",
     "modules",
     "buildingBuffs",
+    "effects",
+    "techs",
+    "patrons",
+    "items",
+    "icons",
+    "effects",
+    "effects",
+    "effects",
+    "effects",
     "effects",
     "techs",
     "patrons",

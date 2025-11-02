@@ -21,9 +21,9 @@
     "type-check": "tsc --noEmit",
     "migrate": "node scripts/migrate-to-typescript.js",
     "type-check:watch": "tsc --noEmit --watch",
-    "fix-types": "node fix-typescript-errors.js",
+    "fix-types": "node scripts/fix-typescript-errors.js",
     "migration-helper": "node scripts/migration-helper.js",
-    "generate-types": "node generate-config-types.js"
+    "generate-types": "node scripts/generate-config-types.js"
   },
   "author": "Nico Höllerich",
   "license": "MIT",
