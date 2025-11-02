@@ -238,6 +238,7 @@ export interface EffectConfig {
   locaText?: LocaTextConfig;
   buffs: number[];
   targets?: number[];
+  targetsIsAllProduction: boolean;
   effectScope: string;
   excludeEffectSourceGUID: boolean;
   effectDuration: number;

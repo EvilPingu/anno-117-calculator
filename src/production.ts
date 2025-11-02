@@ -410,6 +410,7 @@ export class Effect extends NamedElement {
     public buffs: Buff[];
     public targets: Constructible[];
     public targetGuids?: number[];
+    public targetsIsAllProduction: boolean;
     public effectScope: string;
     public excludeEffectSourceGUID: boolean;
     public isStackable: boolean;
@@ -438,6 +439,7 @@ export class Effect extends NamedElement {
         super(config);
         this.guid = config.guid;
         this.effectScope = config.effectScope;
+        this.targetsIsAllProduction = config.targetsIsAllProduction;
         this.excludeEffectSourceGUID = config.excludeEffectSourceGUID;
         this.buffGuids = config.buffs;
         this.buffs = []; // only for displaying
