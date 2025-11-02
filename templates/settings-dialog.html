@@ -1,4 +1,4 @@
-<div id="settings-dialog" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true">
+<div id="settings-dialog" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true" data-bind="debug: 'Settings Dialog'">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -39,7 +39,7 @@
                     <hr />
                     <table class="table table-striped">
                         <tbody data-bind="foreach: settings.options">
-                            <tr data-bind="if: $data.visible()">
+                            <tr data-bind="debug: 'Settings Option', if: $data.visible()">
                                 <td>
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" data-bind="checked: $data.checked, attr: { id: $data.id }">

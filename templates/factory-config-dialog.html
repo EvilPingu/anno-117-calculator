@@ -1,4 +1,4 @@
-﻿<div id="factory-config-dialog" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true" data-bind="with: $root.selectedFactory()">
+﻿<div id="factory-config-dialog" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true" data-bind="debug: 'Factory Config Dialog', with: $root.selectedFactory()">
     <div class="modal-dialog modal-lg" data-bind="css: {'modal-xl': $root.productionChain.breadth() > 5}">
         <div class="modal-content">
             <div class="modal-header">
@@ -27,7 +27,7 @@
                                 
                             </td>
                         </tr>
-                        <tr data-bind="with: $data.workforceDemand">
+                        <tr data-bind="debug: 'Workforce Demand', with: $data.workforceDemand">
                             <!-- workforce -->
                             <td>
                                 <span data-bind="text: $root.texts.workforce.name"></span>
@@ -40,9 +40,9 @@
                             </td>
                         </tr>
 
- 
+
                         <!-- ko foreach: $data.modules.filter(m => m.visible()) -->
-                        <tr>
+                        <tr data-bind="debug: 'Module Config'">
                             <!-- extra goods module -->
 
                             <td>
@@ -63,7 +63,7 @@
                     <collapsible params="id: 'factory-config-equipped-items', heading: $root.texts.itemsEquipped.name, collapsed: true, data: $data">
                         <table class="table table-striped">
                             <tbody data-bind="foreach: $data.availableItems">
-                                <tr>
+                                <tr data-bind="debug: 'Available Item'">
                                     <td>
                                         <div class="inline-list">
                                             <div data-bind="component: {name: 'icon-checkbox', params: {asset: $data.parent, checked: $data.scaling, id: 'fc-' + $data.target.guid + '-' + $data.parent.guid + '-equipped'}}"></div>

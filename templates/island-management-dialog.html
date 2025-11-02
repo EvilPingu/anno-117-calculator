@@ -1,4 +1,4 @@
-<div id="island-management-dialog" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true">
+<div id="island-management-dialog" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true" data-bind="debug: 'Island Management Dialog'">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -45,7 +45,7 @@
                 <table class="table table-striped">
 
                     <tbody data-bind="foreach: $root.islandManager.islandCandidates">
-                        <tr>
+                        <tr data-bind="debug: 'Island Candidate'">
                             <td>
                                 <span data-bind="click: () => $root.islandManager.deleteCandidate($data)" aria-hidden="true" class="dismiss">&times;</span>
                             </td>

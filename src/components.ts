@@ -1,7 +1,7 @@
 import { ResidenceNeed } from './consumption';
 import { Consumer } from './factories';
 import { ResidenceBuilding } from './population';
-import { NumberInputHandler, EPSILON, ko } from './util';
+import { NumberInputHandler, EPSILON, ko, debugBindingContext, logAssetInfo } from './util';
 import { Constructible } from './world';
 
 declare const $: any;
@@ -61,7 +61,7 @@ interface Demand {
      * Allows passing additional properties to child elements in the binding context
      */
     ko.bindingHandlers.withProperties = {
-        init: function (element: HTMLElement, valueAccessor: () => any, _allBindings: any, _viewModel: any, 
+        init: function (element: HTMLElement, valueAccessor: () => any, _allBindings: any, _viewModel: any,
     bindingContext: any) {
             // Make a modified binding context, with a extra properties, and apply it to descendant elements
             var innerBindingContext = bindingContext.extend(valueAccessor);
@@ -69,6 +69,67 @@ interface Demand {
 
             // Also tell KO *not* to bind the descendants itself, otherwise they will be bound twice
             return { controlsDescendantBindings: true };
+        }
+    };
+
+    /**
+     * Custom Knockout binding handler for debugging bound assets
+     * Usage: <div data-bind="debug: true">...</div>
+     * or: <div data-bind="debug: 'Label for this binding'">...</div>
+     * Logs binding context and asset information to console when debug mode is enabled
+     */
+    ko.bindingHandlers.debug = {
+        init: function (element: HTMLElement, valueAccessor: () => unknown, _allBindings: unknown,
+            _viewModel: unknown, bindingContext: { $data: unknown }) {
+            // Check if debugging is enabled globally
+            const isDebugEnabled = () => {
+                return window.view?.debug?.enabled?.() || false;
+            };
+
+            if (!isDebugEnabled()) {
+                return;
+            }
+
+            const labelOrFlag = valueAccessor();
+            const label = typeof labelOrFlag === 'string' ? labelOrFlag : 'Binding';
+
+            // Log initial binding information
+            console.group(`[DebugKO] ${label} - Initial Binding`);
+            console.log('Element:', element);
+
+            const info = debugBindingContext(element);
+            if (info) {
+                console.log('Asset Type:', info.dataType);
+                console.log('Is Observable:', info.isObservable);
+                if (info.assetInfo) {
+                    console.log('Asset Info:', info.assetInfo);
+                }
+                console.log('Binding Context $data:', bindingContext.$data);
+            }
+            console.groupEnd();
+        },
+        update: function (_element: HTMLElement, valueAccessor: () => unknown, _allBindings: unknown,
+            _viewModel: unknown, bindingContext: { $data: unknown }) {
+            // Check if debugging is enabled globally
+            const isDebugEnabled = () => {
+                return window.view?.debug?.enabled?.() || false;
+            };
+
+            // Check if verbose logging is enabled
+            const isVerbose = () => {
+                return window.view?.debug?.verboseMode?.() || false;
+            };
+
+            if (!isDebugEnabled() || !isVerbose()) {
+                return;
+            }
+
+            const labelOrFlag = valueAccessor();
+            const label = typeof labelOrFlag === 'string' ? labelOrFlag : 'Binding';
+
+            // Log when bound values change
+            console.log(`[DebugKO] ${label} - Update triggered`);
+            logAssetInfo(bindingContext.$data, `${label} Current Data`);
         }
     };
 

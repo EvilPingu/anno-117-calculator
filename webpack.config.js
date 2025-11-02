@@ -29,6 +29,22 @@ module.exports = {
         "knockout": path.join( __dirname, "js/knockout-min.js" ),
     }
   },
+  devServer: {
+    static: {
+      directory: __dirname,
+      watch: true,
+    },
+    compress: true,
+    port: 8080,
+    open: false,
+    hot: false,
+    client: {
+      overlay: false, // Disable error overlay so it doesn't interfere with tests
+    },
+    devMiddleware: {
+      writeToDisk: true,
+    },
+  },
   optimization: {
 	  minimize: true
   }

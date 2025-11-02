@@ -12,7 +12,12 @@
       "mcp__memory__search_nodes",
       "mcp__memory__create_entities",
       "WebFetch(domain:www.anno-union.com)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(npm test)",
+      "Bash(npm install)",
+      "Bash(npm run test:factory-dialogs:*)",
+      "Bash(cat:*)",
+      "Bash(tee:*)"
     ],
     "deny": []
   },

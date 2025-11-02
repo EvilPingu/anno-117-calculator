@@ -19,7 +19,6 @@ Anno 117 Calculator is a web-based calculator for the computer game Anno 117, bu
 - `npm run migrate` - Run TypeScript migration helper
 - `npm run fix-types` - Fix TypeScript errors automatically
 - `npm run fix-critical` - Fix critical TypeScript errors
-- `npm run quick-fix` - Apply quick TypeScript fixes
 - `npm run generate-types` - Generate type definitions from params
 
 ## Project Architecture
@@ -79,6 +78,34 @@ For build validation:
 npm run build
 ```
 
+For binding validation after every build:
+```bash
+npm run test:factory-dialog
+```
+
+### Automated Testing
+
+The project uses Playwright for comprehensive browser automation testing. Tests validate:
+- Knockout binding correctness (templates, components, observables)
+- Computed observable calculations (factories, population, production chains)
+- Application initialization and localStorage persistence
+
+#### Test Commands
+```bash
+npm test                 # Run all tests
+npm run test:headed      # Run with visible browser
+npm run test:ui          # Interactive test runner
+npm run test:debug       # Debug mode with inspector
+npm run test:binding     # Knockout binding validation tests
+npm run test:computed    # Calculation verification tests
+npm run test:e2e         # End-to-end integration tests
+```
+
+#### Test Resources
+- **Full Testing Guide**: [docs/DEVELOPER_GUIDE.md](docs/DEVELOPER_GUIDE.md#testing-and-validation)
+- **Test Documentation**: [tests/README.md](tests/README.md)
+- **Testing Knowledge**: [tests/CLAUDE.md](tests/CLAUDE.md) - Playwright constraints and calculation formulas
+
 ## UI Design Guidelines (IMPLEMENTED)
 
 ### Template Styling Standards
@@ -108,10 +135,163 @@ npm run build
 
 ## Debugging Knockout Errors
 - **Template errors**: Check `ko.templates` object, add null checks
-- **Effects missing**: Wrong initialization order (applyBuffs before initDemands)  
+- **Effects missing**: Wrong initialization order (applyBuffs before initDemands)
 - **Components broken**: Call registerComponents() before ko.applyBindings()
 
 Quick debug: `console.log(Object.keys(ko.templates), window.view.island().factories[0].buffs.length)`
+
+## Knockout Binding Debugging (Development Only)
+
+### Debug Binding Handler
+- **Purpose**: Log binding context and asset information for troubleshooting template issues
+- **Location**: src/components.ts (registered alongside other binding handlers)
+- **Usage Patterns**:
+  - Basic debugging: `<div data-bind="debug: true">...</div>`
+  - Labeled debugging: `<div data-bind="debug: 'Factory Tile'">...</div>`
+- **Behavior**:
+  - **init callback**: Logs initial binding information when element is first bound
+  - **update callback**: Logs changes when bound observables update (requires verbose mode)
+  - Only active when `window.view.debug.enabled()` is true
+
+### Debug Utilities (Global Access)
+Available via `window.debugKO` object for ad-hoc debugging from browser console:
+
+```javascript
+// Inspect specific element by selector
+debugKO.inspect('#factory-config-dialog');
+debugKO.inspect('.factory-tile');
+
+// Get asset type information
+const type = debugKO.type(window.view.selectedFactory());
+console.log('Type:', type); // "Factory" or "Template(Factory)"
+
+// Log detailed asset information
+debugKO.log(window.view.island(), 'Current Island');
+
+// Get full binding context
+const context = debugKO.context(document.querySelector('.factory-tile'));
+console.log(context.assetInfo); // { guid, name, type, region }
+```
+
+### Enabling Debug Mode
+
+**Via localStorage** (Persists across page reloads):
+```javascript
+// Before page load - set in browser console
+localStorage.setItem('debug.enabled', 'true');
+// Then reload page to see all binding initialization logs
+
+// To disable
+localStorage.setItem('debug.enabled', 'false');
+// Or: localStorage.removeItem('debug.enabled');
+```
+
+**Via Observable** (Auto-persists to localStorage):
+```javascript
+// In browser console - changes automatically persist
+window.view.debug.enabled(true);
+window.view.debug.verboseMode(true); // Optional: log all update events
+
+// To disable
+window.view.debug.enabled(false);
+
+// Check current status
+console.log('Debug enabled:', window.view.debug.enabled());
+```
+
+**Programmatically** (For development):
+```typescript
+// Add to src/main.ts before ko.applyBindings()
+window.view.debug.enabled(true);
+window.view.debug.verboseMode(true);
+```
+
+### Asset Type Detection
+The debug utilities automatically identify:
+- **Template Wrappers**: Detects and unwraps `Template` objects via `instance` observable
+- **Class Names**: Uses constructor.name for Factory, Consumer, PopulationLevel, etc.
+- **NamedElement Properties**: Identifies objects with guid + name properties
+- **Observable Status**: Distinguishes observables from plain values
+
+### Template Instance Resolution
+Debug utilities handle the Template pattern used in factory-tile/population-tile:
+```javascript
+// If $data is Template object with instance observable:
+debugKO.type($data); // "Template(Factory)"
+debugKO.log($data);  // Automatically unwraps to show actual Factory info
+```
+
+### Common Debug Patterns
+```javascript
+// Debug specific factory
+const factory = window.view.island().factories[0];
+debugKO.log(factory, 'Timber Factory');
+
+// Inspect population level binding
+const popLevel = window.view.selectedPopulationLevel();
+debugKO.log(popLevel, 'Current Population');
+
+// Check binding context hierarchy
+const ctx = ko.contextFor($('#some-element')[0]);
+console.log('$data:', ctx.$data);
+console.log('$root:', ctx.$root);
+console.log('$parent:', ctx.$parent);
+
+// List all observable properties on an object
+const factory = window.view.selectedFactory();
+Object.keys(factory).forEach(key => {
+    if (ko.isObservable(factory[key])) {
+        console.log(`${key}:`, factory[key]());
+    }
+});
+```
+
+### Console Output Format
+When debug binding fires or manual inspection occurs:
+```
+[DebugKO] Factory Tile - Initial Binding
+  Element: <div class="factory-tile">
+  Asset Type: Factory
+  Is Observable: false
+  Asset Info: {
+    guid: 1010517,
+    name: "Timber Mill",
+    type: "Factory",
+    region: "New World"
+  }
+  Binding Context $data: {...}
+```
+
+### Implementation Details
+- **Files**:
+  - `src/util.ts:542-772` - Debug utility functions (isKnockoutObservable, safeUnwrap, getAssetType, debugBindingContext, logAssetInfo, inspectElement)
+  - `src/components.ts:75-134` - Debug binding handler (ko.bindingHandlers.debug with init/update)
+  - `src/main.ts:29-35` - Global debugKO object
+  - `src/main.ts:79-110` - Debug settings with localStorage persistence
+  - All 15 templates in `templates/*.html` - Debug bindings at strategic points
+- **Type Safety**: Uses strict typing with `unknown` types, no `any` casts
+- **Performance**: Zero overhead when debug mode disabled
+- **Safe Unwrapping**: Handles write-only observables gracefully
+- **Persistence**: Debug settings automatically save to/restore from localStorage
+  - `localStorage.setItem('debug.enabled', 'true')` enables debug mode across reloads
+  - Setting `window.view.debug.enabled(true)` automatically persists to localStorage
+  - Subscriptions on observables handle two-way sync (lines 102-110 in main.ts)
+
+### Debugging Binding Errors
+When template bindings fail:
+1. **Add debug binding**: `<div data-bind="debug: 'Problem Area', visible: someObservable">`
+2. **Enable debug mode**: `window.view.debug.enabled(true)`
+3. **Reload page**: Check console for [DebugKO] output
+4. **Inspect binding**: Use `debugKO.inspect()` on the element
+5. **Check asset info**: Verify guid, name, type are correct
+
+### Gotchas
+- **Circular References**: Binding contexts contain circular references ($root → island → factories → island). Don't use `JSON.stringify()` directly.
+- **Observable vs Value**: Check `ko.isObservable()` before calling `()` to unwrap
+- **Template Timing**: `$data.instance()` may return different objects as parent updates
+- **Verbose Mode Impact**: Update logging fires on every observable change; use sparingly
+- **localStorage Persistence Required**: Debug mode won't persist without the localStorage restore code (main.ts:87-110). Observable subscriptions handle automatic saving on changes.
+
 ## Design System and Typography
 
 ### Font Configuration
@@ -153,3 +333,4 @@ Quick debug: `console.log(Object.keys(ko.templates), window.view.island().factor
 - Most assets are created for each island. Only some (regions, seesions, buffs, need categories) only exist once globally.
 - Avoid to use `as any` casts when generating code. Do not use them to fix typescript errors.
 - Use inline-list* classes from styles.css when creating floating divs.
+- types.ts is automatically generated and must not be manually edited.

@@ -537,4 +537,237 @@ export function dummyComputed<T = any>(name: string): KnockoutComputed<T> {
   computed.subscribe = () => { console.error(`[DummyComputed] subscribe on ${name}`); return { dispose: () => {} } as any; };
   computed.notifySubscribers = () => { console.error(`[DummyComputed] notifySubscribers on ${name}`); };
   return computed;
-} 
+}
+
+// ============================================================================
+// KNOCKOUT BINDING DEBUGGING UTILITIES
+// ============================================================================
+
+/**
+ * Interface for debug binding information
+ */
+export interface DebugBindingInfo {
+    element: HTMLElement;
+    data: unknown;
+    dataType: string;
+    isObservable: boolean;
+    bindingContext: {
+        $data: unknown;
+        $root: unknown;
+        $parent?: unknown;
+        $parents?: unknown[];
+    };
+    assetInfo?: {
+        guid?: number;
+        name?: string;
+        type?: string;
+        region?: string;
+    };
+}
+
+/**
+ * Check if object is a Knockout observable or computed
+ * @param obj - Object to check
+ * @returns Boolean indicating if object is observable
+ */
+export function isKnockoutObservable(obj: unknown): boolean {
+    if (!obj) return false;
+    return ko.isObservable(obj) || ko.isComputed(obj) || ko.isObservableArray(obj);
+}
+
+/**
+ * Safely unwrap observable and return its value
+ * Handles non-observables gracefully
+ * @param value - Value to unwrap
+ * @returns Unwrapped value or original value if not observable
+ */
+export function safeUnwrap(value: unknown): unknown {
+    if (ko.isObservable(value)) {
+        try {
+            return (value as KnockoutObservable<unknown>)();
+        } catch (e) {
+            return '[Write-only observable]';
+        }
+    }
+    return value;
+}
+
+/**
+ * Get type information about a bound asset
+ * @param data - The bound data object
+ * @returns String describing the asset type
+ */
+export function getAssetType(data: unknown): string {
+    if (!data) return 'null/undefined';
+
+    // Check if it's a Template wrapper
+    if (typeof data === 'object' && data !== null && 'instance' in data && isKnockoutObservable((data as Record<string, unknown>).instance)) {
+        const unwrapped = safeUnwrap((data as Record<string, unknown>).instance);
+        return `Template(${getAssetType(unwrapped)})`;
+    }
+
+    // Check for NamedElement properties
+    if (typeof data === 'object' && data !== null) {
+        const obj = data as Record<string, unknown>;
+
+        // Try to determine class name from constructor
+        const constructorName = obj.constructor?.name;
+        if (constructorName && constructorName !== 'Object') {
+            return constructorName;
+        }
+
+        // Check for common NamedElement properties
+        if ('guid' in obj && 'name' in obj) {
+            return 'NamedElement';
+        }
+    }
+
+    // Check if it's an observable
+    if (isKnockoutObservable(data)) {
+        const unwrapped = safeUnwrap(data);
+        return `Observable(${getAssetType(unwrapped)})`;
+    }
+
+    // Fallback to typeof
+    return typeof data;
+}
+
+/**
+ * Extract asset information from a bound object
+ * @param data - The bound data object
+ * @returns Object with asset properties
+ */
+function extractAssetInfo(data: unknown): { guid?: number; name?: string; type?: string; region?: string } {
+    const info: { guid?: number; name?: string; type?: string; region?: string } = {};
+
+    if (!data || typeof data !== 'object') return info;
+
+    const obj = data as Record<string, unknown>;
+
+    // Extract guid
+    if ('guid' in obj && typeof obj.guid === 'number') {
+        info.guid = obj.guid;
+    }
+
+    // Extract name (might be observable or string)
+    if ('name' in obj) {
+        const name = safeUnwrap(obj.name);
+        if (typeof name === 'string') {
+            info.name = name;
+        }
+    }
+
+    // Extract region
+    if ('region' in obj) {
+        const region = safeUnwrap(obj.region);
+        if (region && typeof region === 'object' && 'name' in (region as Record<string, unknown>)) {
+            const regionName = safeUnwrap((region as Record<string, unknown>).name);
+            if (typeof regionName === 'string') {
+                info.region = regionName;
+            }
+        }
+    }
+
+    // Set type
+    info.type = getAssetType(data);
+
+    return info;
+}
+
+/**
+ * Debug utility to inspect Knockout binding context
+ * @param element - DOM element to inspect
+ * @returns Object with binding context information
+ */
+export function debugBindingContext(element: HTMLElement): DebugBindingInfo | null {
+    if (!element) {
+        console.error('[DebugKO] Invalid element provided');
+        return null;
+    }
+
+    try {
+        const context = ko.contextFor(element);
+        if (!context) {
+            console.warn('[DebugKO] No binding context found for element');
+            return null;
+        }
+
+        const data = context.$data;
+        const info: DebugBindingInfo = {
+            element,
+            data,
+            dataType: getAssetType(data),
+            isObservable: isKnockoutObservable(data),
+            bindingContext: {
+                $data: data,
+                $root: context.$root,
+                $parent: context.$parent,
+                $parents: context.$parents
+            },
+            assetInfo: extractAssetInfo(data)
+        };
+
+        return info;
+    } catch (e) {
+        console.error('[DebugKO] Error inspecting binding context:', e);
+        return null;
+    }
+}
+
+/**
+ * Log detailed information about a bound asset
+ * @param data - The bound data object
+ * @param label - Optional label for the log
+ */
+export function logAssetInfo(data: unknown, label?: string): void {
+    const prefix = label ? `[DebugKO] ${label}:` : '[DebugKO]';
+
+    console.group(prefix);
+    console.log('Type:', getAssetType(data));
+    console.log('Is Observable:', isKnockoutObservable(data));
+
+    if (data && typeof data === 'object') {
+        const assetInfo = extractAssetInfo(data);
+        if (assetInfo) {
+            console.log('Asset Info:', assetInfo);
+        }
+
+        // Log observable properties
+        const obj = data as Record<string, unknown>;
+        const observableProps = Object.keys(obj).filter(key => isKnockoutObservable(obj[key]));
+        if (observableProps.length > 0) {
+            console.log('Observable Properties:', observableProps);
+        }
+    }
+
+    console.log('Value:', data);
+    console.groupEnd();
+}
+
+/**
+ * Inspect element by selector and log binding information
+ * @param selector - CSS selector or element
+ */
+export function inspectElement(selector: string | HTMLElement): void {
+    const element = typeof selector === 'string'
+        ? document.querySelector(selector) as HTMLElement
+        : selector;
+
+    if (!element) {
+        console.error('[DebugKO] Element not found:', selector);
+        return;
+    }
+
+    const info = debugBindingContext(element);
+    if (info) {
+        console.group(`[DebugKO] Element: ${element.tagName}${element.id ? '#' + element.id : ''}${element.className ? '.' + element.className.split(' ').join('.') : ''}`);
+        console.log('Asset Type:', info.dataType);
+        console.log('Is Observable:', info.isObservable);
+        if (info.assetInfo) {
+            console.log('Asset Info:', info.assetInfo);
+        }
+        console.log('Binding Context:', info.bindingContext);
+        console.log('Data:', info.data);
+        console.groupEnd();
+    }
+}

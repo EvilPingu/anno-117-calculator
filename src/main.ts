@@ -1,4 +1,4 @@
-import { ACCURACY, formatNumber, formatPercentage, versionCalculator, Option, ko, dummyObservable, NeedConsumptionSetting, NamedElement } from './util';
+import { ACCURACY, formatNumber, formatPercentage, versionCalculator, Option, ko, dummyObservable, NeedConsumptionSetting, NamedElement, debugBindingContext, logAssetInfo, inspectElement, getAssetType } from './util';
 import { languageCodes, texts as locaTexts, options } from './i18n';
 import { registerComponents } from './components';
 
@@ -25,6 +25,14 @@ declare const require: any;
 (window as any).formatPercentage = formatPercentage;
 (window as any).factoryReset = factoryReset;
 (window as any).exportConfig = exportConfig;
+
+// Make debug utilities globally available
+(window as any).debugKO = {
+    context: debugBindingContext,
+    type: getAssetType,
+    log: logAssetInfo,
+    inspect: inspectElement
+};
 
 /**
  * Global view object containing all application state
@@ -67,8 +75,39 @@ declare const require: any;
         residence: null
     },
     viewMode: null,
-    islandManager: null
+    islandManager: null,
+    // Debug settings for Knockout binding debugging
+    debug: {
+        enabled: ko.observable(false),
+        logBindings: ko.observable(false),
+        verboseMode: ko.observable(false)
+    }
 };
+
+// Restore debug settings from localStorage
+const debugEnabled = localStorage.getItem('debug.enabled');
+if (debugEnabled === 'true') {
+    (window as any).view.debug.enabled(true);
+}
+const debugVerbose = localStorage.getItem('debug.verboseMode');
+if (debugVerbose === 'true') {
+    (window as any).view.debug.verboseMode(true);
+}
+const debugLogBindings = localStorage.getItem('debug.logBindings');
+if (debugLogBindings === 'true') {
+    (window as any).view.debug.logBindings(true);
+}
+
+// Persist debug settings changes to localStorage
+(window as any).view.debug.enabled.subscribe((value: boolean) => {
+    localStorage.setItem('debug.enabled', value.toString());
+});
+(window as any).view.debug.verboseMode.subscribe((value: boolean) => {
+    localStorage.setItem('debug.verboseMode', value.toString());
+});
+(window as any).view.debug.logBindings.subscribe((value: boolean) => {
+    localStorage.setItem('debug.logBindings', value.toString());
+});
 
 // Set default language based on browser locale
 for (const code in languageCodes) {

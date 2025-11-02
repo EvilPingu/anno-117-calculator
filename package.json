@@ -4,18 +4,26 @@
   "version": "0.1",
   "description": "A calculator to compute the consumption of goods in the computer game Anno 117.",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "playwright test",
+    "test:install": "playwright install chromium",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "test:binding": "playwright test tests/binding",
+    "test:computed": "playwright test tests/computed",
+    "test:e2e": "playwright test tests/e2e",
+    "test:factory-dialogs": "playwright test tests/binding/factory-config-dialogs.spec.ts --reporter=list",
+    "test:report": "playwright show-report",
     "build": "webpack",
     "build:ts": "tsc",
-    "dev": "webpack --watch",
+    "dev": "webpack serve",
+    "dev:open": "webpack serve --open",
     "type-check": "tsc --noEmit",
     "migrate": "node scripts/migrate-to-typescript.js",
     "type-check:watch": "tsc --noEmit --watch",
     "fix-types": "node fix-typescript-errors.js",
     "migration-helper": "node scripts/migration-helper.js",
-    "fix-critical": "node fix-critical-errors.js",
-    "quick-fix": "node scripts/quick-fix.js",
-    "generate-types": "node fix-critical-errors.js && node scripts/quick-fix.js"
+    "generate-types": "node generate-config-types.js"
   },
   "author": "Nico Höllerich",
   "license": "MIT",
@@ -28,9 +36,13 @@
     "webpack-cli": "^5.1.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.40.1",
     "@types/jquery": "^3.5.29",
     "@types/knockout": "^3.4.72",
+    "@types/node": "^20.10.5",
+    "http-server": "^14.1.1",
     "ts-loader": "^9.5.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "webpack-dev-server": "^4.15.1"
   }
 }

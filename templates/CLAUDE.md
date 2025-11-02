@@ -79,3 +79,64 @@ When displaying resident counts in templates, follow these patterns:
 - Use `$root.texts.residents.name()` for localized text
 - Use `formatNumber()` and `formatPercentage()` as global functions (no $root prefix)
 - Access nested properties carefully: `$data.need.product` not `$data.product`
+
+## Debug Binding Usage (IMPLEMENTED)
+
+All 15 templates now include debug bindings for troubleshooting Knockout binding issues.
+
+### Debug Binding Pattern
+```html
+<!-- Root element of template/dialog -->
+<div data-bind="debug: 'Template Name', [other bindings...]">
+
+<!-- Context switches (with, foreach) -->
+<div data-bind="debug: 'Context Label', with: $data.someProperty">
+
+<!-- Loop iterations -->
+<!-- ko foreach: items -->
+<div data-bind="debug: 'Loop Item'">
+<!-- /ko -->
+```
+
+### Strategic Placement
+- **Root level**: All dialogs have debug binding on outermost element
+- **Context switches**: At `with:` and `foreach:` binding points
+- **Complex areas**: Module lists, workforce demands, item configurations
+
+### Debug Labels by Template
+- `factory-tile.html`: "Factory Tile", "Module"
+- `population-tile.html`: "Population Tile"
+- `factory-config-dialog.html`: "Factory Config Dialog", "Workforce Demand", "Module Config", "Available Item"
+- `population-level-config-dialog.html`: "Population Config Dialog", "Residence Building", "Need Category", "Population Level Need"
+- `settings-dialog.html`: "Settings Dialog", "Settings Option"
+- `island-management-dialog.html`: "Island Management Dialog", "Island Candidate"
+- All other dialogs: "[Dialog Name] Dialog"
+- `treeElement.html`: "Tree Element" (for production chain tree)
+
+### Enabling Debug Output
+Debug bindings are controlled by `window.view.debug.enabled` observable:
+```javascript
+// Enable via localStorage (persists across reloads)
+localStorage.setItem('debug.enabled', 'true');
+
+// Enable via observable (auto-persists)
+window.view.debug.enabled(true);
+```
+
+### Debug Output Format
+When enabled, debug bindings log to console with `[DebugKO]` prefix:
+- Element information
+- Asset Type (Factory, Consumer, PopulationLevel, etc.)
+- Asset Info (GUID, name, region if available)
+- Binding Context ($data, $root, $parent hierarchy)
+
+### When to Add Debug Bindings
+- **New templates**: Add debug binding to root element
+- **Complex binding contexts**: Add at `with:` and `foreach:` transitions
+- **Troublesome areas**: Where binding errors commonly occur
+- **Keep labels descriptive**: Use meaningful names that identify the context
+
+### Debug Mode Interaction
+- **init callback**: Fires once when binding is established (requires `debug.enabled` = true)
+- **update callback**: Fires on observable changes (requires `debug.verboseMode` = true)
+- No performance impact when debug mode is disabled (observable check returns false immediately)

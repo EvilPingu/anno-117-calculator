@@ -1,0 +1,18 @@
+{
+    "collapsibleStates": "{\"factory-config-equipped-items\":1,\"workforce\":0,\"category-public-buildings\":0,\"category-37670\":0,\"category-37671\":0,\"category-37672\":0,\"category-37673\":0,\"category-37674\":0,\"factory-config-consumption\":1,\"factory-config-production-chain\":0}",
+    "settings.showAllConstructableFactories": "1",
+    "settings.missingBuildingsHighlight": "1",
+    "selectedPatron": "",
+    "islandName": "Alle Inseln",
+    "versionCalculator": "1",
+    "settings.needUnlockConditions": "1",
+    "3087.buildings.constructed": "0",
+    "tradeRoutes": "[]",
+    "session": "37135",
+    "settings.hideProductionBoost": "0",
+    "settings.hideNames": "1",
+    "settings.utilizeExistingFactories": "1",
+    "debug.enabled": "true",
+    "npcTradeRoutes": "[]",
+    "settings.decimalsForBuildings": "1"
+}

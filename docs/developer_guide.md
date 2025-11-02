@@ -402,6 +402,47 @@ The build uses Webpack with TypeScript support:
 
 The calculator heavily uses Knockout.js templates and complex initialization order. Here's how to debug common issues:
 
+### Enabling Debug Mode Before Page Load
+
+To see detailed binding information as the page initializes, enable debug mode before loading:
+
+**Option 1: Enable via localStorage** (Persists across reloads)
+1. Open browser DevTools (F12)
+2. Go to Console tab
+3. Type: `localStorage.setItem('debug.enabled', 'true')`
+4. Reload the page - all debug bindings will log to console
+5. Debug mode will remain enabled until you clear localStorage or set it to 'false'
+
+**Option 2: Enable Programmatically** (For development)
+Add to `src/main.ts` before `ko.applyBindings()`:
+```typescript
+// Enable debug mode for development
+window.view.debug.enabled(true);
+// Optional: Enable verbose mode for update logging
+window.view.debug.verboseMode(true);
+```
+
+**Option 3: Enable After Page Load** (Auto-persists to localStorage)
+```javascript
+// In browser console after page has loaded:
+window.view.debug.enabled(true);
+// This enables debug mode AND saves to localStorage automatically
+// Reload page to see all binding initialization logs
+// Debug mode will persist across reloads
+```
+
+**To Disable Debug Mode:**
+```javascript
+// Option 1: Via observable (auto-persists)
+window.view.debug.enabled(false);
+
+// Option 2: Via localStorage
+localStorage.removeItem('debug.enabled');
+// Or: localStorage.setItem('debug.enabled', 'false');
+```
+
+**Debug Output**: Look for `[DebugKO]` prefixed messages showing asset types, GUIDs, names, and binding contexts for all templates.
+
 ### Template Binding Errors
 
 **Symptoms**: Errors like "Unable to parse bindings", "Property X is not defined", or blank/broken UI sections
@@ -595,6 +636,194 @@ The application uses a sophisticated Presenter pattern to decouple data models f
 
 ## Testing and Validation
 
+The project includes comprehensive automated testing using Playwright for browser automation.
+
+### Quick Start
+
+#### 1. Install Test Dependencies
+```bash
+npm install
+npx playwright install
+```
+
+#### 2. Build and Test
+```bash
+npm run build    # Build the application
+npm test         # Run all tests
+```
+
+### Test Commands
+
+| Command | Description |
+|---------|-------------|
+| `npm test` | Run all tests (headless) |
+| `npm run test:headed` | Run with visible browser |
+| `npm run test:ui` | Interactive test runner |
+| `npm run test:debug` | Debug mode with inspector |
+| `npm run test:binding` | Only binding validation tests |
+| `npm run test:computed` | Only calculation tests |
+| `npm run test:e2e` | Only e2e integration tests |
+| `npm run test:factory-dialogs` | Test factory config dialog bindings |
+| `npm run test:report` | View HTML test report |
+
+### What Gets Tested
+
+The test suite validates three main areas:
+
+#### Knockout Binding Validation
+- Templates bind without errors
+- Components register correctly
+- No observable unwrapping errors
+- Template loading works properly
+- Factory config dialogs for all categories open without binding errors
+
+#### Computed Observable Calculations
+- Factory production calculations (inputAmount, buildings.required)
+- Population need calculations (amount, residents)
+- Boost and productivity modifiers
+- Tests use params.js values for robust validation
+
+#### End-to-End Workflows
+- Application initialization order
+- localStorage persistence
+- UI rendering
+- Global state management
+
+### Test Helpers
+
+The test suite provides helper classes in `tests/helpers/`:
+
+**ConfigLoader** - Manages localStorage and fixture loading:
+```typescript
+const configLoader = new ConfigLoader();
+await configLoader.loadConfig(page, 'tests/fixtures/basic.json');
+await configLoader.setDebugMode(page, true);
+```
+
+**BindingErrorDetector** - Detects Knockout binding errors:
+```typescript
+const errorDetector = new BindingErrorDetector();
+errorDetector.listenForErrors(page);
+expect(errorDetector.hasBindingError()).toBe(false);
+```
+
+**ComputedValueAsserter** - Validates computed observables:
+```typescript
+const asserter = new ComputedValueAsserter();
+await asserter.assertEquals(
+  page,
+  'window.view.island().factories[0].inputAmount()',
+  expectedValue,
+  { tolerance: 0.01 }
+);
+```
+
+**FixtureManager** - Creates test configurations:
+```typescript
+const fixtureManager = new FixtureManager();
+const config = fixtureManager.generateFixture({
+  populationLevels: [{ guid: 1010343, residents: 1000, buildings: 5 }]
+});
+```
+
+### Test Fixtures
+
+Test fixtures are JSON files in `tests/fixtures/` that configure localStorage state:
+
+- **basic.json** - Minimal configuration for binding tests
+- **with-data.json** - Sample data for calculation tests
+- **empty.json** - Clean slate configuration
+
+Create custom fixtures with localStorage key patterns:
+- `{guid}.buildings.constructed` - Building count
+- `{guid}.boost` - Productivity boost
+- `{popGuid}[{needGuid}].checked` - Need activation
+- `settings.{option}` - Application settings
+
+### Debugging Tests
+
+**Enable Knockout Debug Mode:**
+```typescript
+await configLoader.setDebugMode(page, true);
+```
+
+**Use Playwright Inspector:**
+```bash
+npm run test:debug
+```
+
+**View Test Traces:**
+Failed tests generate traces in `test-results/`:
+```bash
+npx playwright show-trace test-results/.../trace.zip
+```
+
+**Check Console Errors:**
+```typescript
+const errors = errorDetector.getFormattedBindingErrors();
+console.log(errors);
+```
+
+### Writing New Tests
+
+1. Create test file in appropriate directory (`binding/`, `computed/`, `e2e/`)
+2. Import helpers from `'../helpers'`
+3. Use params.js values for expected calculations
+4. Add descriptive test names and messages
+5. Run locally before committing
+
+Example test:
+```typescript
+import { test, expect } from '@playwright/test';
+import { ConfigLoader, ComputedValueAsserter } from '../helpers';
+
+test('factory calculation test', async ({ page }) => {
+  const configLoader = new ConfigLoader();
+  const asserter = new ComputedValueAsserter();
+
+  await configLoader.loadConfig(page, 'tests/fixtures/with-data.json');
+  await page.goto('/');
+  await page.waitForLoadState('networkidle');
+
+  // Get params value
+  const cycleTime = await page.evaluate(() =>
+    window.view.island().factories[0].cycleTime
+  );
+
+  // Calculate expected
+  const expected = 60 / cycleTime;
+
+  // Assert
+  await asserter.assertEquals(
+    page,
+    'window.view.island().factories[0].someValue()',
+    expected
+  );
+});
+```
+
+### Troubleshooting Tests
+
+**Test timeouts**: Increase timeout with `test.setTimeout(60000)`
+
+**Elements not found**: Add wait: `await page.waitForSelector('.element')`
+
+**localStorage not persisting**: Use `configLoader.loadConfig()` before navigation
+
+**Webpack not starting**: Check port 8080 is available
+
+**Binding errors**: Enable debug mode and check console output
+
+### CI/CD Integration
+
+Tests run automatically in CI:
+- Headless mode
+- 2 retries on failure
+- Single worker for determinism
+- HTML report generated
+
+### Type Checking and Build Validation
+
 Always run type checking after changes:
 
 ```bash
@@ -602,6 +831,12 @@ npm run type-check  # Check types
 npm run build      # Validate build
 npm run dev        # Test in browser
 ```
+
+### Additional Resources
+
+- **Full Test Documentation**: [tests/README.md](../tests/README.md)
+- **Testing Framework Knowledge**: [tests/CLAUDE.md](../tests/CLAUDE.md)
+- **Playwright Documentation**: https://playwright.dev
 
 ## Getting Help
 

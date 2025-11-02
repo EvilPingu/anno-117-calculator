@@ -1,4 +1,4 @@
-<div data-bind="visible: $data.instance().visible">
+<div data-bind="debug: 'Factory Tile', visible: $data.instance().visible">
 
     <div class="ui-fchain-item" data-bind="css: $data.instance().isHighlightedAsMissing() ? 'danger' : ''">
         <factory-header params="data: $data, button: true"></factory-header>
@@ -62,7 +62,7 @@
 
                 <!-- modules -->
                  <!-- ko foreach: $data.instance().modules-->
-                 <div class="inline-list">
+                 <div class="inline-list" data-bind="debug: 'Module'">
                     <div data-bind="component: {name: 'icon-checkbox', params: {asset: $data, checked: $data.checked, id: $parent.guid + '-' + $data.guid + '-module-checked-tile'}}"></div>
                 </div>
                 <!-- /ko -->

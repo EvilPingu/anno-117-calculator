@@ -332,7 +332,9 @@ ASALocalRun/
 
 # Local History for Visual Studio
 .localhistory/
-/old
+
+
+# Files to ignore
 /mockups
 /wheel_input_raw.gif
 /build.cmd
@@ -341,3 +343,4 @@ ASALocalRun/
 /TODO.txt
 /wheel_input.xcf
 /dist
+/test-results

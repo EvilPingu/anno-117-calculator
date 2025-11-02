@@ -271,5 +271,125 @@ populationLevelNeed.prepareResidenceEffectView = prepareResidenceEffectView;
 ### Template Integration Improvements
 **UI Binding Context**: Fixed template binding to work with presenter pattern
 - Proper use of `$root.texts` for localization
-- Global function calls: `formatNumber()`, `formatPercentage()` without $root prefix  
+- Global function calls: `formatNumber()`, `formatPercentage()` without $root prefix
 - Correct data context navigation: `$data.need.product` for asset properties
+
+## Knockout Debug System (IMPLEMENTED)
+
+### Debug Utilities (src/util.ts:542-772)
+
+**Core Functions**:
+- `isKnockoutObservable(obj)`: Type guard for observables/computeds/observable arrays
+- `safeUnwrap(value)`: Unwraps observables safely, handles write-only observables
+- `getAssetType(data)`: Detects asset type (Factory, Consumer, Template wrapper, etc.)
+- `debugBindingContext(element)`: Inspects Knockout binding context for DOM element
+- `logAssetInfo(data, label?)`: Logs detailed asset information with observable properties
+- `inspectElement(selector)`: Inspects element by CSS selector or HTMLElement
+
+**Type Safety**: All functions use `unknown` types instead of `any` for strict typing
+
+**Key Features**:
+- Template wrapper detection: Recognizes and unwraps `Template(instance)` pattern
+- Constructor name detection: Uses `obj.constructor.name` for class identification
+- NamedElement detection: Checks for `guid` + `name` properties
+- Safe error handling: Try-catch around observable unwrapping for write-only observables
+
+### Debug Binding Handler (src/components.ts:75-134)
+
+**Registration**: `ko.bindingHandlers.debug` registered before `ko.applyBindings()`
+
+**Callbacks**:
+- `init`: Logs initial binding when element is bound (requires `window.view.debug.enabled()`)
+- `update`: Logs observable changes (requires `window.view.debug.verboseMode()`)
+
+**Template Usage**:
+```typescript
+<div data-bind="debug: 'Label', [other bindings]">
+<div data-bind="debug: true, visible: observable">
+```
+
+**Output**: `[DebugKO]` prefixed console logs with asset type, GUID, name, region, binding context
+
+### Debug Settings Persistence (src/main.ts:79-110)
+
+**Critical Implementation**: Debug settings must be restored from localStorage on initialization
+
+**Observable Creation** (lines 79-84):
+```typescript
+debug: {
+    enabled: ko.observable(false),
+    logBindings: ko.observable(false),
+    verboseMode: ko.observable(false)
+}
+```
+
+**localStorage Restoration** (lines 87-99):
+```typescript
+const debugEnabled = localStorage.getItem('debug.enabled');
+if (debugEnabled === 'true') {
+    window.view.debug.enabled(true);
+}
+// Same for verboseMode and logBindings
+```
+
+**Two-Way Sync** (lines 102-110):
+```typescript
+window.view.debug.enabled.subscribe((value: boolean) => {
+    localStorage.setItem('debug.enabled', value.toString());
+});
+// Same for verboseMode and logBindings
+```
+
+**Without this code**: Debug mode won't persist across page reloads, even if set in localStorage
+
+### Global Debug Object (src/main.ts:29-35)
+
+Exposed as `window.debugKO` for console access:
+```typescript
+window.debugKO = {
+    context: debugBindingContext,
+    type: getAssetType,
+    log: logAssetInfo,
+    inspect: inspectElement
+};
+```
+
+**Usage from Console**:
+```javascript
+debugKO.inspect('.factory-tile');
+debugKO.type(window.view.selectedFactory());
+debugKO.log(window.view.island(), 'Current Island');
+```
+
+### Common Debugging Patterns
+
+**Enable Before Page Load**:
+```javascript
+localStorage.setItem('debug.enabled', 'true');
+// Reload page
+```
+
+**Enable After Load** (auto-persists):
+```javascript
+window.view.debug.enabled(true);
+window.view.debug.verboseMode(true);
+```
+
+**Check Binding Context**:
+```javascript
+const ctx = ko.contextFor(document.querySelector('.factory-tile'));
+debugKO.log(ctx.$data, 'Factory Tile Context');
+```
+
+**Inspect Template Instance**:
+```javascript
+// $data is Template object
+debugKO.type($data); // "Template(Factory)"
+debugKO.type($data.instance()); // "Factory"
+```
+
+### Performance Considerations
+
+- **Zero Overhead When Disabled**: Observable check `window.view.debug.enabled()` returns false immediately
+- **Verbose Mode**: Update callback fires on every observable change - use sparingly
+- **Template Bindings**: All 15 templates have debug bindings at strategic points (see templates/CLAUDE.md)
