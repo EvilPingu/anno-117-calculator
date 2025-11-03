@@ -21,6 +21,14 @@ Anno 117 Calculator is a web-based calculator for the computer game Anno 117, bu
 - `npm run fix-critical` - Fix critical TypeScript errors
 - `npm run generate-types` - Generate type definitions from params
 
+### Translation Management
+- `npm run check-translations` - Check translation completeness in src/i18n.ts
+- `npm run check-translations:batch` - Generate batch translation command file
+- `/translate <key>` - Translate individual key into all supported languages (slash command)
+- `./scripts/auto-translate.sh` - Automated batch translation using Claude headless mode
+
+See [Translation Workflow](#translation-workflow) section below for details.
+
 ## Project Architecture
 
 ### Dual Source Structure
@@ -334,3 +342,119 @@ When template bindings fail:
 - Avoid to use `as any` casts when generating code. Do not use them to fix typescript errors.
 - Use inline-list* classes from styles.css when creating floating divs.
 - types.ts is automatically generated and must not be manually edited.
+
+## Translation Workflow
+
+### Overview
+The calculator supports 12 languages. All translation keys in `src/i18n.ts` must include all languages for completeness. See `src/CLAUDE.md` for i18n-specific technical details.
+
+### Required Languages (12 total)
+1. english
+2. french
+3. polish
+4. spanish
+5. italian
+6. german
+7. brazilian
+8. russian
+9. simplified_chinese
+10. traditional_chinese
+11. japanese
+12. korean
+
+### Checking Translation Completeness
+
+**Check all translations:**
+```bash
+npm run check-translations
+```
+
+**Generate batch translation file:**
+```bash
+npm run check-translations:batch
+# Creates scripts/translate-all.txt with /translate commands
+```
+
+### Manual Translation (Interactive)
+
+**Translate individual key:**
+```bash
+/translate keyName
+```
+
+Example: `/translate requiredNumberOfBuildings`
+
+The `/translate` command (defined in `.claude/commands/translate.md`):
+- Reads the current translation entry
+- Identifies missing languages
+- Generates translations for all 12 languages
+- Updates src/i18n.ts with complete translations
+- Runs type-check for validation
+
+### Automated Batch Translation (Headless)
+
+**Using auto-translate script:**
+```bash
+# Preview what would be done
+./scripts/auto-translate.sh --dry-run
+
+# Translate specific key only
+./scripts/auto-translate.sh --key keyName
+
+# Translate first N incomplete keys
+./scripts/auto-translate.sh --max 5
+
+# Translate all incomplete keys
+./scripts/auto-translate.sh
+```
+
+**How it works:**
+1. Runs `check-translations.js` to identify incomplete keys
+2. Uses Claude Code headless mode to execute `/translate` for each key
+3. Applies rate limiting (default 2s delay between translations)
+4. Logs results to `logs/translate-*.json`
+5. Runs type-check to verify all changes
+
+**Important notes:**
+- Requires `claude` CLI to be installed and in PATH
+- Uses `--permission-mode acceptEdits` to auto-approve file edits
+- Processes translations sequentially to respect rate limits
+- See `docs/CLAUDE_HEADLESS.md` for detailed headless mode documentation
+
+### Best Practices
+
+1. **Always check completeness before commits:**
+   ```bash
+   npm run check-translations
+   ```
+
+2. **Add translations when adding new UI text:**
+   - Add key to `src/i18n.ts` with at least English translation
+   - Run `/translate keyName` to complete all languages
+
+3. **Use consistent key naming:**
+   - Descriptive names: `requiredNumberOfBuildings` not `buildings`
+   - camelCase format
+   - Group related keys with common prefixes
+
+4. **Language code consistency:**
+   - Use `simplified_chinese` and `traditional_chinese` (NOT `chinese`)
+   - Use `brazilian` for Brazilian Portuguese
+   - See `src/CLAUDE.md` for complete language code reference
+
+### Troubleshooting
+
+**Translation script fails:**
+- Verify `claude` CLI is installed: `which claude`
+- Check logs in `logs/translate-*.json` for error details
+- Try manual translation with `/translate keyName`
+
+**Type errors after translation:**
+- Run `npm run type-check` to see errors
+- Verify quote consistency in translations
+- Check for special characters that need escaping
+
+**Incomplete translations persist:**
+- Clear any background processes: check running bash shells
+- Manually add missing translations to src/i18n.ts
+- Run `npm run check-translations` to verify

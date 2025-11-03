@@ -54,21 +54,52 @@ export interface ParamsConfig {
 - During development setup
 - Before committing schema changes
 
-### `generate-params-schema.js`
+### `check-translations.js`
 
-**Purpose**: Analyzes `params.js` file and generates basic schema and TypeScript interfaces.
+**Purpose**: Analyzes translation completeness in `src/i18n.ts` and generates commands to complete missing translations.
 
 **Usage**:
 ```bash
-node scripts/generate-params-schema.js
+# Show report of translation completeness
+npm run check-translations
+
+# Generate batch file with all /translate commands
+npm run check-translations:batch
 ```
 
-**Input**: `js/params.js` - Large JavaScript parameters file  
-**Output**: 
-- `src/params-schema.json` - Basic JSON schema
-- `src/params-types.ts` - TypeScript interfaces
+**Output**:
+- Lists all translation keys with missing languages
+- Shows which languages are missing for each key
+- Generates `/translate` commands that can be copied into Claude Code
+- With `--batch` flag: Creates `scripts/translate-all.txt` with all commands
 
-**Note**: This script provides a starting point for schema generation but may need manual refinement for complex structures.
+**Required Languages**:
+- english, french, polish, spanish, italian, german
+- brazilian, russian, japanese, korean
+- simplified_chinese, traditional_chinese
+
+**Excluded Keys**: `helpContent` (contains HTML content, translated separately)
+
+**Example Output**:
+```
+Translation Completeness Report
+================================================================================
+Total keys: 29
+Complete: 1
+Incomplete: 28
+
+Incomplete translations:
+--------------------------------------------------------------------------------
+
+requiredNumberOfBuildings:
+  Present: 3/12 languages
+  Missing: french, polish, spanish, italian, brazilian, russian...
+
+Commands to run:
+/translate requiredNumberOfBuildings
+/translate existingNumberOfBuildings
+...
+```
 
 ## Script Development Guidelines
 

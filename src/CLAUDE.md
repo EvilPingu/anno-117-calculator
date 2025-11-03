@@ -393,3 +393,128 @@ debugKO.type($data.instance()); // "Factory"
 - **Zero Overhead When Disabled**: Observable check `window.view.debug.enabled()` returns false immediately
 - **Verbose Mode**: Update callback fires on every observable change - use sparingly
 - **Template Bindings**: All 15 templates have debug bindings at strategic points (see templates/CLAUDE.md)
+
+## Internationalization (i18n.ts)
+
+### Language Code Conventions
+
+**CRITICAL**: Always use the standardized language codes in `src/i18n.ts`:
+- ✅ `simplified_chinese` - Simplified Chinese
+- ✅ `traditional_chinese` - Traditional Chinese
+- ✅ `brazilian` - Brazilian Portuguese
+- ❌ `chinese` - NEVER use this (ambiguous)
+
+### Complete Language List (12 required for all keys)
+
+Every translation key MUST include all 12 languages:
+```typescript
+keyName: {
+    english: "...",
+    french: "...",
+    polish: "...",
+    spanish: "...",
+    italian: "...",
+    german: "...",
+    brazilian: "...",
+    russian: "...",
+    simplified_chinese: "...",
+    traditional_chinese: "...",
+    japanese: "...",
+    korean: "..."
+}
+```
+
+### Language Code Mapping
+
+The `languageCodes` object maps browser locale codes to internal language names:
+```typescript
+export const languageCodes: Record<string, string> = {
+    'en': 'english',
+    'de': 'german',
+    'zh_TW': 'chinese_traditional',
+    'zh_HK': 'chinese_traditional',
+    'zh_HANT': 'chinese_traditional',
+    'zh': 'chinese_simplified',
+    'fr': 'french',
+    'es': 'spanish',
+    'pt-br': 'brazilian',
+    'ru': 'russian',
+    'ko': 'korean',
+    'ja': 'japanese',
+    'it': 'italien',  // Note: maps to "italien" not "italian"
+    'pl': 'polish'
+}
+```
+
+**Important**: The `languageCodes` map uses `chinese_traditional` and `chinese_simplified` with underscores, but the translation keys themselves use the same names.
+
+### Translation Key Structure
+
+```typescript
+export const texts: Record<string, Record<string, string>> = {
+    keyName: {
+        // All 12 languages required
+        // Can use either quoted or unquoted keys
+        "english": "...",
+        french: "...",
+        // ...
+    }
+}
+```
+
+### Adding New Translation Keys
+
+When adding new UI text:
+
+1. **Add to src/i18n.ts with English translation:**
+   ```typescript
+   newKey: {
+       english: "Your English text"
+   }
+   ```
+
+2. **Complete all languages:**
+   ```bash
+   /translate newKey
+   ```
+   Or manually add all 12 languages if translations are already known.
+
+3. **Verify completeness:**
+   ```bash
+   npm run check-translations
+   ```
+
+4. **Use in templates:**
+   ```html
+   <span data-bind="text: $root.texts.newKey"></span>
+   ```
+
+### Excluded Keys
+
+**`helpContent`**: Contains long HTML documentation, managed separately. Does NOT require all 12 languages.
+
+### Common Errors
+
+1. **Using `chinese:` instead of `simplified_chinese:`**
+   - ❌ `chinese: "文本"`
+   - ✅ `simplified_chinese: "文本"`
+
+2. **Missing languages**
+   - Run `npm run check-translations` to detect
+   - Use `/translate keyName` to complete
+
+3. **Inconsistent quoting**
+   - Both `"english":` and `english:` are valid
+   - Be consistent within each key
+
+4. **Special characters in translations**
+   - Properly escape quotes: `"It's"` → `"It\\'s"` or use `"It's"`
+   - HTML entities work: `&nbsp;`, `&mdash;`, etc.
+
+### Translation Workflow Tools
+
+See root `CLAUDE.md` for complete translation workflow documentation including:
+- `npm run check-translations` - Check completeness
+- `/translate keyName` - Interactive translation
+- `./scripts/auto-translate.sh` - Automated batch translation
+- `docs/CLAUDE_HEADLESS.md` - Headless mode documentation

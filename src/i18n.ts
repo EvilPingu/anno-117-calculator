@@ -30,13 +30,22 @@ export const texts: Record<string, Record<string, string>> = {
         "polish": "Mieszkańcy",
         "german": "Einwohner",
         "korean": "주민",
-        "russian": "Жители"
+        "russian": "Жители",
+        "brazilian": "Residentes"
     },
  
     workforce: {
-        chinese: "所需劳动力",
         english: "Required Workforce",
+        french: "Main-d'œuvre requise",
+        polish: "Wymagana siła robocza",
+        spanish: "Mano de obra requerida",
+        italian: "Forza lavoro richiesta",
         german: "Benötigte Arbeitskraft",
+        brazilian: "Força de trabalho necessária",
+        russian: "Требуемая рабочая сила",
+        simplified_chinese: "所需劳动力",
+        traditional_chinese: "所需勞動力",
+        japanese: "必要な労働力",
         korean: "필요한 인력"
     },
     itemsEquipped: {
@@ -50,7 +59,8 @@ export const texts: Record<string, Record<string, string>> = {
         "french": "Objets en stock",
         "korean": "배치한 아이템",
         "japanese": "装備したアイテム",
-        "russian": "Используемые предметы"
+        "russian": "Используемые предметы",
+        "brazilian": "Itens equipados"
     },
     extraGoods: {
         "english": "Extra Goods",
@@ -63,7 +73,8 @@ export const texts: Record<string, Record<string, string>> = {
         "french": "Marchandises supplémentaires",
         "korean": "추가 물품",
         "japanese": "追加品物",
-        "russian": "Дополнительные товары"
+        "russian": "Дополнительные товары",
+        "brazilian": "Bens extras"
     },
     "devotion": {
         "english": "Devotion",
@@ -191,27 +202,72 @@ export const texts: Record<string, Record<string, string>> = {
     },
     requiredNumberOfBuildings: {
         english: "Required Number of Buildings",
+        french: "Nombre de bâtiments requis",
+        polish: "Wymagana liczba budynków",
+        spanish: "Número de edificios requeridos",
+        italian: "Numero di edifici richiesti",
         german: "Benötigte Anzahl an Gebäuden",
+        brazilian: "Número de edifícios necessários",
+        russian: "Требуемое количество зданий",
+        simplified_chinese: "所需建筑数量",
+        traditional_chinese: "所需建築數量",
+        japanese: "必要な建物の数",
         korean: "필요한 건물 수"
     },
     existingNumberOfBuildings: {
         english: "Existing Number of Buildings",
+        french: "Nombre de bâtiments existants",
+        polish: "Istniejąca liczba budynków",
+        spanish: "Número de edificios existentes",
+        italian: "Numero di edifici esistenti",
         german: "Vorhandene Anzahl an Gebäuden",
+        brazilian: "Número de edifícios existentes",
+        russian: "Существующее количество зданий",
+        simplified_chinese: "现有建筑数量",
+        traditional_chinese: "現有建築數量",
+        japanese: "既存の建物の数",
         korean: "현재 건물 수"
     },
     existingNumberOfBuildingsIs: {
         english: "Is:",
+        french: "Est :",
+        polish: "Jest:",
+        spanish: "Es:",
+        italian: "È:",
         german: "Ist:",
+        brazilian: "É:",
+        russian: "Есть:",
+        simplified_chinese: "现有：",
+        traditional_chinese: "現有：",
+        japanese: "現在：",
         korean: "현재:"
     },
     requiredNumberOfBuildingsShort: {
         english: "Required:",
+        french: "Requis :",
+        polish: "Wymagane:",
+        spanish: "Requeridos:",
+        italian: "Richiesti:",
         german: "Benötigt:",
+        brazilian: "Necessários:",
+        russian: "Требуется:",
+        simplified_chinese: "所需：",
+        traditional_chinese: "所需：",
+        japanese: "必要：",
         korean: "필요:"
     },
     requiredNumberOfBuildingsDescription: {
         english: "Required number of buildings to produce consumer products",
+        french: "Nombre de bâtiments requis pour produire des biens de consommation",
+        polish: "Wymagana liczba budynków do produkcji dóbr konsumpcyjnych",
+        spanish: "Número de edificios requeridos para producir bienes de consumo",
+        italian: "Numero di edifici richiesti per produrre beni di consumo",
         german: "Benötigte Gebäudeanzahl zur Produktion von Verbrauchsgütern",
+        brazilian: "Número de edifícios necessários para produzir bens de consumo",
+        russian: "Требуемое количество зданий для производства потребительских товаров",
+        simplified_chinese: "生产消费品所需的建筑数量",
+        traditional_chinese: "生產消費品所需的建築數量",
+        japanese: "消費財を生産するために必要な建物の数",
         korean: "소비재 생산에 필요한 건물 수"
     },
     tonsPerMinute: {
@@ -225,95 +281,278 @@ export const texts: Record<string, Record<string, string>> = {
         "french": "Tonnes par minute (t/min)",
         "korean": "톤/분(1분당 톤 수)",
         "japanese": "トン毎分 (トン/分)",
-        "russian": "Тонн в минуту (т./мин.)"
+        "russian": "Тонн в минуту (т./мин.)",
+        "brazilian": "Toneladas por minuto (t/min)"
     },
     showIslandOnCreation: {
         english: "After creating a new island display it",
-        german: "Nach dem Erstellen einer neuen Insel diese anzeigen"
+        french: "Afficher la nouvelle île après sa création",
+        polish: "Po utworzeniu nowej wyspy ją wyświetl",
+        spanish: "Mostrar la isla después de crearla",
+        italian: "Visualizza la nuova isola dopo la creazione",
+        german: "Nach dem Erstellen einer neuen Insel diese anzeigen",
+        brazilian: "Exibir a ilha após criá-la",
+        russian: "Показать остров после создания",
+        simplified_chinese: "创建新岛屿后显示它",
+        traditional_chinese: "建立新島嶼後顯示它",
+        japanese: "新しい島を作成した後に表示する",
+        korean: "새 섬 생성 후 표시"
     },
     importDeficit: {
         english: "Import deficit",
-        german: "Defizit importieren"
+        french: "Importer le déficit",
+        polish: "Importuj deficyt",
+        spanish: "Importar déficit",
+        italian: "Importa deficit",
+        german: "Defizit importieren",
+        brazilian: "Importar déficit",
+        russian: "Импортировать дефицит",
+        simplified_chinese: "进口赤字",
+        traditional_chinese: "進口赤字",
+        japanese: "不足分をインポート",
+        korean: "적자 수입"
     },
     exportOverproduction: {
         english: "Export overproduction",
-        german: "Überproduktion exportieren"
+        french: "Exporter la surproduction",
+        polish: "Eksportuj nadprodukcję",
+        spanish: "Exportar sobreproducción",
+        italian: "Esporta sovrapproduzione",
+        german: "Überproduktion exportieren",
+        brazilian: "Exportar superprodução",
+        russian: "Экспортировать перепроизводство",
+        simplified_chinese: "出口过剩产品",
+        traditional_chinese: "出口過剩產品",
+        japanese: "過剰生産をエクスポート",
+        korean: "과잉 생산 수출"
     },
 
     islandName: {
         english: "New island name",
+        french: "Nom de la nouvelle île",
+        polish: "Nazwa nowej wyspy",
+        spanish: "Nombre de la nueva isla",
+        italian: "Nome della nuova isola",
         german: "Neuer Inselname",
+        brazilian: "Nome da nova ilha",
+        russian: "Название нового острова",
+        simplified_chinese: "新岛屿名称",
+        traditional_chinese: "新島嶼名稱",
+        japanese: "新しい島の名前",
         korean: "새로운 섬 이름"
     },
     selectedIsland: {
-        chinese: "岛屿选择",
         english: "Selected Island",
+        french: "Île sélectionnée",
+        polish: "Wybrana wyspa",
+        spanish: "Isla seleccionada",
+        italian: "Isola selezionata",
         german: "Ausgewählte Insel",
+        brazilian: "Ilha selecionada",
+        russian: "Выбранный остров",
+        simplified_chinese: "岛屿选择",
+        traditional_chinese: "島嶼選擇",
+        japanese: "選択された島",
         korean: "선택된 섬"
     },
     chooseFactories: {
         english: "Modify Production Chains",
+        french: "Modifier les chaînes de production",
+        polish: "Modyfikuj łańcuchy produkcyjne",
+        spanish: "Modificar cadenas de producción",
+        italian: "Modifica catene di produzione",
         german: "Modifiziere Produktionsketten",
+        brazilian: "Modificar cadeias de produção",
+        russian: "Изменить производственные цепочки",
+        simplified_chinese: "修改生产链",
+        traditional_chinese: "修改生產鏈",
+        japanese: "生産チェーンを変更",
         korean: "생산 체인 수정"
     },
     noFixedFactory: {
         english: "Automatic: same region as consumer",
+        french: "Automatique : même région que le consommateur",
+        polish: "Automatycznie: ten sam region co konsument",
+        spanish: "Automático: misma región que el consumidor",
+        italian: "Automatico: stessa regione del consumatore",
         german: "Automatisch: gleichen Region wie Verbraucher",
+        brazilian: "Automático: mesma região do consumidor",
+        russian: "Автоматически: тот же регион, что и у потребителя",
+        simplified_chinese: "自动：与消费者相同的地区",
+        traditional_chinese: "自動：與消費者相同的地區",
+        japanese: "自動：消費者と同じ地域",
         korean: "자동 : 소비자와 동일한 지역"
     },
     notes: {
         english: "Note",
-        german: "Notizen"
+        french: "Note",
+        polish: "Notatka",
+        spanish: "Nota",
+        italian: "Nota",
+        german: "Notizen",
+        brazilian: "Nota",
+        russian: "Заметка",
+        simplified_chinese: "备注",
+        traditional_chinese: "備註",
+        japanese: "メモ",
+        korean: "노트"
     },
     // view mode
     viewMode: {
         english: "View Mode",
-        german: "Ansichtsmodus"
+        french: "Mode d'affichage",
+        polish: "Tryb widoku",
+        spanish: "Modo de vista",
+        italian: "Modalità di visualizzazione",
+        german: "Ansichtsmodus",
+        brazilian: "Modo de visualização",
+        russian: "Режим просмотра",
+        simplified_chinese: "查看模式",
+        traditional_chinese: "檢視模式",
+        japanese: "表示モード",
+        korean: "보기 모드"
     },
     viewStart: {
         english: "Start",
+        french: "Démarrer",
+        polish: "Start",
+        spanish: "Comenzar",
+        italian: "Inizio",
         german: "Starten",
+        brazilian: "Começar",
+        russian: "Начать",
+        simplified_chinese: "开始",
+        traditional_chinese: "開始",
+        japanese: "スタート",
+        korean: "시작"
     },
     viewPlan: {
         english: "Plan",
-        german: "Planen"
+        french: "Planifier",
+        polish: "Plan",
+        spanish: "Planificar",
+        italian: "Piano",
+        german: "Planen",
+        brazilian: "Planejar",
+        russian: "План",
+        simplified_chinese: "计划",
+        traditional_chinese: "計劃",
+        japanese: "プラン",
+        korean: "계획"
     },
     viewMaster: {
         english: "Master",
-        german: "Meistern"
+        french: "Maître",
+        polish: "Mistrz",
+        spanish: "Maestro",
+        italian: "Maestro",
+        german: "Meistern",
+        brazilian: "Mestre",
+        russian: "Мастер",
+        simplified_chinese: "大师",
+        traditional_chinese: "大師",
+        japanese: "マスター",
+        korean: "마스터"
     },
     viewStartDescription: {
         english: "Start from scratch and progress through the resident tiers.",
-        german: "Beginne von Vorne und schreite durch die Bevölkerungsstufen voran."
+        french: "Commencez de zéro et progressez à travers les niveaux de résidents.",
+        polish: "Rozpocznij od zera i przejdź przez poziomy mieszkańców.",
+        spanish: "Comienza desde cero y progresa a través de los niveles de residentes.",
+        italian: "Inizia da zero e progredisci attraverso i livelli di residenti.",
+        german: "Beginne von Vorne und schreite durch die Bevölkerungsstufen voran.",
+        brazilian: "Comece do zero e progrida através dos níveis de residentes.",
+        russian: "Начните с нуля и продвигайтесь через уровни жителей.",
+        simplified_chinese: "从头开始并逐步提升居民等级。",
+        traditional_chinese: "從頭開始並逐步提升居民等級。",
+        japanese: "ゼロから始めて住民のレベルを進めていきます。",
+        korean: "처음부터 시작하여 주민 단계를 진행하세요."
     },
     viewPlanDescription: {
         english: "The essential settings and DLCs are enabled to plan islands and huge cities.",
-        german: "Die essentiellen Einstellungen und DLCs sind aktiviert, um Inseln und rießige Städte zu planen."
+        french: "Les paramètres essentiels et les DLC sont activés pour planifier des îles et d'énormes cités.",
+        polish: "Podstawowe ustawienia i DLC są włączone, aby planować wyspy i ogromne miasta.",
+        spanish: "Las configuraciones esenciales y los DLC están habilitados para planificar islas y ciudades enormes.",
+        italian: "Le impostazioni essenziali e i DLC sono abilitati per pianificare isole e città enormi.",
+        german: "Die essentiellen Einstellungen und DLCs sind aktiviert, um Inseln und rießige Städte zu planen.",
+        brazilian: "As configurações essenciais e DLCs estão habilitados para planejar ilhas e grandes cidades.",
+        russian: "Основные настройки и DLC включены для планирования островов и огромных городов.",
+        simplified_chinese: "启用了基本设置和DLC以规划岛屿和巨大城市。",
+        traditional_chinese: "啟用了基本設定和DLC以規劃島嶼和巨大城市。",
+        japanese: "島や巨大な都市を計画するために、必須の設定とDLCが有効になっています。",
+        korean: "섬과 거대한 도시를 계획하기 위해 필수 설정과 DLC가 활성화되어 있습니다."
     },
     viewMasterDescription: {
         english: "All settings and DLCs are enabled.",
-        german: "Alle Einstellungen und DLCs sind aktiviert."
+        french: "Tous les paramètres et DLC sont activés.",
+        polish: "Wszystkie ustawienia i DLC są włączone.",
+        spanish: "Todas las configuraciones y DLC están habilitados.",
+        italian: "Tutte le impostazioni e i DLC sono abilitati.",
+        german: "Alle Einstellungen und DLCs sind aktiviert.",
+        brazilian: "Todas as configurações e DLCs estão habilitados.",
+        russian: "Все настройки и DLC включены.",
+        simplified_chinese: "所有设置和DLC均已启用。",
+        traditional_chinese: "所有設定和DLC均已啟用。",
+        japanese: "すべての設定とDLCが有効になっています。",
+        korean: "모든 설정과 DLC가 활성화되어 있습니다."
     },
 
     // calculator and server management
     downloadConfig: {
         english: "Import / Export configuration.",
+        french: "Importer / Exporter la configuration.",
+        polish: "Importuj / Eksportuj konfigurację.",
+        spanish: "Importar / Exportar configuración.",
+        italian: "Importa / Esporta configurazione.",
         german: "Konfiguration importieren / exportieren.",
+        brazilian: "Importar / Exportar configuração.",
+        russian: "Импорт / Экспорт конфигурации.",
+        simplified_chinese: "导入/导出配置。",
+        traditional_chinese: "匯入/匯出配置。",
+        japanese: "設定をインポート/エクスポート。",
         korean: "설정 가져오기 / 내보내기"
     },
     downloadCalculator: {
         english: "Download the calculator (source code of this website) to run it locally. To do so, extract the archive and double click index.html.",
+        french: "Téléchargez le calculateur (code source de ce site) pour l'exécuter localement. Pour ce faire, extrayez l'archive et double-cliquez sur index.html.",
+        polish: "Pobierz kalkulator (kod źródłowy tej witryny), aby uruchomić go lokalnie. W tym celu rozpakuj archiwum i kliknij dwukrotnie index.html.",
+        spanish: "Descarga la calculadora (código fuente de este sitio web) para ejecutarla localmente. Para hacerlo, extrae el archivo y haz doble clic en index.html.",
+        italian: "Scarica il calcolatore (codice sorgente di questo sito) per eseguirlo localmente. Per farlo, estrai l'archivio e fai doppio clic su index.html.",
         german: "Lade den Warenrechner (Quellcode dieser Seite) herunter, um ihn lokal auszuführen. Zum Ausführen, extrahiere das Archiv und doppelklicke auf index.html.",
+        brazilian: "Baixe a calculadora (código-fonte deste site) para executá-la localmente. Para fazer isso, extraia o arquivo e clique duas vezes em index.html.",
+        russian: "Загрузите калькулятор (исходный код этого сайта), чтобы запустить его локально. Для этого извлеките архив и дважды щелкните index.html.",
+        simplified_chinese: "下载计算器（本网站的源代码）以在本地运行。为此，请解压存档并双击index.html。",
+        traditional_chinese: "下載計算器（本網站的原始碼）以在本地執行。為此，請解壓縮檔案並雙擊index.html。",
+        japanese: "計算機（このウェブサイトのソースコード）をダウンロードしてローカルで実行します。そのためには、アーカイブを解凍してindex.htmlをダブルクリックしてください。",
         korean: "Anno 계산기 (이 웹 사이트의 소스 코드)를 다운로드 하여 로컬로 실행 하십시오. 압축을 풀고 index.html 실행 하십시오."
     },
     calculatorUpdate: {
         english: "A new calculator version is available. Click the download button.",
+        french: "Une nouvelle version du calculateur est disponible. Cliquez sur le bouton de téléchargement.",
+        polish: "Dostępna jest nowa wersja kalkulatora. Kliknij przycisk pobierania.",
+        spanish: "Hay una nueva versión de la calculadora disponible. Haga clic en el botón de descarga.",
+        italian: "È disponibile una nuova versione del calcolatore. Fai clic sul pulsante di download.",
         german: "Eine neue Version des Warenrechners ist verfügbar. Klicke auf den Downloadbutton.",
+        brazilian: "Uma nova versão da calculadora está disponível. Clique no botão de download.",
+        russian: "Доступна новая версия калькулятора. Нажмите кнопку загрузки.",
+        simplified_chinese: "新版本计算器已推出。点击下载按钮。",
+        traditional_chinese: "新版本計算器已推出。點擊下載按鈕。",
+        japanese: "新しいバージョンの計算機が利用可能です。ダウンロードボタンをクリックしてください。",
         korean: "새로운 Anno1800 계산기 버전이 제공됩니다. 다운로드 버튼을 클릭하십시오."
     },
     newFeature: {
         english: "Game Update 17",
+        french: "Mise à jour du jeu 17",
+        polish: "Aktualizacja gry 17",
+        spanish: "Actualización del juego 17",
+        italian: "Aggiornamento del gioco 17",
         german: "Game Update 17",
+        brazilian: "Atualização do jogo 17",
+        russian: "Обновление игры 17",
+        simplified_chinese: "游戏更新 17",
+        traditional_chinese: "遊戲更新 17",
+        japanese: "ゲームアップデート 17",
+        korean: "게임 업데이트 17"
     },
     helpContent: {
         german:
@@ -411,7 +650,7 @@ export const texts: Record<string, Record<string, string>> = {
 <h5>Fehler und Verbesserungen</h5>
 <span>Falls Sie auf Fehler oder Unannehmlichkeiten stoßen oder Verbesserungen vorschlagen möchten, erstellen Sie ein Issue auf GitHub (</span><a href="https://github.com/NiHoel/Anno1800Calculator/issues">https://github.com/NiHoel/Anno1800Calculator/issues</a><span>)</span>`,
 
-        chinese:
+        simplified_chinese:
             `<h5>使用方法</h5>
 <p>第一行输入每个阶级当前或所需的人口数。当离开输入字段时，生产链将自动更新。仅显示所需的工厂。</p>
 <p>居民姓名前的方括号内的字母是聚焦输入字段的快捷键。可以使用上下箭头键来增减数字。</p><br/>
@@ -604,9 +843,17 @@ export const options: Record<string, any> = {
     "decimalsForBuildings": {
         "name": "Show number of buildings with decimals",
         "locaText": {
-            "simplified_chinese": "建筑数量显示为小数模式",
             "english": "Show number of buildings with decimals",
+            "french": "Afficher le nombre de bâtiments avec des décimales",
+            "polish": "Pokaż liczbę budynków z dziesiątnymi",
+            "spanish": "Mostrar el número de edificios con decimales",
+            "italian": "Mostra il numero di edifici con decimali",
             "german": "Zeige Nachkommastellen bei der Gebäudeanzahl",
+            "brazilian": "Mostrar número de edifícios com decimais",
+            "russian": "Показать количество зданий с десятичными знаками",
+            "simplified_chinese": "建筑数量显示为小数模式",
+            "traditional_chinese": "建築數量顯示為小數模式",
+            "japanese": "建物の数を小数点付きで表示",
             "korean": "건물 수를 소수점 단위로 표시"
         }
     },
@@ -614,7 +861,16 @@ export const options: Record<string, any> = {
         "name": "Hide the names of products, factories, and population levels",
         "locaText": {
             "english": "Hide the names of products, factories, and population levels",
+            "french": "Masquer les noms des produits, usines et niveaux de population",
+            "polish": "Ukryj nazwy produktów, fabryk i poziomów populacji",
+            "spanish": "Ocultar los nombres de productos, fábricas y niveles de población",
+            "italian": "Nascondi i nomi di prodotti, fabbriche e livelli di popolazione",
             "german": "Verberge die Namen von Produkten, Fabriken und Bevölkerungsstufen",
+            "brazilian": "Ocultar os nomes de produtos, fábricas e níveis de população",
+            "russian": "Скрыть названия товаров, фабрик и уровней населения",
+            "simplified_chinese": "隐藏产品、工厂和人口等级的名称",
+            "traditional_chinese": "隱藏產品、工廠和人口等級的名稱",
+            "japanese": "製品、工場、人口レベルの名前を非表示",
             "korean": "제품, 건물명 및 인구 이름 숨기기"
         }
     },
@@ -622,7 +878,16 @@ export const options: Record<string, any> = {
         "name": "Hide the input fields for productivity",
         "locaText": {
             "english": "Hide the input fields for producivity",
+            "french": "Masquer les champs de saisie pour la productivité",
+            "polish": "Ukryj pola wejściowe dla produktywności",
+            "spanish": "Ocultar los campos de entrada para la productividad",
+            "italian": "Nascondi i campi di input per la produttività",
             "german": "Verberge das Eingabefelder für Produktivität",
+            "brazilian": "Ocultar os campos de entrada para produtividade",
+            "russian": "Скрыть поля ввода для производительности",
+            "simplified_chinese": "隐藏生产力输入字段",
+            "traditional_chinese": "隱藏生產力輸入字段",
+            "japanese": "生産性の入力フィールドを非表示",
             "korean": "생산성 입력 필드 숨기기"
         }
     },
@@ -630,15 +895,33 @@ export const options: Record<string, any> = {
         "name": "Show all factories constructable in the region",
         "locaText": {
             "english": "Show all factories constructable in the region",
-            "german": "Zeige alle Fabriken, die in der Region errichtet werden können"
+            "french": "Afficher toutes les usines constructibles dans la région",
+            "polish": "Pokaż wszystkie fabryki możliwe do zbudowania w regionie",
+            "spanish": "Mostrar todas las fábricas construibles en la región",
+            "italian": "Mostra tutte le fabbriche costruibili nella regione",
+            "german": "Zeige alle Fabriken, die in der Region errichtet werden können",
+            "brazilian": "Mostrar todas as fábricas construíveis na região",
+            "russian": "Показать все фабрики, которые можно построить в регионе",
+            "simplified_chinese": "显示该地区所有可建造的工厂",
+            "traditional_chinese": "顯示該地區所有可建造的工廠",
+            "japanese": "地域で建設可能なすべての工場を表示",
+            "korean": "지역에서 건설 가능한 모든 공장 표시"
         }
     },
     "missingBuildingsHighlight": {
         "name": "Highlight missing buildings",
         "locaText": {
-            "simplified_chinese": "高亮缺失的建筑",
             "english": "Highlight missing buildings",
+            "french": "Mettre en évidence les bâtiments manquants",
+            "polish": "Podświetl brakujące budynki",
+            "spanish": "Resaltar edificios faltantes",
+            "italian": "Evidenzia edifici mancanti",
             "german": "Fehlende Gebäude hervorheben",
+            "brazilian": "Destacar edifícios faltantes",
+            "russian": "Выделить недостающие здания",
+            "simplified_chinese": "高亮缺失的建筑",
+            "traditional_chinese": "高亮缺失的建築",
+            "japanese": "不足している建物を強調表示",
             "korean": "부족한 건물 강조"
         }
     },
