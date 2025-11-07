@@ -6,6 +6,7 @@ import { Region, Constructible, isConstructible } from './world';
 
 import type { Factory } from './factories';
 import { AppliedBuff, ExtraGoodProduction } from './buffs';
+import { Supplier, PassiveTradeSupplier, ExtraGoodSupplier } from './suppliers';
 export { AppliedBuff, ExtraGoodProduction };
 
 
@@ -15,14 +16,23 @@ declare const $: any;
 /**
  * Represents a product that can be produced by factories
  * Manages production relationships and factory assignments
+ * Now includes supplier management for flexible sourcing
  */
 export class Product extends NamedElement {
     public guid: number;
     public isAbstract: boolean;
     public factories: Factory[];
     public availableFactories: KnockoutObservableArray<Factory>;
-    public fixedFactory: KnockoutObservable<Factory | null>;
+    public fixedFactory: KnockoutObservable<Factory | null>; // DEPRECATED - use defaultSupplier
     public visible: KnockoutComputed<boolean>;
+    public extraGoodProductionList?: ExtraGoodProductionList;
+    public extraGoodSuppliers?: ExtraGoodSupplier[]; // Suppliers for extra goods production (one per factory)
+
+    // === SUPPLIER MANAGEMENT ===
+    public passiveTradeSupplier?: PassiveTradeSupplier; // Passive trade supplier
+    public availableSuppliers: KnockoutComputed<Supplier[]>; // All available suppliers (factories + extra goods)
+    public defaultSupplier: KnockoutObservable<Supplier | null>; // User-selected default supplier
+    public island?: any; // Island reference for supplier management
 
     /**
      * Creates a new Product instance
@@ -58,11 +68,75 @@ export class Product extends NamedElement {
         this.fixedFactory = ko.observable(null);
 
         this.visible = ko.pureComputed(() => this.available());
+
+        // Initialize extra good production list for tracking item-based production
+        this.extraGoodProductionList = new ExtraGoodProductionList();
+
+        // Initialize supplier management (will be fully set up in initSuppliers)
+        this.defaultSupplier = ko.observable(null);
+        this.availableSuppliers = ko.pureComputed(() => {
+            const suppliers: Supplier[] = [];
+
+            // Add available factories
+            for (const factory of this.factories) {
+                if (factory.available()) {
+                    suppliers.push(factory);
+                }
+            }
+
+            // Add all extra good suppliers if available
+            if (this.extraGoodSuppliers) {
+                for (const supplier of this.extraGoodSuppliers) {
+                    if (supplier.canSupply(0)) {
+                        suppliers.push(supplier);
+                    }
+                }
+            }
+
+            return suppliers;
+        });
     }
 
     addFactory(factory: Factory){
         this.factories.push(factory);
         this.availableFactories = ko.pureComputed(() => this.factories.filter((f: Factory) => f.available()));
+    }
+
+    /**
+     * Initializes supplier management for this product
+     * Creates PassiveTradeSupplier and ExtraGoodSupplier instances
+     * One ExtraGoodSupplier is created per factory that produces this product as extra good
+     * @param island - The island this product belongs to
+     */
+    initSuppliers(island: any): void {
+        this.island = island;
+
+        // Create passive trade supplier
+        this.passiveTradeSupplier = new PassiveTradeSupplier(this, island);
+
+        // Create extra good suppliers if there are extra good production entries
+        if (this.extraGoodProductionList && this.extraGoodProductionList.entries.length > 0) {
+            // Group entries by factory
+            const entriesByFactory = new Map<any, any[]>();
+
+            for (const entry of this.extraGoodProductionList.entries) {
+                if (entry && entry.factory && entry.product === this) {
+                    const factory = entry.factory;
+                    if (!entriesByFactory.has(factory)) {
+                        entriesByFactory.set(factory, []);
+                    }
+                    entriesByFactory.get(factory)!.push(entry);
+                }
+            }
+
+            // Create one ExtraGoodSupplier per factory
+            this.extraGoodSuppliers = [];
+            for (const [, entries] of entriesByFactory.entries()) {
+                const supplier = new ExtraGoodSupplier(this, island);
+                supplier.productionList = entries;
+                this.extraGoodSuppliers.push(supplier);
+            }
+        }
     }
 }
 
@@ -107,7 +181,7 @@ export class MetaProduct extends NamedElement {
 
 /**
  * Represents a demand for a product from a consumer
- * Manages the relationship between consumers and the products they need
+ * Demand resolution now delegated to Product.defaultSupplier
  */
 export class Demand {
     public consumer: Constructible;
@@ -115,7 +189,6 @@ export class Demand {
     public amount: KnockoutObservable<number>;
     public amountSubscription: KnockoutComputed<void>;
     public product: Product;
-    public factory: KnockoutObservable<Factory>;
     public factor: KnockoutComputed<number>;
 
     /**
@@ -123,6 +196,7 @@ export class Demand {
      * @param product - The product being demanded
      * @param consumer - The consumer creating the demand
      * @param assetsMap - Map of all available assets
+     * @param observableFactor - Observable factor for demand scaling
      */
     constructor(product: Product, consumer: Constructible,  _assetsMap: AssetsMap, observableFactor: KnockoutComputed<number>) {
 
@@ -139,39 +213,8 @@ export class Demand {
             }
         });
 
-        this.factory = ko.observable(null);
-        this.updateFixedProductFactory(this.product.fixedFactory());
-        this.product.fixedFactory.subscribe((f: Factory | null) => this.updateFixedProductFactory(f));
-
-    }
-
-    /**
-     * Updates the factory assigned to this demand
-     * @param f - The factory to assign
-     */
-    updateFixedProductFactory(f: Factory | null): void {
-        if (f == null) { // find factory in the same region as consumer
-            let region = this.consumer.associatedRegions[0];
-            if (region) {
-                for (let fac of this.product.factories) {
-                    if (fac.associatedRegions.indexOf(region) != -1) {
-                        f = fac;
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (f == null) // region based approach not successful
-            f = this.product.factories[0];
-
-        if (f != this.factory()) {
-            if (this.factory())
-                this.factory().remove(this);
-
-            this.factory(f);
-            f.add(this);
-        }
+        // Note: Demand resolution now happens through Product.defaultSupplier
+        // No factory assignment at demand level
     }
 
     /**
@@ -644,50 +687,37 @@ export class AqueductBuff {
 
 
 /**
- * Manages a list of extra goods production for a factory
- * Handles the collection and calculation of additional goods production
+ * Manages a list of all extra goods production for a product
+ * Simple array to collect all ExtraGoodProduction entries for this product
  */
 export class ExtraGoodProductionList {
-    public factory: Factory;
-    public checked: KnockoutObservable<boolean>;
-    public selfEffecting: KnockoutObservableArray<ExtraGoodProduction>;
-    public entries: KnockoutObservableArray<ExtraGoodProduction>;
-    public nonZero: KnockoutComputed<ExtraGoodProduction[]>;
-    public amount: KnockoutComputed<number>;
-    public amountWithSelf: KnockoutComputed<number>;
+    public entries: any[]; // ExtraGoodProduction[]
 
     /**
      * Creates a new ExtraGoodProductionList instance
-     * @param factory - The factory this list belongs to
+     * No parameters needed - will be populated as ExtraGoodProduction entries are created
      */
-    constructor(factory: Factory) {
-        if (!factory) {
-            throw new Error('ExtraGoodProductionList factory is required');
-        }
+    constructor() {
+        this.entries = [];
+    }
 
-        this.factory = factory;
+    /**
+     * Returns entries that have non-zero production
+     */
+    nonZero(): any[] {
+        return this.entries.filter((i: any) => i.amount && i.amount() > 0);
+    }
 
-        this.checked = ko.observable(true);
-        this.selfEffecting = ko.observableArray();
-
-        this.entries = ko.observableArray();
-        this.nonZero = ko.computed(() => {
-            return this.entries().filter((i: any) => i.amount());
-        });
-        this.amount = ko.computed(() => {
-            var total = 0;
-            for (var i of (this.entries() || []))
-                if (this.selfEffecting.indexOf(i) == -1) // self effects considered in factory.extraGoodFactor
-                    total += i.amount();
-
-            return total;
-        });
-        this.amountWithSelf = ko.computed(() => {
-            var total = 0;
-            for (var i of (this.entries() || []))
+    /**
+     * Returns total amount from all entries
+     */
+    amount(): number {
+        let total = 0;
+        for (const i of this.entries) {
+            if (i.amount && typeof i.amount === 'function') {
                 total += i.amount();
-
-            return total;
-        });
+            }
+        }
+        return total;
     }
 } 

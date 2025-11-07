@@ -1,6 +1,8 @@
 import { ALL_ISLANDS, createFloatInput, NamedElement, EPSILON, ko } from './util';
 import { Factory, Factory as FactoryClass } from './factories';
 import { Island } from './world';
+import { Supplier } from './suppliers';
+import { Product } from './production';
 
 
 declare const $: any;
@@ -10,7 +12,6 @@ interface ITradeList {
     island: Island;
     factory: Factory;
     routes: any;
-    npcRoutes?: NPCTradeRoute[];
     unusedIslands: any;
     selectedIsland: any;
     export: any;
@@ -22,13 +23,21 @@ interface ITradeList {
 /**
  * Represents a trade route between two islands
  * Manages the transportation of goods between factories on different islands
+ * Implements Supplier interface for the receiving island
  */
-class TradeRoute {
+export class TradeRoute implements Supplier {
+    // === SUPPLIER INTERFACE ===
+    public readonly type: 'trade_route' = 'trade_route';
+    public readonly product: Product | null;
+    public readonly island: Island; // Receiving island (to)
+
+    // === TRADE ROUTE PROPERTIES ===
     public from: Island;
     public to: Island;
     public fromFactory: Factory;
     public toFactory: Factory;
-    public amount: any;
+    public amount: KnockoutObservable<number>;
+    public minAmount: KnockoutObservable<number>; // User-set minimum amount
 
     /**
      * Creates a new TradeRoute instance
@@ -58,8 +67,14 @@ class TradeRoute {
         this.fromFactory = config.fromFactory;
         this.toFactory = config.toFactory;
 
+        // Supplier interface properties
+        this.island = this.to; // Receiving island
+        this.product = this.toFactory.getProduct();
+
         this.amount = createFloatInput(0, 0);
         this.amount(config.amount || 0);
+
+        this.minAmount = ko.observable(config.minAmount || 0);
     }
 
     /**
@@ -101,6 +116,31 @@ class TradeRoute {
     delete(): void {
         view.tradeManager.remove(this);
     }
+
+    // === SUPPLIER INTERFACE IMPLEMENTATION ===
+
+    /**
+     * Returns the amount imported to the receiving island (Supplier interface)
+     */
+    defaultProduction(): number {
+        return this.amount();
+    }
+
+    /**
+     * Trade routes can always supply (as long as they exist) (Supplier interface)
+     */
+    canSupply(_amount: number): boolean {
+        return true;
+    }
+
+    /**
+     * Sets the trade route amount, respecting minAmount floor (Supplier interface)
+     * @param amount - Requested import amount
+     */
+    setDemand(amount: number): void {
+        const newAmount = Math.max(amount, this.minAmount());
+        this.amount(newAmount);
+    }
 }
 
 /**
@@ -126,54 +166,6 @@ export class NPCTrader extends NamedElement {
 }
 
 /**
- * Represents an NPC trade route
- * Manages automatic trade routes provided by NPC traders
- */
-class NPCTradeRoute {
-    public ProductionPerMinute: number;
-    public to: Island;
-    public toFactory: Factory;
-    public from: Island;
-    public fromFactory: Factory;
-    public trader: NPCTrader;
-    public amount: number;
-    public checked: any;
-
-    /**
-     * Creates a new NPCTradeRoute instance
-     * @param config - Configuration object for the NPC trade route
-     */
-    constructor(config: any) {
-        // Validate required parameters
-        if (!config) {
-            throw new Error('NPCTradeRoute config is required');
-        }
-        if (typeof config.ProductionPerMinute !== 'number') {
-            throw new Error('NPCTradeRoute config.ProductionPerMinute is required and must be a number');
-        }
-
-        // Explicit assignments
-        this.ProductionPerMinute = config.ProductionPerMinute;
-        this.to = config.to;
-        this.toFactory = config.toFactory;
-        this.from = config.from;
-        this.fromFactory = config.fromFactory;
-        this.trader = config.trader;
-
-        this.amount = this.ProductionPerMinute;
-        this.checked = ko.observable(false);
-        this.checked.subscribe((checked: boolean) => {
-            if (view.tradeManager) {
-                if (checked)
-                    view.tradeManager.npcRoutes.push(this);
-                else
-                    view.tradeManager.npcRoutes.remove(this);
-            }
-        });
-    }
-}
-
-/**
  * Manages trade routes for a specific factory
  * Handles the creation and management of trade routes for a factory's output
  */
@@ -181,7 +173,6 @@ export class TradeList {
     public island: Island;
     public factory: Factory;
     public routes: any;
-    public npcRoutes?: NPCTradeRoute[];
     public inputAmount: any;
     public outputAmount: any;
     public amount: any;
@@ -210,11 +201,7 @@ export class TradeList {
         this.factory = factory;
 
         this.routes = ko.observableArray();
-        if (this.factory.outputs) {
-            var traders = view.productsToTraders.get(this.factory.outputs[0]);
-            if (traders)
-                this.npcRoutes = traders.map((t: any) => new NPCTradeRoute($.extend({}, t, { to: island, toFactory: factory })));
-        }
+        // Note: NPC routes removed - use PassiveTradeSupplier instead
 
         this.inputAmount = ko.pureComputed(() => {
             var amount = 0;
@@ -227,9 +214,6 @@ export class TradeList {
 
         this.outputAmount = ko.pureComputed(() => {
             var amount = 0;
-
-            for (var npcRoute of (this.npcRoutes || []))
-                amount += npcRoute.checked() ? npcRoute.amount : 0;
 
             for (var route of this.routes())
                 if (!route.isExport(this))
@@ -247,9 +231,6 @@ export class TradeList {
         this.newAmount = ko.observable(0);
 
         this.visible = ko.pureComputed(() => {
-            if (this.npcRoutes != null && this.npcRoutes.length > 0)
-                return true;
-
             return view.islands().length >= 2;
         });
     }
@@ -336,19 +317,14 @@ export class TradeList {
  */
 export class TradeManager {
     public key: string;
-    public npcKey: string;
-    public npcRoutes: any;
     public routes: any;
     public persistenceSubscription: any;
-    public npcPersistenceSubscription: any;
 
     /**
      * Creates a new TradeManager instance
      */
     constructor() {
         this.key = "tradeRoutes";
-        this.npcKey = "npcTradeRoutes";
-        this.npcRoutes = ko.observableArray();
         this.routes = ko.observableArray();
 
         view.selectedFactory.subscribe((f: any) => {
@@ -374,7 +350,8 @@ export class TradeManager {
                 var config: any = {
                     from: resolve(r.from),
                     to: resolve(r.to),
-                    amount: parseFloat(r.amount)
+                    amount: parseFloat(r.amount),
+                    minAmount: r.minAmount != null ? parseFloat(r.minAmount) : 0
                 };
 
                 if (!config.from || !config.to)
@@ -408,7 +385,8 @@ export class TradeManager {
                         from: r.from.isAllIslands() ? ALL_ISLANDS : r.from.name(),
                         to: r.to.isAllIslands() ? ALL_ISLANDS : r.to.name(),
                         factory: r.fromFactory.guid,
-                        amount: r.amount()
+                        amount: r.amount(),
+                        minAmount: r.minAmount()
                     });
                 }
 
@@ -416,44 +394,7 @@ export class TradeManager {
 
                 return json;
             });
-
-            // npc trade routes
-            text = localStorage.getItem(this.npcKey);
-            json = text ? JSON.parse(text) : [];
-            for (var r of json) {
-                var to = resolve(r.to);
-
-                if (!to)
-                    continue;
-
-                var factory = to.assetsMap.get(r.factory);
-                if (!factory) {
-                    throw new Error(`Factory with GUID ${r.factory} not found in to island assetsMap`);
-                }
-
-                factory.tradeList.npcRoutes.forEach((froute: NPCTradeRoute) => {
-                    if (froute.trader.guid === r.trader) {
-                        froute.checked(true);
-                        this.add(froute);
-                    }
-                });
-            }
-
-            this.npcPersistenceSubscription = ko.computed(() => {
-                var json = [];
-
-                for (var r of this.npcRoutes()) {
-                    json.push({
-                        trader: r.trader.guid,
-                        to: r.to.isAllIslands() ? ALL_ISLANDS : r.to.name(),
-                        factory: r.toFactory.guid
-                    });
-                }
-
-                localStorage.setItem(this.npcKey, JSON.stringify(json, null, 4));
-
-                return json;
-            });
+            // Note: NPC trade routes persistence removed - use PassiveTradeSupplier instead
         }
     }
 
@@ -461,24 +402,15 @@ export class TradeManager {
      * Adds a route to the trade manager
      * @param route - The route to add
      */
-    add(route: TradeRoute | NPCTradeRoute): void {
-        if (route instanceof NPCTradeRoute)
-            this.npcRoutes.push(route);
-        else
-            this.routes.push(route);
+    add(route: TradeRoute): void {
+        this.routes.push(route);
     }
 
     /**
      * Removes a route from the trade manager
      * @param route - The route to remove
      */
-    remove(route: TradeRoute | NPCTradeRoute): void {
-        if (route instanceof NPCTradeRoute) {
-            this.npcRoutes.remove(route);
-            route.checked(false);
-            return;
-        }
-
+    remove(route: TradeRoute): void {
         route.fromFactory.tradeList.routes.remove(route);
         route.toFactory.tradeList.routes.remove(route);
         this.routes.remove(route);
@@ -492,14 +424,7 @@ export class TradeManager {
      * @param island - The island being deleted
      */
     islandDeleted(island: Island): void {
-        {
-            var deletedRoutes = this.routes().filter((r: TradeRoute) => r.to === island || r.from === island);
-            deletedRoutes.forEach((r: TradeRoute) => this.remove(r));
-        }
-
-        {
-            var deletedRoutes = this.npcRoutes().filter((r: NPCTradeRoute) => r.to === island);
-            deletedRoutes.forEach((r: NPCTradeRoute) => this.remove(r));
-        }
+        var deletedRoutes = this.routes().filter((r: TradeRoute) => r.to === island || r.from === island);
+        deletedRoutes.forEach((r: TradeRoute) => this.remove(r));
     }
 } 

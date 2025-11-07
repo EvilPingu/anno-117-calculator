@@ -700,6 +700,7 @@ export class Island {
 
                 products.push(p);
                 assetsMap.set(p.guid, p);
+                // Note: ExtraGoodSupplier will be created later during initSuppliers()
             }
         }
 
@@ -755,8 +756,8 @@ export class Island {
             if (f.aqueductBuff){
                 persistFloat(f.aqueductBuff, "scaling", `${f.guid}.aqueductBuff.checked`)
             }
-            persistBool(f.extraGoodProductionList, "checked", `${f.guid}.extraGoodProductionList.checked`);
-            
+            // Note: extraGoodProductionList moved to Product - persistence moved to product loop
+
             // Persist module checked state
             for (const module of f.modules) {
                 persistBool(module, "checked", `${f.guid}.module[${module.guid}].checked`);
@@ -859,6 +860,11 @@ export class Island {
 
         this.consumers.forEach(f => {
             f.initDemands(assetsMap);
+        });
+
+        // Initialize suppliers for all products
+        products.forEach(p => {
+            p.initSuppliers(this);
         });
 
         products.forEach(p => {

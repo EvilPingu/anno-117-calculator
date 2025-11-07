@@ -1,15 +1,16 @@
 import { NamedElement, ACCURACY, EPSILON, ko, BuildingsCalc } from './util';
 import { Workforce, WorkforceDemand } from './population';
-import { Demand, ExtraGoodProductionList, Product, AqueductBuff, Item, Buff } from './production';
+import { Demand, Product, AqueductBuff, Item, Buff } from './production';
 import { AppliedBuff } from './buffs';
 import { TradeList } from './trade';
-import { 
-    ConsumerConfig, 
+import {
+    ConsumerConfig,
     AssetsMap,
     LiteralsMap,
 } from './types';
 import { Island, Region } from './world';
 import { FactoryConfig, ModuleConfig } from './types.config';
+import { Supplier } from './suppliers';
 
 
 /**
@@ -249,9 +250,7 @@ export class Consumer extends NamedElement{
                 }
             }
 
-            for (const d of this.inputDemandsMap.values()) {
-                d.factory().remove(d);
-            }
+            // Note: Demand-factory relationship removed - demands now resolved through Product.defaultSupplier
 
             this.inputDemandsMap = map;
             this.inputDemands.removeAll();
@@ -490,13 +489,18 @@ export class PublicConsumerBuilding extends Consumer {
 /**
  * Represents a factory that produces goods for consumption by other consumers
  * Extends Consumer to provide production chain functionality
- * 
+ * Implements Supplier interface to participate in the supplier selection system
+ *
  * KEY DIFFERENCE FROM CONSUMER:
  * - Consumer: Consumes resources (inputs) for internal use (population needs, public services)
  * - Factory: Consumes resources (inputs) to PRODUCE goods (outputs) that feed other consumers
  * - Factory outputs become inputs for other consumers in the production chain
  */
-export class Factory extends Consumer {
+export class Factory extends Consumer implements Supplier {
+    // === SUPPLIER INTERFACE ===
+    public readonly type: 'factory' = 'factory';            // Supplier type identifier
+    // product and island properties inherited from Consumer
+
     // === FACTORY IDENTIFICATION ===
     public isFactory: boolean;                              // Always true for Factory instances
 
@@ -509,13 +513,13 @@ export class Factory extends Consumer {
 
     // === EXTERNAL PRODUCTION SOURCES ===
     public tradeList: TradeList;                            // Trade routes providing/consuming this product
-    public extraGoodProductionList: ExtraGoodProductionList; // Extra goods (items) providing additional output
+    public selfEffectingExtraGoods: any[];                  // Extra good entries where factory produces extra of its own output
     public extraGoodProductionHistory: [number, Date][];    // History for cycle breaking in extra goods
-    public extraGoodProductionAmount: KnockoutComputed<number>; // Amount from extra goods
+    public extraGoodProductionAmount: KnockoutComputed<number>; // Amount from extra goods (from Product)
     public externalProduction: KnockoutComputed<number>;    // Total from trade + extra goods
 
     // === PRODUCTION CALCULATION ===
-    public inputAmountByExtraGoods: KnockoutObservable<number>; // Input required for extra goods
+    public demandByExtraGoodSupplier: KnockoutObservable<number>; // Demand from extra good supplier
     public inputAmount: KnockoutComputed<number>;            // Total input required (overrides Consumer)
     public extraGoodFactor: KnockoutComputed<number>;        // Multiplier from extra goods affecting this factory
     public outputAmount: KnockoutComputed<number>;           // Total output produced
@@ -557,14 +561,17 @@ export class Factory extends Consumer {
 
         this.tradeList = new TradeList(island, this);
 
-        this.extraGoodProductionList = new ExtraGoodProductionList(this as any);
+        // Self-effecting extra goods will be populated when ExtraGoodProduction entries are created
+        this.selfEffectingExtraGoods = [];
 
         // use the history to break the cycle: extra good (lumberjack) -> building materials need (timber) -> production (sawmill) -> production (lumberjack)
         // that cycles between two values by adding a damper
         // [[prev val, timestamp], [prev prev val, timestamp]]
         this.extraGoodProductionHistory = [];
         this.extraGoodProductionAmount = ko.pureComputed(() => {
-            const val = this.extraGoodProductionList.checked() ? this.extraGoodProductionList.amount() : 0;
+            const product = this.getProduct();
+            if (!product || !product.extraGoodProductionList) return 0;
+            const val = product.extraGoodProductionList.amount();
 
             if (this.extraGoodProductionHistory.length && Math.abs(val - this.extraGoodProductionHistory[0][0]) < ACCURACY)
                 return this.extraGoodProductionHistory[0][0];
@@ -605,10 +612,10 @@ export class Factory extends Consumer {
             return sum;
         });
 
-        this.inputAmountByExtraGoods = ko.observable(0);
+        this.demandByExtraGoodSupplier = ko.observable(0);
 
 
-        
+
         // Create Module instance if factory has additionalModule
         if (config.additionalModule && moduleConfigs) {
             const moduleConfig = moduleConfigs.find(m => m.guid === config.additionalModule);
@@ -622,10 +629,10 @@ export class Factory extends Consumer {
         this.extraGoodFactor = ko.computed(() => {
             let factor = 1;
 
-
-            if (this.extraGoodProductionList && this.extraGoodProductionList.selfEffecting && this.extraGoodProductionList.checked())
-                for (const e of this.extraGoodProductionList.selfEffecting())
-                    factor += e.item.scaling() * e.defaultAmount / e.additionalOutputCycle;
+            // Self-effecting extra goods boost this factory's production
+            for (const e of this.selfEffectingExtraGoods) {
+                factor += e.item.scaling() * e.defaultAmount / e.additionalOutputCycle;
+            }
 
             return factor;
         });
@@ -633,13 +640,13 @@ export class Factory extends Consumer {
 
 
         this.outputAmount = ko.pureComputed(() => {
-            const diff = Math.max(this.inputAmountByExtraGoods() * this.extraGoodFactor(), 
+            const diff = Math.max(this.demandByExtraGoodSupplier() * this.extraGoodFactor(),
                 this.totalDemands() - this.externalProduction(),
                 this.useinputAmountByExistingBuildings && this.useinputAmountByExistingBuildings() ? this.inputAmountByExistingBuildings() * this.extraGoodFactor() : 0);
             return diff > EPSILON ? diff : 0;
         });
 
-        this.substitutableOutputAmount = ko.pureComputed(() => Math.max(0, this.totalDemands() - this.externalProduction() - Math.max(this.inputAmountByExtraGoods(), this.inputAmountByExistingBuildings ? this.inputAmountByExistingBuildings() : 0) * this.extraGoodFactor()));
+        this.substitutableOutputAmount = ko.pureComputed(() => Math.max(0, this.totalDemands() - this.externalProduction() - Math.max(this.demandByExtraGoodSupplier(), this.inputAmountByExistingBuildings ? this.inputAmountByExistingBuildings() : 0) * this.extraGoodFactor()));
         
         this.isHighlightedAsMissing = ko.pureComputed(() => {
             if (!(window as any).view.settings.missingBuildingsHighlight || !(window as any).view.settings.missingBuildingsHighlight.checked())
@@ -665,20 +672,26 @@ export class Factory extends Consumer {
         });
 
         this.overProduction = ko.pureComputed(() => Math.max(0, this.inputAmount() * this.extraGoodFactor() + this.externalProduction() - this.totalDemands()));
-        
-        if (this.extraGoodProductionList) {
-            this.extraGoodsDisplayAmount = ko.pureComputed(() => this.extraGoodProductionList.checked() ? this.extraGoodProductionList.nonZero().reduce((a: number, b: any) => a + b.amount(), 0) : 0);
-        }
+
+        // Extra goods display amount comes from Product now
+        this.extraGoodsDisplayAmount = ko.pureComputed(() => {
+            const product = this.getProduct();
+            if (!product || !product.extraGoodProductionList) return 0;
+            return product.extraGoodProductionList.nonZero().reduce((a: number, b: any) => a + b.amount(), 0);
+        });
 
         this.visible = ko.computed(() => {
             if (!this.available())
                 return false;
 
+            const product = this.getProduct();
+            const extraGoodAmount = product && product.extraGoodProductionList ? product.extraGoodProductionList.amount() : 0;
+
             if (Math.abs(this.inputAmount()) > EPSILON ||
                 this.totalDemands() > EPSILON ||
                 this.externalProduction() > EPSILON ||
                 this.buildings.constructed() > 0 ||
-                this.extraGoodProductionList.amount() > EPSILON)
+                extraGoodAmount > EPSILON)
                 return true;
 
             if (this.island.region.id != "Meta" && this.associatedRegions.indexOf(this.island.region) == -1)
@@ -761,6 +774,33 @@ export class Factory extends Consumer {
     remove(demand: Demand): void {
         this.demands.remove(demand);
         this.updateAmount();
+    }
+
+    // === SUPPLIER INTERFACE IMPLEMENTATION ===
+
+    /**
+     * Returns the current production amount (Supplier interface)
+     * Includes extra goods factor for accurate production calculation
+     */
+    defaultProduction(): number {
+        return this.inputAmount() * this.extraGoodFactor();
+    }
+
+    /**
+     * Checks if this factory can supply the requested amount (Supplier interface)
+     * @param amount - The requested amount
+     * @returns True if factory is available and in correct region
+     */
+    canSupply(_amount: number): boolean {
+        return this.available();
+    }
+
+    /**
+     * Sets the demand for this factory to produce (Supplier interface)
+     * @param amount - The requested production amount
+     */
+    setDemand(amount: number): void {
+        this.inputAmountByOutput(amount / this.extraGoodFactor());
     }
 
 

@@ -518,3 +518,248 @@ See root `CLAUDE.md` for complete translation workflow documentation including:
 - `/translate keyName` - Interactive translation
 - `./scripts/auto-translate.sh` - Automated batch translation
 - `docs/CLAUDE_HEADLESS.md` - Headless mode documentation
+
+## Supplier Interface Architecture (PLANNED)
+
+### Current Demand System (production.ts:112-184)
+
+**Problem**: Demands are tightly coupled to Factory suppliers
+- Demand class has `factory: KnockoutObservable<Factory>` property (line 118)
+- `updateFixedProductFactory()` method (lines 152-175) assigns factory based on region matching
+- Product.fixedFactory determines which factory fulfills demand (line 143-144)
+- Trade routes and extra goods exist but don't integrate into demand resolution
+
+**Limitation**: No unified way to specify whether a product comes from:
+1. Local factory production
+2. Trade route import
+3. Passive trade (manual input without demand propagation)
+4. Extra good production (items affecting factories)
+
+### Proposed Supplier Interface
+
+**Core Concept**: Abstract the concept of "where does this product come from" into a Supplier interface
+
+```typescript
+interface Supplier {
+    // Identification
+    readonly type: 'factory' | 'trade_route' | 'passive_trade' | 'extra_good';
+    readonly product: Product;
+    readonly island: Island;
+
+    // Production capabilities
+    defaultProduction(): number;      // Current/baseline production amount
+    canSupply(amount: number): boolean; // Can this supplier fulfill amount?
+
+    // Demand integration
+    setDemand(amount: number): void;  // Request supplier to produce/import amount
+    overProduction(): number;         // Excess production available
+}
+```
+
+### Supplier Implementations
+
+**1. FactorySupplier** (wraps existing Factory)
+- `defaultProduction()`: Returns `factory.inputAmount() * factory.extraGoodFactor()`
+- `setDemand()`: Updates `factory.inputAmountByOutput()`
+- `canSupply()`: Checks if factory `available()` and in correct region
+- Generates its own input demands recursively
+
+**2. TradeRouteSupplier** (wraps TradeList)
+- `defaultProduction()`: Returns sum of trade route amounts importing to this island
+- `setDemand()`: Creates/updates trade route with `minAmount` constraint
+- `minAmount`: User-set floor - trade route amount can increase but not decrease below this
+- Auto-creates trade route if none exists (with minAmount = 0)
+- Auto-deletes route if supplier changed and minAmount = 0
+
+**3. PassiveTradeSupplier** (new concept)
+- `defaultProduction()`: Returns manually entered amount
+- `setDemand()`: No-op (doesn't propagate demands)
+- "Joker" supplier - provides goods without generating upstream demand
+- Useful for representing external sources or simplified scenarios
+
+**4. ExtraGoodSupplier** (wraps ExtraGoodProductionList)
+- `defaultProduction()`: Returns `extraGoodProductionList.amount()`
+- `setDemand()`: Updates `factory.demandByExtraGoodSupplier()`
+- Only available if items produce this specific product
+- Typically used in combination with factory supplier
+
+### Product-Level Supplier Selection
+
+**Key Change**: Move from Factory selection to Supplier selection at Product level
+
+```typescript
+class Product {
+    // Existing
+    public factories: Factory[];
+    public fixedFactory: KnockoutObservable<Factory | null>;  // DEPRECATED
+
+    // New
+    public availableSuppliers: KnockoutComputed<Supplier[]>;  // All possible suppliers
+    public defaultSupplier: KnockoutObservable<Supplier | null>; // User-selected default
+}
+```
+
+**Per-Island Supplier Selection**: Each product has one default supplier per island
+- Storage key: `island.product.${productGuid}.supplier.type` and `.supplier.id`
+- Supplier types identified by: `factory.guid`, `'trade'`, `'passive'`, `extra_good_item.guid`
+
+### Demand Refactoring
+
+**Simplify Demand class** (remove factory coupling):
+
+```typescript
+class Demand {
+    public consumer: Constructible;
+    public product: Product;
+    public amount: KnockoutObservable<number>;
+
+    // REMOVED: factory, updateFixedProductFactory()
+}
+```
+
+**Demand Resolution** happens at Product level:
+- Product.defaultSupplier receives all demand
+- Supplier.setDemand() handles fulfillment strategy
+- Factory suppliers generate recursive demands for their inputs
+
+### Presenter Pattern for UI
+
+**FactoryPresenter** (similar to ResidencePresenter pattern):
+- Wraps Factory/Product combination for UI binding
+- Provides computed observables for supplier selection
+- **Supplier Options Calculation**:
+  - `availableFactorySuppliers`: Factories producing this product (filter by region)
+  - `availableTradeIslands`: Islands that can export via trade route
+  - `availableExtraGoodSuppliers`: Items that produce this product as extra good
+  - `canUsePassiveTrade`: Always true (passive trade always available)
+
+**Benefits of Presenter**:
+- Separates UI logic from data model
+- Reusable computed properties for supplier selection
+- Handles complex observable chains for supplier availability
+- Example: `availableTradeIslands()` filters islands by session/region and existing routes
+
+### Critical Initialization Order
+
+**Existing Pattern** (world.ts:518):
+```typescript
+1. Create objects (factories, products, consumers)
+2. f.initDemands(assetsMap)    // Factories register in products
+3. e.applyBuffs(assetsMap)     // Effects create AppliedBuff
+4. persistBuildings(factory)   // Load saved state
+```
+
+**With Suppliers**:
+```typescript
+1. Create objects (factories, products, consumers, suppliers)
+2. f.initDemands(assetsMap)    // Register factories in products
+3. p.initSuppliers(assetsMap)  // Create supplier instances for each product
+4. e.applyBuffs(assetsMap)     // Effects still apply to factories
+5. p.restoreDefaultSupplier()  // Load supplier selection from localStorage
+6. persistBuildings(factory)   // Load factory-specific state
+```
+
+### Trade Route Integration Changes
+
+**TradeList modifications** (trade.ts:180-331):
+- `minAmount: KnockoutObservable<number>` - user-set minimum
+- `manuallySet: KnockoutObservable<boolean>` - distinguishes user vs auto-created routes
+- `routes` includes `minAmount` property per route
+- Auto-cleanup: Remove routes where `minAmount == 0 && !manuallySet`
+
+**TradeRoute persistence** (trade.ts:403-418):
+- Add `minAmount` to JSON serialization
+- Restore minAmount on load
+
+### Implementation Strategy
+
+**Phase 1: Supplier Infrastructure**
+1. Create Supplier interface and implementations
+2. Add Product.defaultSupplier and Product.availableSuppliers
+3. Implement supplier persistence (localStorage integration)
+
+**Phase 2: Demand Refactoring**
+1. Remove Demand.factory property
+2. Move demand resolution to Product level
+3. Update Demand.updateAmount() to work through Product.defaultSupplier
+
+**Phase 3: UI Integration**
+1. Create FactoryPresenter class
+2. Build supplier selection dialog/dropdown
+3. Update templates to use presenter pattern
+4. Add trade route minAmount UI
+
+**Phase 4: Migration & Cleanup**
+1. Migrate existing fixedFactory selections to default suppliers
+2. Remove deprecated Product.fixedFactory
+3. Update all demand creation to use new pattern
+
+### Design Patterns in Use
+
+**Strategy Pattern**: Supplier interface with multiple implementations (FactorySupplier, TradeRouteSupplier, etc.)
+- Benefit: Pluggable fulfillment strategies without changing Product/Demand code
+
+**Presenter Pattern**: FactoryPresenter separates UI logic from data model (see ResidencePresenter:702-758)
+- Benefit: Computed observables for complex supplier selection logic
+- Preserves reactivity through Knockout observables
+
+**Delegation Pattern**: Demand → Product → Supplier chain
+- Benefit: Single source of truth for supplier selection
+- Similar to ResidenceNeed → PopulationLevelNeed delegation
+
+### Key Files to Modify
+
+**Core Classes**:
+- `src/production.ts` - Product, Demand classes
+- `src/factories.ts` - Factory integration with suppliers
+- `src/trade.ts` - TradeList, TradeRoute with minAmount
+
+**New Files**:
+- `src/suppliers.ts` - Supplier interface and implementations
+- `src/views.ts` - FactoryPresenter (add to existing file)
+
+**Initialization**:
+- `src/world.ts` - Island constructor supplier initialization
+
+**UI Templates**:
+- `templates/factory-config-dialog.html` - Supplier selection UI
+- `templates/product-supplier-dialog.html` - New supplier management dialog
+
+### References to Similar Code
+
+**Presenter Pattern**: See ResidencePresenter (views.ts:702-758)
+- Observable delegation to underlying data
+- Computed properties for UI-specific calculations
+- Update() method for switching underlying instance
+
+**Persistence Pattern**: See Effect persistence (CLAUDE.md:122-158)
+- Three-tier system (global, session, island)
+- Observable subscriptions for auto-save
+- localStorage key patterns: `${scope}.${guid}.${attribute}`
+
+**Object Lookup**: See AppliedBuff constructor (buffs.ts:36-141)
+- Validate assetsMap.get() results
+- Descriptive error messages with GUIDs
+- Type casting after validation
+
+### Avoiding Common Pitfalls
+
+**1. Circular Dependencies**
+- Supplier → Factory → Product → Supplier cycle risk
+- Solution: Keep Supplier interface in separate file, import carefully
+- Similar to AppliedBuff separation (buffs.ts) to avoid Factory ↔ Production cycle
+
+**2. Observable Method Preservation**
+- NEVER use object spread with Knockout objects
+- See Object Method Preservation Pattern (CLAUDE.md:256-269)
+- Add properties directly: `obj.newProp = ko.computed(...)`
+
+**3. Initialization Order**
+- Suppliers must be created AFTER factories register in products
+- Supplier selection must load BEFORE demands are calculated
+- Critical section: Island constructor (world.ts:536+)
+
+**4. Type Safety**
+- Avoid `as any` casts
+- Use proper type guards: `isSupplier(obj)` helper function
+- See Type Safety Improvements (CLAUDE.md:37-44)

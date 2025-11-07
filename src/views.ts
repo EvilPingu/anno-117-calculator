@@ -261,7 +261,13 @@ export class ProductionChainView {
                             'amount': amount,
                             'factory': consumer,
                             'buildings': amount * consumer.cycleTime / 60 / consumer.boost(),
-                            'children': consumer.inputDemands().map((d) => traverse(d.factory(), amount * d.factor())).filter((d) => d)
+                            'children': consumer.inputDemands().map((d) => {
+                                const supplier = d.product.defaultSupplier();
+                                if (supplier && supplier.type === 'factory') {
+                                    return traverse(supplier as any, amount * d.factor());
+                                }
+                                return null;
+                            }).filter((d) => d)
                         }; 
                     }
 
@@ -289,14 +295,28 @@ export class ProductionChainView {
 
                     var inputAmount = amount / (factory.extraGoodFactor?.() || 1);
                     const buildings = inputAmount * consumer.cycleTime / 60 / factory.boost();
-                    var children = factory.inputDemands().map((d) => traverse(d.factory(), inputAmount * d.factor())).filter((d) => d);
+                    var children = factory.inputDemands().map((d) => {
+                        const supplier = d.product.defaultSupplier();
+                        if (supplier && supplier.type === 'factory') {
+                            return traverse(supplier as any, inputAmount * d.factor());
+                        }
+                        return null;
+                    }).filter((d) => d);
 
                     var buildingDemands = factory.modules.flatMap(m => m.checked() ? m.inputDemands() : []);
-                    for (const d of buildingDemands)
-                        children.push(traverse(d.factory(), buildings * d.factor() * 60 / (d.consumer as Module).cycleTime))
+                    for (const d of buildingDemands) {
+                        const supplier = d.product.defaultSupplier();
+                        if (supplier && supplier.type === 'factory') {
+                            children.push(traverse(supplier as any, buildings * d.factor() * 60 / (d.consumer as Module).cycleTime));
+                        }
+                    }
 
-                    if (factory.inputDemandFuel)
-                        children.push(traverse(factory.inputDemandFuel.factory(), buildings * factory.inputDemandFuel.factor()));
+                    if (factory.inputDemandFuel) {
+                        const supplier = factory.inputDemandFuel.product.defaultSupplier();
+                        if (supplier && supplier.type === 'factory') {
+                            children.push(traverse(supplier as any, buildings * factory.inputDemandFuel.factor()));
+                        }
+                    }
  
 
                     return {
@@ -457,7 +477,13 @@ export class ResidenceEffectView {
 
         this.need = need;
         if (need instanceof ResidenceNeed && need.demand) {
-            this.productionChain = new ProductionChainView(need.demand.factory as any, need.demand.amount);
+            // Get factory from product's default supplier (if it's a factory)
+            const supplier = need.demand.product.defaultSupplier();
+            if (supplier && supplier.type === 'factory') {
+                this.productionChain = new ProductionChainView(ko.observable(supplier as any), need.demand.amount);
+            } else {
+                this.productionChain = null; // Non-factory suppliers don't have production chains
+            }
         } else {
             this.productionChain = null;
         }

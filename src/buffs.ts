@@ -184,13 +184,14 @@ export class ExtraGoodProduction {
 
         this.amount = ko.computed(() => this.item.scaling() * defaultAmount * this.factory.inputAmount() / this.additionalOutputCycle);
 
-        for (var f of this.product.factories) {
-            if (f.extraGoodProductionList) {
-                f.extraGoodProductionList.entries.push(this);
+        // Add to product's extra good production list
+        if (this.product.extraGoodProductionList) {
+            this.product.extraGoodProductionList.entries.push(this);
+        }
 
-                if (f == this.factory)
-                    f.extraGoodProductionList.selfEffecting.push(this);
-            }
+        // If this factory produces extra of its own output, track it for boost calculation
+        if (this.factory == this.product.factories.find(f => f == this.factory)) {
+            this.factory.selfEffectingExtraGoods.push(this);
         }
     }
 }
