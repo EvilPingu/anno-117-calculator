@@ -119,21 +119,6 @@
                 </div>
                 <div data-bind="if: $data.tradeList != null && $data.tradeList.visible()">
                     <collapsible params="id: 'factory-config-trade-routes', heading: $root.texts.tradeRoutes.name, collapsed: true, data: $data.tradeList, summary: $data.tradeList.amount, colorSummary: true">
-                        <div class="mb-3 inline-list-stretched" data-bind="foreach: $data.npcRoutes">
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" data-bind="checked: $data.checked, attr: { id: $data.trader.guid + '-npcRoute-checked' }">
-                                <label class="custom-control-label" data-bind="attr: { for: $data.trader.guid + '-npcRoute-checked' }" src-only style="vertical-align: top;">
-                                    <img class="icon-sm" data-bind="attr:{src: $data.trader.icon}" />
-                                    <span data-bind="text: $data.trader.name"></span>
-                                </label>
-                            </div>
-
-                            <div>
-                                <span data-bind="text: formatNumber($data.amount)"></span>
-                                <span> t/min</span>
-                            </div>
-                        </div>
-
                         <table class="table table-striped table-sm">
                             <tbody data-bind="foreach: $data.routes">
                                 <tr>
@@ -180,7 +165,7 @@
                                                     <span class="fa fa-exclamation-triangle danger-icon"></span>
                                                 </span>
                                             </div>
-                                            <input step="0.1" min="0" class="form-control" type="number" value="0" data-bind="value: amount, attr: {id: $data.guid + '-amount-input' } " />
+                                            <input step="0.1" min="0" class="form-control" type="number" value="0" data-bind="value: minAmount, attr: {id: $data.guid + '-amount-input' } " />
                                             <div class="input-group-append">
                                                 <div data-bind="component: { name: 'number-input-increment', params: { obs: $data.amount, id: $data.guid + '-amount-input' }}"></div>
                                                 <span class="input-group-text">t/min</span>

@@ -1,12 +1,13 @@
 import { NamedElement, EPSILON, ko, dummyObservableArray } from './util';
-import {  AssetsMap, Island } from './types';
-import { ProductConfig, BuildingBuffConfig, PatronsConfig, EffectConfig, ItemConfig } from './types.config';
+import {  AssetsMap } from './types';
+import { ProductConfig, BuildingBuffConfig, PatronsConfig, EffectConfig, ItemConfig, ProductFilterConfig } from './types.config';
 import { Workforce } from './population';
-import { Region, Constructible, isConstructible } from './world';
+import { Region, Constructible, isConstructible, Island } from './world';
 
 import type { Factory } from './factories';
 import { AppliedBuff, ExtraGoodProduction } from './buffs';
 import { Supplier, PassiveTradeSupplier, ExtraGoodSupplier } from './suppliers';
+import { TradeList } from './trade';
 export { AppliedBuff, ExtraGoodProduction };
 
 
@@ -22,7 +23,6 @@ export class Product extends NamedElement {
     public guid: number;
     public isAbstract: boolean;
     public factories: Factory[];
-    public readonly defaultFactoryGUID: number;
     public availableFactories: KnockoutObservableArray<Factory>;
     public visible: KnockoutComputed<boolean>;
     public extraGoodProductionList?: ExtraGoodProductionList;
@@ -30,6 +30,7 @@ export class Product extends NamedElement {
 
     // === SUPPLIER MANAGEMENT ===
     public passiveTradeSupplier?: PassiveTradeSupplier; // Passive trade supplier
+    public tradeList!: TradeList; // TradeList - manages trade routes for this product (initialized in initSuppliers)
     public availableSuppliers: KnockoutComputed<Supplier[]>; // All available suppliers (factories + extra goods)
     public defaultSupplier: KnockoutObservable<Supplier | null>; // User-selected default supplier
     public island?: Island; // Island reference for supplier management
@@ -87,8 +88,11 @@ export class Product extends NamedElement {
      * One ExtraGoodSupplier is created per factory that produces this product as extra good
      * @param island - The island this product belongs to
      */
-    initSuppliers(island: any): void {
+    initSuppliers(island: Island): void {
         this.island = island;
+
+        // Create trade list for managing trade routes
+        this.tradeList = new TradeList(island, this);
 
         // Create passive trade supplier
         this.passiveTradeSupplier = new PassiveTradeSupplier(this, island);
@@ -163,7 +167,7 @@ export class MetaProduct extends NamedElement {
      * @param config - Configuration object for the meta product
      * @param assetsMap - Map of all available assets
      */
-    constructor(config: any, _assetsMap: AssetsMap) {
+    constructor(config: ProductConfig, _assetsMap: AssetsMap) {
         // Validate required parameters
         if (!config.name) {
             throw new Error('MetaProduct name is required');
@@ -178,7 +182,7 @@ export class MetaProduct extends NamedElement {
             name: config.name,
             locaText: config.locaText || {},
             iconPath: config.iconPath || "",
-            dlcs: config.dlcs || []
+            dlcs: []
         };
         
         super(parentConfig);
@@ -251,7 +255,7 @@ export class ProductCategory extends NamedElement {
      * @param config - Configuration object for the category
      * @param assetsMap - Map of all available assets
      */
-    constructor(config: any, _assetsMap: AssetsMap) {
+    constructor(config: ProductFilterConfig, _assetsMap: AssetsMap) {
         // Validate required parameters
         if (!config.guid) {
             throw new Error('ProductCategory GUID is required');
@@ -263,10 +267,9 @@ export class ProductCategory extends NamedElement {
         // Prepare config for parent constructor
         const parentConfig = {
             guid: config.guid,
-            name: config.name,
             locaText: config.locaText || {},
             iconPath: config.iconPath || "",
-            dlcs: config.dlcs || []
+            dlcs: []
         };
         
         super(parentConfig);
@@ -274,7 +277,6 @@ export class ProductCategory extends NamedElement {
         
         // Explicit assignments
         this.guid = config.guid;
-        this.products = config.products;
 
         this.products = config.products.map((p: number) => {
             const product = _assetsMap.get(p);
@@ -702,7 +704,7 @@ export class AqueductBuff {
  * Simple array to collect all ExtraGoodProduction entries for this product
  */
 export class ExtraGoodProductionList {
-    public entries: any[]; // ExtraGoodProduction[]
+    public entries:  ExtraGoodProduction[];
 
     /**
      * Creates a new ExtraGoodProductionList instance
@@ -715,8 +717,8 @@ export class ExtraGoodProductionList {
     /**
      * Returns entries that have non-zero production
      */
-    nonZero(): any[] {
-        return this.entries.filter((i: any) => i.amount && i.amount() > 0);
+    nonZero(): ExtraGoodProduction[] {
+        return this.entries.filter((i: ExtraGoodProduction) => i.amount && i.amount() > 0);
     }
 
     /**

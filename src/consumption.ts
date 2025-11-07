@@ -3,7 +3,8 @@ import { ResidenceBuilding, PopulationLevel } from './population';
 import { AssetsMap, LiteralsMap, ResidenceNeedConfig } from './types';
 import { NeedCategoryConfig, NeedConfig } from './types.config';
 import { Demand, Product } from './production';
-import { Island } from './world';
+import { Island, Region } from './world';
+import { Factory } from './factories';
 
 
 declare const view: any;
@@ -404,8 +405,8 @@ export class ResidenceEffect extends NamedElement {
             typeof this.residences[0].populationLevel !== 'string' &&
             typeof other.residences[0].populationLevel !== 'string'
         ) {
-            const thisPop = this.residences[0].populationLevel as any;
-            const otherPop = other.residences[0].populationLevel as any;
+            const thisPop = this.residences[0].populationLevel as PopulationLevel;
+            const otherPop = other.residences[0].populationLevel as PopulationLevel;
             return 10 * (otherPop.guid - thisPop.guid) + other.panoramaLevel - this.panoramaLevel;
         }
 
@@ -426,7 +427,7 @@ export class ResidenceEffect extends NamedElement {
 export class ResidenceEffectCoverage {
     public residence: ResidenceBuilding;
     public residenceEffect: ResidenceEffect;
-    public coverage: any;
+    public coverage: KnockoutObservable<number>;
 
     /**
      * Creates a new ResidenceEffectCoverage instance
@@ -492,11 +493,11 @@ export class ResidenceEffectEntryCoverage {
  */
 export class RecipeList extends NamedElement {
     public island: Island;
-    public region?: any;
-    public recipeBuildings: any[];
-    public unusedRecipes: any;
-    public selectedRecipe: any;
-    public canCreate: any;
+    public region?: Region;
+    public recipeBuildings: Factory[];
+    public unusedRecipes: KnockoutComputed<Factory[]>;
+    public selectedRecipe: KnockoutObservable<Factory>;
+    public canCreate: KnockoutComputed<boolean>;
     public visible: KnockoutComputed<boolean>;
 
     /**
@@ -541,7 +542,7 @@ export class RecipeList extends NamedElement {
         this.unusedRecipes = ko.computed(() => {
             var result = [];
             for (var recipe of this.recipeBuildings) {
-                if (!recipe.existingBuildings())
+                if (!recipe.buildings.constructed())
                     result.push(recipe);
             }
 
@@ -568,6 +569,6 @@ export class RecipeList extends NamedElement {
         if (!this.canCreate())
             return;
 
-        this.selectedRecipe().existingBuildings(1);
+        this.selectedRecipe().buildings.constructed(1);
     }
 } 

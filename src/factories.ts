@@ -1,8 +1,7 @@
 import { NamedElement, ACCURACY, EPSILON, ko, BuildingsCalc } from './util';
 import { Workforce, WorkforceDemand } from './population';
-import { Demand, Product, AqueductBuff, Item, Buff } from './production';
+import { Demand, Product, AqueductBuff, Item, Buff, ExtraGoodProduction } from './production';
 import { AppliedBuff } from './buffs';
-import { TradeList } from './trade';
 import {
     ConsumerConfig,
     AssetsMap,
@@ -436,9 +435,8 @@ export class Module extends Consumer {
  */
 export class PublicConsumerBuilding extends Consumer {
     // === PUBLIC BUILDING PROPERTIES ===
-    public product: Product | null;                              // Associated product/service (if any)
-    public fixedFactory: KnockoutObservable<Factory | null>;     // Factory this building is fixed to (for recipes)
-    public fixedFactorySubscription: KnockoutComputed<void>;     // Reactive binding to fixed factory
+    public product: Product;                              // Associated product/service (if any)
+
 
     // === OPTIONAL RECIPE SYSTEM ===
     public goodConsumptionUpgrade?: Product;                     // Product used for consumption upgrades
@@ -461,18 +459,6 @@ export class PublicConsumerBuilding extends Consumer {
             }
             return product;
         })() : null;
-        this.fixedFactory = ko.observable(null);
-        
-        this.fixedFactorySubscription = ko.computed(() => {
-            if (this.fixedFactory()) {
-                const factory = this.fixedFactory() as any;
-                if (factory && typeof factory.fixedFactory === 'function') {
-                    factory.fixedFactory(this);
-                } else if (factory && factory.fixedFactory) {
-                    factory.fixedFactory(this);
-                }
-            }
-        });
     }
 
     /**
@@ -512,8 +498,7 @@ export class Factory extends Consumer implements Supplier {
     public totalDemands: KnockoutComputed<number>;          // Total demand from all consumers
 
     // === EXTERNAL PRODUCTION SOURCES ===
-    public tradeList: TradeList;                            // Trade routes providing/consuming this product
-    public selfEffectingExtraGoods: any[];                  // Extra good entries where factory produces extra of its own output
+    public selfEffectingExtraGoods: ExtraGoodProduction[];                  // Extra good entries where factory produces extra of its own output
     public extraGoodProductionHistory: [number, Date][];    // History for cycle breaking in extra goods
     public extraGoodProductionAmount: KnockoutComputed<number>; // Amount from extra goods (from Product)
     public externalProduction: KnockoutComputed<number>;    // Total from trade + extra goods
@@ -559,8 +544,6 @@ export class Factory extends Consumer implements Supplier {
         }
         this.demands = ko.observableArray([]);
 
-        this.tradeList = new TradeList(island, this);
-
         // Self-effecting extra goods will be populated when ExtraGoodProduction entries are created
         this.selfEffectingExtraGoods = [];
 
@@ -598,7 +581,10 @@ export class Factory extends Consumer implements Supplier {
                 sum += d.amount();
             });
 
-            sum += this.tradeList.inputAmount();
+            const product = this.getProduct();
+            if (product && product.tradeList) {
+                sum += product.tradeList.inputAmount();
+            }
 
             return sum;
         });
@@ -606,7 +592,10 @@ export class Factory extends Consumer implements Supplier {
         this.externalProduction = ko.pureComputed(() => {
             let sum = 0;
 
-            sum += this.tradeList.outputAmount();
+            const product = this.getProduct();
+            if (product && product.tradeList) {
+                sum += product.tradeList.outputAmount();
+            }
             sum += this.extraGoodProductionAmount();
 
             return sum;
@@ -677,7 +666,7 @@ export class Factory extends Consumer implements Supplier {
         this.extraGoodsDisplayAmount = ko.pureComputed(() => {
             const product = this.getProduct();
             if (!product || !product.extraGoodProductionList) return 0;
-            return product.extraGoodProductionList.nonZero().reduce((a: number, b: any) => a + b.amount(), 0);
+            return product.extraGoodProductionList.nonZero().reduce((a: number, b: ExtraGoodProduction) => a + b.amount(), 0);
         });
 
         this.visible = ko.computed(() => {

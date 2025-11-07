@@ -3,11 +3,11 @@ import { texts } from './i18n';
 import { 
  
     AssetsMap, 
-    GameParams,
     LiteralsMap,
 } from './types';
 import { 
     EffectConfig,
+    ParamsConfig,
     RegionConfig, 
     SessionConfig, 
 
@@ -17,7 +17,8 @@ import { Workforce, ResidenceBuilding, PopulationLevel, PopulationGroup } from '
 import { Product, MetaProduct, Item, ProductCategory, AppliedBuff, Buff, Effect, Patron } from './production';
 import { PublicConsumerBuilding, Factory, Consumer } from './factories';
 import { ResidenceEffectView } from './views';
-import { Need, NeedCategory, RecipeList, ResidenceEffect } from './consumption';
+import { Need, NeedCategory, RecipeList, } from './consumption';
+import { ExtraGoodSupplier } from './suppliers';
 
 declare const $: any;
 declare const view: any;
@@ -245,10 +246,10 @@ export class IslandManager {
     public sessionInput: KnockoutObservable<Session>;
     public renameIsland: KnockoutObservable<Island>;
     public islandExists: KnockoutObservable<boolean>;
-    public params: GameParams;
+    public params: ParamsConfig;
     public currentIslandSubscription: KnockoutComputed<void>;
     
-    constructor(params: GameParams, isFirstRun: boolean) {
+    constructor(params: ParamsConfig, isFirstRun: boolean) {
         // Explicit assignments
         const islandKey = "islandName";
         const islandsKey = "islandNames";
@@ -533,7 +534,7 @@ export class Island {
      * @param isNew - Whether this is a newly created island
      * @param session - The session this island belongs to
      */
-    constructor(params: GameParams, localStorage: Storage | any, isNew: boolean, session: Session | null) {
+    constructor(params: ParamsConfig, localStorage: Storage | any, isNew: boolean, session: Session | null) {
         // Validate required parameters
         if (!params) {
             throw new Error('Island params is required');
@@ -723,24 +724,24 @@ export class Island {
             this.workforce.push(w);
         }
 
-        for (let consumer of (params.publicServices || [])) {
-            let f = new PublicConsumerBuilding(consumer, assetsMap, literalsMap, this);
-            assetsMap.set(f.guid, f);
-            this.consumers.push(f);
-            this.publicServices.push(f);
-        }
+        // for (let consumer of (params.publicServices || [])) {
+        //     let f = new PublicConsumerBuilding(consumer, assetsMap, literalsMap, this);
+        //     assetsMap.set(f.guid, f);
+        //     this.consumers.push(f);
+        //     this.publicServices.push(f);
+        // }
 
-        for (let consumer of (params.publicRecipeBuildings || [])) {
-            let f = new PublicConsumerBuilding(consumer, assetsMap, literalsMap, this);
-            assetsMap.set(f.guid, f);
-            this.consumers.push(f);
-            this.publicRecipeBuildings.push(f);
-        }
+        // for (let consumer of (params.publicRecipeBuildings || [])) {
+        //     let f = new PublicConsumerBuilding(consumer, assetsMap, literalsMap, this);
+        //     assetsMap.set(f.guid, f);
+        //     this.consumers.push(f);
+        //     this.publicRecipeBuildings.push(f);
+        // }
 
-        for (let list of (params.recipeLists || [])) {
-            if (!list.region || !this.region || list.region === this.region.guid)
-                this.recipeLists.push(new RecipeList(list, assetsMap, this));
-        }
+        // for (let list of (params.recipeLists || [])) {
+        //     if (!list.region || !this.region || list.region === this.region.guid)
+        //         this.recipeLists.push(new RecipeList(list, assetsMap, this));
+        // }
 
         for (let buff of (params.buildingBuffs || [])) {
             let b = new Buff(buff, assetsMap);
@@ -870,19 +871,60 @@ export class Island {
         products.forEach(p => {
             if (p.factories.length > 1)
                 this.multiFactoryProducts.push(p);
-            
+
 
             if (localStorage) {
-                let id = p.guid + ".fixedFactory";
-                if (localStorage.getItem(id) != null) {
-                    const factory = assetsMap.get(parseInt(localStorage.getItem(id)));
-                    if (!factory) {
-                        throw new Error(`Factory with GUID ${localStorage.getItem(id)} not found in assetsMap`);
+                // Restore default supplier from localStorage
+                const typeKey = p.guid + ".defaultSupplier.type";
+                const idKey = p.guid + ".defaultSupplier.id";
+                const supplierType = localStorage.getItem(typeKey);
+                const supplierId = localStorage.getItem(idKey);
+
+                if (supplierType && supplierId) {
+                    if (supplierType === 'factory') {
+                        const factory = assetsMap.get(parseInt(supplierId));
+                        if (factory && p.factories.includes(factory)) {
+                            p.defaultSupplier(factory);
+                        }
+                    } else if (supplierType === 'extra_good') {
+                        // Find extra good supplier for this factory
+                        const factoryGuid = parseInt(supplierId);
+                        if (p.extraGoodSuppliers) {
+                            for (const supplier of p.extraGoodSuppliers) {
+                                if (supplier.factory.guid == factoryGuid) {
+                                    p.defaultSupplier(supplier);
+                                    break;
+                                }
+                            }
+                        }
+                    } else if (supplierType === 'passive_trade') {
+                        if (p.passiveTradeSupplier) {
+                            p.defaultSupplier(p.passiveTradeSupplier);
+                        }
                     }
-                    p.fixedFactory(factory);
+                    // Note: Trade routes will be handled by TradeManager
                 }
-                p.fixedFactory.subscribe(
-                    (f: Factory | null) => f ? localStorage.setItem(id, f.guid.toString()) : localStorage.removeItem(id));
+
+                // Subscribe to changes for persistence
+                p.defaultSupplier.subscribe((supplier: any) => {
+                    if (!supplier) {
+                        localStorage.removeItem(typeKey);
+                        localStorage.removeItem(idKey);
+
+                    } else if (supplier.type === 'factory') {
+                        localStorage.setItem(typeKey, 'factory');
+                        localStorage.setItem(idKey, supplier.guid.toString());
+
+                    } else if (supplier.type === 'extra_good') {                        
+                        localStorage.setItem(typeKey, 'extra_good');
+                        localStorage.setItem(idKey, (supplier as ExtraGoodSupplier).factory.guid.toString());
+
+                    } else if (supplier.type === 'passive_trade') {
+                        localStorage.setItem(typeKey, 'passive_trade');
+                        localStorage.setItem(idKey, 'passive');
+                    }
+                    // Note: Trade routes handled by TradeManager
+                });
             }
         });
 
@@ -940,12 +982,12 @@ export class Island {
 //        for (let l of this.populationLevels)
 //            l.initBans(assetsMap);  // must be executed before loading the values for residence buildings
 
-        for (let effect of (params.residenceEffects || [])) {
-            let e = new ResidenceEffect(effect, assetsMap);
-            assetsMap.set(e.guid, e);
-            if (localStorage)
-                localStorage.removeItem(`${e.guid}.checked`);
-        }
+        // for (let effect of (params.residenceEffects || [])) {
+        //     let e = new ResidenceEffect(effect, assetsMap);
+        //     assetsMap.set(e.guid, e);
+        //     if (localStorage)
+        //         localStorage.removeItem(`${e.guid}.checked`);
+        // }
 
         for (let b of this.residenceBuildings) {
             {

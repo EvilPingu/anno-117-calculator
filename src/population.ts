@@ -1,6 +1,6 @@
 import { NamedElement, ko, BuildingsCalc } from './util';
 import { AppliedBuff, Product } from './production';
-import { ResidenceNeed, PopulationLevelNeed, ResidenceEffectEntryCoverage, ResidenceEffectCoverage, ResidenceEffect } from './consumption';
+import { ResidenceNeed, PopulationLevelNeed, ResidenceEffectEntryCoverage, ResidenceEffectCoverage, ResidenceEffect, NeedCategory } from './consumption';
 import { AssetsMap, LiteralsMap } from './types';
 import { 
     PopulationLevelConfig, 
@@ -11,8 +11,14 @@ import {
 import {    Island, 
     Region,
      Constructible } from './world';
+import { Consumer } from './factories';
 
 declare const view: any;
+
+export interface VisibleNeedCategory {
+    readonly needCategory: NeedCategory;
+    readonly visibleResidenceNeeds: ResidenceNeed[];
+}
 
 /**
  * Represents a residence building that houses population
@@ -40,7 +46,7 @@ export class ResidenceBuilding extends NamedElement implements Constructible{
      * @param assetsMap - Map of all available assets
      * @param island - The island this residence belongs to
      */
-    constructor(config: ResidenceBuildingConfig, assetsMap: AssetsMap, island: any) {
+    constructor(config: ResidenceBuildingConfig, assetsMap: AssetsMap, island: Island) {
         // Validate required parameters
         if (!config) {
             throw new Error('ResidenceBuilding config is required');
@@ -129,7 +135,7 @@ export class ResidenceBuilding extends NamedElement implements Constructible{
      * Adds an effect to this residence
      * @param effect - The effect to add
      */
-    addEffect(effect: any): void {
+    addEffect(effect: ResidenceEffect): void {
         this.allEffects.set(effect.guid, effect);
     }
 
@@ -154,7 +160,7 @@ export class ResidenceBuilding extends NamedElement implements Constructible{
      * Sorts effect coverage by priority
      */
     sortEffectCoverage(): void {
-        this.effectCoverage.sort((a: any, b: any) => a.residenceEffect.compare(b.residenceEffect));
+        this.effectCoverage.sort((a: ResidenceEffectCoverage, b: ResidenceEffectCoverage) => a.residenceEffect.compare(b.residenceEffect));
     }
 
 
@@ -164,23 +170,31 @@ export class ResidenceBuilding extends NamedElement implements Constructible{
      * @param need - The need to get entries for
      * @returns Array of consumption entries
      */
-    getConsumptionEntries(need: any): any[] {
-        if (!(need instanceof Product)) {
-            if (need instanceof ResidenceNeed) {
-                need = need.need;
-            }
-            need = need.product;
-        }
+    getConsumptionEntries(need: Product | ResidenceNeed | PopulationLevelNeed): ResidenceEffectEntryCoverage[] {
+        var product : Product | null = null;
 
-        return this.entryCoveragePerProduct().get(need) || [];
+        if (need instanceof Product)
+            product = need;
+
+        if (need instanceof ResidenceNeed)
+            product = need.need.product;
+        
+
+        if (need instanceof PopulationLevelNeed)
+            product = need.product;
+        
+        if (product == null)
+            throw new Error("Argument passed to getConsumptionEntries must be Product | ResidenceNeed | PopulationLevelNeed")
+
+        return this.entryCoveragePerProduct().get(product) || [];
     }
 
     /**
      * Serializes effects to JSON for storage
      * @returns Serialized effects data
      */
-    serializeEffects(): Record<string, any> {
-        const coverageMap: Record<string, any> = {};
+    serializeEffects(): Record<string, number> {
+        const coverageMap: Record<string, number> = {};
         for (const coverage of this.effectCoverage()) {
             coverageMap[coverage.residenceEffect.guid] = coverage.coverage();
         }
@@ -213,15 +227,15 @@ export class ResidenceBuilding extends NamedElement implements Constructible{
     /**
      * Gets visible need categories for this residence's population level
      */
-    visibleNeedCategories(): any[] {
+    visibleNeedCategories(): VisibleNeedCategory[] {
         // This method should return need categories grouped by the population level needs
-        const categories = new Map();
+        const categories = new Map<number, VisibleNeedCategory>();
         
         for (const populationNeed of this.populationLevel.getVisibleNeeds()) {
             const category = populationNeed.need.category;
-            if (!categories.has(category.guid)) {
+            if (category.guid && !categories.has(category.guid)) {
                 categories.set(category.guid, {
-                    ...category,
+                    needCategory: category,
                     visibleResidenceNeeds: []
                 });
             }
@@ -229,7 +243,8 @@ export class ResidenceBuilding extends NamedElement implements Constructible{
             // Get the corresponding residence need for this population need
             const residenceNeed = this.needsMap.get(populationNeed.need.guid);
             if (residenceNeed) {
-                categories.get(category.guid).visibleResidenceNeeds.push(residenceNeed);
+                var entry = categories.get(category.guid as number) as VisibleNeedCategory
+                entry.visibleResidenceNeeds.push(residenceNeed);
             }
         }
         
@@ -266,7 +281,7 @@ export class PopulationLevel extends NamedElement {
     public residents: KnockoutComputed<number>;
     public visible: KnockoutComputed<boolean>;
     public canEditPerHouse?: KnockoutComputed<boolean>;
-    public availableResidences?: KnockoutComputed<any[]>;
+    public availableResidences?: KnockoutComputed<ResidenceBuilding[]>;
     public canEdit?: KnockoutComputed<boolean>;
     public hotkey: KnockoutObservable<string | null>;
 
@@ -281,7 +296,7 @@ export class PopulationLevel extends NamedElement {
      * @param assetsMap - Map of all available assets
      * @param island - The island this population level belongs to
      */
-    constructor(config: PopulationLevelConfig, assetsMap: AssetsMap, island: any) {
+    constructor(config: PopulationLevelConfig, assetsMap: AssetsMap, island: Island) {
         // Validate required parameters
         if (!config) {
             throw new Error('PopulationLevel config is required');
@@ -448,7 +463,7 @@ export class PopulationGroup extends NamedElement{
  */
 export class Workforce extends NamedElement{
     public guid: number;
-    public demands: KnockoutObservableArray<any>;
+    public demands: KnockoutObservableArray<WorkforceDemand>;
     public amount: KnockoutComputed<number>;
     public visible: KnockoutComputed<boolean>;
 
@@ -492,7 +507,7 @@ export class Workforce extends NamedElement{
      * Adds a demand to this workforce
      * @param demand - The demand to add
      */
-    add(demand: any): void {
+    add(demand: WorkforceDemand): void {
         this.demands.push(demand);
     }
 
@@ -500,7 +515,7 @@ export class Workforce extends NamedElement{
      * Removes a demand from this workforce
      * @param demand - The demand to remove
      */
-    remove(demand: any): void {
+    remove(demand: WorkforceDemand): void {
         this.demands.remove(demand);
     }
 }
@@ -509,12 +524,12 @@ export class Workforce extends NamedElement{
  * Manages the relationship between factories and their workforce requirements
  */
 export class WorkforceDemand {
-    public factory: any;
+    public factory: Consumer;
     public amountPerBuilding: number;
     public boost: KnockoutObservable<number>;
     public amount: KnockoutObservable<number>;
-    public workforce: KnockoutObservable<any>;
-    public defaultWorkforce: any;
+    public workforce: KnockoutObservable<Workforce>;
+    public defaultWorkforce: Workforce;
     public buildings: number;
 
     /**
@@ -523,7 +538,7 @@ export class WorkforceDemand {
      * @param workforce - The workforce type
      * @param amount - Amount of workforce per building
      */
-    constructor(factory: any, workforce: any, amount: number) {
+    constructor(factory: Consumer, workforce: Workforce, amount: number) {
         // Validate required parameters
         if (!factory) {
             throw new Error('WorkforceDemand factory is required');
@@ -552,7 +567,7 @@ export class WorkforceDemand {
      * Updates the workforce assignment
      * @param workforce - The new workforce to assign
      */
-    updateWorkforce(workforce: any = null): void {
+    updateWorkforce(workforce: Workforce | null = null): void {
         if (workforce == null) {
             workforce = this.defaultWorkforce;
         }

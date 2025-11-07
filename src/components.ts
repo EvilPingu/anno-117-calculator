@@ -1,8 +1,8 @@
 import { ResidenceNeed } from './consumption';
 import { Consumer } from './factories';
-import { ResidenceBuilding } from './population';
+import { PopulationLevel, ResidenceBuilding } from './population';
 import { NumberInputHandler, EPSILON, ko, debugBindingContext, logAssetInfo } from './util';
-import { Constructible } from './world';
+import { Constructible, Region } from './world';
 
 declare const $: any;
 declare const window: any;
@@ -35,12 +35,10 @@ interface Asset {
     icon?: string;
     name: string;
     guid: string;
-    checked?: any;
-    existingBuildings?: any;
+    checked?: KnockoutObservable<boolean>;
     canEdit?: () => boolean;
-    region?: any;
-    populationLevel?: any;
-    floorCount?: number;
+    region?: Region;
+    populationLevel?: PopulationLevel;
 }
 
 // Removed unused Factory interface
@@ -51,7 +49,7 @@ interface Module {
 
 interface Demand {
     amount(): number;
-    level?: any;
+    level?: PopulationLevel;
     consumer?: Consumer;
     module?: Module;
 }

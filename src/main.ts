@@ -12,7 +12,7 @@ import { DarkMode, ResidencePresenter } from './views';
 import { ConstantsConfig, NeedConsumptionConfig, TextConfig } from './types.config';
 import { Island, Region, Session } from './world';
 import { Effect } from './production';
-import { NPCTrader } from './trade';
+
 
 declare const $: any;
 declare const window: any;
@@ -180,7 +180,7 @@ function exportConfig(): void {
         const a = document.createElement("a");
         document.body.appendChild(a);
         a.style.display = "none";
-        return function (data: any, fileName: string): void {
+        return function (data: Storage, fileName: string): void {
             const blob = new Blob([JSON.stringify(data, null, 4)], { type: "text/json" });
             const url = window.URL.createObjectURL(blob);
             a.href = url;
@@ -447,20 +447,6 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
         const r = new NamedElement(attribute);
         (window as any).view.needAttributes.push(r);
         (window as any).view.literalsMap.set(r.id, r);
-    }
-
-    // Set up NPC traders
-    (window as any).view.productsToTraders = new Map();
-    for (let t of (params.traders || [])) {
-        const trader = new NPCTrader(t);
-
-        for (let r of t.goodsProduction) {
-            const route = Object.assign({}, r, { trader: trader });
-            if ((window as any).view.productsToTraders.has(r.Good))
-                (window as any).view.productsToTraders.get(r.Good).push(route);
-            else
-                (window as any).view.productsToTraders.set(r.Good, [route]);
-        }
     }
 
     // Set up island management

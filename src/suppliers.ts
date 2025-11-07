@@ -1,5 +1,5 @@
 import { ko } from './util';
-import { Product } from './production';
+import { ExtraGoodProduction, Product } from './production';
 import { Island } from './world';
 import { Factory } from './factories';
 
@@ -94,7 +94,7 @@ export class ExtraGoodSupplier implements Supplier {
     public readonly factory: Factory;
     public readonly product: Product; // Extra good product
     public readonly island: Island;
-    public productionList: any[]; // ExtraGoodProduction[] - filtered entries where factory outputs this product
+    public productionList: ExtraGoodProduction[]; // ExtraGoodProduction[] - filtered entries where factory outputs this product
 
     /**
      * Creates a new ExtraGoodSupplier instance
@@ -146,7 +146,7 @@ export class ExtraGoodSupplier implements Supplier {
     /**
      * Extra supplier can supply if there is at least one extra good production active.
      */
-    canSupply(amount: number): boolean {
+    canSupply(_: number): boolean {
         return this.getTotalRatio() > 0;
     }
 

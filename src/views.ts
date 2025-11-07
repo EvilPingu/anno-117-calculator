@@ -275,8 +275,9 @@ export class ProductionChainView {
 
                     var icon = null;
                     var maxSubAmount = factory.outputAmount ? factory.outputAmount() : factory.inputAmount();
-                    if (factory.tradeList && factory.tradeList.amount() > maxSubAmount){
-                        maxSubAmount = factory.tradeList.amount()
+                    const product = factory.getProduct();
+                    if (product && product.tradeList && product.tradeList.amount() > maxSubAmount){
+                        maxSubAmount = product.tradeList.amount()
                         icon = "./icons/icon_shiptrade.png"
                     }
                     if (factory.extraGoodProductionAmount && factory.extraGoodProductionAmount() > maxSubAmount) {

@@ -1,4 +1,4 @@
-import { ALL_ISLANDS, createFloatInput, NamedElement, EPSILON, ko } from './util';
+import { ALL_ISLANDS, createFloatInput, EPSILON, ko } from './util';
 import { Factory, Factory as FactoryClass } from './factories';
 import { Island } from './world';
 import { Supplier } from './suppliers';
@@ -304,8 +304,10 @@ export class TradeManager {
             if (!(f instanceof FactoryClass))
                 return;
 
-            if (f.tradeList && f.tradeList.onShow)
-                f.tradeList.onShow();
+            const product = f.getProduct();
+            if (product && product.tradeList && product.tradeList.onShow) {
+                product.tradeList.onShow();
+            }
         });
 
         if (localStorage) {
@@ -340,10 +342,10 @@ export class TradeManager {
 
                 for (var r of this.routes()) {
                     json.push({
-                        productGUID: r.product,
+                        productGUID: r.product.guid.toString(),
                         from: r.from.isAllIslands() ? ALL_ISLANDS : r.from.name(),
                         to: r.to.isAllIslands() ? ALL_ISLANDS : r.to.name(),
-                        minAmount: r.minAmount()
+                        minAmount: r.minAmount().toString()
                     });
                 }
 
@@ -384,4 +386,4 @@ export class TradeManager {
         var deletedRoutes = this.routes().filter((r: TradeRoute) => r.to === island || r.from === island);
         deletedRoutes.forEach((r: TradeRoute) => this.remove(r));
     }
-} 
+}

@@ -68,7 +68,7 @@ export class AppliedBuff {
                 try {
 
 
-                    const product = entry.forceProductSameAsFactoryOutput ? (this.target as any).getProduct() : entry.product;
+                    const product = entry.forceProductSameAsFactoryOutput ? (this.target as Factory).getProduct() : entry.product;
                     
                     if (!product) {
                         throw new Error(`Product with GUID ${product} not found in assetsMap`);
