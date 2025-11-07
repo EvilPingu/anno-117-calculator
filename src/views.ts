@@ -274,14 +274,14 @@ export class ProductionChainView {
                     var factory = consumer;
 
                     var icon = null;
-                    var maxSubAmount = factory.outputAmount ? factory.outputAmount() : factory.inputAmount();
+                    var maxSubAmount = factory.outputAmount ? factory.outputAmount() : factory.throughput();
                     const product = factory.getProduct();
                     if (product && product.tradeList && product.tradeList.amount() > maxSubAmount){
                         maxSubAmount = product.tradeList.amount()
                         icon = "./icons/icon_shiptrade.png"
                     }
-                    if (factory.extraGoodProductionAmount && factory.extraGoodProductionAmount() > maxSubAmount) {
-                        maxSubAmount = factory.extraGoodProductionAmount()
+                    if (product && product.extraGoodProduction && product.extraGoodProduction() > maxSubAmount) {
+                        maxSubAmount = product.extraGoodProduction()
                         icon = "./icons/icon_add_goods_socket_white.png"
                     } 
                     
@@ -334,7 +334,7 @@ export class ProductionChainView {
             if (amount == null && consumer instanceof Factory)
                 amount = consumer.outputAmount;
             if (amount == null)
-                amount = consumer.inputAmount;
+                amount = consumer.throughput;
             return traverse(consumer, amount());
              
         });

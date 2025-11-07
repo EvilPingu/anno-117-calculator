@@ -1,4 +1,4 @@
-import { ko } from './util';
+import { ACCURACY, ko } from './util';
 import { AssetsMap } from './types';
 import { Workforce } from './population';
 import { Constructible } from './world';
@@ -152,6 +152,8 @@ export class ExtraGoodProduction {
     public product: Product;
     public amount: KnockoutComputed<number>;
 
+    private amountHistory: [number, Date][];  
+
     /**
      * Creates a new ExtraGoodProduction instance
      * @param config - Configuration object for the extra good production
@@ -182,7 +184,31 @@ export class ExtraGoodProduction {
 
         this.product = product;
 
-        this.amount = ko.computed(() => this.item.scaling() * defaultAmount * this.factory.inputAmount() / this.additionalOutputCycle);
+        // use the history to break the cycle: extra good (lumberjack) -> building materials need (timber) -> production (sawmill) -> production (lumberjack)
+        // that cycles between two values by adding a damper
+        // [[prev val, timestamp], [prev prev val, timestamp]]
+        this.amountHistory = [];
+        this.amount = ko.computed(() => {
+            const val = this.item.scaling() * defaultAmount * this.factory.throughput() / this.additionalOutputCycle;
+
+            if (this.amountHistory.length && Math.abs(val - this.amountHistory[0][0]) < ACCURACY)
+                return this.amountHistory[0][0];
+
+            const time = new Date();
+
+            if (this.amountHistory.length >= 2) {
+                // after initialization, we have this.amountHistory = [val, 0]
+                // when the user manually sets it to 0, the wrong value is propagated
+                // restrict to cycles triggered by automatic updates, i.e. update interval < 200 ms
+                if (Math.abs(this.amountHistory[1][0] - val) < ACCURACY && this.amountHistory[1][0] !== 0 && time.getTime() - this.amountHistory[1][1].getTime() < 200)
+                    return (val + this.amountHistory[0][0]) / 2;
+            }
+
+            this.amountHistory.unshift([val, time]);
+            if (this.amountHistory.length > 2)
+                this.amountHistory.pop();
+            return val;
+        });
 
         // Add to product's extra good production list
         if (this.product.extraGoodProductionList) {

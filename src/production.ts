@@ -7,7 +7,7 @@ import { Region, Constructible, isConstructible, Island } from './world';
 import type { Factory } from './factories';
 import { AppliedBuff, ExtraGoodProduction } from './buffs';
 import { Supplier, PassiveTradeSupplier, ExtraGoodSupplier } from './suppliers';
-import { TradeList } from './trade';
+import { TradeList, TradeRoute } from './trade';
 export { AppliedBuff, ExtraGoodProduction };
 
 
@@ -28,12 +28,20 @@ export class Product extends NamedElement {
     public extraGoodProductionList?: ExtraGoodProductionList;
     public extraGoodSuppliers?: ExtraGoodSupplier[]; // Suppliers for extra goods production (one per factory)
 
+    // === DEMAND TRACKING ===
+    public demands: KnockoutObservableArray<Demand>; // All consumers demanding this product
+    public totalDemand: KnockoutComputed<number>; // Total demand from all consumers
+    public nonDefaultSupplierProduction: KnockoutComputed<number>; // Production from non-default suppliers
+    public excessProduction: KnockoutObservable<number>; // Excess when non-default suppliers exceed demand
+    public demandCalculationSubscription!: KnockoutComputed<void>; // Updates supplier demands based on total demand
+
     // === SUPPLIER MANAGEMENT ===
     public passiveTradeSupplier!: PassiveTradeSupplier; // Passive trade supplier
     public tradeList!: TradeList; // TradeList - manages trade routes for this product (initialized in initSuppliers)
-    public availableSuppliers: KnockoutComputed<Supplier[]>; // All available suppliers (factories + extra goods)
+    public availableSuppliersNoRoutes: KnockoutComputed<Supplier[]>; // All available suppliers (factories + extra goods)
     public defaultSupplier: KnockoutObservable<Supplier | null>; // User-selected default supplier
     public defaultSupplierSubscription!: KnockoutComputed<void>; // Ensures that the default supplier is unset if it is no longer available
+    public extraGoodProduction!: KnockoutComputed<number>;
     public island?: Island; // Island reference for supplier management
 
     /**
@@ -72,15 +80,39 @@ export class Product extends NamedElement {
         // Initialize extra good production list for tracking item-based production
         this.extraGoodProductionList = new ExtraGoodProductionList();
 
+        // Initialize demand tracking
+        this.demands = ko.observableArray([]);
+        this.excessProduction = ko.observable(0);
+
+        // Will be initialized properly in initSuppliers after suppliers are created
+        this.totalDemand = ko.dummyComputed("product.totalDemand");
+        this.nonDefaultSupplierProduction = ko.dummyComputed("product.nonDefaultSupplierProduction");
+
         // Initialize supplier management (will be fully set up in initSuppliers)
         this.defaultSupplier = ko.observable(null);
-        this.availableSuppliers = ko.dummyComputedObservableArray("Product.availableSuppliers");
+        this.availableSuppliersNoRoutes = ko.dummyComputedObservableArray("Product.availableSuppliers");
         this.availableFactories = ko.dummyComputedObservableArray("Product.availableFactories"); // throws if used before initialization in initSuppliers
     }
 
     addFactory(factory: Factory){
         this.factories.push(factory);
         this.availableFactories = ko.pureComputed(() => this.factories.filter((f: Factory) => f.available()));
+    }
+
+    /**
+     * Adds a demand to this product's demand tracking
+     * @param demand - The demand to add
+     */
+    addDemand(demand: Demand): void {
+        this.demands.push(demand);
+    }
+
+    /**
+     * Removes a demand from this product's demand tracking
+     * @param demand - The demand to remove
+     */
+    removeDemand(demand: Demand): void {
+        this.demands.remove(demand);
     }
 
     /**
@@ -122,7 +154,10 @@ export class Product extends NamedElement {
             }
         }
 
-        this.availableSuppliers = ko.pureComputed(() => {
+        this.extraGoodProduction = ko.pureComputed(() => this.extraGoodSuppliers?.reduce((sum,prod) => sum + prod.defaultProduction(), 0));
+
+        // excluding trade routes
+        this.availableSuppliersNoRoutes = ko.pureComputed(() => {
             const suppliers: Supplier[] = [];
 
             // Add available factories
@@ -146,15 +181,70 @@ export class Product extends NamedElement {
 
         this.defaultSupplierSubscription = ko.Computed(() => {
             if(!this.defaultSupplier() || !this.defaultSupplier()?.canSupply())
-                this.setDefaultSupplier();
-        })
+                this.resetDefaultSupplier();
+        });
+
+        // Set up demand calculation
+        this.totalDemand = ko.pureComputed(() => {
+            let sum = 0;
+            for (const demand of this.demands()) {
+                sum += demand.amount();
+            }
+            // Add trade route export demands (products leaving this island)
+            if (this.tradeList) {
+                sum += this.tradeList.inputAmount();
+            }
+            return sum;
+        });
+
+        this.nonDefaultSupplierProduction = ko.pureComputed(() => {
+            let sum = 0;
+            const defaultSupp = this.defaultSupplier();
+
+            // Sum production from all suppliers except the default one
+            for (const supplier of this.availableSuppliersNoRoutes()) {
+                if (supplier !== defaultSupp && supplier.canSupply()) {
+                    sum += supplier.defaultProduction();
+                }
+            }
+
+            // Add trade route imports (products coming to this island)
+            if (this.tradeList) {
+                sum += this.tradeList.outputAmount();
+
+                if (defaultSupp instanceof TradeRoute)
+                    sum -= defaultSupp.amount();
+            }
+
+            return sum;
+        });
+
+        // Update supplier demands when total demand or supplier production changes
+        this.demandCalculationSubscription = ko.computed(() => {
+            const total = this.totalDemand();
+            const nonDefaultProd = this.nonDefaultSupplierProduction();
+            const defaultSupp = this.defaultSupplier();
+
+            if (!defaultSupp) return;
+
+            if (nonDefaultProd >= total) {
+                // Non-default suppliers produce more than needed
+                this.excessProduction(nonDefaultProd - total);
+                defaultSupp.setDemand(0);
+            } else {
+                // Default supplier needs to fill the gap
+                this.excessProduction(0);
+                const remaining = total - nonDefaultProd;
+                defaultSupp.setDemand(remaining);
+            }
+        });
     }
 
     /**
      * Overwrite the current default supplier with the one used by default - a fectory in the region (if available) or passive trade
      * @returns 
      */
-    setDefaultSupplier(){
+    resetDefaultSupplier(){
         for (const factory of this.factories) {
             if (factory.canSupply()) {
                 this.updateDefaultSupplier(factory);
@@ -258,8 +348,8 @@ export class Demand {
             }
         });
 
-        // Note: Demand resolution now happens through Product.defaultSupplier
-        // No factory assignment at demand level
+        // Register this demand with the product
+        product.addDemand(this);
     }
 
     /**

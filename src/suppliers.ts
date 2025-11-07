@@ -104,6 +104,8 @@ export class ExtraGoodSupplier implements Supplier {
     public readonly island: Island;
     public productionList: ExtraGoodProduction[]; // ExtraGoodProduction[] - filtered entries where factory outputs this product
 
+    public readonly throughput: KnockoutObservable<number>;
+
     /**
      * Creates a new ExtraGoodSupplier instance
      * @param product - The product this supplier provides
@@ -124,6 +126,7 @@ export class ExtraGoodSupplier implements Supplier {
         this.product = extraGood;        
         this.island = island;
         this.productionList = []; // Will be populated by ExtraGoodProduction entries
+        this.throughput = ko.observable(0);
     }
 
     private getTotalRatio(): number {
@@ -175,14 +178,12 @@ export class ExtraGoodSupplier implements Supplier {
             // Required factory inputAmount = requested amount / ratio
             const requiredInputAmount = amount / totalRatio;
 
-            // Update factory's demandByExtraGoodSupplier to request this production
-            if (this.factory.demandByExtraGoodSupplier && typeof this.factory.demandByExtraGoodSupplier === 'function') {
-                this.factory.demandByExtraGoodSupplier(requiredInputAmount);
-            }
+            this.throughput(requiredInputAmount);
+
         }
     }
 
     unsetAsDefaultSupplier(): void {
-        this.factory.demandByExtraGoodSupplier(0);
+        this.throughput(0);
     }
 }
