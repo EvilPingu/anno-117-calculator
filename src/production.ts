@@ -1,5 +1,5 @@
 import { NamedElement, EPSILON, ko, dummyObservableArray } from './util';
-import {  AssetsMap } from './types';
+import {  AssetsMap, Island } from './types';
 import { ProductConfig, BuildingBuffConfig, PatronsConfig, EffectConfig, ItemConfig } from './types.config';
 import { Workforce } from './population';
 import { Region, Constructible, isConstructible } from './world';
@@ -22,8 +22,8 @@ export class Product extends NamedElement {
     public guid: number;
     public isAbstract: boolean;
     public factories: Factory[];
+    public readonly defaultFactoryGUID: number;
     public availableFactories: KnockoutObservableArray<Factory>;
-    public fixedFactory: KnockoutObservable<Factory | null>; // DEPRECATED - use defaultSupplier
     public visible: KnockoutComputed<boolean>;
     public extraGoodProductionList?: ExtraGoodProductionList;
     public extraGoodSuppliers?: ExtraGoodSupplier[]; // Suppliers for extra goods production (one per factory)
@@ -32,7 +32,7 @@ export class Product extends NamedElement {
     public passiveTradeSupplier?: PassiveTradeSupplier; // Passive trade supplier
     public availableSuppliers: KnockoutComputed<Supplier[]>; // All available suppliers (factories + extra goods)
     public defaultSupplier: KnockoutObservable<Supplier | null>; // User-selected default supplier
-    public island?: any; // Island reference for supplier management
+    public island?: Island; // Island reference for supplier management
 
     /**
      * Creates a new Product instance
@@ -65,8 +65,6 @@ export class Product extends NamedElement {
         this.factories = [];
         this.availableFactories = dummyObservableArray("Product.availableFactories");
 
-        this.fixedFactory = ko.observable(null);
-
         this.visible = ko.pureComputed(() => this.available());
 
         // Initialize extra good production list for tracking item-based production
@@ -74,27 +72,8 @@ export class Product extends NamedElement {
 
         // Initialize supplier management (will be fully set up in initSuppliers)
         this.defaultSupplier = ko.observable(null);
-        this.availableSuppliers = ko.pureComputed(() => {
-            const suppliers: Supplier[] = [];
-
-            // Add available factories
-            for (const factory of this.factories) {
-                if (factory.available()) {
-                    suppliers.push(factory);
-                }
-            }
-
-            // Add all extra good suppliers if available
-            if (this.extraGoodSuppliers) {
-                for (const supplier of this.extraGoodSuppliers) {
-                    if (supplier.canSupply(0)) {
-                        suppliers.push(supplier);
-                    }
-                }
-            }
-
-            return suppliers;
-        });
+        this.availableSuppliers = ko.dummyComputedObservableArray("Product.availableSuppliers");
+        this.availableFactories = ko.dummyComputedObservableArray("Product.availableFactories"); // throws if used before initialization in initSuppliers
     }
 
     addFactory(factory: Factory){
@@ -117,7 +96,7 @@ export class Product extends NamedElement {
         // Create extra good suppliers if there are extra good production entries
         if (this.extraGoodProductionList && this.extraGoodProductionList.entries.length > 0) {
             // Group entries by factory
-            const entriesByFactory = new Map<any, any[]>();
+            const entriesByFactory = new Map<Factory, ExtraGoodProduction[]>();
 
             for (const entry of this.extraGoodProductionList.entries) {
                 if (entry && entry.factory && entry.product === this) {
@@ -131,12 +110,44 @@ export class Product extends NamedElement {
 
             // Create one ExtraGoodSupplier per factory
             this.extraGoodSuppliers = [];
-            for (const [, entries] of entriesByFactory.entries()) {
-                const supplier = new ExtraGoodSupplier(this, island);
+            for (const [factory, entries] of entriesByFactory.entries()) {
+                const supplier = new ExtraGoodSupplier(factory, this, island);
                 supplier.productionList = entries;
                 this.extraGoodSuppliers.push(supplier);
             }
         }
+
+        this.availableSuppliers = ko.pureComputed(() => {
+            const suppliers: Supplier[] = [];
+
+            // Add available factories
+            for (const factory of this.factories) {
+                if (factory.available()) {
+                    suppliers.push(factory);
+                }
+            }
+
+            // Add all extra good suppliers if available
+            if (this.extraGoodSuppliers) {
+                for (const supplier of this.extraGoodSuppliers) {
+                    if (supplier.canSupply(0)) {
+                        suppliers.push(supplier);
+                    }
+                }
+            }
+
+            return suppliers;
+        });
+
+        for (const factory of this.factories) {
+            if (factory.available()) {
+                this.defaultSupplier(factory);
+                break;
+            }
+        }
+
+        if (this.defaultSupplier() == null)
+            this.defaultSupplier(this.passiveTradeSupplier);
     }
 }
 

@@ -11,7 +11,6 @@ export interface Supplier {
     // Identification
     readonly type: 'factory' | 'trade_route' | 'passive_trade' | 'extra_good';
     readonly product: Product | null;
-    readonly island: Island;
 
     // Production capabilities
     defaultProduction(): number;           // Current/baseline production amount
@@ -64,10 +63,10 @@ export class PassiveTradeSupplier implements Supplier {
     }
 
     /**
-     * Returns the manually set amount
+     * Only used if needed
      */
     defaultProduction(): number {
-        return this.amount();
+        return 0;
     }
 
     /**
@@ -92,7 +91,8 @@ export class PassiveTradeSupplier implements Supplier {
  */
 export class ExtraGoodSupplier implements Supplier {
     public readonly type: 'extra_good' = 'extra_good';
-    public readonly product: Product;
+    public readonly factory: Factory;
+    public readonly product: Product; // Extra good product
     public readonly island: Island;
     public productionList: any[]; // ExtraGoodProduction[] - filtered entries where factory outputs this product
 
@@ -101,17 +101,32 @@ export class ExtraGoodSupplier implements Supplier {
      * @param product - The product this supplier provides
      * @param island - The island this supplier operates on
      */
-    constructor(product: Product, island: Island) {
-        if (!product) {
+    constructor(factory: Factory, extraGood: Product, island: Island) {
+        if (!factory) {
+            throw new Error('ExtraGoodSupplier factory is required');
+        }
+        if (!extraGood) {
             throw new Error('ExtraGoodSupplier product is required');
         }
         if (!island) {
             throw new Error('ExtraGoodSupplier island is required');
         }
 
-        this.product = product;
+        this.factory = factory;
+        this.product = extraGood;        
         this.island = island;
         this.productionList = []; // Will be populated by ExtraGoodProduction entries
+    }
+
+    private getTotalRatio(): number {
+        let totalRatio = 0;
+        for (const entry of this.productionList) {
+            if (entry && entry.item && entry.factory) {
+                const scaling = typeof entry.item.scaling === 'function' ? entry.item.scaling() : entry.item.scaling;
+                totalRatio += (scaling * entry.defaultAmount) / entry.additionalOutputCycle;
+            }
+        }
+        return totalRatio;
     }
 
     /**
@@ -129,10 +144,10 @@ export class ExtraGoodSupplier implements Supplier {
     }
 
     /**
-     * Extra goods can supply up to their production amount
+     * Extra supplier can supply if there is at least one extra good production active.
      */
     canSupply(amount: number): boolean {
-        return this.defaultProduction() >= amount;
+        return this.getTotalRatio() > 0;
     }
 
     /**
@@ -146,24 +161,15 @@ export class ExtraGoodSupplier implements Supplier {
         // Calculate the production ratio: extra_good_amount per factory_input_amount
         // For each entry: entry.amount() = item.scaling() * defaultAmount * factory.inputAmount / additionalOutputCycle
         // Total ratio = sum of (item.scaling() * defaultAmount / additionalOutputCycle)
-        let totalRatio = 0;
-        let factory: Factory | null = null;
+        const totalRatio = this.getTotalRatio();
 
-        for (const entry of this.productionList) {
-            if (entry && entry.item && entry.factory) {
-                factory = entry.factory as Factory;
-                const scaling = typeof entry.item.scaling === 'function' ? entry.item.scaling() : entry.item.scaling;
-                totalRatio += (scaling * entry.defaultAmount) / entry.additionalOutputCycle;
-            }
-        }
-
-        if (factory && totalRatio > 0) {
+        if (totalRatio > 0) {
             // Required factory inputAmount = requested amount / ratio
             const requiredInputAmount = amount / totalRatio;
 
             // Update factory's demandByExtraGoodSupplier to request this production
-            if (factory.demandByExtraGoodSupplier && typeof factory.demandByExtraGoodSupplier === 'function') {
-                factory.demandByExtraGoodSupplier(requiredInputAmount);
+            if (this.factory.demandByExtraGoodSupplier && typeof this.factory.demandByExtraGoodSupplier === 'function') {
+                this.factory.demandByExtraGoodSupplier(requiredInputAmount);
             }
         }
     }
