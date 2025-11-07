@@ -39,6 +39,8 @@ export class TradeRoute implements Supplier {
     public amount: KnockoutObservable<number>;
     public minAmount: KnockoutObservable<number>; // User-set minimum amount
 
+    public readonly active: KnockoutObservable<boolean>; // when trade route is destructed, active makes canSupply return false and thus trigger unregistering as default supplier
+
     /**
      * Creates a new TradeRoute instance
      * @param config - Configuration object for the trade route
@@ -71,6 +73,8 @@ export class TradeRoute implements Supplier {
 
         this.minAmount = createFloatInput(minAmount, 0);
         this.amount = ko.observable(minAmount);
+
+        this.active = ko.observable(true);
     }
 
     /**
@@ -110,7 +114,11 @@ export class TradeRoute implements Supplier {
      * Deletes this trade route
      */
     delete(): void {
-        view.tradeManager.remove(this);
+        if(!this.active())
+            return;
+
+        this.active(false);
+        view.tradeManager.remove(this);        
     }
 
     // === SUPPLIER INTERFACE IMPLEMENTATION ===
@@ -125,8 +133,8 @@ export class TradeRoute implements Supplier {
     /**
      * Trade routes can always supply (as long as they exist) (Supplier interface)
      */
-    canSupply(_amount: number): boolean {
-        return true;
+    canSupply(): boolean {
+        return this.active();
     }
 
     /**
@@ -136,6 +144,16 @@ export class TradeRoute implements Supplier {
     setDemand(amount: number): void {
         const newAmount = Math.max(amount, this.minAmount());
         this.amount(newAmount);
+    }
+
+    /**
+     * Reset to minAmount or delete trade route
+     */
+    unsetAsDefaultSupplier(): void {
+        if (this.minAmount() > 0)
+            this.amount(this.minAmount());
+        else
+            this.delete();
     }
 }
 
@@ -278,10 +296,11 @@ export class TradeList {
 }
 
 interface TradeRouteConfig {
-    productGUID: string,
+    productGUID: number,
     from: string,
     to: string,
-    minAmount: string
+    minAmount: number,
+    isDefaultSupplier: boolean
 }
 
 /**
@@ -322,10 +341,11 @@ export class TradeManager {
             var text = localStorage.getItem(this.key);
             var json = text ? JSON.parse(text) : [];
             for (var r of json as TradeRouteConfig[]) {
-                const productGUID = parseInt(r.productGUID);
+                const productGUID = r.productGUID;
                 const from = resolve(r.from);
                 const to = resolve(r.to);
-                const minAmount = parseFloat(r.minAmount) || 0;
+                const minAmount = r.minAmount;
+                const isDefaultSupplier = r.isDefaultSupplier;
 
                 if (!from || !to)
                     continue;
@@ -335,6 +355,9 @@ export class TradeManager {
                 this.routes.push(route);
                 route.fromIslandProduct.tradeList.routes.push(route);
                 route.toIslandProduct.tradeList.routes.push(route);
+
+                if (isDefaultSupplier)
+                    route.toIslandProduct.updateDefaultSupplier(route);
             }
 
             this.persistenceSubscription = ko.computed(() => {
@@ -342,10 +365,11 @@ export class TradeManager {
 
                 for (var r of this.routes()) {
                     json.push({
-                        productGUID: r.product.guid.toString(),
+                        productGUID: r.product.guid,
                         from: r.from.isAllIslands() ? ALL_ISLANDS : r.from.name(),
                         to: r.to.isAllIslands() ? ALL_ISLANDS : r.to.name(),
-                        minAmount: r.minAmount().toString()
+                        minAmount: r.minAmount(),
+                        isDefaultSupplier: r.product.defaultSupplier() == r
                     });
                 }
 

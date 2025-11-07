@@ -485,7 +485,8 @@ export class PublicConsumerBuilding extends Consumer {
 export class Factory extends Consumer implements Supplier {
     // === SUPPLIER INTERFACE ===
     public readonly type: 'factory' = 'factory';            // Supplier type identifier
-    // product and island properties inherited from Consumer
+    public readonly product!: Product;
+    // island properties inherited from Consumer
 
     // === FACTORY IDENTIFICATION ===
     public isFactory: boolean;                              // Always true for Factory instances
@@ -542,6 +543,10 @@ export class Factory extends Consumer implements Supplier {
             }
             this.outputs.push(product);
         }
+        var product = this.getProduct();
+        if (product == null)
+            throw new Error(`Factory with GUID ${this.guid} has no products`);
+        this.product = product
         this.demands = ko.observableArray([]);
 
         // Self-effecting extra goods will be populated when ExtraGoodProduction entries are created
@@ -717,7 +722,6 @@ export class Factory extends Consumer implements Supplier {
 
         this.modules.forEach(m => m.applyBuffs(assetsMap));
 
-        this.product = this.getProduct();
         if (!this.icon && this.product)
             this.icon = this.product.icon as string;
 
@@ -780,7 +784,7 @@ export class Factory extends Consumer implements Supplier {
      * @param amount - The requested amount
      * @returns True if factory is available and in correct region
      */
-    canSupply(_amount: number): boolean {
+    canSupply(): boolean {
         return this.available();
     }
 
@@ -790,6 +794,10 @@ export class Factory extends Consumer implements Supplier {
      */
     setDemand(amount: number): void {
         this.inputAmountByOutput(amount / this.extraGoodFactor());
+    }
+
+    unsetAsDefaultSupplier(): void {
+        this.inputAmountByOutput(0);
     }
 
 

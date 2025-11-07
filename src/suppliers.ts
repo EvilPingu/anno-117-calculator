@@ -10,14 +10,15 @@ import { Factory } from './factories';
 export interface Supplier {
     // Identification
     readonly type: 'factory' | 'trade_route' | 'passive_trade' | 'extra_good';
-    readonly product: Product | null;
+    readonly product: Product;
 
     // Production capabilities
     defaultProduction(): number;           // Current/baseline production amount
-    canSupply(amount: number): boolean;    // Can this supplier fulfill amount?
+    canSupply(): boolean;    // Can this supplier fulfill amount?
 
     // Demand integration
     setDemand(amount: number): void;       // Request supplier to produce/import amount
+    unsetAsDefaultSupplier(): void;  // called by product when default supplier changes
 }
 
 /**
@@ -72,14 +73,21 @@ export class PassiveTradeSupplier implements Supplier {
     /**
      * Passive trade can always supply any amount (user responsibility)
      */
-    canSupply(_amount: number): boolean {
+    canSupply(): boolean {
         return true;
     }
 
     /**
-     * Passive trade doesn't propagate demand - user sets amount manually
+     * Passive trade doesn't propagate demand
      */
     setDemand(_amount: number): void {
+        // No-op: passive trade doesn't respond to demand
+    }
+
+    /**
+     * Passive trade doesn't propagate demand
+     */
+    unsetAsDefaultSupplier(): void {
         // No-op: passive trade doesn't respond to demand
     }
 }
@@ -146,7 +154,7 @@ export class ExtraGoodSupplier implements Supplier {
     /**
      * Extra supplier can supply if there is at least one extra good production active.
      */
-    canSupply(_: number): boolean {
+    canSupply(): boolean {
         return this.getTotalRatio() > 0;
     }
 
@@ -172,5 +180,9 @@ export class ExtraGoodSupplier implements Supplier {
                 this.factory.demandByExtraGoodSupplier(requiredInputAmount);
             }
         }
+    }
+
+    unsetAsDefaultSupplier(): void {
+        this.factory.demandByExtraGoodSupplier(0);
     }
 }

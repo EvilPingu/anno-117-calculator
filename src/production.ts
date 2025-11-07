@@ -29,10 +29,11 @@ export class Product extends NamedElement {
     public extraGoodSuppliers?: ExtraGoodSupplier[]; // Suppliers for extra goods production (one per factory)
 
     // === SUPPLIER MANAGEMENT ===
-    public passiveTradeSupplier?: PassiveTradeSupplier; // Passive trade supplier
+    public passiveTradeSupplier!: PassiveTradeSupplier; // Passive trade supplier
     public tradeList!: TradeList; // TradeList - manages trade routes for this product (initialized in initSuppliers)
     public availableSuppliers: KnockoutComputed<Supplier[]>; // All available suppliers (factories + extra goods)
     public defaultSupplier: KnockoutObservable<Supplier | null>; // User-selected default supplier
+    public defaultSupplierSubscription!: KnockoutComputed<void>; // Ensures that the default supplier is unset if it is no longer available
     public island?: Island; // Island reference for supplier management
 
     /**
@@ -134,7 +135,7 @@ export class Product extends NamedElement {
             // Add all extra good suppliers if available
             if (this.extraGoodSuppliers) {
                 for (const supplier of this.extraGoodSuppliers) {
-                    if (supplier.canSupply(0)) {
+                    if (supplier.canSupply()) {
                         suppliers.push(supplier);
                     }
                 }
@@ -143,17 +144,46 @@ export class Product extends NamedElement {
             return suppliers;
         });
 
+        this.defaultSupplierSubscription = ko.Computed(() => {
+            if(!this.defaultSupplier() || !this.defaultSupplier()?.canSupply())
+                this.setDefaultSupplier();
+        })
+    }
+
+    /**
+     * Overwrite the current default supplier with the one used by default - a fectory in the region (if available) or passive trade
+     * @returns 
+     */
+    setDefaultSupplier(){
         for (const factory of this.factories) {
-            if (factory.available()) {
-                this.defaultSupplier(factory);
-                break;
+            if (factory.canSupply()) {
+                this.updateDefaultSupplier(factory);
+                return;
             }
         }
 
-        if (this.defaultSupplier() == null)
-            this.defaultSupplier(this.passiveTradeSupplier);
+        this.updateDefaultSupplier(this.passiveTradeSupplier);
+    }
+
+    /**
+     * Unsets the current default supplier and sets the new one. Unsetting the old one resets updates the demand enforced by it.
+     * Setting the demand for the new one is handled by the product demand calculation.
+     * @param supplier The new default supplier
+     * @returns 
+     */
+    updateDefaultSupplier(supplier: Supplier){
+        if(supplier == null)
+            throw Error(`Supplier on ${this.name()} must not be set to null.`);
+
+        if(supplier == this.defaultSupplier())
+            return;
+
+        this.defaultSupplier()?.unsetAsDefaultSupplier();
+        this.defaultSupplier(supplier);
     }
 }
+
+
 
 /**
  * Represents a meta product that groups other products
