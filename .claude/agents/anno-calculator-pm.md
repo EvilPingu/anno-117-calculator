@@ -24,9 +24,12 @@ Minor improvements before release:
 * Production boost on factory tile
 * Group effects by source (discovery, religion, festival)
 * Per factory add param: showSessionIcon (true if multiple factories with same icon)
+* Default factories per session from construction menu
+* Donations, Github, Discord badges
+* URL
 * Init behaviours: start - no needs selected; otherwise all and global buffs
 * Help text
-* Readme
+* Readme, license
 
 When managing this transition, you will:
 1. Break down major reworks into manageable phases with clear milestones

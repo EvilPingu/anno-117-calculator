@@ -4,7 +4,6 @@ import {
   DLCConfig, 
   NumberInputHandlerParams, 
   NumericBounds,
-  AssetsMap,
   LocaTextConfig
 } from './types';
 import { NeedConsumptionConfig } from './types.config';
@@ -51,20 +50,6 @@ export let EPSILON = 0.0000001;
 /** Special identifier for "All Islands" view */
 export let ALL_ISLANDS = "All Islands";
 
-/**
- * Sets default fixed factory assignments for specific products
- * Assigns rum, cotton fabric, and coffee to their default New World production locations
- * @param assetsMap - Map of all available assets
- */
-export function setDefaultFixedFactories(assetsMap: AssetsMap): void {
-    // Default rum, cotton fabric and coffee to the new world production
-    assetsMap.get(1010240)?.fixedFactory(assetsMap.get(1010318));
-    assetsMap.get(1010257)?.fixedFactory(assetsMap.get(1010340));
-    assetsMap.get(120032)?.fixedFactory(assetsMap.get(101252));
-    assetsMap.get(1010216)?.fixedFactory(assetsMap.get(1010294));
-    assetsMap.get(1010214)?.fixedFactory(assetsMap.get(1010292));
-    assetsMap.get(1010206)?.fixedFactory(assetsMap.get(1010284));
-}
 
 /** Number formatter using the browser's locale */
 const formater = new Intl.NumberFormat(navigator.language || "en").format;
@@ -298,7 +283,7 @@ export class NamedElement {
         
         // Create computed name that uses localization
         this.name = ko.computed(() => {
-            const view = (window as any).view;
+            const view = window.view;
             if (!view || !view.settings) {
                 return config.name || "";
             }
@@ -316,7 +301,7 @@ export class NamedElement {
         });
 
         // Set up icon from params if available
-        const params = (window as any).params;
+        const params = window.params;
         if (config.iconPath && params && params.icons) {
             this.icon = params.icons[config.iconPath];
         }

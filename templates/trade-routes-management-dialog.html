@@ -7,38 +7,6 @@
 
             </div>
             <div class="modal-body">
-                <table class="table table-striped table-sm" data-bind="if: $root.tradeManager.npcRoutes().length">
-                    <tbody class="mb-3" data-bind="foreach: $root.tradeManager.npcRoutes">
-                        <tr>
-                            <td>
-                                <img class="icon-sm" src="../icons/icon_marketplace_2d_light.png" data-bind="attr: {src: $data.trader.icon, alt: $data.trader.name}" />
-                                <span data-bind="text: $data.trader.name"></span>
-                            </td>
-                            <td><span>&rarr;</span></td>
-                            <td>
-                                <span data-bind="if: $data.to.session">
-                                    <img src="../icons/icon_marketplace_2d_light.png" class="icon-sm icon-light" data-bind="attr: {src: $data.to.session.icon}" />
-                                </span>
-                                <a href="#" data-dismiss="modal" data-bind="text: $data.to.name, click: () => {setTimeout(() => { $root.island($data.to); $root.selectedFactory($data.toFactory);$('#factory-config-dialog').modal('show')}, 500);}"></a>
-                            </td>
-                            <td>
-                                <img class="icon-sm" src="../icons/icon_marketplace_2d_light.png" data-bind="attr: {src: $data.toFactory.product.icon, alt: $data.toFactory.product.name}" />
-                            </td>
-                            <td>
-                                <span data-bind="text: formatNumber($data.amount)"></span>
-                                <span> t/min</span>
-                            </td>
-                            <td>
-                                <div class="float-right">
-                                    <button class="btn btn-secondary btn-sm" data-bind="click: () => $data.checked(false)">
-                                        <span class="fa fa-trash"> </span>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
                 <table class="table table-striped table-sm">
                     <tbody data-bind="foreach: $root.tradeManager.routes">
                         <tr>

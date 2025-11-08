@@ -13,6 +13,8 @@
     "test:computed": "playwright test tests/computed",
     "test:e2e": "playwright test tests/e2e",
     "test:factory-dialogs": "playwright test tests/binding/factory-config-dialogs.spec.ts --reporter=list",
+    "test:init-errors": "playwright test tests/e2e/initialization-errors.spec.ts --reporter=list",
+    "test:dom-inspect": "playwright test tests/e2e/dom-inspection.spec.ts --reporter=list",
     "test:report": "playwright show-report",
     "build": "webpack",
     "build:ts": "tsc",

@@ -284,6 +284,10 @@ export const texts: Record<string, Record<string, string>> = {
         "russian": "Тонн в минуту (т./мин.)",
         "brazilian": "Toneladas por minuto (t/min)"
     },
+    setAsDefault: {
+        "english": "Obtain goods from",
+        "german": "Ware davon beziehen"
+    },
     showIslandOnCreation: {
         english: "After creating a new island display it",
         french: "Afficher la nouvelle île après sa création",

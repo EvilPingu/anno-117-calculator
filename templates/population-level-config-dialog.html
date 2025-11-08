@@ -54,9 +54,9 @@
 
                 <!-- Population Level Needs -->
                 <div data-bind="debug: 'Need Category', foreach: $data.visibleNeedCategories()">
-                    <collapsible params="id: $data.needCategory.id, heading: $data.needCategory.name, data: $data, checkbox: $data.needCategory.checked">
+                    <collapsible params="id: $data.id, heading: $data.name, data: $data, checkbox: $data.checked">
                         <table class="table table-striped table-fixed">
-                            <tbody data-bind="foreach: $data.visiblePopulationLevelNeeds">
+                            <tbody data-bind="foreach: $data.visiblePopulationLevelNeeds()">
                                 <tr data-bind="debug: 'Population Level Need', css:{inactive: $data.isInactive()}">
                                     <td>
                                         <span class="custom-control custom-checkbox" data-bind="title: $data.name()">

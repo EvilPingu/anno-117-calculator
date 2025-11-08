@@ -25,7 +25,7 @@ test.describe('Factory Config Dialog Binding Validation', () => {
     errorDetector.listenForErrors(page);
   });
 
-  test('factory config dialogs bind without errors for all categories', async ({ page }) => {
+  test('product config dialogs bind without errors for all categories', async ({ page }) => {
     // Set longer timeout for this test
     test.setTimeout(60000);
 
@@ -35,7 +35,7 @@ test.describe('Factory Config Dialog Binding Validation', () => {
     // Wait for application to fully initialize (same pattern as template-bindings.spec.ts)
     await page.waitForLoadState('networkidle');
 
-    // Wait for factory tiles to appear
+    // Wait for product tiles to appear (product tiles replaced factory tiles)
     await page.waitForSelector('.ui-fchain-item, .ui-service-building-item', {
       timeout: 10000,
       state: 'attached',
@@ -62,8 +62,9 @@ test.describe('Factory Config Dialog Binding Validation', () => {
     // Wait for sections to expand
     await page.waitForTimeout(1000);
 
-    // Get all factory config buttons - filter to only visible ones
-    const allButtons = await page.locator('.ui-fchain-item .btn[data-target="#factory-config-dialog"], .ui-service-building-item .btn[data-target="#factory-config-dialog"]').all();
+    // Get all product/factory config buttons - filter to only visible ones
+    // Note: Product tiles now have product-config-dialog, but we keep factory-config-dialog for public services
+    const allButtons = await page.locator('.ui-fchain-item .btn[data-target="#product-config-dialog"], .ui-fchain-item .btn[data-target="#factory-config-dialog"], .ui-service-building-item .btn[data-target="#factory-config-dialog"]').all();
 
     // Filter to only visible buttons
     const factoryButtons: typeof allButtons = [];
@@ -143,8 +144,8 @@ test.describe('Factory Config Dialog Binding Validation', () => {
         // Click button (force click to handle potential visibility issues)
         await button.click({ force: true });
 
-        // Wait for modal to open
-        await page.waitForSelector('#factory-config-dialog.show', {
+        // Wait for modal to open (either product or factory dialog)
+        await page.waitForSelector('#product-config-dialog.show, #factory-config-dialog.show', {
           timeout: 5000,
           state: 'visible',
         });

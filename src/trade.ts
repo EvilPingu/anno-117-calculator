@@ -1,5 +1,5 @@
 import { ALL_ISLANDS, createFloatInput, EPSILON, ko } from './util';
-import { Factory, Factory as FactoryClass } from './factories';
+import { Factory as FactoryClass } from './factories';
 import { Island } from './world';
 import { Supplier } from './suppliers';
 import { Product } from './production';
@@ -11,13 +11,16 @@ declare const view: any;
 
 interface ITradeList {
     island: Island;
-    factory: Factory;
-    routes: any;
-    unusedIslands: any;
-    selectedIsland: any;
-    export: any;
-    newAmount: any;
-    visible: any;
+    product: Product;
+    routes: KnockoutObservableArray<TradeRoute>;
+    inputAmount: KnockoutComputed<number>;
+    outputAmount: KnockoutComputed<number>;
+    amount: KnockoutComputed<number>;
+    unusedIslands: KnockoutObservableArray<Island>;
+    selectedIsland: KnockoutObservable<Island>;
+    export: KnockoutObservable<boolean>;
+    newAmount: KnockoutObservable<number>;
+    visible: KnockoutComputed<boolean>;
     onShow(): void;
 }
 
@@ -164,15 +167,15 @@ export class TradeRoute implements Supplier {
 export class TradeList {
     public island: Island;
     public product: Product;
-    public routes: any;
-    public inputAmount: any;
-    public outputAmount: any;
-    public amount: any;
-    public unusedIslands: any;
-    public selectedIsland: any;
-    public export: any;
-    public newAmount: any;
-    public visible: any;
+    public routes: KnockoutObservableArray<TradeRoute>;
+    public inputAmount: KnockoutComputed<number>;
+    public outputAmount: KnockoutComputed<number>;
+    public amount: KnockoutComputed<number>;
+    public unusedIslands: KnockoutObservableArray<Island>;
+    public selectedIsland: KnockoutObservable<Island>;
+    public export: KnockoutObservable<boolean>;
+    public newAmount: KnockoutObservable<number>;
+    public visible: KnockoutComputed<boolean>;
 
     /**
      * Creates a new TradeList instance
@@ -232,7 +235,7 @@ export class TradeList {
      * @returns True if a route can be created
      */
     canCreate(): boolean {
-        return this.selectedIsland() && !this.selectedIsland().isAllIslands() && this.newAmount();
+        return this.selectedIsland() != null && !this.selectedIsland().isAllIslands() && this.newAmount() > EPSILON;
     }
 
     /**

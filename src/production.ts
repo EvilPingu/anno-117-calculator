@@ -1,4 +1,4 @@
-import { NamedElement, EPSILON, ko, dummyObservableArray } from './util';
+import { NamedElement, EPSILON, ko, dummyObservableArray, dummyComputed } from './util';
 import {  AssetsMap } from './types';
 import { ProductConfig, BuildingBuffConfig, PatronsConfig, EffectConfig, ItemConfig, ProductFilterConfig } from './types.config';
 import { Workforce } from './population';
@@ -24,7 +24,6 @@ export class Product extends NamedElement {
     public isAbstract: boolean;
     public factories: Factory[];
     public availableFactories: KnockoutObservableArray<Factory>;
-    public visible: KnockoutComputed<boolean>;
     public extraGoodProductionList?: ExtraGoodProductionList;
     public extraGoodSuppliers?: ExtraGoodSupplier[]; // Suppliers for extra goods production (one per factory)
 
@@ -43,6 +42,8 @@ export class Product extends NamedElement {
     public defaultSupplierSubscription!: KnockoutComputed<void>; // Ensures that the default supplier is unset if it is no longer available
     public extraGoodProduction!: KnockoutComputed<number>;
     public island?: Island; // Island reference for supplier management
+
+    public notes: KnockoutObservable<string>;
 
     /**
      * Creates a new Product instance
@@ -75,8 +76,6 @@ export class Product extends NamedElement {
         this.factories = [];
         this.availableFactories = dummyObservableArray("Product.availableFactories");
 
-        this.visible = ko.pureComputed(() => this.available());
-
         // Initialize extra good production list for tracking item-based production
         this.extraGoodProductionList = new ExtraGoodProductionList();
 
@@ -85,13 +84,15 @@ export class Product extends NamedElement {
         this.excessProduction = ko.observable(0);
 
         // Will be initialized properly in initSuppliers after suppliers are created
-        this.totalDemand = ko.dummyComputed("product.totalDemand");
-        this.nonDefaultSupplierProduction = ko.dummyComputed("product.nonDefaultSupplierProduction");
+        this.totalDemand = dummyComputed("product.totalDemand");
+        this.nonDefaultSupplierProduction = dummyComputed("product.nonDefaultSupplierProduction");
 
         // Initialize supplier management (will be fully set up in initSuppliers)
         this.defaultSupplier = ko.observable(null);
-        this.availableSuppliersNoRoutes = ko.dummyComputedObservableArray("Product.availableSuppliers");
-        this.availableFactories = ko.dummyComputedObservableArray("Product.availableFactories"); // throws if used before initialization in initSuppliers
+        this.availableSuppliersNoRoutes = dummyComputed("Product.availableSuppliers");
+        this.availableFactories = dummyObservableArray("Product.availableFactories"); // throws if used before initialization in initSuppliers
+
+        this.notes = ko.observable("");
     }
 
     addFactory(factory: Factory){
@@ -179,7 +180,7 @@ export class Product extends NamedElement {
             return suppliers;
         });
 
-        this.defaultSupplierSubscription = ko.Computed(() => {
+        this.defaultSupplierSubscription = ko.computed(() => {
             if(!this.defaultSupplier() || !this.defaultSupplier()?.canSupply())
                 this.resetDefaultSupplier();
         });
@@ -428,7 +429,7 @@ export class Buff extends NamedElement {
     };
     public workforceMaintenanceFactorUpgrade: number;
     public additionalOutputs: {
-        product: Product;
+        product?: Product;
         forceProductSameAsFactoryOutput: boolean;
         additionalOutputCycle: number;
         amount: number;

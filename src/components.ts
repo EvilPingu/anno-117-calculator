@@ -1,6 +1,7 @@
 import { ResidenceNeed } from './consumption';
 import { Consumer } from './factories';
 import { PopulationLevel, ResidenceBuilding } from './population';
+import { Product } from './production';
 import { NumberInputHandler, EPSILON, ko, debugBindingContext, logAssetInfo } from './util';
 import { Constructible, Region } from './world';
 
@@ -159,7 +160,7 @@ interface Demand {
      */
     ko.components.register('notes-section', {
         template:
-            `<div class="form-group notes-section" data-bind="if: $data != null && $data.notes != null">
+            `<div class="form-group notes-section" data-bind="debug: 'Notes', if: $data != null && $data.notes != null">
                   <textarea class="form-control" data-bind="textInput: $data.notes, attr: {placeholder: $root.texts.notes.name()}"></textarea>
             </div>`
     });
@@ -170,7 +171,7 @@ interface Demand {
      */
     ko.components.register('lock-toggle', {
         template:
-            `<div style="cursor: pointer" data-bind="click: () => {checked(!checked());}">
+            `<div style="cursor: pointer" data-bind="debug: 'Lock toggle', click: () => {checked(!checked());}">
                  <img class="icon-sm icon-light" src="icons/icon_unlock.png" data-bind="style: {display : checked()? 'none' : 'inherit'}">
                  <img class="icon-sm icon-light" src="icons/icon_lock.png" style="display: none;"  data-bind="style: {display : checked()? 'inherit' : 'none'}">
             </div>`
@@ -185,7 +186,7 @@ interface Demand {
     viewModel: function (asset: Asset) {
         this.asset = asset;
     },
-    template: `<img class="icon-sm" src="" data-bind="attr: { src: asset.icon ? asset.icon : null, alt: asset.name, title: asset.name}">`
+    template: `<img class="icon-sm" src="" data-bind="debug: 'Asset icon', attr: { src: asset.icon ? asset.icon : null, alt: asset.name, title: asset.name}">`
 });
 
 /**
@@ -202,7 +203,7 @@ interface Demand {
         this.$root = window.view;
     },
     template:
-        `<div class="ui-fchain-item-tr-button" data-bind="if: hasButton">
+        `<div class="ui-fchain-item-tr-button" data-bind="debug: 'Factory header', if: hasButton">
             <div>
                 <button class="btn btn-light btn-sm" data-bind="click: () => {$root.selectedFactory($data.instance())}" data-toggle="modal" data-target="#factory-config-dialog">
                     <span class="fa fa-sliders"></span>
@@ -218,6 +219,7 @@ interface Demand {
         </div>`
 });
 
+
 /**
  * Residence label component for displaying residence information
  * Shows population level icon, residence icon, and floor count
@@ -228,7 +230,7 @@ interface Demand {
         this.residence = residence;
     },
     template:
-        `<div class="inline-list mr-3" data-bind="attr: {title: residence.name}">
+        `<div class="inline-list mr-3" data-bind="debug: 'Residence label', attr: {title: residence.name}">
             <div data-bind="component: {name: 'asset-icon', params: residence.populationLevel}"></div>
             <div data-bind="component: {name: 'asset-icon', params: residence}"></div>
             <div data-bind="text: residence.floorCount"></div>
@@ -249,8 +251,8 @@ interface Demand {
         this.texts = window.view.texts;
     },
     template:
-        `<div class="inline-list-centered" data-bind="foreach: entries">
-             <div class="inline-list mr-3" data-bind="if: product.available() && ($parent.filter == null || $parent.filter.has(product))">
+        `<div class="inline-list-centered" data-bind="debug: 'Residence Effect Entries', foreach: entries">
+             <div class="inline-list mr-3" data-bind="debug: 'Residence Effect Entry', if: product.available() && ($parent.filter == null || $parent.filter.has(product))">
                 <div data-bind="component: { name: 'asset-icon', params: product}" ></div>
                 <div data-bind="if: consumptionModifier !== 0">
                     <img class="icon-sm icon-light ml-1" src="icons/icon_marketplace_2d_light.png" data-bind="attr: {title: $parent.texts.reduceConsumption.name}">
@@ -263,7 +265,7 @@ interface Demand {
                 <div class="inline-list" data-bind="if: suppliedBy.length !== 0">
                     <img class="icon-sm icon-light ml-1" src="icons/icon_transfer_goods_light.png" data-bind="attr: {title: $parent.texts.bonusSupply.name}">
                     <div class="inline-list" data-bind="foreach: {data: suppliedBy, as: 'product'}">
-                        <span data-bind="component: {name: 'asset-icon', params: product}"></span>
+                        <span data-bind="debug: 'Supplied by', component: {name: 'asset-icon', params: product}"></span>
                     </div>
                 </div>
             </div>
@@ -285,7 +287,7 @@ interface Demand {
     }, template:
         ` <div class="ui-fchain-item-icon-replacement">
             <span class="strike-through">
-                <img class="icon-sm icon-light" src="" data-bind="attr: { src: old.icon ? old.icon : null, alt: old.name }">
+                <img class="icon-sm icon-light" src="" data-bind="debug: 'Replacement', attr: { src: old.icon ? old.icon : null, alt: old.name }">
             </span>
             <!-- ko if: replacing -->
             <div class="ui-replacement-spacer">
@@ -310,7 +312,7 @@ interface Demand {
         this.texts = window.view.texts;
     }, template:
         `<div class="input-group input-group-short spinner float-left" style="max-width: 10rem;">
-            <div class="input-group-prepend" data-bind="src: {title: texts.residences.name()}">
+            <div class="input-group-prepend" data-bind="debug: 'Constructed buildings input', src: {title: texts.residences.name()}">
                 <div class="input-group-text">
                     <img class="icon-sm icon-light" src="icons/icon_house_white.png" />
                 </div>
@@ -367,7 +369,7 @@ interface Demand {
         this.amount = params.amount;
         this.texts = window.view.texts;
     }, template:
-        `<div data-bind="src: { title: texts.extraGoods.name}">
+        `<div data-bind="debug: 'Additional output', src: { title: texts.extraGoods.name}">
             <img class="icon-sm icon-light mr-2" src="icons/icon_add_goods_socket_white.png"/>
             <span data-bind="text: formatNumber(amount()) + ' t/min'"></span>
         </div>`
@@ -444,9 +446,9 @@ interface Demand {
 
     }, template:
         `<fieldset class="mt-4" data-bind="class: fieldsetClass">
-            <legend class="collapser collapsed" data-toggle="collapse" data-bind="attr: {'data-target' : target}, css: {'collapsed' : collapser.collapsed()}">
+            <legend class="collapser collapsed" data-toggle="collapse" data-bind="debug: 'Collapser', attr: {'data-target' : target}, css: {'collapsed' : collapser.collapsed()}">
                 <div class="summary" data-bind="if: hasSummary">
-                    <span class="float-right" data-bind="class: summaryClass">
+                    <span class="float-right" data-bind="debug: 'Summary', class: summaryClass">
                         <span data-bind="text: formatNumber(summary(), summaryWithSign)"></span>
                         <span> t/min</span>
                     </span>
@@ -458,7 +460,7 @@ interface Demand {
                 <!-- /ko -->
                 <!-- ko if: hasCheckbox -->
                 <span class="custom-control custom-checkbox ml-1" style="display: initial">
-                    <input type="checkbox" class="custom-control-input" data-bind="checked: checked, attr: { id: target + '-check-all' }">
+                    <input type="checkbox" class="custom-control-input" data-bind="debug: 'Checkbox', checked: checked, attr: { id: target + '-check-all' }">
                     <label class="custom-control-label" data-bind="attr: {for: target + '-check-all'}">
                         <span data-bind="text:heading"></span>
                     </label>
@@ -488,7 +490,7 @@ interface Demand {
  */
 (ko as any).components.register('consumer-residence', {
     template:
-        `<div class="inline-list" style="cursor: pointer" data-dismiss="modal" data-bind="click: () => {setTimeout(() => { $root.selectedPopulationLevel($data.consumer.populationLevel); $('#population-level-config-dialog').modal('show')}, 500);}" >
+        `<div class="inline-list" style="cursor: pointer" data-dismiss="modal" data-bind="debug: 'Consumer: Residence', click: () => {setTimeout(() => { $root.selectedPopulationLevel($data.consumer.populationLevel); $('#population-level-config-dialog').modal('show')}, 500);}" >
             <div data-bind="component: {name: 'asset-icon', params: $data.consumer.populationLevel}"></div>
             <span class="ml-2" data-bind="text: $data.consumer.populationLevel.name"></span>
         </div>`
@@ -501,7 +503,7 @@ interface Demand {
  */
 (ko as any).components.register('consumer-factory', {
     template:
-        `<div class="inline-list" style="cursor: pointer" data-bind="click: () => {$root.selectedFactory($data.consumer);}" >
+        `<div class="inline-list" style="cursor: pointer" data-bind="debug: 'Consumer: Factory', click: () => {$root.selectedFactory($data.consumer);}" >
             <div data-bind="component: {name: 'asset-icon', params: $data.consumer}"></div>
             <span class="ml-2" data-bind="text: $data.consumer.getRegionExtendedName()"></span>
         </div>`
@@ -514,7 +516,7 @@ interface Demand {
  */
 (ko as any).components.register('consumer-module', {
     template:
-        `<div class="inline-list" style="cursor: pointer" data-bind="click: () => {$root.selectedFactory($data.consumer);}" >
+        `<div class="inline-list" style="cursor: pointer" data-bind="debug: 'Consumer: Module', click: () => {$root.selectedFactory($data.consumer);}" >
             <div data-bind="component: {name: 'asset-icon', params: $data.consumer}"></div>
             <div class="ml-2" data-bind="component: {name: 'asset-icon', params: $data.module}"></div>
             <span class="ml-2" data-bind="text: $data.module.name() + ': ' + $data.consumer.getRegionExtendedName()"></span>
@@ -545,19 +547,19 @@ interface Demand {
 });
 
 /**
- * Consumer view component for displaying a list of factory demands
- * Shows a table of all demands for a factory with their amounts
+ * Consumer view component for displaying a list of product demands
+ * Shows a table of all demands for a product with their amounts
  * @param params - Component parameters
- * @param params.factory - The factory to display demands for
+ * @param params.product - The product to display demands for
  */
 (ko as any).components.register('consumer-view', {
-    viewModel: function (params: any) {
-        this.factory = params.factory as Consumer;
-        this.populationResidenceIndices = new Map() as Map<number, number>;
-        (this.factory as Consumer).island.residenceBuildings.forEach((r, i) => this.populationResidenceIndices.set(r, i));
+    viewModel: function (params: {product: Product}) {
+        this.product = params.product;
+        this.populationResidenceIndices = new Map<number, number>();
+        params.product.island?.residenceBuildings.forEach((r, i) => this.populationResidenceIndices.set(r, i));
 
         this.demands = ko.pureComputed(() => {
-            var demands = this.factory.demands().filter((d: Demand) => d.amount() > EPSILON);
+            var demands = this.product.demands().filter((d: Demand) => d.amount() > EPSILON);
             return demands.sort((a: Demand, b: Demand) => {
                 if (a.consumer instanceof ResidenceNeed && b.consumer instanceof ResidenceNeed)
                     return this.populationResidenceIndices.get(a.consumer.residence.populationLevel) - this.populationResidenceIndices.get(b.consumer.residence.populationLevel);
@@ -587,7 +589,7 @@ interface Demand {
             <tbody data-bind="foreach: demands">
                 <tr>
                     <td>
-                        <div data-bind="component: { name: 'consumer-entry', params: $data}"></div>
+                        <div data-bind="debug: 'Demand', component: { name: 'consumer-entry', params: $data}"></div>
                     </td>
                     <td>
                         <div class="float-right">
@@ -612,22 +614,22 @@ interface Demand {
         this.buffs = params.buffs;
         this.texts = window.view.texts;
     }, template:
-        `<div class="inline-list" data-bind="foreach: buffs">
+        `<div class="inline-list" data-bind="debug: 'Buffs', foreach: buffs">
             <!-- productivity -->
-            <div data-bind="if: $data.productivityUpgrade != 0">
+            <div data-bind="debug: 'Productivity Upgrade', if: $data.productivityUpgrade != 0">
                 <span data-bind="text: formatNumber($data.productivityUpgrade, true) + ' %'"></span>
             </div>
             <!-- fuel upgrade-->
-            <div data-bind="if: $data.fuelDurationPercent != 0">
+            <div data-bind="debug: 'Fuel duration',if: $data.fuelDurationPercent != 0">
                 <span data-bind="text: formatNumber($data.fuelDurationPercent, true) + ' % s per coal'"></span>
             </div>
             <!-- extra goods -->
-            <span data-bind="if: $data.additionalOutputs && $data.additionalOutputs.length">
+            <span data-bind="debug: 'additional outputs', if: $data.additionalOutputs && $data.additionalOutputs.length">
                 <span class="inline-list-centered">
                     <img class="icon-sm icon-light mr-2" src="icons/icon_add_goods_socket_white.png" />
                     <!-- ko foreach: $data.additionalOutputs -->
                     <span style="flex: 100 1 auto;"></span>
-                    <span style="flex: auto;" data-bind="if: !!$data.product && $data.product.visible()">
+                    <span style="flex: auto;" data-bind="debug: 'Product', if: !!$data.product && $data.product.available()">
                         <img class="icon-sm" data-bind="attr: { src: $data.product && $data.product.icon ? $data.product.icon  : '?', alt: $data.product?.name }" />
                     </span>
                     <span style="flex: 100 1 auto;"></span>
@@ -635,20 +637,20 @@ interface Demand {
                 </span>
             </span>
             <!-- input replacements -->
-            <div data-bind="if: $data.replaceInputs">
+            <div data-bind="debug: 'Replace Inputs', if: $data.replaceInputs">
                 <div data-bind="foreach: $data.replaceInputs">
                     <replacement params="{old: $data.oldInput, new: $data.newInput}"></replacement>
                 </div>
             </div>
             <!-- workforce maintenance -->
-            <div data-bind="if: $data.workforceMaintenanceFactorUpgrade != 0">
+            <div data-bind="debug: 'Workforce maintenance', if: $data.workforceMaintenanceFactorUpgrade != 0">
                 <span class="inline-list-centered">
                     <span data-bind="text: formatNumber($data.workforceMaintenanceFactorUpgrade, true) + ' %'"></span>
                     <img class="icon-sm icon-light" data-bind="attr: { src: $root.island().workforce[0].icon ? $root.island().workforce[0].icon  : null, alt: $root.island().workforce[0].name }" />
                 </span>
             </div>
             <!-- workforce replacement -->
-            <div data-bind="if: $data.replaceWorkforce">
+            <div data-bind="debug: 'replace workforce', if: $data.replaceWorkforce">
                 <replacement params="{old: $data.replaceWorkforce.oldWorkforce, new: $data.replaceWorkforce.newWorkforce}"></replacement>
             </div>
         </div>`

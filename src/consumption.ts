@@ -5,6 +5,7 @@ import { NeedCategoryConfig, NeedConfig } from './types.config';
 import { Demand, Product } from './production';
 import { Island, Region } from './world';
 import { Factory } from './factories';
+import { ResidenceEffectView } from './views';
 
 
 declare const view: any;
@@ -57,7 +58,7 @@ export class Need {
         this.supplyWeight = config.supplyWeight;
         this.attributes = new Map()
         for (let attr in config.needAttributes){
-            this.attributes.set((window as any).view.literalsMap.get(attr), config.needAttributes[attr]);
+            this.attributes.set(window.view.literalsMap.get(attr), config.needAttributes[attr]);
         }
         
 
@@ -211,7 +212,7 @@ export class ResidenceNeed {
             if(!this.checked())
                 return 0;
             
-            return this.residence.buildings.constructed() * this.needConsumptionRate * (window as any).view.settings.selectedNeedConsumptionSetting().consumptionFactor;
+            return this.residence.buildings.constructed() * this.needConsumptionRate * window.view.settings.selectedNeedConsumptionSetting().consumptionFactor;
         });
 
         this.residents = ko.pureComputed(() => {
@@ -267,8 +268,8 @@ export class ResidenceNeed {
         if (populationLevelNeed) {
             // Create residence effect view using all residences of the population level
             const heading = `${this.residence.populationLevel.name()}: ${this.need.product.name}`;
-            (window as any).view.selectedResidenceEffectView(
-                new (window as any).ResidenceEffectView(
+            window.view.selectedResidenceEffectView(
+                new ResidenceEffectView(
                     this.residence.populationLevel.allResidences(), 
                     heading, 
                     this

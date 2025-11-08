@@ -1,4 +1,4 @@
-import { ALL_ISLANDS, setDefaultFixedFactories, NamedElement, Option, ko, BuildingsCalc } from './util';
+import { ALL_ISLANDS, NamedElement, Option, ko, BuildingsCalc } from './util';
 import { texts } from './i18n';
 import { 
  
@@ -607,6 +607,9 @@ export class Island {
                         attr(parseInt(localStorage.getItem(id)));
 
                     attr.subscribe((val: boolean) => localStorage.setItem(id, val ? "1" : "0"));
+
+                    if (isNew) // persist initial values, in case initialization logic changes with newer calculator version
+                        attr.valueHasMutated();
                 }
             }
 
@@ -625,6 +628,9 @@ export class Island {
 
                         localStorage.setItem(id, val.toString());
                     });
+
+                    if (isNew)
+                        attr.valueHasMutated();
                 }
             }
 
@@ -644,6 +650,9 @@ export class Island {
                         localStorage.setItem(id, val.toString());
                     });
                 }
+
+                if (isNew)
+                    attr.valueHasMutated();
             }
 
             persistString = (obj: any, attributeName: string, storageName?: string) => {
@@ -765,9 +774,6 @@ export class Island {
             }
         }
 
-        if (isNew)
-            setDefaultFixedFactories(assetsMap);
-
 
         this.allEffects = [];
         // Set up island effects
@@ -874,6 +880,8 @@ export class Island {
 
 
             if (localStorage) {
+                persistString(p, "notes");
+
                 // Restore default supplier from localStorage
                 const typeKey = p.guid + ".defaultSupplier.type";
                 const idKey = p.guid + ".defaultSupplier.id";
@@ -1036,7 +1044,6 @@ export class Island {
 
         for (let f of this.consumers) {
             persistBuildings(f);
-            persistString(f, "notes");
         }
 
         this.workforce = this.workforce.filter(w => w.demands().length);

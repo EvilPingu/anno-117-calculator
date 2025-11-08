@@ -12,6 +12,7 @@ import {    Island,
     Region,
      Constructible } from './world';
 import { Consumer } from './factories';
+import { ResidenceEffectView } from './views';
 
 declare const view: any;
 
@@ -67,7 +68,7 @@ export class ResidenceBuilding extends NamedElement implements Constructible{
         // Explicit assignments
 
         this.island = island;
-        this.associatedRegions = config.associatedRegions.map(r => (window as any).view.literalsMap.get(r));
+        this.associatedRegions = config.associatedRegions.map(r => window.view.literalsMap.get(r));
         //this.upgradedBuildingGuids = config.possibleUpgrades;
         const populationLevel = assetsMap.get(config.populationLevel);
         if (!populationLevel) {
@@ -256,8 +257,8 @@ export class ResidenceBuilding extends NamedElement implements Constructible{
      */
     prepareResidenceEffectView(): void {
         const heading = this.populationLevel.name();
-        (window as any).view.selectedResidenceEffectView(
-            new (window as any).ResidenceEffectView(
+        window.view.selectedResidenceEffectView(
+            new ResidenceEffectView(
                 this.populationLevel.allResidences(), 
                 heading, 
                 null
@@ -315,7 +316,7 @@ export class PopulationLevel extends NamedElement {
         this.island = island;
         
 
-        this.regions = config.associatedRegions.map(r => (window as any).view.literalsMap.get(r));
+        this.regions = config.associatedRegions.map(r => window.view.literalsMap.get(r));
         this.allResidences = ko.observableArray();
         this.notes = ko.observable("");
         this.residences = [];
@@ -355,7 +356,7 @@ export class PopulationLevel extends NamedElement {
                 return false;
             }
 
-            if (!(window as any).view.island || !(window as any).view.island()) {
+            if (!window.view.island || !window.view.island()) {
                 return true;
             }
 
@@ -419,7 +420,7 @@ export class PopulationLevel extends NamedElement {
     //     if (need) {
     //         heading = ko.pureComputed(() => this.name() + ": " + need.product.name());
     //     }
-    //     (window as any).view.selectedResidenceEffectView(new ResidenceEffectView(this.allResidences(), heading, need));
+    //     window.view.selectedResidenceEffectView(new ResidenceEffectView(this.allResidences(), heading, need));
     // }
 }
 

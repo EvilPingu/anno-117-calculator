@@ -67,6 +67,7 @@
     <div data-bind="template: 'population-level-config-dialog'"></div>
     <div data-bind="template: 'residence-effect-dialog'"></div>
     <div data-bind="template: 'factory-config-dialog'"></div>
+    <div data-bind="template: 'product-config-dialog'"></div>
     <!-- navbar -->
     <div id="content" data-bind="visible: true" style="display:none">
         <nav class="navbar navbar-expand-sm bg-dark inline-list-stretched">
@@ -280,12 +281,10 @@
 
             <!-- /public buildings -->
             <!-- required factories by category -->
-            <div data-bind="foreach: { data: $root.template.categories, as: 'category'}">
-                <collapsible params="id: 'category-' + guid, heading: name, collapsed: false, data: $data, fieldsetClass: 'ui-fieldset'">
-                    <div data-bind="foreach: $data.products">
-                        <div data-bind="foreach: $data.factories">
-                            <div data-bind="template: 'factory-tile'"></div>
-                        </div>
+            <div data-bind="foreach: { data: $root.presenter.categories, as: 'category'}">
+                <collapsible params="id: 'category-' + category.guid, heading: name, collapsed: false, data: $data, fieldsetClass: 'ui-fieldset'">
+                    <div data-bind="foreach: $data.productPresenters">
+                        <div data-bind="template: 'product-tile'"></div>
                     </div>
                 </collapsible>
             </div>

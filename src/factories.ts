@@ -112,7 +112,7 @@ export class Consumer extends NamedElement{
         this.editable = ko.observable(false);
         this.buildings = new BuildingsCalc();
         this.lockDLCIfSet(this.buildings.constructed);
-        this.useThroughputByExistingBuildings = ko.purComputed(() => this.editable() || this.buildings.fullyUtilizeConstructed());
+        this.useThroughputByExistingBuildings = ko.pureComputed(() => this.editable() || this.buildings.fullyUtilizeConstructed());
         this.throughputByOutput = ko.observable(0);
 
         // Set up computed observables
@@ -132,8 +132,6 @@ export class Consumer extends NamedElement{
             this.buildings.required(this.throughput() / 60 * this.cycleTime / this.boost());
         }).extend({ deferred: true });
         this.lockDLCIfSet(this.buildings);
-        
-        this.notes = ko.observable("");
 
         this.defaultInputs = new Map();
         if (config.inputs) {
@@ -505,11 +503,6 @@ export class Factory extends Consumer implements Supplier {
     public substitutableOutputAmount: KnockoutComputed<number>; // Output that can be substituted
     public overProduction: KnockoutComputed<number>;         // Excess production over demand
 
-    // === UI/DISPLAY ===
-    public isHighlightedAsMissing: KnockoutComputed<boolean>; // Whether to highlight missing buildings
-    public extraGoodsDisplayAmount?: KnockoutComputed<number>; // Extra goods amount for display
-    public visible: KnockoutComputed<boolean>;               // Whether factory is visible in UI
-
 
     /**
      * Creates a new Factory instance
@@ -577,7 +570,7 @@ export class Factory extends Consumer implements Supplier {
         });
 
         // Calculate maximum demand from all three sources
-        this.throughputByOutputSubscriptions = ko.Computed(() => {
+        this.throughputByOutputSubscriptions = ko.computed(() => {
             let maxDemand = 0;
 
             // 1. Demand from product (set via Supplier interface)
@@ -602,44 +595,10 @@ export class Factory extends Consumer implements Supplier {
             return Math.max(0, this.demandFromProduct() - Math.max(this.throughputByExtraGoodSupplier(), this.throughputByExistingBuildings()));
         });
         
-        this.isHighlightedAsMissing = ko.pureComputed(() => {
-            if (!(window as any).view.settings.missingBuildingsHighlight || !(window as any).view.settings.missingBuildingsHighlight.checked())
-                return false;
-
-            return this.buildings.required() > this.buildings.constructed() + ACCURACY;
-        });
-
-
 
         this.overProduction = ko.pureComputed(() => Math.max(0, this.outputAmount() - this.demandFromProduct()));
 
-
-        this.visible = ko.computed(() => {
-            if (!this.available())
-                return false;
-
-            const product = this.getProduct();
-            const extraGoodAmount = product && product.extraGoodProductionList ? product.extraGoodProductionList.amount() : 0;
-
-            if (Math.abs(this.throughput()) > EPSILON ||
-                this.buildings.constructed() > 0 ||
-                extraGoodAmount > EPSILON)
-                return true;
-
-            if (this.island.region.id != "Meta" && this.associatedRegions.indexOf(this.island.region) == -1)
-                return false;
-
-            if ((window as any).view.settings.showAllConstructableFactories && (window as any).view.settings.showAllConstructableFactories.checked())
-                return true;
-
-            if (this.editable()) {
-                return this.associatedRegions.indexOf(this.island.region) != -1;
-            }
-
-            return false;
-        });
-
-        
+ 
         (this.getProduct() as Product).addFactory(this);
     }
 

@@ -415,7 +415,7 @@ export class ResidenceEffectView {
     public allEffects: ResidenceEffect[];
     public aggregates: KnockoutObservableArray<ResidenceEffectAggregate>;
     public unusedEffects: KnockoutObservableArray<ResidenceEffect>;
-    public need: PopulationLevelNeed | null;
+    public need: PopulationLevelNeed | ResidenceNeed | null;
     public productionChain: ProductionChainView | null;
     public selectedEffect: KnockoutObservable<ResidenceEffect>;
     public region: string | null = null;
@@ -426,7 +426,7 @@ export class ResidenceEffectView {
      * @param heading - Optional heading for the view
      * @param need - Optional specific need to focus on
      */
-    constructor(residences: ResidenceBuilding[], heading: string | null = null, need: PopulationLevelNeed | null = null) {
+    constructor(residences: ResidenceBuilding[], heading: string | null = null, need: PopulationLevelNeed | ResidenceNeed | null = null) {
         // Validate required parameters
         if (!residences || !Array.isArray(residences)) {
             throw new Error('ResidenceEffectView residences array is required');
@@ -684,7 +684,7 @@ class PopulationLevelNeedPresenter {
     }
     
     prepareResidenceEffectView(): void {
-        (window as any).view.selectedResidenceEffectView(new ResidenceEffectView([this.parent.parent.residence()], this.name(), this.instance()));
+        window.view.selectedResidenceEffectView(new ResidenceEffectView([this.parent.parent.residence()], this.name(), this.instance()));
     }
 }
 
@@ -780,6 +780,6 @@ export class ResidencePresenter{
      * Prepares the residence effect view for this residence building
      */
     prepareResidenceEffectView(): void {
-        (window as any).view.selectedResidenceEffectView(new ResidenceEffectView([this.residence()], this.name()));
+        window.view.selectedResidenceEffectView(new ResidenceEffectView([this.residence()], this.name()));
     }
 }

@@ -458,3 +458,179 @@ The `/translate` command (defined in `.claude/commands/translate.md`):
 - Clear any background processes: check running bash shells
 - Manually add missing translations to src/i18n.ts
 - Run `npm run check-translations` to verify
+
+## Product-Based Presenter Architecture (PLANNED)
+
+### Motivation and Design Goals
+
+The current factory-centric UI displays multiple tiles per product (one per factory), making it difficult to:
+- See total product supply/demand at a glance
+- Manage supplier selection (factories, trade routes, extra goods, passive trade)
+- Create and manage trade routes in context of production needs
+
+The Product-Based Presenter system addresses these issues by:
+1. **Single tile per product** showing aggregate production/demand
+2. **Unified supplier selection** dropdown integrating all supplier types
+3. **Tabbed factory management** within product-config-dialog
+4. **Integrated trade route creation** from supplier selection
+
+### ProductPresenter Class Structure
+
+**Purpose**: Wraps Product with UI-specific computed observables and supplier management
+
+**Key Properties:**
+- `instance: KnockoutObservable<Product>` - Current product
+- `factoryPresenters: KnockoutObservableArray<FactoryPresenter>` - Nested presenters for each factory
+- `availableSuppliers: KnockoutComputed<SupplierOption[]>` - All supplier options for dropdown
+- `defaultSupplier: KnockoutComputed<Supplier>` - Delegates to product.defaultSupplier
+- `totalProduction: KnockoutComputed<number>` - Sum from all suppliers
+- `totalDemand: KnockoutComputed<number>` - Total product demand
+- `netBalance: KnockoutComputed<number>` - Production minus demand
+
+**Methods:**
+- `selectSupplier(option: SupplierOption)` - Handles dropdown selection, creates trade routes if needed
+- `createTradeRoute(island, isExport, minAmount)` - Creates trade route and sets as default supplier
+- `openConfigDialog()` - Opens product-config-dialog
+
+**Implementation Location**: `src/presenters.ts` (new file)
+
+### FactoryPresenter Class (Nested Presenter)
+
+**Purpose**: Represents individual factory within ProductPresenter
+
+**Key Properties:**
+- `factory: Factory` - Underlying factory instance
+- `parentProduct: ProductPresenter` - Reference to parent presenter
+- Delegated observables: `name`, `buildings`, `boost`, `outputAmount`, `modules`, `items`
+
+**Methods:**
+- `setAsDefaultSupplier()` - Sets this factory as default supplier for parent product
+- `isDefaultSupplier()` - Checks if this factory is current default
+
+**Implementation Location**: `src/presenters.ts` (new file)
+
+### SupplierOption Interface
+
+```typescript
+interface SupplierOption {
+    type: 'factory' | 'extra_good' | 'trade_island' | 'trade_route' | 'passive_trade';
+    supplier?: Supplier;        // For direct supplier selection
+    island?: Island;            // For trade route creation
+    label: string;              // Display name
+    icon: string;               // Icon path
+}
+```
+
+### UI Templates
+
+**product-tile.html**: Replaces factory-tile with product-level view
+- Product icon and name
+- Default supplier badge
+- Total production and net balance
+- Click opens product-config-dialog
+
+**product-config-dialog.html**: Replaces factory-config-dialog
+- Supplier selection dropdown (factories, islands, extra goods, passive trade)
+- Tabs: Factories | Extra Goods | Trade Routes | Production Chain
+- Factories tab contains factory-config-section for each factory
+
+**factory-config-section.html**: Individual factory configuration within product dialog
+- Buildings input, boost display
+- Modules, items, aqueduct buff
+- Trade routes for this factory
+- All existing factory-config-dialog content
+
+### Initialization Order (Critical)
+
+```typescript
+// In Island constructor (world.ts:518+)
+1. Create objects (factories, products)
+2. f.initDemands(assetsMap)           // Factories register in products
+3. p.initSuppliers(island)             // Create supplier instances (already exists)
+4. e.applyBuffs(assetsMap)             // Effects apply buffs
+5. createProductPresenters(island)     // NEW: Create ProductPresenter for each product
+6. restoreDefaultSuppliers()           // Load supplier selections from localStorage
+7. persistBuildings(factory)           // Load factory state
+```
+
+### Supplier Selection Workflow
+
+1. User opens product-config-dialog from product-tile
+2. Dropdown populated by `availableSuppliers` computed:
+   - Regional factories producing this product
+   - Islands with factories (for trade route creation)
+   - Extra good suppliers (items affecting factories)
+   - Passive trade supplier (always available)
+3. User selects supplier:
+   - **Factory**: `product.updateDefaultSupplier(factory)`
+   - **Island**: Creates `TradeRoute`, sets as default supplier
+   - **Extra Good**: `product.updateDefaultSupplier(extraGoodSupplier)`
+   - **Passive Trade**: `product.updateDefaultSupplier(passiveTradeSupplier)`
+4. Product `demandCalculationSubscription` updates factory demands
+5. UI reactively updates via Knockout observables
+
+### Trade Route Integration
+
+**Auto-creation from Supplier Dropdown:**
+- Selecting island creates `TradeRoute` with `minAmount = 0`
+- Import routes automatically set as default supplier
+- Export routes created manually from trade routes tab
+
+**Trade Route Cleanup:**
+- Routes with `minAmount == 0` deleted when supplier changes
+- User can set `minAmount > 0` to persist route even when not default
+
+**Persistence:**
+- TradeManager persists `isDefaultSupplier` flag per route
+- Restored on initialization before product presenters created
+
+### Critical Implementation Patterns
+
+**Object Method Preservation:**
+```typescript
+// ❌ WRONG - loses Knockout methods
+const extended = { ...product, totalProduction };
+
+// ✅ CORRECT - preserves methods
+product.totalProduction = totalProduction;
+```
+
+**Presenter Pattern (from ResidencePresenter):**
+- Observable `instance` property for switching underlying data
+- Computed observables delegate to `instance().property`
+- Nested presenters for hierarchical data (FactoryPresenter within ProductPresenter)
+- Direct property addition to preserve Knockout methods
+
+### Files to Create/Modify
+
+**New Files:**
+- `src/presenters.ts` - ProductPresenter, FactoryPresenter classes
+- `templates/product-tile.html` - Product tile replacing factory-tile
+- `templates/product-config-dialog.html` - Product dialog replacing factory-config-dialog
+- `templates/factory-config-section.html` - Factory section within product dialog
+
+**Modified Files:**
+- `src/views.ts` - Export ProductPresenter
+- `src/main.ts` - Add `selectedProduct` observable, create presenters
+- `src/world.ts` - Integrate presenter creation in Island constructor
+- `index.html` - Replace `foreach: factories` with `foreach: productPresenters`
+- `src/components.ts` - Register product-related components
+
+### Benefits
+
+1. **Unified Product View**: Single tile shows total production/demand for product
+2. **Integrated Supplier Management**: All supplier types in one dropdown
+3. **Contextual Trade Route Creation**: Create routes directly from production management
+4. **Tabbed Factory Management**: All factories for product in one dialog
+5. **Consistent Patterns**: Follows ResidencePresenter pattern
+6. **Reactive Updates**: Knockout observables handle all UI updates automatically
+
+### References
+
+- **Presenter Pattern**: ResidencePresenter (views.ts:729-785)
+- **Supplier Interface**: suppliers.ts:10-22, already implemented
+- **Template Pattern**: Template class (views.ts:132-227)
+- **Demand System**: Product.demandCalculationSubscription (production.ts:223-240)
+- **Trade Routes**: TradeList, TradeRoute (trade.ts)
+- **Extra Good Suppliers**: ExtraGoodSupplier (suppliers.ts:100-189)
+- The island in presenter classes must be an observable value.

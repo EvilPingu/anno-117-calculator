@@ -9,9 +9,10 @@ if (typeof require !== 'undefined') {
 }
 import { AssetsMap, LiteralsMap } from './types';
 import { DarkMode, ResidencePresenter } from './views';
+import { CategoryPresenter } from './presenters';
 import { ConstantsConfig, NeedConsumptionConfig, TextConfig } from './types.config';
 import { Island, Region, Session } from './world';
-import { Effect } from './production';
+import { Effect, ProductCategory } from './production';
 
 
 declare const $: any;
@@ -20,14 +21,14 @@ declare const require: any;
 
 
 // Make utility functions globally available
-(window as any).ACCURACY = ACCURACY;
-(window as any).formatNumber = formatNumber;
-(window as any).formatPercentage = formatPercentage;
-(window as any).factoryReset = factoryReset;
-(window as any).exportConfig = exportConfig;
+window.ACCURACY = ACCURACY;
+window.formatNumber = formatNumber;
+window.formatPercentage = formatPercentage;
+window.factoryReset = factoryReset;
+window.exportConfig = exportConfig;
 
 // Make debug utilities globally available
-(window as any).debugKO = {
+window.debugKO = {
     context: debugBindingContext,
     type: getAssetType,
     log: logAssetInfo,
@@ -37,7 +38,7 @@ declare const require: any;
 /**
  * Global view object containing all application state
  */
-(window as any).view = {
+window.view = {
     settings: {
         language: ko.observable("english"),
         options: [],
@@ -50,6 +51,7 @@ declare const require: any;
     dlcsMap: new Map(),
     // Add missing properties that are referenced in the original code
     selectedFactory: ko.observable(null),
+    selectedProduct: ko.observable(null),
     selectedPopulationLevel: ko.observable(null),
     selectedMultiFactoryProducts: ko.observable([]),
     selectedResidenceEffectView: ko.observable(null),
@@ -87,32 +89,32 @@ declare const require: any;
 // Restore debug settings from localStorage
 const debugEnabled = localStorage.getItem('debug.enabled');
 if (debugEnabled === 'true') {
-    (window as any).view.debug.enabled(true);
+    window.view.debug.enabled(true);
 }
 const debugVerbose = localStorage.getItem('debug.verboseMode');
 if (debugVerbose === 'true') {
-    (window as any).view.debug.verboseMode(true);
+    window.view.debug.verboseMode(true);
 }
 const debugLogBindings = localStorage.getItem('debug.logBindings');
 if (debugLogBindings === 'true') {
-    (window as any).view.debug.logBindings(true);
+    window.view.debug.logBindings(true);
 }
 
 // Persist debug settings changes to localStorage
-(window as any).view.debug.enabled.subscribe((value: boolean) => {
+window.view.debug.enabled.subscribe((value: boolean) => {
     localStorage.setItem('debug.enabled', value.toString());
 });
-(window as any).view.debug.verboseMode.subscribe((value: boolean) => {
+window.view.debug.verboseMode.subscribe((value: boolean) => {
     localStorage.setItem('debug.verboseMode', value.toString());
 });
-(window as any).view.debug.logBindings.subscribe((value: boolean) => {
+window.view.debug.logBindings.subscribe((value: boolean) => {
     localStorage.setItem('debug.logBindings', value.toString());
 });
 
 // Set default language based on browser locale
 for (const code in languageCodes) {
     if (navigator.language.startsWith(code)) {
-        (window as any).view.settings.language(languageCodes[code]);
+        window.view.settings.language(languageCodes[code]);
         break;
     }
 }
@@ -205,7 +207,7 @@ function checkAndShowNotifications(): void {
             if (release.tag_name !== versionCalculator) {
                 ($ as any).notify({
                     // options
-                    message: (window as any).view.texts.calculatorUpdate.name()
+                    message: window.view.texts.calculatorUpdate.name()
                 }, {
                     // settings
                     type: 'warning',
@@ -216,10 +218,10 @@ function checkAndShowNotifications(): void {
 
         if (localStorage) {
             if (localStorage.getItem("versionCalculator") != versionCalculator) {
-                if ((window as any).view.texts.newFeature.name() && (window as any).view.texts.newFeature.name().length)
+                if (window.view.texts.newFeature.name() && window.view.texts.newFeature.name().length)
                     ($ as any).notify({
                         // options
-                        message: (window as any).view.texts.newFeature.name()
+                        message: window.view.texts.newFeature.name()
                     }, {
                         // settings
                         type: 'success',
@@ -332,22 +334,22 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
     // Initialize application
     configUpgrade(configVersion);
 
-    (window as any).view.darkMode = new DarkMode();
+    window.view.darkMode = new DarkMode();
     
     // Set up Knockout numeric extender
     setupNumericExtender();
     
     // Use the global params object (set by params.js)
-    const params = (window as any).params;
+    const params = window.params;
     window.view.constants = params.constants;
     
     // Set up DLCs
-    (window as any).view.dlcs = [];
-    (window as any).view.dlcsMap = new Map();
+    window.view.dlcs = [];
+    window.view.dlcsMap = new Map();
     for (let dlc of (params.dlcs || [])) {
         const d = new (require('./util').DLC)(dlc);
-        (window as any).view.dlcs.push(d);
-        (window as any).view.dlcsMap.set(d.id, d);
+        window.view.dlcs.push(d);
+        window.view.dlcsMap.set(d.id, d);
         if (localStorage) {
             let id = "settings." + d.id;
             if (localStorage.getItem(id) != null)
@@ -362,8 +364,8 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
     for (let attr in options) {
         let o = new Option({...options[attr], id: attr});
 
-        (window as any).view.settings[attr] = o;
-        (window as any).view.settings.options.push(o);
+        window.view.settings[attr] = o;
+        window.view.settings.options.push(o);
 
         if (localStorage) {
             let id = "settings." + attr;
@@ -374,19 +376,19 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
         }
     }
 
-    (window as any).view.settings.languages = params.languages;
+    window.view.settings.languages = params.languages;
 
     for (let attr of (params.needConsumptions as NeedConsumptionConfig[])) {
         let o = new NeedConsumptionSetting(attr);
 
-        (window as any).view.settings.needConsumptionSettings.push(o);
+        window.view.settings.needConsumptionSettings.push(o);
     } 
-    (window as any).view.settings.selectedNeedConsumptionSetting = ko.observable( (window as any).view.settings.needConsumptionSettings[0])
+    window.view.settings.selectedNeedConsumptionSetting = ko.observable( window.view.settings.needConsumptionSettings[0])
     if (localStorage) {
         let id = "settings.needConsumption";
-        let selection = (window as any).view.settings.selectedNeedConsumptionSetting as KnockoutObservable<NeedConsumptionSetting>;
+        let selection = window.view.settings.selectedNeedConsumptionSetting as KnockoutObservable<NeedConsumptionSetting>;
         if (localStorage.getItem(id) != null)
-            for (var o of (window as any).view.settings.needConsumptionSettings)
+            for (var o of window.view.settings.needConsumptionSettings)
                 if(o.id == localStorage.getItem(id))
                     selection(o);
 
@@ -400,8 +402,8 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
         if (!effect.effectScope.endsWith("Meta") && effect.effectScope != "ModuleOwner")
             continue
 
-        const r = new Effect(effect, (window as any).view.assetsMap);
-        (window as any).view.assetsMap.set(r.guid, r);
+        const r = new Effect(effect, window.view.assetsMap);
+        window.view.assetsMap.set(r.guid, r);
         globalEffects.push(r);
     }
 
@@ -425,40 +427,40 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
     
 
     // Set up regions
-    (window as any).view.regions = [];
+    window.view.regions = [];
     for (let region of (params.regions || [])) {
         const r = new Region(region);
-        (window as any).view.assetsMap.set(r.guid, r);
-        (window as any).view.literalsMap.set(r.id, r);
-        (window as any).view.regions.push(r);
+        window.view.assetsMap.set(r.guid, r);
+        window.view.literalsMap.set(r.id, r);
+        window.view.regions.push(r);
     }
 
     // Set up sessions
-    (window as any).view.sessions = [];
+    window.view.sessions = [];
     for (let session of (params.sessions || [])) {
-        const s = new Session(session, params.effects || [], (window as any).view.assetsMap);
-        (window as any).view.assetsMap.set(s.guid, s);
-        (window as any).view.sessions.push(s);
+        const s = new Session(session, params.effects || [], window.view.assetsMap);
+        window.view.assetsMap.set(s.guid, s);
+        window.view.sessions.push(s);
     }
 
-    (window as any).view.needAttributes = [];
+    window.view.needAttributes = [];
     // Set up attributes: Population, Money, Happiness, Health, FireSafety, Belief, Knowledge, Prestige
     for (let attribute of (params.needAttributes || [])) {
         const r = new NamedElement(attribute);
-        (window as any).view.needAttributes.push(r);
-        (window as any).view.literalsMap.set(r.id, r);
+        window.view.needAttributes.push(r);
+        window.view.literalsMap.set(r.id, r);
     }
 
     // Set up island management
-    (window as any).view.islandManager = new (require('./world').IslandManager)(params, _isFirstRun);
+    window.view.islandManager = new (require('./world').IslandManager)(params, _isFirstRun);
 
     // Set up language persistence
     if (localStorage) {
         const id = "language";
         if (localStorage.getItem(id))
-            (window as any).view.settings.language(localStorage.getItem(id));
+            window.view.settings.language(localStorage.getItem(id));
 
-        (window as any).view.settings.language.subscribe((val: string) => localStorage.setItem(id, val));
+        window.view.settings.language.subscribe((val: string) => localStorage.setItem(id, val));
     }
 
     // Handle configuration upgrades
@@ -467,19 +469,19 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
 
 
     // Set up modal dialogs and UI state
-    (window as any).view.collapsibleStates = new (require('./views').CollapsibleStates)();
-    (window as any).view.selectedFactory = ko.observable((window as any).view.island().factories[0]);
-    (window as any).view.selectedPopulationLevel = ko.observable((window as any).view.island().populationLevels[0]);
-    (window as any).view.productionChain = new (require('./views').ProductionChainView)((window as any).view.selectedFactory);
-    (window as any).view.selectedMultiFactoryProducts = ko.observable((window as any).view.island().multiFactoryProducts);
-    (window as any).view.selectedResidenceEffectView = ko.observable(new (require('./views').ResidenceEffectView)([(window as any).view.island().residenceBuildings[0]]));
+    window.view.collapsibleStates = new (require('./views').CollapsibleStates)();
+    window.view.selectedFactory = ko.observable(window.view.island().factories[0]);
+    window.view.selectedPopulationLevel = ko.observable(window.view.island().populationLevels[0]);
+    window.view.productionChain = new (require('./views').ProductionChainView)(window.view.selectedFactory);
+    window.view.selectedMultiFactoryProducts = ko.observable(window.view.island().multiFactoryProducts);
+    window.view.selectedResidenceEffectView = ko.observable(new (require('./views').ResidenceEffectView)([window.view.island().residenceBuildings[0]]));
 
     // Set up trade manager
-    (window as any).view.tradeManager = new (require('./trade').TradeManager)();
+    window.view.tradeManager = new (require('./trade').TradeManager)();
 
     // Set up templates
-    const allIslands = (window as any).view.islandManager.allIslands as Island;
-    const selectedIsland = (window as any).view.island();
+    const allIslands = window.view.islandManager.allIslands as Island;
+    const selectedIsland = window.view.island();
     const templates: any[] = [];
     const arrayToTemplate = (name: string) => allIslands[name].map((asset: any, index: number) => {
         const t = new (require('./views').Template)(asset, selectedIsland, name, index);
@@ -487,30 +489,36 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
         return t;
     });
 
-    (window as any).view.island.subscribe((i: any) => templates.forEach(t => t.parentInstance(i)));
+    window.view.island.subscribe((i: any) => templates.forEach(t => t.parentInstance(i)));
 
-    (window as any).view.template = {
+    window.view.presenter.categories = [] as CategoryPresenter[];
+    // Create CategoryPresenter for each category template
+    allIslands.categories.forEach((category: ProductCategory) => {
+        window.view.presenter.categories.push(new CategoryPresenter(category, window.view.island));
+    });
+
+    window.view.template = {
         populationGroups: arrayToTemplate("populationGroups"),
-        categories: arrayToTemplate("categories"),
         consumers: arrayToTemplate("consumers"),
         publicServices: arrayToTemplate("publicServices"),
         publicRecipeBuildings: arrayToTemplate("publicRecipeBuildings")
     };
-    (window as any).view.presenter.residence = new ResidencePresenter(allIslands.needCategories, allIslands.populationLevels[0]);
+    window.view.presenter.residence = new ResidencePresenter(allIslands.needCategories, allIslands.populationLevels[0]);
+    
 
     // Set up view mode for first run
     if (_isFirstRun)
-        (window as any).view.viewMode = new (require('./views').ViewMode)(_isFirstRun);
+        window.view.viewMode = new (require('./views').ViewMode)(_isFirstRun);
 
     // Register Knockout components (before bindings are applied)
     registerComponents();
 
     // Apply Knockout bindings
-    ko.applyBindings((window as any).view, $(document.body)[0]);
+    ko.applyBindings(window.view, $(document.body)[0]);
 
     // Set up modal event handlers
     $('#factory-choose-dialog').on('show.bs.modal', () => {
-        (window as any).view.selectedMultiFactoryProducts((window.view.island() as Island).multiFactoryProducts
+        window.view.selectedMultiFactoryProducts((window.view.island() as Island).multiFactoryProducts
             .filter((p: any) => p.availableFactories().length > 1)
             .sort((a: any, b: any) => a.name().localeCompare(b.name())));
     });
@@ -595,9 +603,9 @@ $(document).ready(function () {
     // Note: locaTexts parsing is handled in the i18n module
     
     // Parse the texts - create NamedElement instances for each text entry
-    for (let text of (window as any).params.texts as TextConfig[]) {
+    for (let text of window.params.texts as TextConfig[]) {
         console.log(text);
-        (window as any).view.texts[text.name] = new (require('./util').NamedElement)({ 
+        window.view.texts[text.name] = new (require('./util').NamedElement)({ 
             name: text.name, 
             guid: text.lineID,
             locaText: text.locaText 
@@ -605,14 +613,14 @@ $(document).ready(function () {
     }
 
     for (let attr in locaTexts) {
-        (window as any).view.texts[attr] = new (require('./util').NamedElement)({ 
+        window.view.texts[attr] = new (require('./util').NamedElement)({ 
             name: attr, 
             guid: attr, // Use the attribute name as the GUID
             locaText: locaTexts[attr] 
         });
     }
     
-    console.log('Loaded texts:', Object.keys((window as any).view.texts));
+    console.log('Loaded texts:', Object.keys(window.view.texts));
     console.log('Available locaTexts:', Object.keys(locaTexts));
 
     // Check for updates and show notifications
