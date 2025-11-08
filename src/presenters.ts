@@ -4,6 +4,7 @@ import { Factory, Module } from './factories';
 import { Island, Region } from './world';
 import { Supplier } from './suppliers';
 import { TradeRoute, TradeList } from './trade';
+import { ProductionChainView } from './views';
 
 declare const $: any;
 declare const view: any;
@@ -25,8 +26,8 @@ export interface SupplierOption {
 export class FactoryPresenter {
     public factory: Factory;
     public parentProduct: ProductPresenter;
-    public instance: KnockoutObservable<Factory>;
-    public island: KnockoutComputed<Island>;
+    public instance: KnockoutComputed<Factory>;
+    public island: KnockoutObservable<Island>;
 
     // Delegated properties
     public guid: KnockoutComputed<string>;
@@ -40,7 +41,7 @@ export class FactoryPresenter {
     public visible: KnockoutComputed<boolean>;
     public isDefaultSupplier: KnockoutComputed<boolean>;
     public tradeList: KnockoutComputed<TradeList | undefined>;
-    
+    public productionChain: ProductionChainView;
     
 
     /**
@@ -58,8 +59,9 @@ export class FactoryPresenter {
 
         this.factory = factory;
         this.parentProduct = parent;
-        this.instance = ko.observable(factory);
-        this.island = ko.pureComputed(() => this.instance().island);
+        this.island = parent.island;        
+        this.instance = ko.computed(() => this.island().assetsMap.get(this.factory.guid));
+        
 
         // Delegate to factory observables
         this.guid = ko.pureComputed(() => this.instance().guid);
@@ -75,25 +77,10 @@ export class FactoryPresenter {
             if (!this.instance().available())
                 return false;
 
-            const product = this.instance().getProduct();
-            const extraGoodAmount = product && product.extraGoodProductionList ? product.extraGoodProductionList.amount() : 0;
-
-            if (Math.abs(this.instance().throughput()) > EPSILON ||
-                this.instance().buildings.constructed() > 0 ||
-                extraGoodAmount > EPSILON)
-                return true;
-
             if (this.island().region.id != "Meta" && this.region() != this.island().region)
                 return false;
 
-            if (window.view.settings.showAllConstructableFactories && window.view.settings.showAllConstructableFactories.checked())
-                return true;
-
-            if (this.instance().editable()) {
-                return this.region() == this.island().region;
-            }
-
-            return false;
+            return true;
         });
 
         this.isDefaultSupplier = ko.pureComputed(() =>
@@ -105,6 +92,7 @@ export class FactoryPresenter {
             return product ? product.tradeList : undefined;
         });
 
+        this.productionChain = new ProductionChainView(this.instance, this.outputAmount);
     }
 
     /**
@@ -126,6 +114,7 @@ export class ProductPresenter {
     public instance: KnockoutComputed<Product>;
     public product: Product;
     public island: KnockoutObservable<Island>;
+    public guid: number;
 
     // === FACTORY PRESENTERS ===
     public factoryPresenters: FactoryPresenter[];
@@ -172,6 +161,7 @@ export class ProductPresenter {
         this.product = product;
         this.island = island;
         this.instance = ko.pureComputed(() => this.island().assetsMap.get(this.product.guid) as Product);
+        this.guid = this.product.guid;
 
         // Create factory presenters for each factory producing this product
         this.factoryPresenters = product.factories.map(f => new FactoryPresenter(f, this));
@@ -341,7 +331,7 @@ export class ProductPresenter {
 
             return defaultSupplier.buildings.required() > defaultSupplier.buildings.constructed() + ACCURACY;
         });
-        
+
         this.tradeListVisible = ko.pureComputed(() => this.tradeList()?.visible());
     }
 

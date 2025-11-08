@@ -1,4 +1,4 @@
-﻿<div id="product-config-dialog" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true" data-bind="debug: 'Product Config Dialog', with: $root.selectedProduct()">
+﻿<div id="product-config-dialog" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true" data-bind="debug: 'Product Config Dialog', with: $root.presenter.productByGuid.get($root.selectedProduct().guid)">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
@@ -90,18 +90,18 @@
 
                 <!-- Tab Navigation -->
                 <ul class="nav nav-tabs" role="tablist">
-                    <!-- ko foreach: $data.factoryPresenters -->
-                    <li class="nav-item">
-                        <a class="nav-link active" data-toggle="tab" data-bind="click: () => $root.productionChain.factory($data.instance()), attr: {'href': '#factories-tab-' + $data.guid()}">
+                    <!-- ko foreach: $data.visibleFactories -->
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" data-toggle="tab" data-bind="attr: {'data-target': '#factories-tab-' + $data.guid(), 'aria-selected': $data.isDefaultSupplier()}" type="button" role="tab">
                             <div class="d-flex align-items-center">
                                 <span class="icon-light mr-2" data-bind="visible: $data.island().region.id == 'Meta', component: {name: 'asset-icon', params: $data.region()}"></span>
                                 <h5 class="mb-0" data-bind="text: $data.name()"></h5>
                             </div>
-                        </a>
+                        </button>
                     </li>
                      <!-- /ko -->
-                    <li class="nav-item" data-bind="visible: $data.tradeListVisible()">
-                        <a class="nav-link" data-toggle="tab" href="#trade-routes-tab">
+                    <li class="nav-item" data-bind="visible: $data.tradeListVisible()" role="presentation">
+                        <a class="nav-link" data-toggle="tab" data-target="#trade-routes-tab">
                             <span data-bind="text: $root.texts.tradeRoutes ? $root.texts.tradeRoutes.name : 'Trade Routes'"></span>
                             <span class="badge badge-light ml-1" data-bind="text: $data.tradeList().routes().length"></span>
                         </a>
@@ -111,11 +111,11 @@
                 <!-- Tab Content -->
                 <div class="tab-content mt-3">
                     <!-- Factories Tab -->
-                    <div id="factories-tab" class="tab-pane fade show active">
-                        <div data-bind="foreach: $data.visibleFactories">
-                            <div data-bind="template: { name: 'factory-config-section', data: $data }"></div>
-                        </div>
+                     <!-- ko foreach: $data.visibleFactories -->
+                    <div class="tab-pane fade" data-bind="attr: {'id': 'factories-tab-' + $data.guid()}, css: {'show': $data.isDefaultSupplier(), 'active': $data.isDefaultSupplier()}" role="tabpanel">
+                        <div data-bind="template: { name: 'factory-config-section', data: $data }"></div>
                     </div>
+                    <!-- /ko -->
 
                     <!-- Trade Routes Tab -->
                     <div id="trade-routes-tab" class="tab-pane fade">

@@ -3,6 +3,8 @@ import { PopulationGroup, PopulationLevel, ResidenceBuilding, Workforce } from '
 import { ResidenceEffectCoverage, ResidenceEffect, ResidenceNeed, NeedCategory, Need, PopulationLevelNeed } from './consumption';
 import { ProductCategory, Product, Demand } from './production';
 import { Consumer, Factory, Module } from './factories';
+import { TradeRoute } from './trade';
+import { ExtraGoodSupplier, PassiveTradeSupplier } from './suppliers';
 
 
 declare const $: any;
@@ -231,7 +233,7 @@ export class Template {
  * Creates hierarchical tree structures for visualizing factory dependencies
  */
 export class ProductionChainView {
-    public factory: KnockoutObservable<Consumer>;
+    public factory: KnockoutObservable<Consumer> | KnockoutObservable<Product>;
     public amount: KnockoutObservable<number> | null;
     public tree: any;
     public breadth: KnockoutObservable<number>;
@@ -241,7 +243,7 @@ export class ProductionChainView {
      * @param factory - The factory to create a chain for
      * @param amount - Optional amount to base calculations on
      */
-    constructor(factory: KnockoutObservable<Consumer>, amount: KnockoutObservable<number> | null = null) {
+    constructor(factory: KnockoutObservable<Consumer> | KnockoutObservable<Product>, amount: KnockoutObservable<number> | null = null) {
         // Validate required parameters
         if (!factory) {
             throw new Error('ProductionChainView factory is required');
@@ -252,14 +254,19 @@ export class ProductionChainView {
         this.amount = amount;
 
         this.tree = ko.pureComputed(() => {
-            let traverse = (consumer: Factory | Consumer, amount: number): any => {
+            let traverse = (consumer: Factory | Consumer | Product, amount: number): any => {
                     if (amount < ACCURACY)
                         return null;
 
-                    if (!(consumer instanceof Factory)){
+                    var regionIcon = null;
+
+                    if (!(consumer instanceof Factory || consumer instanceof Product)){
+                        if (window.view.island().region.id == "Meta" )
+                            regionIcon = consumer.associatedRegions[0].icon;
                         return {
                             'amount': amount,
-                            'factory': consumer,
+                            'product': consumer,
+                            'regionIcon': regionIcon,
                             'buildings': amount * consumer.cycleTime / 60 / consumer.boost(),
                             'children': consumer.inputDemands().map((d) => {
                                 const supplier = d.product.defaultSupplier();
@@ -271,58 +278,64 @@ export class ProductionChainView {
                         }; 
                     }
 
-                    var factory = consumer;
-
                     var icon = null;
-                    var maxSubAmount = factory.outputAmount ? factory.outputAmount() : factory.throughput();
-                    const product = factory.getProduct();
-                    if (product && product.tradeList && product.tradeList.amount() > maxSubAmount){
-                        maxSubAmount = product.tradeList.amount()
-                        icon = "./icons/icon_shiptrade.png"
-                    }
-                    if (product && product.extraGoodProduction && product.extraGoodProduction() > maxSubAmount) {
-                        maxSubAmount = product.extraGoodProduction()
-                        icon = "./icons/icon_add_goods_socket_white.png"
-                    } 
                     
-                    if(icon){
+                    if (consumer instanceof Product && consumer.defaultSupplier()?.type != "factory"){
+                        const supplier = consumer.defaultSupplier();
+                        if (supplier instanceof TradeRoute){
+                            icon = "./icons/icon_shiptrade.png"
+                        }
+                        if (supplier instanceof ExtraGoodSupplier) {
+                            icon = "./icons/icon_add_goods_socket_white.png"
+                        } 
+                        if (supplier instanceof PassiveTradeSupplier){
+                            icon = "./icons/icon_shiptrade.png"
+                        }
+
+                        if(!icon){
+                            console.log(supplier);
+                            throw new Error(`Unhadeled supplier ${supplier?.type}`);
+                        }
+
                         return {
                             'amount': amount,
-                            'factory': factory,
+                            'product': consumer,
+                            'regionIcon': regionIcon,
                             'children': [],
                             'icon': icon
                         }
                     }
+                    
+                    const factory = consumer instanceof Factory ? consumer : consumer.defaultSupplier();
+
+                    if (!(factory instanceof Factory)){
+                        console.log(factory);
+                        throw new Error(`Expected factory ${factory?.type}`);
+                    }
+
+                    if (window.view.island().region.id == "Meta" )
+                        regionIcon = factory.associatedRegions[0].icon;
 
                     var inputAmount = amount / (factory.extraGoodFactor?.() || 1);
-                    const buildings = inputAmount * consumer.cycleTime / 60 / factory.boost();
+                    const buildings = inputAmount * factory.cycleTime / 60 / factory.boost();
                     var children = factory.inputDemands().map((d) => {
-                        const supplier = d.product.defaultSupplier();
-                        if (supplier && supplier.type === 'factory') {
-                            return traverse(supplier as any, inputAmount * d.factor());
-                        }
-                        return null;
+                        return traverse(d.product, inputAmount * d.factor());
                     }).filter((d) => d);
 
                     var buildingDemands = factory.modules.flatMap(m => m.checked() ? m.inputDemands() : []);
                     for (const d of buildingDemands) {
-                        const supplier = d.product.defaultSupplier();
-                        if (supplier && supplier.type === 'factory') {
-                            children.push(traverse(supplier as any, buildings * d.factor() * 60 / (d.consumer as Module).cycleTime));
-                        }
+                        children.push(traverse(d.product, buildings * d.factor() * 60 / (d.consumer as Module).cycleTime));
                     }
 
                     if (factory.inputDemandFuel) {
-                        const supplier = factory.inputDemandFuel.product.defaultSupplier();
-                        if (supplier && supplier.type === 'factory') {
-                            children.push(traverse(supplier as any, buildings * factory.inputDemandFuel.factor()));
-                        }
+                        children.push(traverse(factory.inputDemandFuel.product, buildings * factory.inputDemandFuel.factor()));
                     }
  
 
                     return {
                         'amount': amount,
-                        'factory': factory,
+                        'product': factory.getProduct(),
+                        'regionIcon': regionIcon,
                         'buildings': buildings,
                         'children': children
                     };           
@@ -331,10 +344,14 @@ export class ProductionChainView {
 
             var amount = this.amount;
             const consumer = this.factory();
-            if (amount == null && consumer instanceof Factory)
-                amount = consumer.outputAmount;
-            if (amount == null)
-                amount = consumer.throughput;
+            if (amount == null){
+                if (consumer instanceof Product)
+                    amount = consumer.totalDemand;
+                else if (consumer instanceof Factory)
+                    amount = consumer.outputAmount;
+                else 
+                    amount = consumer.throughput;
+            }
             return traverse(consumer, amount());
              
         });
@@ -477,17 +494,11 @@ export class ResidenceEffectView {
         this.unusedEffects = ko.observableArray([...effects]);
 
         this.need = need;
-        if (need instanceof ResidenceNeed && need.demand) {
-            // Get factory from product's default supplier (if it's a factory)
-            const supplier = need.demand.product.defaultSupplier();
-            if (supplier && supplier.type === 'factory') {
-                this.productionChain = new ProductionChainView(ko.observable(supplier as any), need.demand.amount);
-            } else {
-                this.productionChain = null; // Non-factory suppliers don't have production chains
-            }
-        } else {
+        if (this.need) 
+            this.productionChain = new ProductionChainView(ko.observable(this.need.product), this.need.amount);
+        else 
             this.productionChain = null;
-        }
+        
 
         this.sort();
         this.selectedEffect = ko.observable(this.unusedEffects()[0]);

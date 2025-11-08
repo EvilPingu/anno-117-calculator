@@ -4,7 +4,7 @@
         <!-- Product Header -->
         <div class="ui-fchain-item-tr-button">
             <div>
-                <button class="btn btn-light btn-sm" data-bind="click: () => {$root.selectedProduct($data)}" data-toggle="modal" data-target="#product-config-dialog">
+                <button class="btn btn-light btn-sm" data-bind="click: () => {$root.selectedProduct($data.instance())}" data-toggle="modal" data-target="#product-config-dialog">
                     <span class="fa fa-sliders"></span>
                 </button>
             </div>

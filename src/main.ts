@@ -74,7 +74,9 @@ window.view = {
         publicRecipeBuildings: []
     },
     presenter: {
-        residence: null
+        residence: null,
+        categories: [],
+        productByGuid: new Map(),
     },
     viewMode: null,
     islandManager: null,
@@ -491,10 +493,17 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
 
     window.view.island.subscribe((i: any) => templates.forEach(t => t.parentInstance(i)));
 
-    window.view.presenter.categories = [] as CategoryPresenter[];
+    const presenter = window.view.presenter;
+    presenter.categories = [] as CategoryPresenter[];
     // Create CategoryPresenter for each category template
     allIslands.categories.forEach((category: ProductCategory) => {
-        window.view.presenter.categories.push(new CategoryPresenter(category, window.view.island));
+        const categoryPresenter = new CategoryPresenter(category, window.view.island) 
+        presenter.categories.push(categoryPresenter);
+        for(const productPresenter of categoryPresenter.productPresenters){
+            presenter.productByGuid.set(productPresenter.guid, productPresenter);
+            if (window.view.selectedProduct() == null)
+                window.view.selectedProduct(productPresenter.instance());
+        }
     });
 
     window.view.template = {
