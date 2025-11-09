@@ -8,6 +8,12 @@
             </div>
 
             <div class="modal-body">
+                <div data-bind="if: $data.instance().demands && $data.instance().totalDemands && $data.instance().totalDemands() > ACCURACY">
+                    <collapsible params="id: 'product-config-consumption', heading: $root.texts.consumption.name, collapsed: true, data: $data.instance(), summary: $data.instance().totalDemands">
+                        <consumer-view params="product: $data.instance()"></consumer-view>
+                    </collapsible>
+                </div>
+
                 <!-- Supplier Selection Section -->
                 <div class="mb-4 p-3" style="background-color: rgba(0,0,0,0.05); border-radius: 4px;">
                     <h5 data-bind="text: $root.texts.defaultSupplier ? $root.texts.defaultSupplier.name : 'Default Supplier'"></h5>
@@ -70,51 +76,7 @@
 
                 </div>
 
-                <!-- Island Selection for Trade Routes -->
-                <div class="mb-4 p-3" data-bind="if: $data.availableTradeIslands().length > 0">
-                    <h5 data-bind="text: $root.texts.createTradeRoute ? $root.texts.createTradeRoute.name : 'Create Trade Route'"></h5>
-                    <form class="form-inline" style="gap: 1rem;" data-bind="submit: () => $data.createTradeRoute()">
-                        <div class="form-group">
-                            <label data-bind="text: $root.texts.island ? $root.texts.island.name : 'Island'"></label>
-                            <select class="custom-select ml-2"
-                                    data-bind="options: $data.availableTradeIslands,
-                                               optionsText: i => i.sessionExtendedName(),
-                                               value: $data.selectedTradeIsland">
-                            </select>
-                        </div>
 
-                        <div class="form-group">
-                            <div class="custom-control custom-switch">
-                                <input type="checkbox" class="custom-control-input" id="trade-route-export-checkbox" data-bind="checked: $data.tradeRouteExport">
-                                <label class="custom-control-label" for="trade-route-export-checkbox">
-                                    <img class="icon-sm icon-light mr-1" data-bind="attr: { src: $data.tradeRouteExport() ? '../icons/icon_transporter_unloading_light.png' : '../icons/icon_transporter_loading_light.png' }">
-                                    <span data-bind="text: $data.tradeRouteExport() ? ($root.texts.export ? $root.texts.export.name : 'Export') : ($root.texts.import ? $root.texts.import.name : 'Import')"></span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="input-group">
-                                <input type="number" class="form-control" step="0.1" min="0"
-                                       data-bind="value: $data.tradeRouteAmount">
-                                <div class="input-group-append">
-                                    <span class="input-group-text">t/min</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary" data-bind="enable: $data.canCreateTradeRoute()">
-                            <span class="fa fa-plus"></span>
-                            <span data-bind="text: $root.texts.create ? $root.texts.create.name : 'Create'"></span>
-                        </button>
-                    </form>
-                </div>
-
-                <div data-bind="if: $data.instance().demands && $data.instance().totalDemands && $data.instance().totalDemands() > ACCURACY">
-                    <collapsible params="id: 'product-config-consumption', heading: $root.texts.consumption.name, collapsed: true, data: $data.instance(), summary: $data.instance().totalDemands">
-                        <consumer-view params="product: $data.instance()"></consumer-view>
-                    </collapsible>
-                </div>
 
                 <!-- Tab Navigation -->
                 <ul class="nav nav-tabs" role="tablist" id="product-config-supplier-tabs">
@@ -148,6 +110,34 @@
 
                     <!-- Trade Routes Tab -->
                     <div class="tab-pane fade show active" id="trade-routes-tab" >
+                        <div data-bind="if: $data.availableTradeIslands().length">
+                            <form class="form form-inline mb-2" style="justify-content: space-between"> 
+                                <!-- Create route for import -->
+                                <select name="islands" class="custom-select" id="trade-islands" data-bind="value: $data.selectedTradeIsland, options: $data.availableTradeIslands, optionsText: i => i.sessionExtendedName() /* + '\t' + i.assetsMap.get($data.factory.guid).overProduction() + ' t/min' */"></select>
+                                <button class="btn btn-light btn-sm"
+                                    data-bind="click: () => $data.createImportTradeRoute(), enable: $data.canCreateImportTradeRoute()">
+                                    <span data-bind="text: $root.texts.setAsDefault ? $root.texts.setAsDefault.name : 'Set as Default'"></span>
+                                </button>
+                            </form>
+                            
+                            <form class="form form-inline mb-4" style="justify-content: space-between"> 
+                                <!-- Create route for export -->
+                                <div class="input-group input-group-short spinner">
+                                    <div class="input-group-prepend">
+                                        <img class="icon-sm icon-light" src="../icons/icon_transporter_unloading_light.png" />
+                                    </div>
+                                    <input step="0.1" class="form-control" type="number" value="0" data-bind="value: $data.tradeAmount" />
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">t/min</span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-light" data-bind="click: () => $data.createExportTradeRoute(), enable: $data.canCreateExportTradeRoute()">
+                                    <span class="fa fa-plus"></span>
+                                </button>
+                            </form>
+                            
+                        </div>
+
                         <table class="table table-striped table-sm">
                             <thead>
                                 <tr>

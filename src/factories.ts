@@ -502,7 +502,7 @@ export class Factory extends Consumer implements Supplier {
     public outputAmount: KnockoutComputed<number>;           // Total output produced
     public substitutableOutputAmount: KnockoutComputed<number>; // Output that can be substituted
     public overProduction: KnockoutComputed<number>;         // Excess production over demand
-
+    public isHighlightedAsMissing: KnockoutComputed<boolean>;
 
     /**
      * Creates a new Factory instance
@@ -598,6 +598,16 @@ export class Factory extends Consumer implements Supplier {
 
         this.overProduction = ko.pureComputed(() => Math.max(0, this.outputAmount() - this.demandFromProduct()));
 
+        this.isHighlightedAsMissing = ko.pureComputed(() => {
+            if (!window.view.settings.missingBuildingsHighlight || !window.view.settings.missingBuildingsHighlight.checked())
+                return false;
+
+            if (!this.isDefaultSupplier())
+                return false;
+
+            return this.buildings.required() > this.buildings.constructed() + ACCURACY;
+
+        });
  
         (this.getProduct() as Product).addFactory(this);
     }

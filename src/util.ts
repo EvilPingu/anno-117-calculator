@@ -70,6 +70,8 @@ export function formatNumber(num: number | string, forceSign: boolean = false): 
     return str;
 }
 
+
+
 /**
  * Handles number input with mouse wheel support and keyboard modifiers
  * Provides increment/decrement functionality with configurable step sizes
@@ -436,9 +438,11 @@ export class BuildingsCalc {
         this.constructed = ko.observable(0);
         this.planned = ko.observable(0);
         this.required = ko.observable(0);
-        this.utilized = ko.computed(() => this.fullyUtilizeConstructed() ? Math.max(this.constructed(), this.required()) : this.required());
-        
+        this.utilized = ko.computed(() => this.fullyUtilizeConstructed() ? Math.max(this.constructed(), this.required()) : this.required());   
+
     }
+
+
 }
 
 /**

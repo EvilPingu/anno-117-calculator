@@ -14,22 +14,22 @@
                                 <span data-bind="if: $data.from.session">
                                     <img src="../icons/icon_marketplace_2d_light.png" class="icon-sm icon-light" data-bind="attr: {src: $data.from.session.icon}" />
                                 </span>
-                                <a href="#" data-dismiss="modal" data-bind="text: $data.from.name, click: () => { $root.island($data.from); setTimeout(() => {$root.selectedFactory($data.fromFactory);$('#factory-config-dialog').modal('show')}, 500);}"></a>
+                                <a href="#" data-dismiss="modal" data-bind="text: $data.from.name, click: () => { $root.island($data.from); setTimeout(() => {$root.selectedProduct($data.fromIslandProduct);$('#product-config-dialog').modal('show')}, 500);}"></a>
                             </td>
                             <td><span>&rarr;</span></td>
                             <td>
                                 <span data-bind="if: $data.to.session">
                                     <img src="../icons/icon_marketplace_2d_light.png" class="icon-sm icon-light" data-bind="attr: {src: $data.to.session.icon}" />
                                 </span>
-                                <a href="#" data-dismiss="modal" data-bind="text: $data.to.name, click: () => {setTimeout(() => { $root.island($data.to); $root.selectedFactory($data.toFactory);$('#factory-config-dialog').modal('show')}, 500);}"></a>
+                                <a href="#" data-dismiss="modal" data-bind="text: $data.to.name, click: () => {setTimeout(() => { $root.island($data.to); $root.selectedProduct($data.toIslandProduct);$('#product-config-dialog').modal('show')}, 500);}"></a>
                             </td>
                             <td>
-                                <img class="icon-sm" src="../icons/icon_marketplace_2d_light.png" data-bind="attr: {src: $data.fromFactory.product.icon, alt: $data.fromFactory.product.name}" />
+                                <img class="icon-sm" src="../icons/icon_marketplace_2d_light.png" data-bind="attr: {src: $data.product.icon, alt: $data.product.name()}" />
                             </td>
                             <td>
                                 
                                 <div class="float-right">
-                                    <span data-bind="if: !$data.isExport($parent) && $data.fromFactory.isHighlightedAsMissing()">
+                                    <span data-bind="if: !$data.isExport($parent) && $data.product.isHighlightedAsMissing()">
                                         <span class="fa fa-exclamation-triangle danger-icon"></span>
                                     </span>
                                     <trade-route-amount params="supplier: $data"></trade-route-amount>

@@ -219,7 +219,7 @@ ko.components.register('trade-route-amount', {
         if (isObservable(this.supplier))
             this.supplier = this.supplier();
 
-        if(!isSupplier(this.supplier) || !isObservable(this.supplier.userSetAmount)){
+        if( !isObservable(this.supplier.userSetAmount)){
             logAssetInfo(this.supplier);
             throw new Error("Expect supplier with Knout observable userSetAmount to be passed to trade-route-amount.");
         }

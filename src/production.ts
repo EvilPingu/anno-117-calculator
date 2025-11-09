@@ -41,6 +41,7 @@ export class Product extends NamedElement {
     public defaultSupplier: KnockoutObservable<Supplier | null>; // User-selected default supplier
     public defaultSupplierSubscription!: KnockoutComputed<void>; // Ensures that the default supplier is unset if it is no longer available
     public island?: Island; // Island reference for supplier management
+    public isHighlightedAsMissing: KnockoutComputed<boolean>;
 
     public notes: KnockoutObservable<string>;
 
@@ -90,6 +91,15 @@ export class Product extends NamedElement {
         this.defaultSupplier = ko.observable(null);
         this.availableSuppliersNoRoutes = dummyComputed("Product.availableSuppliers");
         this.availableFactories = dummyObservableArray("Product.availableFactories"); // throws if used before initialization in initSuppliers
+        
+        this.isHighlightedAsMissing = ko.pureComputed(() => {
+            const supplier = this.defaultSupplier();
+
+            if(!supplier || supplier.type != "factory")
+                return false;
+
+            return (supplier as Factory).isHighlightedAsMissing();
+         });
 
         this.notes = ko.observable("");
     }
@@ -240,6 +250,7 @@ export class Product extends NamedElement {
                 defaultSupp.setDemand(remaining);
             }
         });
+
     }
 
     /**
@@ -272,6 +283,28 @@ export class Product extends NamedElement {
 
         this.defaultSupplier()?.unsetAsDefaultSupplier();
         this.defaultSupplier(supplier);
+    }
+
+    /**
+     * Checks whether the chain of default suppliers ends at the island the passed product belongs to
+     */
+    isSuppliedFrom(product: Product){
+        var sourceSupplier = this.defaultSupplier();
+        var count = 0;
+        while(sourceSupplier instanceof TradeRoute) {
+            var p = sourceSupplier.fromIslandProduct;
+
+            if (p == product)
+                return true;
+
+            sourceSupplier = product.defaultSupplier();
+
+            if(++count >= 1000)
+                throw new Error(`Ended in infinite loop while checking cycle in supplier chain graph 
+                    for product ${this.guid} from island "${this.island?.name()}": ${this}`);
+        }
+
+        return false;
     }
 }
 

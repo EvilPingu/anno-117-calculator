@@ -1,5 +1,4 @@
-import { ALL_ISLANDS, createFloatInput, EPSILON, ko } from './util';
-import { Factory as FactoryClass } from './factories';
+import { ALL_ISLANDS, createFloatInput, ko } from './util';
 import { Island } from './world';
 import { Supplier } from './suppliers';
 import { Product } from './production';
@@ -16,12 +15,7 @@ interface ITradeList {
     inputAmount: KnockoutComputed<number>;
     outputAmount: KnockoutComputed<number>;
     amount: KnockoutComputed<number>;
-    unusedIslands: KnockoutObservableArray<Island>;
-    selectedIsland: KnockoutObservable<Island>;
-    export: KnockoutObservable<boolean>;
-    newAmount: KnockoutObservable<number>;
     visible: KnockoutComputed<boolean>;
-    onShow(): void;
 }
 
 /**
@@ -65,7 +59,7 @@ export class TradeRoute implements Supplier {
         var toIslandProduct = this.to.assetsMap.get(productGUID) as Product
         var fromIslandProduct = this.from.assetsMap.get(productGUID) as Product
 
-        if (!toIslandProduct || fromIslandProduct)
+        if (!toIslandProduct || !fromIslandProduct)
             throw new Error('TradeRoute product is required');
 
         this.fromIslandProduct = fromIslandProduct;
@@ -145,23 +139,7 @@ export class TradeRoute implements Supplier {
         if(!this.active())
             return false;
 
-        // backtrack source product supply to avoid cycles in the supplier graph
-        var sourceSupplier = this.fromIslandProduct.defaultSupplier();
-        var count = 0;
-        while(sourceSupplier instanceof TradeRoute) {
-            var product = sourceSupplier.fromIslandProduct;
-
-            if (product == this.toIslandProduct)
-                return false;
-
-            sourceSupplier = product.defaultSupplier();
-
-            if(++count >= 1000)
-                throw new Error(`Ended in infinite loop while checking cycle in supplier chain graph 
-                    for product ${this.fromIslandProduct.guid} from island "${this.from.name()}": ${this.fromIslandProduct}`);
-        }
-
-        return true;
+        return !this.fromIslandProduct.isSuppliedFrom(this.toIslandProduct);
     }
 
     isDefaultSupplier(): boolean {
@@ -205,10 +183,6 @@ export class TradeList {
     public inputAmount: KnockoutComputed<number>;
     public outputAmount: KnockoutComputed<number>;
     public amount: KnockoutComputed<number>;
-    public unusedIslands: KnockoutObservableArray<Island>;
-    public selectedIsland: KnockoutObservable<Island>;
-    public export: KnockoutObservable<boolean>;
-    public newAmount: KnockoutObservable<number>;
     public visible: KnockoutComputed<boolean>;
 
     /**
@@ -230,7 +204,7 @@ export class TradeList {
         this.product = product;
 
         this.routes = ko.observableArray();
-        // Note: NPC routes removed - use PassiveTradeSupplier instead
+
 
         this.inputAmount = ko.pureComputed(() => {
             var amount = 0;
@@ -253,83 +227,14 @@ export class TradeList {
 
         this.amount = ko.pureComputed(() => this.outputAmount() - this.inputAmount() );
 
-        // interface elements to create a new route
-        this.unusedIslands = ko.observableArray();
-        this.selectedIsland = ko.observable();
-        this.export = ko.observable(false);
-        this.newAmount = ko.observable(0);
-
         this.visible = ko.pureComputed(() => {
             return view.islands().length >= 2;
         });
     }
 
-    /**
-     * Checks if a new trade route can be created
-     * @returns True if a route can be created
-     */
-    canCreate(): boolean {
-        return this.selectedIsland() != null && !this.selectedIsland().isAllIslands() && this.newAmount() > EPSILON;
-    }
 
-    /**
-     * Creates a new trade route
-     */
-    create(): void {
-        if (!this.canCreate())
-            return;
 
-        if (this.export()) {
-            var route = new TradeRoute(
-                this.product.guid,
-                this.island, //from
-                this.selectedIsland(), //to
-                this.newAmount()
-            );
-        } else {
-            var route = new TradeRoute(
-                this.product.guid,
-                this.selectedIsland(), //from
-                this.island, //to
-                this.newAmount()
-            );
-        }
 
-        this.routes.push(route);
-        this.unusedIslands.remove(this.selectedIsland());
-
-        view.tradeManager.add(route);
-    }
-
-    /**
-     * Called when the trade list dialog is shown
-     * Updates the available islands and default values
-     */
-    onShow(): void {
-        var usedIslands = new Set(this.routes().flatMap((r: TradeRoute) => [r.from, r.to]));
-        var islands = view.islands().filter((i: Island) => !usedIslands.has(i) && i != this.island);
-        islands.sort((a: Island, b: Island) => {
-            var sIdxA = view.sessions.indexOf(a.session);
-            var sIdxB = view.sessions.indexOf(b.session);
-
-            if (sIdxA == sIdxB) {
-                return a.name().localeCompare(b.name());
-            } else {
-                return sIdxA - sIdxB;
-            }
-        });
-        var overProduction = 0;
-        var substitutableOutputAmount = 0;
-        for (var factory of this.product.factories){
-            overProduction += factory.overProduction();
-            substitutableOutputAmount += factory.substitutableOutputAmount();
-        }
-
-        this.export(overProduction > EPSILON); 
-        this.newAmount(Math.max(overProduction, substitutableOutputAmount));
-
-        this.unusedIslands(islands);
-    }
 }
 
 interface TradeRouteConfig {
@@ -355,16 +260,6 @@ export class TradeManager {
     constructor() {
         this.key = "tradeRoutes";
         this.routes = ko.observableArray();
-
-        view.selectedFactory.subscribe((f: any) => {
-            if (!(f instanceof FactoryClass))
-                return;
-
-            const product = f.getProduct();
-            if (product && product.tradeList && product.tradeList.onShow) {
-                product.tradeList.onShow();
-            }
-        });
 
         if (localStorage) {
             // trade routes
@@ -434,9 +329,6 @@ export class TradeManager {
         route.fromIslandProduct.tradeList.routes.remove(route);
         route.toIslandProduct.tradeList.routes.remove(route);
         this.routes.remove(route);
-
-        route.toIslandProduct.tradeList.unusedIslands.unshift(route.from);
-        route.fromIslandProduct.tradeList.unusedIslands.unshift(route.to);
     }
 
     /**

@@ -1,4 +1,4 @@
-import { ACCURACY, BuildingsCalc, EPSILON, formatNumber, ko } from './util';
+import { BuildingsCalc, EPSILON, formatNumber, ko } from './util';
 import { AppliedBuff, Product, ProductCategory } from './production';
 import { Factory, Module } from './factories';
 import { Island, Region } from './world';
@@ -136,8 +136,8 @@ export class ProductPresenter {
     // === ISLAND SELECTION FOR TRADE ROUTES ===
     public availableTradeIslands: KnockoutComputed<Island[]>;
     public selectedTradeIsland: KnockoutObservable<Island | null>;
-    public tradeRouteExport: KnockoutObservable<boolean>;
     public tradeRouteAmount: KnockoutObservable<number>;
+    public excessProductionSubscription: KnockoutComputed<void>;
 
     // === AGGREGATE CALCULATIONS ===
     public extraGoodProduction: KnockoutComputed<number>;
@@ -247,8 +247,11 @@ export class ProductPresenter {
 
         // Island selection for trade route creation
         this.selectedTradeIsland = ko.observable(null);
-        this.tradeRouteExport = ko.observable(false);
         this.tradeRouteAmount = ko.observable(0);
+
+        this.excessProductionSubscription = ko.computed(() => {
+            this.tradeRouteAmount(this.instance().excessProduction());
+        });
 
         this.availableTradeIslands = ko.pureComputed(() => {
             if (!this.instance().tradeList) return [];
@@ -263,13 +266,25 @@ export class ProductPresenter {
                 usedIslands.add(route.to);
             }
 
-            return view.islands().filter((i: Island) => {
+            var islands = view.islands().filter((i: Island) => {
                 if (i === island() || i.isAllIslands()) return false;
                 if (usedIslands.has(i)) return false;
 
-                const islandProduct = i.assetsMap.get(this.instance().guid);
-                return islandProduct && islandProduct.factories && islandProduct.factories.length > 0;
+                return true; // allow routes from islands without a factory to allow handling extra goods
             });
+
+            islands.sort((a: Island, b: Island) => {
+                var sIdxA = view.sessions.indexOf(a.session);
+                var sIdxB = view.sessions.indexOf(b.session);
+    
+                if (sIdxA == sIdxB) {
+                    return a.name().localeCompare(b.name());
+                } else {
+                    return sIdxA - sIdxB;
+                }
+            });
+
+            return islands;
         });
 
 
@@ -323,15 +338,13 @@ export class ProductPresenter {
         this.icon = ko.pureComputed(() => this.product.icon as string);
 
         this.isHighlightedAsMissing = ko.pureComputed(() => {
-            if (!window.view.settings.missingBuildingsHighlight || !window.view.settings.missingBuildingsHighlight.checked())
+            const supplier = this.defaultSupplier();
+
+            if(!(supplier instanceof Factory))
                 return false;
 
-            const defaultSupplier =  this.defaultSupplier()
-            if (!(defaultSupplier instanceof Factory))
-                return false;
-
-            return defaultSupplier.buildings.required() > defaultSupplier.buildings.constructed() + ACCURACY;
-        });
+            return supplier.isHighlightedAsMissing();
+         });
 
 
         this.visible = ko.computed(() => {
@@ -387,27 +400,24 @@ export class ProductPresenter {
     /**
      * Creates a trade route from selected island
      */
-    createTradeRoute(): void {
+    createExportTradeRoute(): void {
+        if(!this.canCreateExportTradeRoute())
+            return;
+
         const island = this.selectedTradeIsland();
         if (!island) return;
 
         const amount = this.tradeRouteAmount() || 0;
-        const isExport = this.tradeRouteExport();
 
         const route = new TradeRoute(
             this.product.guid,
-            isExport ? this.island() : island,
-            isExport ? island : this.island(),
+            this.island(),
+            island,
             amount
         );
 
         this.instance().tradeList.routes.push(route);
         view.tradeManager.add(route);
-
-        // Set as default supplier if importing
-        if (!isExport) {
-            this.instance().updateDefaultSupplier(route);
-        }
 
         // Reset form
         this.selectedTradeIsland(null);
@@ -415,10 +425,42 @@ export class ProductPresenter {
     }
 
     /**
+     * Creates a trade route from selected island
+     */
+    createImportTradeRoute(): void {
+        const island = this.selectedTradeIsland();
+        if (!island) return;
+
+        if (!this.canCreateImportTradeRoute())
+            return;
+
+        const route = new TradeRoute(
+            this.product.guid,
+            island,
+            this.island(),
+            0
+        );
+
+        this.instance().tradeList.routes.push(route);
+        view.tradeManager.add(route);
+
+        // Set as default supplier if importing
+        this.instance().updateDefaultSupplier(route);
+
+        // Reset form
+        this.selectedTradeIsland(null);
+    }
+
+    /**
      * Checks if trade route can be created
      */
-    canCreateTradeRoute(): boolean {
-        return this.selectedTradeIsland() != null;
+    canCreateExportTradeRoute(): boolean {
+        return this.selectedTradeIsland() != null && this.tradeRouteAmount() > EPSILON;
+    }
+
+    canCreateImportTradeRoute(): boolean {
+        // ensure we do not create a cycle
+        return this.selectedTradeIsland() != null && !this.instance().isSuppliedFrom(this.selectedTradeIsland()?.assetsMap.get(this.guid));
     }
 
     /**

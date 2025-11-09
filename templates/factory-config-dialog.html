@@ -176,7 +176,7 @@
                                                         <img class="icon-sm icon-light" src="../icons/icon_transporter_loading_light.png" />
                                                     </span>
                                                 </div>
-                                                <span data-bind="if: !$data.isExport($parent) && $data.fromFactory.isHighlightedAsMissing()">
+                                                <span data-bind="if: !$data.isExport($parent) && $data.product.isHighlightedAsMissing()">
                                                     <span class="fa fa-exclamation-triangle danger-icon"></span>
                                                 </span>
                                             </div>
@@ -198,33 +198,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <form class="form form-inline" data-bind="if: $data.unusedIslands().length" style="justify-content: space-between">
 
-                            <select name="islands" class="custom-select" id="islands" data-bind="value: $data.selectedIsland, options: $data.unusedIslands, optionsText: i => i.sessionExtendedName() /* + '\t' + i.assetsMap.get($data.factory.guid).overProduction() + ' t/min' */"></select>
-                            <div style="display: flex">
-                                <div class="mr-2">
-
-                                    <img class="icon-sm icon-light" src="../icons/icon_transporter_loading_light.png" />
-                                </div>
-                                <div class="custom-control custom-switch">
-                                    <input type="checkbox" class="custom-control-input" id="create-trade-route-export-checkbox" data-bind="checked: $data.export">
-                                    <label class="custom-control-label" for="create-trade-route-export-checkbox">
-
-                                        <img class="icon-sm icon-light" src="../icons/icon_transporter_unloading_light.png" />
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="input-group input-group-short spinner">
-
-                                <input step="0.1" class="form-control" type="number" value="0" data-bind="value: newAmount" />
-                                <div class="input-group-append">
-                                    <span class="input-group-text">t/min</span>
-                                </div>
-                            </div>
-                            <button class="btn btn-sm btn-light" data-bind="click: () => $data.create(), enable: $data.canCreate()">
-                                <span class="fa fa-plus"></span>
-                            </button>
-                        </form>
 
 
                     </collapsible>
