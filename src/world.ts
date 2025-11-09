@@ -734,6 +734,8 @@ export class Island {
         }
 
         // for (let consumer of (params.publicServices || [])) {
+        //    if (this.region.id != 'Meta' && consumer.associatedRegions.indexOf(this.region.id || '') == -1)
+        //        continue;
         //     let f = new PublicConsumerBuilding(consumer, assetsMap, literalsMap, this);
         //     assetsMap.set(f.guid, f);
         //     this.consumers.push(f);
@@ -741,6 +743,8 @@ export class Island {
         // }
 
         // for (let consumer of (params.publicRecipeBuildings || [])) {
+        //    if (this.region.id != 'Meta' && consumer.associatedRegions.indexOf(this.region.id || '') == -1)
+        //        continue;
         //     let f = new PublicConsumerBuilding(consumer, assetsMap, literalsMap, this);
         //     assetsMap.set(f.guid, f);
         //     this.consumers.push(f);
@@ -758,6 +762,10 @@ export class Island {
         }
 
         for (let factory of params.factories) {
+
+            if (this.region.id != 'Meta' && factory.associatedRegions.indexOf(this.region.id || '') == -1)
+                continue;
+
             let f = new Factory(factory, assetsMap, literalsMap, this, params.modules);
             assetsMap.set(f.guid, f);
             this.consumers.push(f);

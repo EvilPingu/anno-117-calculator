@@ -233,7 +233,7 @@ export class Template {
  * Creates hierarchical tree structures for visualizing factory dependencies
  */
 export class ProductionChainView {
-    public factory: KnockoutObservable<Consumer> | KnockoutObservable<Product>;
+    public factory: KnockoutObservable<Consumer | null> | KnockoutObservable<Product>;
     public amount: KnockoutObservable<number> | null;
     public tree: any;
     public breadth: KnockoutObservable<number>;
@@ -243,7 +243,7 @@ export class ProductionChainView {
      * @param factory - The factory to create a chain for
      * @param amount - Optional amount to base calculations on
      */
-    constructor(factory: KnockoutObservable<Consumer> | KnockoutObservable<Product>, amount: KnockoutObservable<number> | null = null) {
+    constructor(factory: KnockoutObservable<Consumer | null> | KnockoutObservable<Product>, amount: KnockoutObservable<number> | null = null) {
         // Validate required parameters
         if (!factory) {
             throw new Error('ProductionChainView factory is required');
@@ -254,6 +254,9 @@ export class ProductionChainView {
         this.amount = amount;
 
         this.tree = ko.pureComputed(() => {
+            if(this.factory() == null)
+                return null;
+
             let traverse = (consumer: Factory | Consumer | Product, amount: number): any => {
                     if (amount < ACCURACY)
                         return null;
@@ -343,7 +346,7 @@ export class ProductionChainView {
             };
 
             var amount = this.amount;
-            const consumer = this.factory();
+            const consumer = this.factory() as Consumer;
             if (amount == null){
                 if (consumer instanceof Product)
                     amount = consumer.totalDemand;

@@ -106,7 +106,6 @@ export class Product extends NamedElement {
 
     addFactory(factory: Factory){
         this.factories.push(factory);
-        this.availableFactories = ko.pureComputed(() => this.factories.filter((f: Factory) => f.available()));
     }
 
     /**
@@ -133,6 +132,9 @@ export class Product extends NamedElement {
      */
     initSuppliers(island: Island): void {
         this.island = island;
+
+        this.availableFactories = ko.pureComputed(() => this.factories.filter((f: Factory) => f.available()));
+ 
 
         // Create trade list for managing trade routes
         this.tradeList = new TradeList(island, this);
@@ -225,7 +227,7 @@ export class Product extends NamedElement {
                 sum += this.tradeList.outputAmount();
 
                 if (defaultSupp instanceof TradeRoute)
-                    sum -= defaultSupp.amount();
+                    sum -= defaultSupp.currentProduction();
             }
 
             return sum;
@@ -297,7 +299,7 @@ export class Product extends NamedElement {
             if (p == product)
                 return true;
 
-            sourceSupplier = product.defaultSupplier();
+            sourceSupplier = p.defaultSupplier();
 
             if(++count >= 1000)
                 throw new Error(`Ended in infinite loop while checking cycle in supplier chain graph 

@@ -126,7 +126,7 @@
                                     <div class="input-group-prepend">
                                         <img class="icon-sm icon-light" src="../icons/icon_transporter_unloading_light.png" />
                                     </div>
-                                    <input step="0.1" class="form-control" type="number" value="0" data-bind="value: $data.tradeAmount" />
+                                    <input step="0.1" class="form-control" type="number" value="0" data-bind="value: $data.tradeRouteAmount" />
                                     <div class="input-group-append">
                                         <span class="input-group-text">t/min</span>
                                     </div>
@@ -172,11 +172,13 @@
                                         <a href="#" data-bind="text: $data.getOpposite($parent.tradeList()).name, click: () => {$root.island($data.getOpposite($parent.tradeList()))}"></a>
                                     </td>
                                     <td>
-                                        <img class="icon-sm icon-light" data-bind="attr: { src: $data.isExport($parent.tradeList()) ? '../icons/icon_transporter_unloading_light.png' : '../icons/icon_transporter_loading_light.png' }">
+                                        <img class="icon-sm icon-light" data-bind="attr: { 'src': $data.isExport($parent.tradeList()) ? 'icons/icon_transporter_unloading_light.png' : 'icons/icon_transporter_loading_light.png' }">
                                         <span data-bind="text: $data.isExport($parent.tradeList()) ? ($root.texts.export ? $root.texts.export.name : 'Export') : ($root.texts.import ? $root.texts.import.name : 'Import')"></span>
                                     </td>
                                     <td>
-                                        <btn-default-supplier params="supplier: $data"></btn-default-supplier>
+                                        <div data-bind="if: !$data.isExport($parent.tradeList())">
+                                            <btn-default-supplier params="supplier: $data"></btn-default-supplier>
+                                        </div>
                                     </td>
                                     <td>
                                         <trade-route-amount params="supplier: $data"></trade-route-amount>

@@ -1,4 +1,4 @@
-import { BuildingsCalc, EPSILON, formatNumber, ko } from './util';
+import { BuildingsCalc, createFloatInput, EPSILON, formatNumber, ko } from './util';
 import { AppliedBuff, Product, ProductCategory } from './production';
 import { Factory, Module } from './factories';
 import { Island, Region } from './world';
@@ -26,7 +26,7 @@ export interface SupplierOption {
 export class FactoryPresenter {
     public factory: Factory;
     public parentProduct: ProductPresenter;
-    public instance: KnockoutComputed<Factory>;
+    public instance: KnockoutComputed<Factory | null>;
     public island: KnockoutObservable<Island>;
 
     // Delegated properties
@@ -41,7 +41,6 @@ export class FactoryPresenter {
     public visible: KnockoutComputed<boolean>;
     public canSupply: KnockoutComputed<boolean>;
     public isDefaultSupplier: KnockoutComputed<boolean>;
-    public tradeList: KnockoutComputed<TradeList | undefined>;
     public productionChain: ProductionChainView;
     
 
@@ -65,17 +64,17 @@ export class FactoryPresenter {
         
 
         // Delegate to factory observables
-        this.guid = ko.pureComputed(() => this.instance().guid);
-        this.name = ko.pureComputed(() => this.instance().name());
-        this.region = ko.pureComputed(() => this.instance().associatedRegions[0]);
-        this.buildings = ko.pureComputed(() => this.instance().buildings);
-        this.boost = ko.pureComputed(() => this.instance().boost());
-        this.outputAmount = ko.pureComputed(() => this.instance().outputAmount());
-        this.modules = ko.pureComputed(() => this.instance().modules);
-        this.items = ko.pureComputed(() => this.instance().availableItems());
+        this.guid = ko.pureComputed(() => this.instance()?.guid);
+        this.name = ko.pureComputed(() => this.instance()?.name());
+        this.region = ko.pureComputed(() => this.instance()?.associatedRegions[0]);
+        this.buildings = ko.pureComputed(() => this.instance()?.buildings || 0);
+        this.boost = ko.pureComputed(() => this.instance()?.boost() || 1);
+        this.outputAmount = ko.pureComputed(() => this.instance()?.outputAmount() || 0);
+        this.modules = ko.pureComputed(() => this.instance()?.modules || []);
+        this.items = ko.pureComputed(() => this.instance()?.availableItems() || []);
 
         this.visible = ko.computed(() => {
-            if (!this.instance().available())
+            if (!this.instance()?.available())
                 return false;
 
             if (this.island().region.id != "Meta" && this.region() != this.island().region)
@@ -85,17 +84,12 @@ export class FactoryPresenter {
         });
 
         this.canSupply = ko.pureComputed(() =>
-            this.instance().canSupply()
+            this.instance()?.canSupply() || false
         );
 
         this.isDefaultSupplier = ko.pureComputed(() =>
-            this.instance().isDefaultSupplier()
+            this.instance()?.isDefaultSupplier() || false
         );
-
-        this.tradeList = ko.pureComputed(() => {
-            const product = this.factory.getProduct();
-            return product ? product.tradeList : undefined;
-        });
 
         this.productionChain = new ProductionChainView(this.instance, this.outputAmount);
     }
@@ -104,7 +98,7 @@ export class FactoryPresenter {
      * Sets this factory as the default supplier for the parent product
      */
     setAsDefaultSupplier(): void {
-        this.instance().setAsDefaultSupplier();
+        this.instance()?.setAsDefaultSupplier();
     }
 
     outputAmountFormatted(): string {
@@ -247,9 +241,9 @@ export class ProductPresenter {
 
         // Island selection for trade route creation
         this.selectedTradeIsland = ko.observable(null);
-        this.tradeRouteAmount = ko.observable(0);
+        this.tradeRouteAmount = createFloatInput(0, 0);
 
-        this.excessProductionSubscription = ko.computed(() => {
+        this.excessProductionSubscription = ko.pureComputed(() => { // pure Computed to avoid re-calculation when tradeRouteAmount is set
             this.tradeRouteAmount(this.instance().excessProduction());
         });
 
@@ -358,10 +352,13 @@ export class ProductPresenter {
             if (extraGoodAmount > EPSILON || tradeList.inputAmount() > EPSILON || tradeList.outputAmount() > EPSILON || this.totalDemand() > EPSILON)
                 return true;
 
-            for (var factory of this.visibleFactories())
-                if (Math.abs(factory.instance().throughput()) > EPSILON ||
-                    factory.instance().buildings.constructed() > 0)
+            for (var presenter of this.visibleFactories()){
+                const factory = presenter.instance();
+                if (!factory) throw new Error(`Visible factory with GUID ${presenter.guid()} has no instance on island ${presenter.island().name()}`);
+                if (Math.abs(factory.throughput()) > EPSILON ||
+                    factory.buildings.constructed() > 0)
                     return true;
+            }
 
             const productRegion = this.region();
             if (this.island().region.id != "Meta" && productRegion && productRegion != this.island().region)
@@ -460,7 +457,7 @@ export class ProductPresenter {
 
     canCreateImportTradeRoute(): boolean {
         // ensure we do not create a cycle
-        return this.selectedTradeIsland() != null && !this.instance().isSuppliedFrom(this.selectedTradeIsland()?.assetsMap.get(this.guid));
+        return this.selectedTradeIsland() != null && !this.selectedTradeIsland()?.assetsMap.get(this.guid).isSuppliedFrom(this.instance())!;
     }
 
     /**

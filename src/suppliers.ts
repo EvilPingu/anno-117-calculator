@@ -32,11 +32,7 @@ export function isSupplier(obj: any): obj is Supplier {
     return obj != null &&
         typeof obj.type === 'string' &&
         (obj.type === 'factory' || obj.type === 'trade_route' || obj.type === 'passive_trade' || obj.type === 'extra_good') &&
-        obj.product instanceof Product &&
-        obj.island instanceof Island &&
-        typeof obj.defaultProduction === 'function' &&
-        typeof obj.canSupply === 'function' &&
-        typeof obj.setDemand === 'function';
+        obj.product instanceof Product
 }
 
 /**

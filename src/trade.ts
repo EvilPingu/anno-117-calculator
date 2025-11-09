@@ -33,7 +33,7 @@ export class TradeRoute implements Supplier {
     public readonly to: Island;
     public readonly fromIslandProduct: Product; 
     public readonly toIslandProduct: Product; 
-    public amount: KnockoutObservable<number>;
+    private amount: KnockoutObservable<number>;
     public userSetAmount: KnockoutObservable<number>; // User-set minimum amount
 
     public readonly active: KnockoutObservable<boolean>; // when trade route is destructed, active makes canSupply return false and thus trigger unregistering as default supplier
@@ -210,7 +210,7 @@ export class TradeList {
             var amount = 0;
             for (var route of this.routes())
                 if(route.isExport(this))
-                    amount += route.amount();
+                    amount += route.currentProduction();
 
             return amount;
         });
@@ -220,7 +220,7 @@ export class TradeList {
 
             for (var route of this.routes())
                 if (!route.isExport(this))
-                    amount += route.amount();
+                    amount += route.currentProduction();
 
             return amount;
         });
