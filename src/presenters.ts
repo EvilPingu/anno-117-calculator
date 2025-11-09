@@ -2,7 +2,7 @@ import { ACCURACY, BuildingsCalc, EPSILON, formatNumber, ko } from './util';
 import { AppliedBuff, Product, ProductCategory } from './production';
 import { Factory, Module } from './factories';
 import { Island, Region } from './world';
-import { Supplier } from './suppliers';
+import { ExtraGoodSupplier, Supplier } from './suppliers';
 import { TradeRoute, TradeList } from './trade';
 import { ProductionChainView } from './views';
 
@@ -39,6 +39,7 @@ export class FactoryPresenter {
     public modules: KnockoutComputed<Module[]>;
     public items: KnockoutComputed<AppliedBuff[]>;
     public visible: KnockoutComputed<boolean>;
+    public canSupply: KnockoutComputed<boolean>;
     public isDefaultSupplier: KnockoutComputed<boolean>;
     public tradeList: KnockoutComputed<TradeList | undefined>;
     public productionChain: ProductionChainView;
@@ -83,8 +84,12 @@ export class FactoryPresenter {
             return true;
         });
 
+        this.canSupply = ko.pureComputed(() =>
+            this.instance().canSupply()
+        );
+
         this.isDefaultSupplier = ko.pureComputed(() =>
-            this.parentProduct.defaultSupplier() === this.factory
+            this.instance().isDefaultSupplier()
         );
 
         this.tradeList = ko.pureComputed(() => {
@@ -99,7 +104,7 @@ export class FactoryPresenter {
      * Sets this factory as the default supplier for the parent product
      */
     setAsDefaultSupplier(): void {
-        this.parentProduct.instance().updateDefaultSupplier(this.factory);
+        this.instance().setAsDefaultSupplier();
     }
 
     outputAmountFormatted(): string {
@@ -124,6 +129,7 @@ export class ProductPresenter {
 
     // === SUPPLIER MANAGEMENT ===
     public availableSuppliers: KnockoutComputed<SupplierOption[]>;
+    public availableExtraGoodSuppliers: KnockoutComputed<ExtraGoodSupplier[]>;
     public defaultSupplier: KnockoutComputed<Supplier | null>;
     public selectedSupplierOption: KnockoutObservable<SupplierOption | null>;
 
@@ -134,6 +140,7 @@ export class ProductPresenter {
     public tradeRouteAmount: KnockoutObservable<number>;
 
     // === AGGREGATE CALCULATIONS ===
+    public extraGoodProduction: KnockoutComputed<number>;
     public totalProduction: KnockoutComputed<number>;
     public totalDemand: KnockoutComputed<number>;
     public netBalance: KnockoutComputed<number>;
@@ -142,13 +149,15 @@ export class ProductPresenter {
     public tradeList: KnockoutComputed<TradeList>;
 
     // === UI STATE ===
-    public visible: KnockoutComputed<boolean>;
-    public regionIconVisible: KnockoutComputed<boolean>;
     public isHighlightedAsMissing: KnockoutComputed<boolean>;
     public name: KnockoutComputed<string>;
     public icon: KnockoutComputed<string>;
     public region: KnockoutComputed<Region | undefined>;
+
+    public visible: KnockoutComputed<boolean>;
+    public regionIconVisible: KnockoutComputed<boolean>;
     public tradeListVisible: KnockoutComputed<boolean>;
+    public extraGoodSuppliersVisible: KnockoutComputed<boolean>;
 
     /**
      * Creates a new ProductPresenter instance
@@ -215,6 +224,21 @@ export class ProductPresenter {
             return suppliers;
         });
 
+        this.availableExtraGoodSuppliers = ko.pureComputed(() => {
+            var suppliers = [];
+
+            const extraGoodSuppliers = this.instance().extraGoodSuppliers;
+            if (extraGoodSuppliers) {
+                for (const supplier of extraGoodSuppliers) {
+                    if (supplier.canSupply() && supplier.island === island()) {
+                        suppliers.push(supplier);
+                    }
+                }
+            }
+
+            return suppliers;
+        })
+
         // Delegate to product's defaultSupplier
         this.defaultSupplier = ko.pureComputed(() => this.instance().defaultSupplier());
 
@@ -248,6 +272,10 @@ export class ProductPresenter {
             });
         });
 
+
+        this.extraGoodProduction = ko.pureComputed(() => this.instance().extraGoodSuppliers?.reduce((sum,prod) => sum + prod.currentProduction(), 0));
+
+
         // Calculate total production (from all local suppliers + trade imports)
         this.totalProduction = ko.pureComputed(() => {
             let total = 0;
@@ -257,7 +285,7 @@ export class ProductPresenter {
             if (suppliers) {
                 for (const supplier of suppliers) {
                     if ((supplier as any).island === island) {
-                        total += supplier.defaultProduction();
+                        total += supplier.currentProduction();
                     }
                 }
             }
@@ -291,6 +319,21 @@ export class ProductPresenter {
         });
 
         // UI properties
+        this.name = ko.pureComputed(() => this.product.name());
+        this.icon = ko.pureComputed(() => this.product.icon as string);
+
+        this.isHighlightedAsMissing = ko.pureComputed(() => {
+            if (!window.view.settings.missingBuildingsHighlight || !window.view.settings.missingBuildingsHighlight.checked())
+                return false;
+
+            const defaultSupplier =  this.defaultSupplier()
+            if (!(defaultSupplier instanceof Factory))
+                return false;
+
+            return defaultSupplier.buildings.required() > defaultSupplier.buildings.constructed() + ACCURACY;
+        });
+
+
         this.visible = ko.computed(() => {
             if (!this.instance().available())
                 return false;
@@ -320,21 +363,15 @@ export class ProductPresenter {
 
         this.regionIconVisible = ko.pureComputed(() => this.island().region.id == "Meta");
 
-        this.name = ko.pureComputed(() => this.product.name());
-        this.icon = ko.pureComputed(() => this.product.icon as string);
-
-        this.isHighlightedAsMissing = ko.pureComputed(() => {
-            if (!window.view.settings.missingBuildingsHighlight || !window.view.settings.missingBuildingsHighlight.checked())
-                return false;
-
-            const defaultSupplier =  this.defaultSupplier()
-            if (!(defaultSupplier instanceof Factory))
-                return false;
-
-            return defaultSupplier.buildings.required() > defaultSupplier.buildings.constructed() + ACCURACY;
-        });
-
         this.tradeListVisible = ko.pureComputed(() => this.tradeList()?.visible());
+
+        this.extraGoodSuppliersVisible = ko.pureComputed(() => {
+            for(var supplier of this.availableSuppliers())
+                if (supplier instanceof ExtraGoodSupplier)
+                    return true;
+
+            return false;
+        })
     }
 
     /**

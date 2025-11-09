@@ -1,4 +1,4 @@
-import { ko } from './util';
+import { createFloatInput, EPSILON, ko } from './util';
 import { ExtraGoodProduction, Product } from './production';
 import { Island } from './world';
 import { Factory } from './factories';
@@ -14,7 +14,11 @@ export interface Supplier {
 
     // Production capabilities
     defaultProduction(): number;           // Current/baseline production amount
+    currentProduction(): number;
     canSupply(): boolean;    // Can this supplier fulfill amount?
+
+    isDefaultSupplier(): boolean;
+    setAsDefaultSupplier(): void;
 
     // Demand integration
     setDemand(amount: number): void;       // Request supplier to produce/import amount
@@ -44,6 +48,7 @@ export class PassiveTradeSupplier implements Supplier {
     public readonly product: Product;
     public readonly island: Island;
     public amount: KnockoutObservable<number>;
+    public minAmount: KnockoutObservable<number>;
 
     /**
      * Creates a new PassiveTradeSupplier instance
@@ -61,13 +66,18 @@ export class PassiveTradeSupplier implements Supplier {
         this.product = product;
         this.island = island;
         this.amount = ko.observable(0);
+        this.minAmount = createFloatInput(0, 0);
     }
 
     /**
      * Only used if needed
      */
     defaultProduction(): number {
-        return 0;
+        return 0; // when set as default supplier, minAmount is ignored
+    }
+
+    currentProduction(): number {
+        return this.amount();
     }
 
     /**
@@ -77,18 +87,29 @@ export class PassiveTradeSupplier implements Supplier {
         return true;
     }
 
+    isDefaultSupplier(): boolean {
+        return this.product.defaultSupplier() === this;
+    }
+
+    setAsDefaultSupplier(): void {
+        if (!this.canSupply())
+            return;
+
+        this.product.updateDefaultSupplier(this);
+    }
+
     /**
      * Passive trade doesn't propagate demand
      */
-    setDemand(_amount: number): void {
-        // No-op: passive trade doesn't respond to demand
+    setDemand(amount: number): void {
+        this.amount(amount);
     }
 
     /**
      * Passive trade doesn't propagate demand
      */
     unsetAsDefaultSupplier(): void {
-        // No-op: passive trade doesn't respond to demand
+        this.amount(this.minAmount());
     }
 }
 
@@ -140,11 +161,25 @@ export class ExtraGoodSupplier implements Supplier {
         return totalRatio;
     }
 
+    defaultProduction(): number {
+        // other demands determine the throughput of the factory
+        if (this.throughput() + EPSILON < this.factory.throughput())
+            return this.currentProduction();
+
+        var otherThroughput = Math.max(this.factory.throughputByExistingBuildings(), this.factory.throughputByOutput());
+        
+        if (otherThroughput < EPSILON)
+            return 0;
+        
+        return this.factory.throughput() / otherThroughput * this.currentProduction();
+
+    }
+
     /**
      * Returns the total amount from all extra goods production entries
      * Sum of all ExtraGoodProduction.amount() in the list
      */
-    defaultProduction(): number {
+    currentProduction(): number {
         let total = 0;
         for (const entry of this.productionList) {
             if (entry && typeof entry.amount === 'function') {
@@ -159,6 +194,17 @@ export class ExtraGoodSupplier implements Supplier {
      */
     canSupply(): boolean {
         return this.getTotalRatio() > 0;
+    }
+
+    isDefaultSupplier(): boolean {
+        return this.product.defaultSupplier() === this;
+    }
+
+    setAsDefaultSupplier(): void {
+        if (!this.canSupply())
+            return;
+
+        this.product.updateDefaultSupplier(this);
     }
 
     /**
@@ -183,6 +229,9 @@ export class ExtraGoodSupplier implements Supplier {
         }
     }
 
+    /**
+     * Must only be called from product within the updateDefaultSupplier method
+     */
     unsetAsDefaultSupplier(): void {
         this.throughput(0);
     }

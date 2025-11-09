@@ -2,6 +2,8 @@ import { ResidenceNeed } from './consumption';
 import { Consumer } from './factories';
 import { PopulationLevel, ResidenceBuilding } from './population';
 import { Product } from './production';
+import { isSupplier, PassiveTradeSupplier, Supplier } from './suppliers';
+import { TradeRoute } from './trade';
 import { NumberInputHandler, EPSILON, ko, debugBindingContext, logAssetInfo } from './util';
 import { Constructible, Region } from './world';
 
@@ -177,17 +179,58 @@ interface Demand {
             </div>`
     });
 
-    /**
-     * Asset icon component for displaying icons with fallback handling
-     * Shows an icon for an asset with proper alt text and title attributes
-     * @param asset - The asset object containing icon and name properties
-     */
-    ko.components.register('asset-icon', {
+/**
+ * Asset icon component for displaying icons with fallback handling
+ * Shows an icon for an asset with proper alt text and title attributes
+ * @param asset - The asset object containing icon and name properties
+ */
+ko.components.register('asset-icon', {
     viewModel: function (asset: Asset) {
         this.asset = asset;
     },
     template: `<img class="icon-sm" src="" data-bind="debug: 'Asset icon', attr: { src: asset.icon ? asset.icon : null, alt: asset.name, title: asset.name}">`
 });
+
+
+ko.components.register('btn-default-supplier', {
+    viewModel: function (params: any) {
+        this.supplier = params.supplier;
+
+        if(!isSupplier(this.supplier)){
+            logAssetInfo(this.supplier);
+            throw new Error("Expect supplier to be passed to btn-default-supplier.");
+        }
+    },
+    template: `<button class="btn btn-light btn-sm"
+                    data-bind="click: () => supplier.setAsDefaultSupplier(), enable: supplier.canSupply()">
+                    <span class="fa fa-check" data-bind="visible: supplier.isDefaultSupplier()"></span>
+                    <span data-bind="text: $root.texts.setAsDefault ? $root.texts.setAsDefault.name : 'Set as Default'"></span>
+                </button>`
+});
+
+ko.components.register('trade-route-amount', {
+    viewModel: function (supplier: TradeRoute | PassiveTradeSupplier) {
+        this.supplier = supplier;
+
+        if(!isSupplier(this.supplier) || !ko.isObservable(this.supplier.minAmount)){
+            logAssetInfo(this.supplier);
+            throw new Error("Expect supplier with Knout observable minAmount to be passed to trade-route-amount.");
+        }
+    },
+    template: `<div>
+                <div class="input-group spinner" style="max-width: 12rem" data-bind="if: !supplier.isDefaultSupplier()">
+                    <input step="0.1" min="0" class="form-control" type="number" value="0" data-bind="value: supplier.minAmount, attr: {id: 'trade-route-amount-input' } " />
+                    <div class="input-group-append">
+                        <div data-bind="component: { name: 'number-input-increment', params: { obs: $data.minAmount, id: 'trade-route-amount-input' }}"></div>
+                        <span class="input-group-text">t/min</span>
+                    </div>
+                </div>
+                <div>
+                    <span data-bind="text: formatNumber(supplier.currentProduction())"></span>
+                    <span class="input-group-text">t/min</span>
+                </div>
+               </div>`
+    });
 
 /**
  * Factory header component for displaying factory information with optional configuration button
@@ -196,7 +239,7 @@ interface Demand {
  * @param params.data - The factory data object
  * @param params.button - Whether to show the configuration button
  */
-(ko as any).components.register('factory-header', {
+ko.components.register('factory-header', {
     viewModel: function (params: any) {
         this.$data = params.data;
         this.hasButton = params.button;
@@ -225,7 +268,7 @@ interface Demand {
  * Shows population level icon, residence icon, and floor count
  * @param residence - The residence building object
  */
-(ko as any).components.register('residence-label', {
+ko.components.register('residence-label', {
     viewModel: function (residence: Asset) {
         this.residence = residence;
     },
@@ -244,7 +287,7 @@ interface Demand {
  * @param params.entries - Array of effect entries to display
  * @param params.filter - Optional filter for products to show
  */
-(ko as any).components.register('residence-effect-entry', {
+ko.components.register('residence-effect-entry', {
     viewModel: function (params: any) {
         this.entries = params.entries;
         this.filter = params.filter;
@@ -280,7 +323,7 @@ interface Demand {
  * @param params.old - The old item being replaced
  * @param params.new - The new item replacing the old one
  */
-(ko as any).components.register('replacement', {
+ko.components.register('replacement', {
     viewModel: function (params: any) {
         this.old = params.old;
         this.replacing = params.new;
@@ -305,7 +348,7 @@ interface Demand {
  * Provides a numeric input with increment/decrement buttons for existing building counts
  * @param asset - The asset object to configure existing buildings for
  */
-(ko as any).components.register('constructed-buildings-input', {
+ko.components.register('constructed-buildings-input', {
     viewModel: function (asset: Constructible) {
         this.guid = asset.guid;
         this.buildings = asset.buildings;
@@ -333,7 +376,7 @@ interface Demand {
  * @param params.id - Optional custom ID for the checkbox
  * @param params.title - Optional custom title
  */
-(ko as any).components.register('icon-checkbox', {
+ko.components.register('icon-checkbox', {
     viewModel: function (params: any) {
         this.asset = params.asset;
         this.checked = params.checked || this.asset.checked;
@@ -364,7 +407,7 @@ interface Demand {
  * @param params - Component parameters
  * @param params.amount - The amount of additional goods
  */
-(ko as any).components.register('additional-output', {
+ko.components.register('additional-output', {
     viewModel: function (params: any) {
         this.amount = params.amount;
         this.texts = window.view.texts;
@@ -388,7 +431,7 @@ interface Demand {
  * @param params.summary - Optional summary value to display
  * @param params.colorSummary - Whether to color the summary based on value
  */
-(ko as any).components.register('collapsible', {
+ko.components.register('collapsible', {
     viewModel: function (params: any) {
         this.target = '#' + params.id;
         this.heading = params.heading;
@@ -479,7 +522,7 @@ interface Demand {
  * Consumer unknown component for displaying unknown consumer types
  * Fallback component when consumer type is not recognized
  */
-(ko as any).components.register('consumer-unknown', {
+ko.components.register('consumer-unknown', {
     template: `<span>?</span>`
 });
 
@@ -488,7 +531,7 @@ interface Demand {
  * Shows population level icon and name, clickable to open population configuration
  * @param demand - The population demand object
  */
-(ko as any).components.register('consumer-residence', {
+ko.components.register('consumer-residence', {
     template:
         `<div class="inline-list" style="cursor: pointer" data-dismiss="modal" data-bind="debug: 'Consumer: Residence', click: () => {setTimeout(() => { $root.selectedPopulationLevel($data.consumer.populationLevel); $('#population-level-config-dialog').modal('show')}, 500);}" >
             <div data-bind="component: {name: 'asset-icon', params: $data.consumer.populationLevel}"></div>
@@ -501,7 +544,7 @@ interface Demand {
  * Shows factory icon and name, clickable to open factory configuration
  * @param demand - The factory demand object
  */
-(ko as any).components.register('consumer-factory', {
+ko.components.register('consumer-factory', {
     template:
         `<div class="inline-list" style="cursor: pointer" data-bind="debug: 'Consumer: Factory', click: () => {$root.selectedFactory($data.consumer);}" >
             <div data-bind="component: {name: 'asset-icon', params: $data.consumer}"></div>
@@ -514,7 +557,7 @@ interface Demand {
  * Shows factory icon, module icon, and combined name, clickable to open factory configuration
  * @param demand - The module demand object
  */
-(ko as any).components.register('consumer-module', {
+ko.components.register('consumer-module', {
     template:
         `<div class="inline-list" style="cursor: pointer" data-bind="debug: 'Consumer: Module', click: () => {$root.selectedFactory($data.consumer);}" >
             <div data-bind="component: {name: 'asset-icon', params: $data.consumer}"></div>
@@ -528,7 +571,7 @@ interface Demand {
  * Dynamically selects the appropriate consumer component based on demand type
  * @param demand - The demand object to display
  */
-(ko as any).components.register('consumer-entry', {
+ko.components.register('consumer-entry', {
     viewModel: function (demand: Demand) {
         this.demand = demand;
 
@@ -552,7 +595,7 @@ interface Demand {
  * @param params - Component parameters
  * @param params.product - The product to display demands for
  */
-(ko as any).components.register('consumer-view', {
+ko.components.register('consumer-view', {
     viewModel: function (params: {product: Product}) {
         this.product = params.product;
         this.populationResidenceIndices = new Map<number, number>();
@@ -609,7 +652,7 @@ interface Demand {
  * @param params - Component parameters
  * @param params.buffs - Array of buff objects to display
  */
-(ko as any).components.register('buff-display', {
+ko.components.register('buff-display', {
     viewModel: function (params: any) {
         this.buffs = params.buffs;
         this.texts = window.view.texts;

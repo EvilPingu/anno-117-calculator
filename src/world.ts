@@ -881,6 +881,7 @@ export class Island {
 
             if (localStorage) {
                 persistString(p, "notes");
+                persistFloat(p.passiveTradeSupplier.minAmount, "passiveTrade.amount");
 
                 // Restore default supplier from localStorage
                 const typeKey = p.guid + ".defaultSupplier.type";

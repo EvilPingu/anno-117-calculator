@@ -500,8 +500,9 @@ nav {
     text-decoration: underline;
 }
 
-#nav button span {
-    font-size: 1.25rem;
+.nav-link {
+    font-size: 1.1rem;
+    background: rgba(255, 233, 222, 0.9);
 }
 
 .center {
@@ -844,11 +845,21 @@ input[type=number]::-webkit-inner-spin-button {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-    .bg-dark .ui-fchain-item.danger {
-        border-color: #e53e3e;
-        background: rgba(229, 62, 62, 0.15) !important;
-        box-shadow: 0 2px 8px rgba(229, 62, 62, 0.4);
-    }
+.bg-dark .ui-fchain-item.danger {
+    border-color: #e53e3e;
+    background: rgba(229, 62, 62, 0.15) !important;
+    box-shadow: 0 2px 8px rgba(229, 62, 62, 0.4);
+}
+
+.bg-dark .nav-link {
+    background: rgba(45, 55, 72, 0.9);
+    color: rgb(226, 232, 240);
+}
+
+.bg-dark .nav-link.active {
+    background: rgb(92, 113, 148);
+    color: rgb(226, 232, 240);
+}
 
 body:not(.bg-dark) .icon-light {
     filter: invert(61.2%) sepia(48%) hue-rotate(168.4deg);

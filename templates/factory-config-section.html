@@ -17,11 +17,7 @@
                     <div data-bind="text: formatNumber(100 * $data.boost()) + '%'"></div>
                 </td>
                 <td>
-                    <button class="btn btn-light btn-sm"
-                            data-bind="click: () => $data.setAsDefaultSupplier(), enable: !$data.isDefaultSupplier()">
-                        <span class="fa fa-check"></span>
-                        <span data-bind="text: $root.texts.setAsDefault ? $root.texts.setAsDefault.name : 'Set as Default'"></span>
-                    </button>
+                    <div data-bind="component: 'btn-default-supplier', params=$data.instance()"></div>
                 </td>
             </tr>
             <tr data-bind="debug: 'Workforce Demand', with: $data.instance().workforceDemand">

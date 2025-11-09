@@ -42,6 +42,34 @@
                     </div>
                 </div>
 
+
+                <div data-bind="if: $data.extraGoodSuppliersVisible()">
+                    <collapsible params="id: 'product-config-extraGoods', heading: $root.texts.extraGoods.name, collapsed: false, data: $data, summary: $data.extraGoodProduction">
+                        <table class="table table-striped">
+                            <tbody data-bind="foreach: $data.availableExtraGoodSuppliers">
+                                <tr>
+                                    <td>
+                                        <span class="icon-sm icon-light mr-2" data-bind="visible: $data.island().region.id == 'Meta', component: {name: 'asset-icon', params: $data.region()}"></span>
+                                        <img class="icon-sm" data-bind="attr: { src: $data.factory.icon ? $data.factory.icon : null, alt: $data.factory.name}">
+                                        <span class="mb-0" data-bind="text: $data.name()"></span>
+                                    </td> <!-- factory icon -->
+                                    <td>
+                                        <div data-bind="component: 'btn-default-supplier', params=$data"></div>
+                                    </td>
+                                    <td>
+                                        <div class="float-right">
+                                            <span data-bind="text: formatNumber($data.currentProduction())"></span>
+                                            <span> t/min</span>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </collapsible>
+
+                </div>
+
                 <!-- Island Selection for Trade Routes -->
                 <div class="mb-4 p-3" data-bind="if: $data.availableTradeIslands().length > 0">
                     <h5 data-bind="text: $root.texts.createTradeRoute ? $root.texts.createTradeRoute.name : 'Create Trade Route'"></h5>
@@ -96,7 +124,7 @@
                             <span class="d-flex align-items-center">
                                 <span class="icon-sm icon-light mr-2" data-bind="visible: $data.island().region.id == 'Meta', component: {name: 'asset-icon', params: $data.region()}"></span>
                                 <span class="mb-0" data-bind="text: $data.name()"></span>
-                                <span class="badge badge-light ml-1" data-bind="text: $data.outputAmountFormatted()"></span>
+                                <span class="ml-3" data-bind="text: $data.outputAmountFormatted()"></span>
                             </span>
                         </button>
                     </li>
@@ -104,7 +132,7 @@
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" data-toggle="tab" data-target="#trade-routes-tab" aria-controls="trade-routes-tab" aria-selected="true">
                             <span data-bind="text: $root.texts.tradeRoutes ? $root.texts.tradeRoutes.name : 'Trade Routes'"></span>
-                            <span class="badge badge-light ml-1" data-bind="text: $data.tradeList().routes().length"></span>
+                            <span class="ml-3" data-bind="text: $data.tradeList().amount()"></span><span> t/min</span>
                         </button>
                     </li>
                 </ul>
@@ -125,11 +153,27 @@
                                 <tr>
                                     <th data-bind="text: $root.texts.island ? $root.texts.island.name : 'Island'"></th>
                                     <th data-bind="text: $root.texts.direction ? $root.texts.direction.name : 'Direction'"></th>
+                                    <th></th>
                                     <th data-bind="text: $root.texts.amount ? $root.texts.amount.name : 'Amount'"></th>
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody data-bind="foreach: $data.tradeList().routes">
+                            <tbody>
+                                <tr>
+                                    <td data-bind="text: $root.texts.traders ? $root.texts.traders.name : 'Traders'"></td>
+                                    <td>
+                                        <img class="icon-sm icon-light" src="../icons/icon_transporter_loading_light.png" }">
+                                        <span data-bind="text: $root.texts.import ? $root.texts.import.name : 'Import'"></span>
+                                    </td>
+                                    <td>
+                                        <div data-bind="component: 'btn-default-supplier', params=$data.instance().passiveTradeSupplier"></div>
+                                    </td>
+                                    <td>
+                                        <div data-bind="component: 'trade-route-amount', params=$data"></div>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <!-- ko foreach: $data.tradeList().routes -->
                                 <tr>
                                     <td>
                                         <span data-bind="if: $data.getOpposite($parent.tradeList()).session">
@@ -142,13 +186,10 @@
                                         <span data-bind="text: $data.isExport($parent.tradeList()) ? ($root.texts.export ? $root.texts.export.name : 'Export') : ($root.texts.import ? $root.texts.import.name : 'Import')"></span>
                                     </td>
                                     <td>
-                                        <div class="input-group spinner" style="max-width: 12rem">
-                                            <input step="0.1" min="0" class="form-control" type="number" value="0" data-bind="value: $data.minAmount, attr: {id: $data.guid + '-amount-input' } " />
-                                            <div class="input-group-append">
-                                                <div data-bind="component: { name: 'number-input-increment', params: { obs: $data.amount, id: $data.guid + '-amount-input' }}"></div>
-                                                <span class="input-group-text">t/min</span>
-                                            </div>
-                                        </div>
+                                        <div data-bind="component: 'btn-default-supplier', params=$data"></div>
+                                    </td>
+                                    <td>
+                                        <div data-bind="component: 'trade-route-amount', params=$data"></div>
                                     </td>
                                     <td>
                                         <button class="btn btn-secondary btn-sm float-right" data-bind="click: () => $data.delete()">
@@ -156,6 +197,7 @@
                                         </button>
                                     </td>
                                 </tr>
+                                <!-- /ko -->
                             </tbody>
                         </table>
                     </div>

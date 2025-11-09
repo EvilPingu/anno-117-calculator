@@ -133,11 +133,46 @@ export class TradeRoute implements Supplier {
         return this.minAmount();
     }
 
+    currentProduction(): number {
+        return this.amount();
+    }
+
     /**
      * Trade routes can always supply (as long as they exist) (Supplier interface)
+     * But they need to check that they do not create a cycle in the suppliers graph
      */
     canSupply(): boolean {
-        return this.active();
+        if(!this.active())
+            return false;
+
+        // backtrack source product supply to avoid cycles in the supplier graph
+        var sourceSupplier = this.fromIslandProduct.defaultSupplier();
+        var count = 0;
+        while(sourceSupplier instanceof TradeRoute) {
+            var product = sourceSupplier.fromIslandProduct;
+
+            if (product == this.toIslandProduct)
+                return false;
+
+            sourceSupplier = product.defaultSupplier();
+
+            if(++count >= 1000)
+                throw new Error(`Ended in infinite loop while checking cycle in supplier chain graph 
+                    for product ${this.fromIslandProduct.guid} from island "${this.from.name()}": ${this.fromIslandProduct}`);
+        }
+
+        return true;
+    }
+
+    isDefaultSupplier(): boolean {
+        return this.product.defaultSupplier() === this;
+    }
+
+    setAsDefaultSupplier(): void {
+        if (!this.canSupply())
+            return;
+
+        this.product.updateDefaultSupplier(this);
     }
 
     /**
@@ -360,7 +395,7 @@ export class TradeManager {
                 route.toIslandProduct.tradeList.routes.push(route);
 
                 if (isDefaultSupplier)
-                    route.toIslandProduct.updateDefaultSupplier(route);
+                    route.setAsDefaultSupplier();
             }
 
             this.persistenceSubscription = ko.computed(() => {
@@ -372,7 +407,7 @@ export class TradeManager {
                         from: r.from.isAllIslands() ? ALL_ISLANDS : r.from.name(),
                         to: r.to.isAllIslands() ? ALL_ISLANDS : r.to.name(),
                         minAmount: r.minAmount(),
-                        isDefaultSupplier: r.product.defaultSupplier() == r
+                        isDefaultSupplier: r.isDefaultSupplier()
                     });
                 }
 

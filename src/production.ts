@@ -40,7 +40,6 @@ export class Product extends NamedElement {
     public availableSuppliersNoRoutes: KnockoutComputed<Supplier[]>; // All available suppliers (factories + extra goods)
     public defaultSupplier: KnockoutObservable<Supplier | null>; // User-selected default supplier
     public defaultSupplierSubscription!: KnockoutComputed<void>; // Ensures that the default supplier is unset if it is no longer available
-    public extraGoodProduction!: KnockoutComputed<number>;
     public island?: Island; // Island reference for supplier management
 
     public notes: KnockoutObservable<string>;
@@ -155,7 +154,6 @@ export class Product extends NamedElement {
             }
         }
 
-        this.extraGoodProduction = ko.pureComputed(() => this.extraGoodSuppliers?.reduce((sum,prod) => sum + prod.defaultProduction(), 0));
 
         // excluding trade routes
         this.availableSuppliersNoRoutes = ko.pureComputed(() => {

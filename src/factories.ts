@@ -117,7 +117,7 @@ export class Consumer extends NamedElement{
 
         // Set up computed observables
         this.throughputByExistingBuildings = ko.computed(() => {
-            return this.buildings.constructed() * this.boost() * 60 /  this.cycleTime ;
+            return this.buildings.fullyUtilizeConstructed() ? this.buildings.constructed() * this.boost() * 60 /  this.cycleTime : 0 ;
         });
 
         this.throughput = ko.pureComputed(() => {
@@ -667,11 +667,15 @@ export class Factory extends Consumer implements Supplier {
     // === SUPPLIER INTERFACE IMPLEMENTATION ===
 
     /**
-     * Returns the current production amount (Supplier interface)
+     * Returns the the production amount (Supplier interface) if this factory would NOT be the default supplier
      * Includes extra goods factor for accurate production calculation
      */
     defaultProduction(): number {
         return Math.max(this.throughputByExistingBuildings(), this.throughputByExtraGoodSupplier()) * this.extraGoodFactor();
+    }
+
+    currentProduction(): number {
+        return this.outputAmount();
     }
 
     /**
@@ -681,6 +685,17 @@ export class Factory extends Consumer implements Supplier {
      */
     canSupply(): boolean {
         return this.available();
+    }
+
+    isDefaultSupplier(): boolean {
+        return this.product.defaultSupplier() === this;
+    }
+
+    setAsDefaultSupplier(): void {
+        if (!this.canSupply())
+            return;
+
+        this.product.updateDefaultSupplier(this);
     }
 
     /**
