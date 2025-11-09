@@ -566,10 +566,10 @@ interface Supplier {
 
 **2. TradeRouteSupplier** (wraps TradeList)
 - `defaultProduction()`: Returns sum of trade route amounts importing to this island
-- `setDemand()`: Creates/updates trade route with `minAmount` constraint
-- `minAmount`: User-set floor - trade route amount can increase but not decrease below this
-- Auto-creates trade route if none exists (with minAmount = 0)
-- Auto-deletes route if supplier changed and minAmount = 0
+- `setDemand()`: Creates/updates trade route with `userSetAmount` constraint
+- `userSetAmount`: User-set floor - trade route amount can increase but not decrease below this
+- Auto-creates trade route if none exists (with userSetAmount = 0)
+- Auto-deletes route if supplier changed and userSetAmount = 0
 
 **3. PassiveTradeSupplier** (new concept)
 - `defaultProduction()`: Returns manually entered amount
@@ -662,14 +662,14 @@ class Demand {
 ### Trade Route Integration Changes
 
 **TradeList modifications** (trade.ts:180-331):
-- `minAmount: KnockoutObservable<number>` - user-set minimum
+- `userSetAmount: KnockoutObservable<number>` - user-set minimum
 - `manuallySet: KnockoutObservable<boolean>` - distinguishes user vs auto-created routes
-- `routes` includes `minAmount` property per route
-- Auto-cleanup: Remove routes where `minAmount == 0 && !manuallySet`
+- `routes` includes `userSetAmount` property per route
+- Auto-cleanup: Remove routes where `userSetAmount == 0 && !manuallySet`
 
 **TradeRoute persistence** (trade.ts:403-418):
-- Add `minAmount` to JSON serialization
-- Restore minAmount on load
+- Add `userSetAmount` to JSON serialization
+- Restore userSetAmount on load
 
 ### Implementation Strategy
 
@@ -687,7 +687,7 @@ class Demand {
 1. Create FactoryPresenter class
 2. Build supplier selection dialog/dropdown
 3. Update templates to use presenter pattern
-4. Add trade route minAmount UI
+4. Add trade route userSetAmount UI
 
 **Phase 4: Migration & Cleanup**
 1. Migrate existing fixedFactory selections to default suppliers
@@ -712,7 +712,7 @@ class Demand {
 **Core Classes**:
 - `src/production.ts` - Product, Demand classes
 - `src/factories.ts` - Factory integration with suppliers
-- `src/trade.ts` - TradeList, TradeRoute with minAmount
+- `src/trade.ts` - TradeList, TradeRoute with userSetAmount
 
 **New Files**:
 - `src/suppliers.ts` - Supplier interface and implementations

@@ -54,7 +54,7 @@
                                         <span class="mb-0" data-bind="text: $data.name()"></span>
                                     </td> <!-- factory icon -->
                                     <td>
-                                        <div data-bind="component: 'btn-default-supplier', params=$data"></div>
+                                        <btn-default-supplier params="supplier: $data"></btn-default-supplier>
                                     </td>
                                     <td>
                                         <div class="float-right">
@@ -131,8 +131,8 @@
                      <!-- /ko -->
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" data-toggle="tab" data-target="#trade-routes-tab" aria-controls="trade-routes-tab" aria-selected="true">
-                            <span data-bind="text: $root.texts.tradeRoutes ? $root.texts.tradeRoutes.name : 'Trade Routes'"></span>
-                            <span class="ml-3" data-bind="text: $data.tradeList().amount()"></span><span> t/min</span>
+                            <span data-bind="text: $root.texts.trading ? $root.texts.trading.name : 'Trading'"></span>
+                            <span class="ml-3" data-bind="text: $data.tradingAmountFormatted()"></span>
                         </button>
                     </li>
                 </ul>
@@ -166,10 +166,10 @@
                                         <span data-bind="text: $root.texts.import ? $root.texts.import.name : 'Import'"></span>
                                     </td>
                                     <td>
-                                        <div data-bind="component: 'btn-default-supplier', params=$data.instance().passiveTradeSupplier"></div>
+                                        <btn-default-supplier params="supplier: $data.instance().passiveTradeSupplier"></btn-default-supplier>
                                     </td>
                                     <td>
-                                        <div data-bind="component: 'trade-route-amount', params=$data"></div>
+                                        <trade-route-amount params="supplier: $data.instance().passiveTradeSupplier"></trade-route-amount>
                                     </td>
                                     <td></td>
                                 </tr>
@@ -186,10 +186,10 @@
                                         <span data-bind="text: $data.isExport($parent.tradeList()) ? ($root.texts.export ? $root.texts.export.name : 'Export') : ($root.texts.import ? $root.texts.import.name : 'Import')"></span>
                                     </td>
                                     <td>
-                                        <div data-bind="component: 'btn-default-supplier', params=$data"></div>
+                                        <btn-default-supplier params="supplier: $data"></btn-default-supplier>
                                     </td>
                                     <td>
-                                        <div data-bind="component: 'trade-route-amount', params=$data"></div>
+                                        <trade-route-amount params="supplier: $data"></trade-route-amount>
                                     </td>
                                     <td>
                                         <button class="btn btn-secondary btn-sm float-right" data-bind="click: () => $data.delete()">

@@ -1,11 +1,12 @@
+import { isObservable } from 'knockout';
 import { ResidenceNeed } from './consumption';
 import { Consumer } from './factories';
 import { PopulationLevel, ResidenceBuilding } from './population';
 import { Product } from './production';
-import { isSupplier, PassiveTradeSupplier, Supplier } from './suppliers';
-import { TradeRoute } from './trade';
+import { isSupplier } from './suppliers';
 import { NumberInputHandler, EPSILON, ko, debugBindingContext, logAssetInfo } from './util';
 import { Constructible, Region } from './world';
+import { TradeRoute } from './trade';
 
 declare const $: any;
 declare const window: any;
@@ -196,6 +197,9 @@ ko.components.register('btn-default-supplier', {
     viewModel: function (params: any) {
         this.supplier = params.supplier;
 
+        if (isObservable(this.supplier))
+            this.supplier = this.supplier();
+
         if(!isSupplier(this.supplier)){
             logAssetInfo(this.supplier);
             throw new Error("Expect supplier to be passed to btn-default-supplier.");
@@ -209,25 +213,37 @@ ko.components.register('btn-default-supplier', {
 });
 
 ko.components.register('trade-route-amount', {
-    viewModel: function (supplier: TradeRoute | PassiveTradeSupplier) {
-        this.supplier = supplier;
+    viewModel: function (params: any) {
+        this.supplier = params.supplier;
 
-        if(!isSupplier(this.supplier) || !ko.isObservable(this.supplier.minAmount)){
+        if (isObservable(this.supplier))
+            this.supplier = this.supplier();
+
+        if(!isSupplier(this.supplier) || !isObservable(this.supplier.userSetAmount)){
             logAssetInfo(this.supplier);
-            throw new Error("Expect supplier with Knout observable minAmount to be passed to trade-route-amount.");
+            throw new Error("Expect supplier with Knout observable userSetAmount to be passed to trade-route-amount.");
         }
+
+        this.id =  'trade-route-amount-input-' + this.supplier.product.guid.toString();
+
+        if (this.supplier instanceof TradeRoute)
+        {
+            const sanitize = (name: string) => name.replace(/[\W]/g, '-');
+            this.id += '-' + sanitize(this.supplier.from.name()) + '-to-' + sanitize(this.supplier.to.name())
+        }
+
     },
     template: `<div>
-                <div class="input-group spinner" style="max-width: 12rem" data-bind="if: !supplier.isDefaultSupplier()">
-                    <input step="0.1" min="0" class="form-control" type="number" value="0" data-bind="value: supplier.minAmount, attr: {id: 'trade-route-amount-input' } " />
+                <div class="input-group input-group-short spinner" data-bind="if: !supplier.isDefaultSupplier()">
+                    <input step="0.1" min="0" class="form-control" type="number" value="0" data-bind="value: supplier.userSetAmount, attr: { id: id } " />
                     <div class="input-group-append">
-                        <div data-bind="component: { name: 'number-input-increment', params: { obs: $data.minAmount, id: 'trade-route-amount-input' }}"></div>
+                        <div data-bind="component: { name: 'number-input-increment', params: { obs: supplier.userSetAmount, id: id }}"></div>
                         <span class="input-group-text">t/min</span>
                     </div>
                 </div>
-                <div>
+                <div data-bind="if: supplier.isDefaultSupplier()">
                     <span data-bind="text: formatNumber(supplier.currentProduction())"></span>
-                    <span class="input-group-text">t/min</span>
+                    <span> t/min</span>
                 </div>
                </div>`
     });

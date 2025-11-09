@@ -17,7 +17,7 @@
                     <div data-bind="text: formatNumber(100 * $data.boost()) + '%'"></div>
                 </td>
                 <td>
-                    <div data-bind="component: 'btn-default-supplier', params=$data.instance()"></div>
+                    <btn-default-supplier params="supplier: $data.instance()"></btn-default-supplier>
                 </td>
             </tr>
             <tr data-bind="debug: 'Workforce Demand', with: $data.instance().workforceDemand">

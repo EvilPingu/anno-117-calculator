@@ -48,7 +48,7 @@ export class PassiveTradeSupplier implements Supplier {
     public readonly product: Product;
     public readonly island: Island;
     public amount: KnockoutObservable<number>;
-    public minAmount: KnockoutObservable<number>;
+    public userSetAmount: KnockoutObservable<number>;
 
     /**
      * Creates a new PassiveTradeSupplier instance
@@ -66,18 +66,24 @@ export class PassiveTradeSupplier implements Supplier {
         this.product = product;
         this.island = island;
         this.amount = ko.observable(0);
-        this.minAmount = createFloatInput(0, 0);
+        this.userSetAmount = createFloatInput(0, 0);
     }
 
     /**
      * Only used if needed
      */
     defaultProduction(): number {
-        return 0; // when set as default supplier, minAmount is ignored
+        if (this.isDefaultSupplier())
+            return 0; // when set as default supplier, userSetAmount is ignored
+
+        return this.userSetAmount(); 
     }
 
     currentProduction(): number {
-        return this.amount();
+        if (this.isDefaultSupplier())
+            return this.amount();
+
+        return this.userSetAmount();
     }
 
     /**
@@ -109,7 +115,7 @@ export class PassiveTradeSupplier implements Supplier {
      * Passive trade doesn't propagate demand
      */
     unsetAsDefaultSupplier(): void {
-        this.amount(this.minAmount());
+        this.amount(this.userSetAmount());
     }
 }
 

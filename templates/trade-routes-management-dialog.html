@@ -27,17 +27,12 @@
                                 <img class="icon-sm" src="../icons/icon_marketplace_2d_light.png" data-bind="attr: {src: $data.fromFactory.product.icon, alt: $data.fromFactory.product.name}" />
                             </td>
                             <td>
+                                
                                 <div class="float-right">
                                     <span data-bind="if: !$data.isExport($parent) && $data.fromFactory.isHighlightedAsMissing()">
                                         <span class="fa fa-exclamation-triangle danger-icon"></span>
                                     </span>
-                                    <div class="input-group input-group-short spinner">
-                                        <input step="0.1" min="0" class="form-control" type="number" value="0" data-bind="value: amount, attr: { id: $data.from.name().replaceAll(' ', '-') + '-' + $data.to.name().replaceAll(' ', '-') + '-' + $data.toFactory.guid + '-amount-input' }" />
-                                        <div class="input-group-append">
-                                            <div data-bind="component: { name: 'number-input-increment', params: { obs: $data.amount, id: $data.from.name().replaceAll(' ', '-') + '-' + $data.to.name().replaceAll(' ', '-') + '-' + $data.toFactory.guid + '-amount-input' }}"></div>
-                                            <span class="input-group-text">t/min</span>
-                                        </div>
-                                    </div>
+                                    <trade-route-amount params="supplier: $data"></trade-route-amount>
                                 </div>
                             </td>
                             <td>

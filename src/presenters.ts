@@ -469,6 +469,10 @@ export class ProductPresenter {
 
         return '';
     }
+
+    tradingAmountFormatted(): string{
+        return formatNumber(this.tradeList().amount() + this.instance().passiveTradeSupplier.currentProduction()) + ' t/min';
+    }
 }
 
 /**

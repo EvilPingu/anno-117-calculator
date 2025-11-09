@@ -609,7 +609,7 @@ export class Island {
                     attr.subscribe((val: boolean) => localStorage.setItem(id, val ? "1" : "0"));
 
                     if (isNew) // persist initial values, in case initialization logic changes with newer calculator version
-                        attr.valueHasMutated();
+                        attr.notifySubscribers(attr());
                 }
             }
 
@@ -630,7 +630,7 @@ export class Island {
                     });
 
                     if (isNew)
-                        attr.valueHasMutated();
+                        attr.notifySubscribers(attr());
                 }
             }
 
@@ -652,7 +652,7 @@ export class Island {
                 }
 
                 if (isNew)
-                    attr.valueHasMutated();
+                    attr.notifySubscribers(attr());
             }
 
             persistString = (obj: any, attributeName: string, storageName?: string) => {
@@ -881,7 +881,7 @@ export class Island {
 
             if (localStorage) {
                 persistString(p, "notes");
-                persistFloat(p.passiveTradeSupplier.minAmount, "passiveTrade.amount");
+                persistFloat(p.passiveTradeSupplier, "userSetAmount", "passiveTrade.userSetAmount");
 
                 // Restore default supplier from localStorage
                 const typeKey = p.guid + ".defaultSupplier.type";

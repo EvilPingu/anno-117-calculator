@@ -207,6 +207,9 @@ export class Product extends NamedElement {
                 }
             }
 
+            if(this.passiveTradeSupplier != defaultSupp)
+                sum += this.passiveTradeSupplier.currentProduction();
+
             // Add trade route imports (products coming to this island)
             if (this.tradeList) {
                 sum += this.tradeList.outputAmount();

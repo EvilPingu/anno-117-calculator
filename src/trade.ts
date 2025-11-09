@@ -40,7 +40,7 @@ export class TradeRoute implements Supplier {
     public readonly fromIslandProduct: Product; 
     public readonly toIslandProduct: Product; 
     public amount: KnockoutObservable<number>;
-    public minAmount: KnockoutObservable<number>; // User-set minimum amount
+    public userSetAmount: KnockoutObservable<number>; // User-set minimum amount
 
     public readonly active: KnockoutObservable<boolean>; // when trade route is destructed, active makes canSupply return false and thus trigger unregistering as default supplier
 
@@ -48,7 +48,7 @@ export class TradeRoute implements Supplier {
      * Creates a new TradeRoute instance
      * @param config - Configuration object for the trade route
      */
-    constructor(productGUID: number, from: Island, to: Island, minAmount: number = 0) {
+    constructor(productGUID: number, from: Island, to: Island, userSetAmount: number = 0) {
         // Validate required parameters
         if (!from) {
             throw new Error('TradeRoute from is required');
@@ -74,8 +74,8 @@ export class TradeRoute implements Supplier {
         // Supplier interface properties
         this.product = toIslandProduct;
 
-        this.minAmount = createFloatInput(minAmount, 0);
-        this.amount = ko.observable(minAmount);
+        this.userSetAmount = createFloatInput(userSetAmount, 0);
+        this.amount = ko.observable(userSetAmount);
 
         this.active = ko.observable(true);
     }
@@ -130,11 +130,11 @@ export class TradeRoute implements Supplier {
      * Returns the amount imported to the receiving island (Supplier interface)
      */
     defaultProduction(): number {
-        return this.minAmount();
+        return this.userSetAmount();
     }
 
     currentProduction(): number {
-        return this.amount();
+        return Math.max(this.userSetAmount(), this.amount());
     }
 
     /**
@@ -176,20 +176,19 @@ export class TradeRoute implements Supplier {
     }
 
     /**
-     * Sets the trade route amount, respecting minAmount floor (Supplier interface)
+     * Sets the trade route amount, respecting userSetAmount floor (Supplier interface)
      * @param amount - Requested import amount
      */
     setDemand(amount: number): void {
-        const newAmount = Math.max(amount, this.minAmount());
-        this.amount(newAmount);
+        this.amount(amount);
     }
 
     /**
-     * Reset to minAmount or delete trade route
+     * Reset to userSetAmount or delete trade route
      */
     unsetAsDefaultSupplier(): void {
-        if (this.minAmount() > 0)
-            this.amount(this.minAmount());
+        if (this.userSetAmount() > 0)
+            this.amount(this.userSetAmount());
         else
             this.delete();
     }
@@ -337,7 +336,7 @@ interface TradeRouteConfig {
     productGUID: number,
     from: string,
     to: string,
-    minAmount: number,
+    userSetAmount: number,
     isDefaultSupplier: boolean
 }
 
@@ -382,14 +381,14 @@ export class TradeManager {
                 const productGUID = r.productGUID;
                 const from = resolve(r.from);
                 const to = resolve(r.to);
-                const minAmount = r.minAmount;
+                const userSetAmount = r.userSetAmount;
                 const isDefaultSupplier = r.isDefaultSupplier;
 
                 if (!from || !to)
                     continue;
 
 
-                var route = new TradeRoute(productGUID, from, to , minAmount);
+                var route = new TradeRoute(productGUID, from, to , userSetAmount);
                 this.routes.push(route);
                 route.fromIslandProduct.tradeList.routes.push(route);
                 route.toIslandProduct.tradeList.routes.push(route);
@@ -406,7 +405,7 @@ export class TradeManager {
                         productGUID: r.product.guid,
                         from: r.from.isAllIslands() ? ALL_ISLANDS : r.from.name(),
                         to: r.to.isAllIslands() ? ALL_ISLANDS : r.to.name(),
-                        minAmount: r.minAmount(),
+                        userSetAmount: r.userSetAmount(),
                         isDefaultSupplier: r.isDefaultSupplier()
                     });
                 }
