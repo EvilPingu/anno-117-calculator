@@ -474,7 +474,6 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
     window.view.collapsibleStates = new (require('./views').CollapsibleStates)();
     window.view.selectedFactory = ko.observable(window.view.island().factories[0]);
     window.view.selectedPopulationLevel = ko.observable(window.view.island().populationLevels[0]);
-    window.view.productionChain = new (require('./views').ProductionChainView)(window.view.selectedFactory);
     window.view.selectedMultiFactoryProducts = ko.observable(window.view.island().multiFactoryProducts);
     window.view.selectedResidenceEffectView = ko.observable(new (require('./views').ResidenceEffectView)([window.view.island().residenceBuildings[0]]));
 

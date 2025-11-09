@@ -379,9 +379,10 @@ export class ProductPresenter {
         this.tradeListVisible = ko.pureComputed(() => this.tradeList()?.visible());
 
         this.extraGoodSuppliersVisible = ko.pureComputed(() => {
-            for(var supplier of this.availableSuppliers())
-                if (supplier instanceof ExtraGoodSupplier)
+            for(var supplier of this.availableSuppliers()){
+                if (supplier.type === 'extra_good')
                     return true;
+            }
 
             return false;
         })

@@ -549,7 +549,7 @@ ko.components.register('consumer-unknown', {
  */
 ko.components.register('consumer-residence', {
     template:
-        `<div class="inline-list" style="cursor: pointer" data-dismiss="modal" data-bind="debug: 'Consumer: Residence', click: () => {setTimeout(() => { $root.selectedPopulationLevel($data.consumer.populationLevel); $('#population-level-config-dialog').modal('show')}, 500);}" >
+        `<div class="inline-list" style="cursor: pointer" data-dismiss="modal" data-bind="debug: 'Consumer: Residence', click: () => {$root.presenter.residence.update($data.consumer.populationLevel); setTimeout(() => {  $('#population-level-config-dialog').modal('show')}, 500);}" >
             <div data-bind="component: {name: 'asset-icon', params: $data.consumer.populationLevel}"></div>
             <span class="ml-2" data-bind="text: $data.consumer.populationLevel.name"></span>
         </div>`
@@ -562,7 +562,7 @@ ko.components.register('consumer-residence', {
  */
 ko.components.register('consumer-factory', {
     template:
-        `<div class="inline-list" style="cursor: pointer" data-bind="debug: 'Consumer: Factory', click: () => {$root.selectedFactory($data.consumer);}" >
+        `<div class="inline-list" style="cursor: pointer" data-bind="debug: 'Consumer: Factory', click: () => {$root.selectedProduct($data.consumer.product);}" >
             <div data-bind="component: {name: 'asset-icon', params: $data.consumer}"></div>
             <span class="ml-2" data-bind="text: $data.consumer.getRegionExtendedName()"></span>
         </div>`
@@ -575,7 +575,7 @@ ko.components.register('consumer-factory', {
  */
 ko.components.register('consumer-module', {
     template:
-        `<div class="inline-list" style="cursor: pointer" data-bind="debug: 'Consumer: Module', click: () => {$root.selectedFactory($data.consumer);}" >
+        `<div class="inline-list" style="cursor: pointer" data-bind="debug: 'Consumer: Module', click: () => {$root.selectedProduct($data.consumer.product);}" >
             <div data-bind="component: {name: 'asset-icon', params: $data.consumer}"></div>
             <div class="ml-2" data-bind="component: {name: 'asset-icon', params: $data.module}"></div>
             <span class="ml-2" data-bind="text: $data.module.name() + ': ' + $data.consumer.getRegionExtendedName()"></span>

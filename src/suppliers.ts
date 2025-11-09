@@ -195,7 +195,7 @@ export class ExtraGoodSupplier implements Supplier {
      * Extra supplier can supply if there is at least one extra good production active.
      */
     canSupply(): boolean {
-        return this.getTotalRatio() > 0;
+        return this.product != this.factory.product && this.getTotalRatio() > 0;
     }
 
     isDefaultSupplier(): boolean {

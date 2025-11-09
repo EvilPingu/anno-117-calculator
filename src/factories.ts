@@ -492,7 +492,7 @@ export class Factory extends Consumer implements Supplier {
     // Three sources of production demand:
     public demandFromProduct: KnockoutObservable<number>;   // Demand set via Supplier interface by Product
     public throughputByExtraGoodSupplier:  KnockoutObservable<number>;  // Demand generated because extra goods are default suppliers
-    // throughputExistingBuildings is used when buildings.fullyUtilizeConstructed is true
+    // filled by the extra goods from this factory
     private extraGoodSuppliers: KnockoutObservableArray<ExtraGoodSupplier>;
     public throughputByOutputSubscriptions: KnockoutComputed<void>;
 

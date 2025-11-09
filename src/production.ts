@@ -163,6 +163,7 @@ export class Product extends NamedElement {
                 const supplier = new ExtraGoodSupplier(factory, this, island);
                 supplier.productionList = entries;
                 this.extraGoodSuppliers.push(supplier);
+                factory.addExtraGoodSupplier(supplier);
             }
         }
 
