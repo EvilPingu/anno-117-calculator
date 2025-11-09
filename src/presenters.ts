@@ -1,4 +1,4 @@
-import { BuildingsCalc, createFloatInput, EPSILON, formatNumber, ko } from './util';
+import { ACCURACY, BuildingsCalc, createFloatInput, EPSILON, formatNumber, ko } from './util';
 import { AppliedBuff, Product, ProductCategory } from './production';
 import { Factory, Module } from './factories';
 import { Island, Region } from './world';
@@ -149,6 +149,7 @@ export class ProductPresenter {
     public region: KnockoutComputed<Region | undefined>;
 
     public visible: KnockoutComputed<boolean>;
+    public consumerViewVisible: KnockoutComputed<boolean>;
     public regionIconVisible: KnockoutComputed<boolean>;
     public tradeListVisible: KnockoutComputed<boolean>;
     public extraGoodSuppliersVisible: KnockoutComputed<boolean>;
@@ -370,6 +371,8 @@ export class ProductPresenter {
             // Show if any visible factories exist
             return this.visibleFactories().length > 0;
         });
+
+        this.consumerViewVisible = ko.pureComputed(() => this.instance().totalDemand() > ACCURACY);
 
         this.regionIconVisible = ko.pureComputed(() => this.island().region.id == "Meta");
 

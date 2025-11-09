@@ -5,7 +5,7 @@ import { PopulationLevel, ResidenceBuilding } from './population';
 import { Product } from './production';
 import { isSupplier } from './suppliers';
 import { NumberInputHandler, EPSILON, ko, debugBindingContext, logAssetInfo } from './util';
-import { Constructible, Region } from './world';
+import { Constructible, Island, Region } from './world';
 import { TradeRoute } from './trade';
 
 declare const $: any;
@@ -612,16 +612,23 @@ ko.components.register('consumer-entry', {
  * @param params.product - The product to display demands for
  */
 ko.components.register('consumer-view', {
-    viewModel: function (params: {product: Product}) {
+    viewModel: function (params: {product: KnockoutComputed<Product>}) {
         this.product = params.product;
-        this.populationResidenceIndices = new Map<number, number>();
-        params.product.island?.residenceBuildings.forEach((r, i) => this.populationResidenceIndices.set(r, i));
+
+        if (!isObservable(this.product))
+            throw new Error('product is not an observable');
+        
+        this.populationResidenceIndices = ko.pureComputed(() => {
+            var indices = new Map<number, number>();
+            (this.product().island as Island).residenceBuildings.forEach((r: ResidenceBuilding, i: number) => indices.set(r.guid, i));
+            return indices;
+        });
 
         this.demands = ko.pureComputed(() => {
-            var demands = this.product.demands().filter((d: Demand) => d.amount() > EPSILON);
+            var demands = this.product().demands().filter((d: Demand) => d.amount() > EPSILON);
             return demands.sort((a: Demand, b: Demand) => {
                 if (a.consumer instanceof ResidenceNeed && b.consumer instanceof ResidenceNeed)
-                    return this.populationResidenceIndices.get(a.consumer.residence.populationLevel) - this.populationResidenceIndices.get(b.consumer.residence.populationLevel);
+                    return this.populationResidenceIndices().get(a.consumer.residence.populationLevel) - this.populationResidenceIndices().get(b.consumer.residence.populationLevel);
 
                 if (a.consumer instanceof ResidenceNeed)
                     return -1000;

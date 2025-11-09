@@ -8,9 +8,10 @@
             </div>
 
             <div class="modal-body">
-                <div data-bind="if: $data.instance().demands && $data.instance().totalDemands && $data.instance().totalDemands() > ACCURACY">
-                    <collapsible params="id: 'product-config-consumption', heading: $root.texts.consumption.name, collapsed: true, data: $data.instance(), summary: $data.instance().totalDemands">
-                        <consumer-view params="product: $data.instance()"></consumer-view>
+                <div data-bind="debug: 'consumerViewVisible', if: $data.consumerViewVisible()">
+                    <collapsible params="id: 'product-config-consumption', heading: $root.texts.consumption.name, collapsed: true, data: $data, summary: $data.totalDemand">
+                        <!-- Pass the observable and not one fixed product  -->
+                        <consumer-view params="product: $data.instance"></consumer-view>
                     </collapsible>
                 </div>
 

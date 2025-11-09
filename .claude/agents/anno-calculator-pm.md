@@ -21,6 +21,7 @@ Minor improvements before release:
 * Icons
 * Remove newspaper button
 * Persistance: allIsland as Storage
+* width of config dialog
 * Default selected supplier
 * Add checkbox: Fully utilize factory
 * Production boost on factory tile
