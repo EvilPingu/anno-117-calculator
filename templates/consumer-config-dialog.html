@@ -84,7 +84,7 @@
                                                     <!-- ko foreach: $data.extraGoods -->
                                                     <span style="flex: 100 1 auto;"></span>
 
-                                                    <span style="flex: auto;" daba-bind="visible: $data.product.visible()">
+                                                    <span style="flex: auto;" daba-bind="visible: $data.product.available()">
                                                         <img class="icon-sm" data-bind="attr: { src: $data.product.icon ? $data.product.icon  : null, alt: $data.product.name }" />
                                                     </span>
 

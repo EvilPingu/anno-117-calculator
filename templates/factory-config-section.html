@@ -73,7 +73,7 @@
                                         <img class="icon-sm icon-light mr-2" src="../icons/icon_add_goods_socket_white.png" />
                                         <!-- ko foreach: $data.extraGoods -->
                                         <span style="flex: 100 1 auto;"></span>
-                                        <span style="flex: auto;" data-bind="visible: $data.product.visible()">
+                                        <span style="flex: auto;" data-bind="visible: $data.product.available()">
                                             <img class="icon-sm" data-bind="attr: { src: $data.product.icon ? $data.product.icon  : null, alt: $data.product.name }" />
                                         </span>
                                         <span style="flex: 100 1 auto;"></span>
