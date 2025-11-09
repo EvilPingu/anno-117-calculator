@@ -1,4 +1,4 @@
-import { ACCURACY, BuildingsCalc, EPSILON, ko } from './util';
+import { ACCURACY, BuildingsCalc, EPSILON, formatNumber, ko } from './util';
 import { AppliedBuff, Product, ProductCategory } from './production';
 import { Factory, Module } from './factories';
 import { Island, Region } from './world';
@@ -102,7 +102,9 @@ export class FactoryPresenter {
         this.parentProduct.instance().updateDefaultSupplier(this.factory);
     }
 
-
+    outputAmountFormatted(): string {
+        return formatNumber(this.outputAmount()).toString() + ' t/min';
+    }
 }
 
 /**

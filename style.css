@@ -482,23 +482,27 @@ nav {
     margin-top: 10px;
 }
 
-    #nav ul li {
-        display: inline;
-        margin-right: 10px;
-    }
+#nav ul li {
+    display: inline;
+    margin-right: 10px;
+}
 
-    #nav a, #nav a:active, #nav a:hover, #nav a:visited {
-        font-family: 'Pelago', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        color: #32373c;
-        text-decoration: none;
-        font-weight: 500;
-        letter-spacing: 0.2px;
-    }
-    
-    #nav a:hover {
-        color: #abb8c3;
-        text-decoration: underline;
-    }
+#nav a, #nav a:active, #nav a:hover, #nav a:visited {
+    font-family: 'Pelago', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #32373c;
+    text-decoration: none;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+}
+
+#nav a:hover {
+    color: #abb8c3;
+    text-decoration: underline;
+}
+
+#nav button span {
+    font-size: 1.25rem;
+}
 
 .center {
     text-align: center;

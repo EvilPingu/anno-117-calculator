@@ -20,6 +20,7 @@ The following major reworks are planned:
 Minor improvements before release:
 * Icons
 * Remove newspaper button
+* Persistance: allIsland as Storage
 * Add checkbox: Fully utilize factory
 * Production boost on factory tile
 * Group effects by source (discovery, religion, festival)
