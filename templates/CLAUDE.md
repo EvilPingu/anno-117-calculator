@@ -80,6 +80,46 @@ When displaying resident counts in templates, follow these patterns:
 - Use `formatNumber()` and `formatPercentage()` as global functions (no $root prefix)
 - Access nested properties carefully: `$data.need.product` not `$data.product`
 
+## Knockout Component Binding Syntax (CRITICAL)
+
+### Correct Syntax Rules
+**Component bindings must use colon `:` for params, NOT equals `=`**
+
+```html
+<!-- CORRECT -->
+<div data-bind="component: 'component-name', params: {property: value}"></div>
+<custom-component params="property: value"></custom-component>
+
+<!-- WRONG - causes parse errors -->
+<div data-bind="component: 'component-name', params={'property': value}"></div>
+<div data-bind="component: 'component-name', params=value"></div>
+<custom-component params={'property': value}></custom-component>
+```
+
+### Common Errors and Fixes
+
+**Error**: `Unable to parse bindings. Message: missing : after property id`
+**Cause**: Using `params=` or `params={'key': value}` instead of `params: {key: value}`
+
+**Examples of Correct Usage**:
+```html
+<!-- Component with object params -->
+<btn-default-supplier params="supplier: $data"></btn-default-supplier>
+<trade-route-amount params="supplier: $data.instance().passiveTradeSupplier"></trade-route-amount>
+
+<!-- Component with direct value -->
+<div data-bind="component: 'number-input-increment', params: {obs: $data.amount, id: 'input-id'}"></div>
+
+<!-- Custom element syntax -->
+<asset-icon params="asset: $data.product"></asset-icon>
+```
+
+### Key Points
+1. **Always use colon**: `params: {key: value}` not `params={key: value}`
+2. **No quotes on property names**: `{supplier: $data}` not `{'supplier': $data}`
+3. **Consistent across all component types**: Custom elements and data-bind component syntax
+4. **Observable unwrapping**: Components should handle observable unwrapping internally if needed
+
 ## Debug Binding Usage (IMPLEMENTED)
 
 All 15 templates now include debug bindings for troubleshooting Knockout binding issues.

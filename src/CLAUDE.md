@@ -519,6 +519,155 @@ See root `CLAUDE.md` for complete translation workflow documentation including:
 - `./scripts/auto-translate.sh` - Automated batch translation
 - `docs/CLAUDE_HEADLESS.md` - Headless mode documentation
 
+## Presenter Pattern Architecture (IMPLEMENTED)
+
+### CategoryPresenter Implementation
+
+**Purpose**: Wraps ProductCategory and creates ProductPresenter instances for all products in the category
+
+**Key Architectural Decision**: CategoryPresenter creates its own ProductPresenter instances rather than filtering from island.productPresenters
+- **Reason**: Ensures each product has exactly one presenter per category, avoiding duplication
+- **Pattern**: Similar to ResidencePresenter creating need presenters
+
+**Critical Properties**:
+```typescript
+export class CategoryPresenter {
+    public instance: KnockoutObservable<ProductCategory>;  // Resolves from island.assetsMap
+    public category: ProductCategory;                       // Original category reference
+    public island: KnockoutObservable<Island>;             // MUST be observable for reactivity
+    public productPresenters: ProductPresenter[];           // Created in constructor, not computed
+}
+```
+
+**Initialization Pattern** (main.ts:494-505):
+```typescript
+// For each category in allIslands.categories
+const categoryPresenter = new CategoryPresenter(category, window.view.island);
+presenter.categories.push(categoryPresenter);
+
+// Build presenter lookup map
+for (const productPresenter of categoryPresenter.productPresenters) {
+    presenter.productByGuid.set(productPresenter.guid, productPresenter);
+}
+```
+
+**Key Differences from ProductPresenter**:
+- `productPresenters` is a plain array (not computed) - created once in constructor
+- `instance` computed resolves category from island.assetsMap on island changes
+- No filtering logic - creates presenters for ALL products in category.products
+
+### ProductPresenter Architecture
+
+**Critical Observable Pattern**:
+```typescript
+export class ProductPresenter {
+    public product: Product;                              // Direct reference (NOT observable)
+    public island: KnockoutObservable<Island>;           // MUST be observable
+    public instance: KnockoutComputed<Product>;          // Resolves from island().assetsMap
+    public factoryPresenters: FactoryPresenter[];        // Created once, not observable array
+}
+```
+
+**Why instance is Computed**:
+- Allows product data to update when user switches islands
+- Resolves current island's version: `this.island().assetsMap.get(this.product.guid)`
+- All delegated properties use `this.instance()` to get current data
+
+**Factory Presenter Creation**:
+- Created once in constructor from `product.factories`
+- Each FactoryPresenter gets reference to parent ProductPresenter
+- Not an observable array - static list per product
+
+### FactoryPresenter Nested Pattern
+
+**Parent Reference for Observable Island**:
+```typescript
+export class FactoryPresenter {
+    public parentProduct: ProductPresenter;
+    public island: KnockoutObservable<Island>;  // Inherited from parent
+
+    constructor(factory: Factory, parent: ProductPresenter) {
+        this.parentProduct = parent;
+        this.island = parent.island;  // Share parent's observable island
+        this.instance = ko.computed(() =>
+            this.island().assetsMap.get(this.factory.guid)
+        );
+    }
+}
+```
+
+**Critical Pattern**: Never create new observable - reuse parent's observable island
+- Ensures all nested presenters react to same island changes
+- Avoids subscription proliferation
+- Maintains single source of truth
+
+### Common Presenter Anti-Patterns
+
+**❌ WRONG - Creating circular dependency**:
+```typescript
+this.product = ko.pureComputed(() => this.instance());
+this.instance = ko.computed(() => this.island().assetsMap.get(this.product.guid));
+// ERROR: product depends on instance, instance depends on product.guid
+```
+
+**✅ CORRECT - Direct reference + computed resolution**:
+```typescript
+this.product = product;  // Direct reference to original product
+this.instance = ko.pureComputed(() => this.island().assetsMap.get(this.product.guid));
+```
+
+**❌ WRONG - Creating new observable for nested presenter**:
+```typescript
+this.island = ko.observable(parent.island());  // Creates duplicate observable
+```
+
+**✅ CORRECT - Share parent's observable**:
+```typescript
+this.island = parent.island;  // Reuse parent's observable reference
+```
+
+### Presenter Integration with Templates (REMOVED)
+
+**Old Pattern (Removed)**: Templates with added computed properties
+```typescript
+// This pattern was replaced
+categoryTemplate.productPresenters = ko.pureComputed(() => {
+    // Filter island.productPresenters by category
+});
+```
+
+**New Pattern (Implemented)**: Dedicated presenter hierarchy
+```typescript
+// CategoryPresenter creates its own ProductPresenters
+window.view.presenter.categories = [];  // Array of CategoryPresenter
+window.view.presenter.productByGuid = new Map();  // Quick lookup
+
+// Templates removed - use presenters directly in bindings
+```
+
+**Benefits of Presenter-Only Approach**:
+- Clear separation: Templates for display, Presenters for data/logic
+- No mixing of Template pattern with Presenter pattern
+- Single source of ProductPresenter instances (via CategoryPresenter)
+- Faster lookups via productByGuid Map
+
+### Observable vs Direct Reference Guidelines
+
+**Use Observable When**:
+- Value changes during application lifetime (e.g., selected island)
+- Multiple components need to react to changes
+- Value needs to persist across UI updates
+
+**Use Direct Reference When**:
+- Value is immutable after creation (e.g., original Product/Category reference)
+- Only needed for identification (e.g., guid lookup)
+- Used to resolve current data from observable source
+
+**Computed Observable Pattern**:
+- Delegate to observable source: `ko.pureComputed(() => this.island().assetsMap.get(guid))`
+- Provides reactive access to current data
+- Updates automatically when observable source changes
+
 ## Supplier Interface Architecture (PLANNED)
 
 ### Current Demand System (production.ts:112-184)

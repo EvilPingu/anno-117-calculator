@@ -21,6 +21,7 @@ Minor improvements before release:
 * Icons
 * Remove newspaper button
 * Persistance: allIsland as Storage
+* Default selected supplier
 * Add checkbox: Fully utilize factory
 * Production boost on factory tile
 * Group effects by source (discovery, religion, festival)
@@ -28,7 +29,7 @@ Minor improvements before release:
 * Default factories per session from construction menu
 * Donations, Github, Discord badges
 * URL
-* Init behaviours: start - no needs selected; otherwise all and global buffs
+* Init behaviours: start - no needs selected (add setting to select no need); otherwise all and global buffs
 * Help text
 * Readme, license
 

@@ -334,6 +334,93 @@ When template bindings fail:
 - **Small Text**: 11-12px (load indicators, help text)
 - **Input Groups**: 0.8rem
 
+## Bootstrap 4 Tab Implementation (Version 4.5.2)
+
+### Critical Requirements for Tab Switching
+
+**Single Active Tab Rule**: Only ONE tab/tab-pane should have the `active` class at initialization. Bootstrap will manage active states during tab switching.
+
+**Button vs Link Syntax**:
+```html
+<!-- For <button> elements - use data-target -->
+<button class="nav-link" data-toggle="tab" data-target="#tab-pane-id"
+        aria-controls="tab-pane-id" aria-selected="false">
+    Tab Label
+</button>
+
+<!-- For <a> elements - use href -->
+<a class="nav-link" data-toggle="tab" href="#tab-pane-id"
+   aria-controls="tab-pane-id" aria-selected="false">
+    Tab Label
+</a>
+```
+
+### Common Tab Implementation Errors
+
+**Error 1: Multiple Active Tabs**
+```html
+<!-- WRONG - all tabs marked active -->
+<button class="nav-link active" data-toggle="tab">Tab 1</button>
+<button class="nav-link active" data-toggle="tab">Tab 2</button>
+
+<!-- CORRECT - only one active tab -->
+<button class="nav-link active" data-toggle="tab">Tab 1</button>
+<button class="nav-link" data-toggle="tab">Tab 2</button>
+```
+
+**Error 2: Custom Click Handlers Interfering**
+```html
+<!-- WRONG - custom handler prevents Bootstrap behavior -->
+<button class="nav-link" data-toggle="tab" data-bind="click: customHandler">
+
+<!-- CORRECT - let Bootstrap handle tab switching -->
+<button class="nav-link" data-toggle="tab">
+```
+
+**Error 3: Wrong Attribute for Buttons**
+```html
+<!-- WRONG - buttons should use data-target, not href -->
+<button data-toggle="tab" href="#tab-id">
+
+<!-- CORRECT -->
+<button data-toggle="tab" data-target="#tab-id">
+```
+
+### Accessibility Attributes
+
+Always include ARIA attributes for proper accessibility:
+```html
+<button class="nav-link" data-toggle="tab" data-target="#factories-tab"
+        role="tab" aria-controls="factories-tab" aria-selected="false">
+```
+
+### Tab Pane Structure
+
+Tab content panes must match the active state of their corresponding tab button:
+```html
+<!-- Tab navigation -->
+<button class="nav-link active" data-target="#tab1">Tab 1</button>
+<button class="nav-link" data-target="#tab2">Tab 2</button>
+
+<!-- Tab content - matching active states -->
+<div class="tab-pane fade show active" id="tab1">Content 1</div>
+<div class="tab-pane fade" id="tab2">Content 2</div>
+```
+
+### Knockout Integration with Bootstrap Tabs
+
+When generating tab IDs dynamically with Knockout:
+```html
+<!-- Tab button -->
+<button data-bind="attr: {'data-target': '#tab-' + $data.guid(),
+                          'aria-controls': 'tab-' + $data.guid()}">
+
+<!-- Matching tab pane -->
+<div data-bind="attr: {'id': 'tab-' + $data.guid()}">
+```
+
+**Critical**: Don't add `active` class via Knockout bindings on all items in a foreach loop. Set ONE default active tab in the template, let Bootstrap manage the rest.
+
 ## Generated File Notes
 
 - Items create AppliedBuff for each target. This tracks whether the effect is applied to the specific factory in AppliedBuff.scaling (knockout observable storing a float).
