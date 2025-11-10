@@ -373,7 +373,7 @@ export class Module extends Consumer {
      */
     constructor(config: ModuleConfig, assetsMap: AssetsMap, literalsMap: LiteralsMap, factory: Factory) {
         super({...config, maintenances: []}, assetsMap, literalsMap, factory.island);
-        
+
         // Module-specific initialization
         this.isFactory = false;
         this.factory = factory;
@@ -384,7 +384,8 @@ export class Module extends Consumer {
         this.lockDLCIfSet(this.checked);
         this.visible = ko.pureComputed(() => this.available());
 
-
+        // Enable throughput calculation based on utilized buildings (includes both constructed and required)
+        this.buildings.fullyUtilizeConstructed(true);
 
         this.constructedSubscription = ko.computed(() => {
             this.buildings.constructed(this.checked() ? this.factory.buildings.utilized() : 0);
