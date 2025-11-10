@@ -37,10 +37,10 @@ export class Consumer extends NamedElement{
     public connectedWorkforce?: Workforce;
 
     // === BUFF SYSTEM ===
-    public items: AppliedBuff[];           // Applied item effects
-    public buffs: AppliedBuff[];           // All applied effects (items + other sources)
-    public aqueductBuff?: AqueductBuff;    // Special aqueduct productivity buff
-    public modules: Module[];              // Attached modules (for factories)
+    public items: AppliedBuff[];                            // Applied item effects
+    public buffs: KnockoutObservableArray<AppliedBuff>;     // All applied effects (items + other sources)
+    public aqueductBuff?: AqueductBuff;                     // Special aqueduct productivity buff
+    public modules: Module[];                               // Attached modules (for factories)
 
     // === INPUT DEMAND SYSTEM ===
     public inputDemandsMap: Map<Product, Demand>;
@@ -101,7 +101,7 @@ export class Consumer extends NamedElement{
             this.associatedRegions.push(literalsMap.get(r) as Region);
  
         this.items = [];
-        this.buffs = [];
+        this.buffs = ko.observableArray([]);
         this.inputDemandsMap = new Map();
         this.inputDemands = ko.observableArray([]);
 
@@ -178,8 +178,9 @@ export class Consumer extends NamedElement{
             // Separate module buffs (multiplicative) from other buffs (additive)
             let additivePercentBuff = 0;
             let multiplicativeFactor = 1;
-            
-            for (const buff of this.buffs) {
+
+            // Unwrap observable array to track changes
+            for (const buff of this.buffs()) {
                 if (this.isModuleBuff(buff)) {
                     // Module buffs are multiplicative - each adds to the multiplier
                     multiplicativeFactor *= (1 + buff.productivityUpgrade() / 100);
@@ -188,15 +189,15 @@ export class Consumer extends NamedElement{
                     additivePercentBuff += buff.productivityUpgrade();
                 }
             }
-            
+
             // Add aqueduct buff to additive buffs
             if (this.aqueductBuff != null)
                 additivePercentBuff += this.aqueductBuff.productivityUpgrade();
-            
+
             // Combine additive and multiplicative factors
             const additiveFactor = Math.max(ACCURACY, additivePercentBuff / 100 + 1);
             const totalFactor = additiveFactor * multiplicativeFactor;
-            
+
             this.boost(Math.max(ACCURACY, totalFactor));
         });
 
@@ -211,7 +212,7 @@ export class Consumer extends NamedElement{
             for (let product of this.defaultInputs.keys())
                 inputs.set(product, this.defaultInputs.get(product) as number);
 
-            const buffs = this.buffs.filter(item => item.replacements && item.scaling()).sort((a, b) => a.buff.guid as number - (b.buff.guid as number));
+            const buffs = this.buffs().filter(item => item.replacements && item.scaling()).sort((a, b) => a.buff.guid as number - (b.buff.guid as number));
             
             for (const buff of buffs) {
                 for (const replacement of buff.replacements || []) {
@@ -262,7 +263,7 @@ export class Consumer extends NamedElement{
             let cycleTime = window.view.constants.fuelProductionTime as number;
 
             const fuelFactor = ko.pureComputed(() => {
-                const percentBuff = this.buffs.reduce((a:number, b: AppliedBuff)=> a+b.fuelDurationPercent() , 0);
+                const percentBuff = this.buffs().reduce((a:number, b: AppliedBuff)=> a+b.fuelDurationPercent() , 0);
                 const factor = percentBuff / 100 + 1;
 
                 return this.cycleTime / (factor * cycleTime) / this.boost();
@@ -295,14 +296,14 @@ export class Consumer extends NamedElement{
 
         this.workforceDemandSubscription = ko.computed(() => {
             // for workforce replacement, the last applied item matters
-            const buffs = this.buffs.filter(item => item.replacingWorkforce && (item.replacingWorkforce as any) != this.connectedWorkforce && item.scaling()).sort((a, b) => b.parent.guid as number - (a.parent.guid as number));
+            const buffs = this.buffs().filter(item => item.replacingWorkforce && (item.replacingWorkforce as any) != this.connectedWorkforce && item.scaling()).sort((a, b) => b.parent.guid as number - (a.parent.guid as number));
             if (buffs.length && this.workforceDemand) {
                 this.workforceDemand.updateWorkforce(buffs[0].replacingWorkforce);
             } else if (this.workforceDemand) {
                 this.workforceDemand.updateWorkforce(null);
             }
 
-            const percentBuff = this.buffs.reduce((a:number, b: AppliedBuff)=> a+b.workforceMaintenanceFactorUpgrade() , 0);
+            const percentBuff = this.buffs().reduce((a:number, b: AppliedBuff)=> a+b.workforceMaintenanceFactorUpgrade() , 0);
             const factor = Math.max(0, percentBuff / 100 + 1);
             this.workforceDemand.boost(factor);
         });
@@ -402,15 +403,17 @@ export class Module extends Consumer {
                     buff,
                     this.factory,
                     assetsMap,
-                    false // Don't use parent scaling
+                    false // Don't use parent scaling - module controls scaling via checked state
                 );
-                // Initially set scaling to 0 (unchecked)
-                appliedBuff.scaling(0);
+                // Set initial scaling based on current checked state
+                appliedBuff.scaling(this.checked() ? 1 : 0);
                 this.triggeredBuffs.push(appliedBuff);
-            }            
+
+                // Note: AppliedBuff constructor already calls this.factory.addBuff(appliedBuff) at line 139
+            }
         }
 
-        // Set up checked observable subscription for buff scaling
+        // Set up subscription to update buff scaling when module checked state changes
         this.checked.subscribe((checked: boolean) => {
             for (const triggeredBuff of this.triggeredBuffs) {
                 triggeredBuff.scaling(checked ? 1 : 0);

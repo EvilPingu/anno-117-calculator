@@ -49,12 +49,39 @@ When encountering "missing" properties that exist at runtime:
 - Add them as properly typed optional properties: `public property?: Type`
 - Common example: `ResidenceBuilding` needs `upgradedBuildingGuid?: string` and `upgradedBuilding?: ResidenceBuilding`
 
-## Module Integration Architecture
+## Module Integration Architecture (IMPLEMENTED)
 - **Module Creation**: Modules are created in Factory constructor when `config.additionalModule` exists
-- **AppliedBuff Creation**: Moved from Factory to Module constructor - modules create their own AppliedBuffs
+- **AppliedBuff Creation**: Modules call `applyBuffs()` from Factory.initDemands() - creates AppliedBuff instances with `useParentScaling=false`
 - **Buff Scaling**: Module `checked` observable controls buff scaling (0 = inactive, 1 = active)
 - **Persistence**: Module state persisted using `persistBool` pattern in Island constructor
 - **Circular Imports**: AppliedBuff moved to separate `buffs.ts` file to resolve Factory ↔ Production circular dependency
+
+### Critical Module Implementation Details
+**Input Demand Calculation** (factories.ts:388):
+- Modules MUST have `buildings.fullyUtilizeConstructed(true)` in constructor
+- This enables throughput calculation via `throughputByExistingBuildings`
+- Without this, modules produce no input demands even when checked
+
+**Boost Application via Observable Array** (factories.ts:41, 104):
+- `buffs` MUST be `KnockoutObservableArray<AppliedBuff>`, not plain array
+- Declared as: `public buffs: KnockoutObservableArray<AppliedBuff>;`
+- Initialized as: `this.buffs = ko.observableArray([]);`
+- Without observable array, `boostSubscription` doesn't react to module buff changes
+- All code accessing buffs must unwrap: `this.buffs()` not `this.buffs`
+
+**Module Buff Application Flow**:
+1. Factory.initDemands() calls `module.applyBuffs(assetsMap)` (factories.ts:633)
+2. Module creates AppliedBuff with `useParentScaling=false` (factories.ts:400-406)
+3. Module sets initial scaling: `appliedBuff.scaling(this.checked() ? 1 : 0)` (factories.ts:408)
+4. AppliedBuff constructor calls `this.target.addBuff(this)` (buffs.ts:139)
+5. Consumer.addBuff() pushes to observable array: `this.buffs.push(appliedBuff)` (factories.ts:335)
+6. Observable array change triggers `boostSubscription` recalculation (factories.ts:177-202)
+7. Module buffs are multiplicative, other buffs additive (factories.ts:184-190)
+
+**AppliedBuff Property Names** (buffs.ts:14-27):
+- AppliedBuff has `buff` property, NOT `effect`
+- Correct: `appliedBuff.buff.guid`
+- Wrong: `appliedBuff.effect.guid`
 
 ### Object Lookup Best Practices
 1. Always validate the result of `_assetsMap.get(id)` before using

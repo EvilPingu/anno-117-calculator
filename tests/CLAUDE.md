@@ -255,6 +255,23 @@ const factoryCount = await page.evaluate(() => {
 });
 ```
 
+**Pattern 4: Working with Buffs Observable Array** (CRITICAL)
+```typescript
+// factory.buffs is KnockoutObservableArray<AppliedBuff>
+// MUST unwrap with () before calling array methods
+
+// ❌ WRONG - will fail with "factory.buffs.find is not a function"
+const buff = factory.buffs.find(b => b.parent === module);
+
+// ✅ CORRECT - unwrap observable array first
+const buff = factory.buffs().find(b => b.parent === module);
+
+// Same applies to all array methods
+factory.buffs().length;        // Not: factory.buffs.length
+factory.buffs().map(...);      // Not: factory.buffs.map(...)
+factory.buffs().filter(...);   // Not: factory.buffs.filter(...)
+```
+
 **Pattern 4: Iterate Over Data Structures**
 ```typescript
 // Work with maps and arrays in evaluate context
@@ -595,6 +612,61 @@ When testing dialogs that appear via Bootstrap modals:
    // Avoid: await page.evaluate(() => $('#dialog').modal('hide'));
    // Prefer: await page.keyboard.press('Escape');
    ```
+
+## Module Testing Patterns
+
+### Module Input Demands Test (module-input-demands.spec.ts)
+Tests that modules correctly calculate input demands based on parent factory's utilized buildings.
+
+**Test Setup**:
+```typescript
+const config = {
+    "versionCalculator": "1",
+    "session": "37135",
+    "islandName": "Latium",
+    "2786.buildings.constructed": "5",  // Sheep farm
+    "2786.buildings.fullyUtilizeConstructed": "1"  // MUST use "1" not "true"
+};
+```
+
+**Key Assertions**:
+- Module `buildings.constructed` syncs from factory's `buildings.utilized()`
+- Input demand calculation: `buildings.utilized() * 60 / cycleTime * inputAmount * boost`
+- Demand appears only when module is checked
+
+### Module Boost Test (module-boost.spec.ts)
+Tests that module buffs apply multiplicative productivity boost to factory.
+
+**Critical Points**:
+1. **Observable Array Access**: Must unwrap `factory.buffs()` before array methods
+2. **Property Names**: Use `appliedBuff.buff.guid` NOT `appliedBuff.effect.guid`
+3. **Boost Calculation**: Module buffs are multiplicative (×2 for +100%), other buffs additive
+4. **Expected Values**:
+   - Module unchecked: `factoryBoost = 1.0`, `appliedBuffScaling = 0`
+   - Module checked: `factoryBoost = 2.0`, `appliedBuffScaling = 1`, `productivityUpgrade = 100`
+
+**Test Pattern for Reactive Updates**:
+```typescript
+// Check module
+await page.evaluate((factoryGuid) => {
+    const factory = window.view.island().factories.find(f => f.guid === factoryGuid);
+    factory.modules[0].checked(true);
+}, sheepFarmGuid);
+
+await page.waitForTimeout(200);  // Wait for observables to update
+
+// Verify boost changed
+const state = await page.evaluate(() => {
+    const factory = window.view.island().factories[0];
+    return {
+        boost: factory.boost(),
+        buffs: factory.buffs().map(b => ({
+            scaling: b.scaling(),
+            productivity: b.productivityUpgrade()
+        }))
+    };
+});
+```
 
 ## Resources
 
