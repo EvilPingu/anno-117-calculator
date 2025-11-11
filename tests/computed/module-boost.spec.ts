@@ -129,8 +129,8 @@ test.describe('Module Boost Application', () => {
 
         // CRITICAL: Factory boost should be 2.0 (base 1.0 + 100% from module)
         // According to the productivity system:
-        // - Module buffs are multiplicative: boost *= (1 + productivityUpgrade / 100)
-        // - With +100% productivity: boost = 1.0 * (1 + 100/100) = 1.0 * 2.0 = 2.0
+        // - Module buffs are additive: boost += 1
+        // - With +100% productivity: boost = 1.0 * 1 = 2.0
         expect(checkedState.factoryBoost).toBe(2.0);
 
         // Verify throughput increases with boost

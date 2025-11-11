@@ -181,13 +181,13 @@ export class Consumer extends NamedElement{
 
             // Unwrap observable array to track changes
             for (const buff of this.buffs()) {
-                if (this.isModuleBuff(buff)) {
-                    // Module buffs are multiplicative - each adds to the multiplier
-                    multiplicativeFactor *= (1 + buff.productivityUpgrade() / 100);
-                } else {
+                //if (this.isModuleBuff(buff)) {
+                    // Module buffs are no longer multiplicative, but we keep the logic for now
+                    //multiplicativeFactor *= (1 + buff.productivityUpgrade() / 100);
+                //} else {
                     // Non-module buffs remain additive
                     additivePercentBuff += buff.productivityUpgrade();
-                }
+                //}
             }
 
             // Add aqueduct buff to additive buffs

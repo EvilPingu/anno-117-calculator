@@ -646,7 +646,7 @@ Tests that module buffs apply multiplicative productivity boost to factory.
 **Critical Points**:
 1. **Observable Array Access**: Must unwrap `factory.buffs()` before array methods
 2. **Property Names**: Use `appliedBuff.buff.guid` NOT `appliedBuff.effect.guid`
-3. **Boost Calculation**: Module buffs are multiplicative (×2 for +100%), other buffs additive
+3. **Boost Calculation**: All buffs are additive (was different in prior versions)
 4. **Expected Values**:
    - Module unchecked: `factoryBoost = 1.0`, `appliedBuffScaling = 0`
    - Module checked: `factoryBoost = 2.0`, `appliedBuffScaling = 1`, `productivityUpgrade = 100`
