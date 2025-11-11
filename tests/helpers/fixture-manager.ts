@@ -109,7 +109,7 @@ export class FixtureManager {
    */
   generateFixture(params: FixtureParams = {}): Record<string, any> {
     const config: Record<string, any> = {
-      versionCalculator: 'test',
+      versionCalculator: '1.0',
       language: 'english',
     };
 

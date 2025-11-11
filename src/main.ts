@@ -11,7 +11,7 @@ import { AssetsMap, LiteralsMap } from './types';
 import { DarkMode, ResidencePresenter } from './views';
 import { CategoryPresenter } from './presenters';
 import { ConstantsConfig, NeedConsumptionConfig, TextConfig } from './types.config';
-import { Island, Region, Session } from './world';
+import { Storage as SubStorage, Island, Region, Session } from './world';
 import { Effect, ProductCategory } from './production';
 
 
@@ -194,15 +194,15 @@ function exportConfig(): void {
         };
     }());
 
-    saveData(localStorage, ("Anno1800CalculatorConfig") + ".json");
+    saveData(localStorage, ("Anno117CalculatorConfig") + ".json");
 }
 
 /**
  * Checks for updates and shows notifications
  * Compares current version with latest GitHub release
  */
-function checkAndShowNotifications(): void {
-    $.getJSON("https://api.github.com/repos/NiHoel/Anno1800Calculator/releases/latest").done((release: any) => {
+function checkAndShowNotifications(configVersion: string | null): void {
+    $.getJSON("https://api.github.com/repos/anno-mods/anno-117-calculator/releases/latest").done((release: any) => {
         $('#download-calculator-button').attr("href", release.zipball_url);
 
         if (isLocal()) {
@@ -218,22 +218,20 @@ function checkAndShowNotifications(): void {
             }
         }
 
-        if (localStorage) {
-            if (localStorage.getItem("versionCalculator") != versionCalculator) {
-                if (window.view.texts.newFeature.name() && window.view.texts.newFeature.name().length)
-                    ($ as any).notify({
-                        // options
-                        message: window.view.texts.newFeature.name()
-                    }, {
-                        // settings
-                        type: 'success',
-                        placement: { align: 'center' },
-                        timer: 60000
-                    });
-            }
 
-            localStorage.setItem("versionCalculator", versionCalculator);
+        if (configVersion != null && configVersion != versionCalculator) {
+            if (window.view.texts.newFeature?.name() && window.view.texts.newFeature.name().length)
+                ($ as any).notify({
+                    // options
+                    message: window.view.texts.newFeature.name()
+                }, {
+                    // settings
+                    type: 'success',
+                    placement: { align: 'center' },
+                    timer: 60000
+                });
         }
+
     });
 }
 
@@ -348,16 +346,20 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
     // Set up DLCs
     window.view.dlcs = [];
     window.view.dlcsMap = new Map();
+
+    const settingsStorage = localStorage ? new SubStorage("calculatorSettings") : undefined;
+    const sessionStorage = localStorage ? new SubStorage("sessionSettings") : undefined;
+    
     for (let dlc of (params.dlcs || [])) {
         const d = new (require('./util').DLC)(dlc);
         window.view.dlcs.push(d);
         window.view.dlcsMap.set(d.id, d);
-        if (localStorage) {
-            let id = "settings." + d.id;
-            if (localStorage.getItem(id) != null)
-                d.checked(parseInt(localStorage.getItem(id) || '0'));
+        if (settingsStorage) {
+            let id = d.id;
+            if (settingsStorage.getItem(id) != null)
+                d.checked(parseInt(settingsStorage.getItem(id) || '0'));
 
-            d.checked.subscribe((val: boolean) => localStorage.setItem(id, val ? '1' : '0'));
+            d.checked.subscribe((val: boolean) => settingsStorage.setItem(id, val ? '1' : '0'));
         }
     }
 
@@ -369,12 +371,12 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
         window.view.settings[attr] = o;
         window.view.settings.options.push(o);
 
-        if (localStorage) {
+        if (settingsStorage) {
             let id = "settings." + attr;
-            if (localStorage.getItem(id) != null)
-                o.checked(parseInt(localStorage.getItem(id) || '0') ? true : false);
+            if (settingsStorage.getItem(id) != null)
+                o.checked(parseInt(settingsStorage.getItem(id) || '0') ? true : false);
 
-            o.checked.subscribe((val: boolean) => localStorage.setItem(id, val ? '1' : '0'));
+            o.checked.subscribe((val: boolean) => settingsStorage.setItem(id, val ? '1' : '0'));
         }
     }
 
@@ -386,15 +388,15 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
         window.view.settings.needConsumptionSettings.push(o);
     } 
     window.view.settings.selectedNeedConsumptionSetting = ko.observable( window.view.settings.needConsumptionSettings[0])
-    if (localStorage) {
+    if (settingsStorage) {
         let id = "settings.needConsumption";
         let selection = window.view.settings.selectedNeedConsumptionSetting as KnockoutObservable<NeedConsumptionSetting>;
-        if (localStorage.getItem(id) != null)
+        if (settingsStorage.getItem(id) != null)
             for (var o of window.view.settings.needConsumptionSettings)
-                if(o.id == localStorage.getItem(id))
+                if(o.id == settingsStorage.getItem(id))
                     selection(o);
 
-        selection.subscribe((val ) => localStorage.setItem(id, val.id as string));
+        selection.subscribe((val ) => settingsStorage.setItem(id, val.id as string));
     }
 
     // Set up global effects
@@ -411,18 +413,19 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
 
     // Set up persistence for global effects
     if (localStorage) {
+        const globalEffectsStorage = new SubStorage("globalEffects");
         for (const effect of globalEffects) {
-            const storageKey = `global.effect.${effect.guid}.scaling`;
+            const storageKey = `${effect.guid}.scaling`;
             
             // Load saved scaling value
-            const savedValue = localStorage.getItem(storageKey);
+            const savedValue = globalEffectsStorage.getItem(storageKey);
             if (savedValue != null) {
                 effect.scaling(parseFloat(savedValue));
             }
             
             // Subscribe to changes for automatic saving
             effect.scaling.subscribe((val: number) => {
-                localStorage.setItem(storageKey, val.toString());
+                globalEffectsStorage.setItem(storageKey, val.toString());
             });
         }
     }
@@ -440,7 +443,7 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
     // Set up sessions
     window.view.sessions = [];
     for (let session of (params.sessions || [])) {
-        const s = new Session(session, params.effects || [], window.view.assetsMap);
+        const s = new Session(session, params.effects || [], window.view.assetsMap, sessionStorage);
         window.view.assetsMap.set(s.guid, s);
         window.view.sessions.push(s);
     }
@@ -457,12 +460,12 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
     window.view.islandManager = new (require('./world').IslandManager)(params, _isFirstRun);
 
     // Set up language persistence
-    if (localStorage) {
+    if (settingsStorage) {
         const id = "language";
-        if (localStorage.getItem(id))
-            window.view.settings.language(localStorage.getItem(id));
+        if (settingsStorage.getItem(id))
+            window.view.settings.language(settingsStorage.getItem(id));
 
-        window.view.settings.language.subscribe((val: string) => localStorage.setItem(id, val));
+        window.view.settings.language.subscribe((val: string) => settingsStorage.setItem(id, val));
     }
 
     // Handle configuration upgrades
@@ -607,6 +610,8 @@ $(document).ready(function () {
     const configVersion = localStorage && localStorage.getItem("versionCalculator");
     const isFirstRun = !localStorage || localStorage.getItem("versionCalculator") == null;
 
+    if(localStorage)
+        localStorage.setItem("versionCalculator", versionCalculator)
     // Parse the parameters (texts will be loaded from i18n)
     // Note: locaTexts parsing is handled in the i18n module
     
@@ -628,11 +633,10 @@ $(document).ready(function () {
         });
     }
     
-    console.log('Loaded texts:', Object.keys(window.view.texts));
-    console.log('Available locaTexts:', Object.keys(locaTexts));
+
 
     // Check for updates and show notifications
-    checkAndShowNotifications();
+    checkAndShowNotifications(configVersion);
 
     // Initialize the application
     init(isFirstRun, configVersion);

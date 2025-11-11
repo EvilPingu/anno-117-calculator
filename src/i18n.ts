@@ -545,18 +545,8 @@ export const texts: Record<string, Record<string, string>> = {
         korean: "새로운 Anno1800 계산기 버전이 제공됩니다. 다운로드 버튼을 클릭하십시오."
     },
     newFeature: {
-        english: "Game Update 17",
-        french: "Mise à jour du jeu 17",
-        polish: "Aktualizacja gry 17",
-        spanish: "Actualización del juego 17",
-        italian: "Aggiornamento del gioco 17",
-        german: "Game Update 17",
-        brazilian: "Atualização do jogo 17",
-        russian: "Обновление игры 17",
-        simplified_chinese: "游戏更新 17",
-        traditional_chinese: "遊戲更新 17",
-        japanese: "ゲームアップデート 17",
-        korean: "게임 업데이트 17"
+        english: "",
+        german: "",
     },
     helpContent: {
         german:

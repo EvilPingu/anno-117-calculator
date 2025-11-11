@@ -1,4 +1,7 @@
 {
-  "versionCalculator": "test",
-  "language": "english"
+    "collapsibleStates": "{\"factory-config-equipped-items\":1,\"workforce\":0,\"category-public-buildings\":0,\"category-37670\":0,\"category-37671\":0,\"category-37672\":0,\"category-37673\":0,\"category-37674\":0}",
+    "islandName": "All Islands",
+    "tradeRoutes": "[]",
+    "calculatorSettings": "{\n    \"settings.decimalsForBuildings\": \"1\"\n}",
+    "versionCalculator": "1.0"
 }

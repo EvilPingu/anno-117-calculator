@@ -31,7 +31,7 @@ declare const localStorage: any;
  * Manages persistent storage for island data
  * Handles saving and loading of configuration data to/from localStorage
  */
-class Storage {
+export class Storage {
     public key: string;
     public json: Record<string, any>;
     public map: Map<string, any>;
@@ -175,7 +175,7 @@ export class Session extends NamedElement {
     public workforce: Workforce[] = [];
     public effects: Effect[] = [];
     
-    constructor(config: SessionConfig, effectsConfig: EffectConfig[], assetsMap: AssetsMap) {
+    constructor(config: SessionConfig, effectsConfig: EffectConfig[], assetsMap: AssetsMap, sessionStorage: Storage | undefined) {
         // Validate config before calling super
         if (!config) {
             throw new Error('Session config is required');
@@ -202,19 +202,19 @@ export class Session extends NamedElement {
         this.effects = effectsConfig.filter(e => e.effectScope.endsWith("Session")).map(e => new Effect(e, assetsMap))
 
         // Set up persistence for session effects
-        if (typeof localStorage !== 'undefined') {
+        if (sessionStorage) {
             for (const effect of this.effects) {
                 const storageKey = `session.${this.guid}.effect.${effect.guid}.scaling`;
                 
                 // Load saved scaling value
-                const savedValue = localStorage.getItem(storageKey);
+                const savedValue = sessionStorage.getItem(storageKey);
                 if (savedValue != null) {
                     effect.scaling(parseFloat(savedValue));
                 }
                 
                 // Subscribe to changes for automatic saving
                 effect.scaling.subscribe((val: number) => {
-                    localStorage.setItem(storageKey, val.toString());
+                    sessionStorage.setItem(storageKey, val.toString());
                 });
             }
         }
@@ -294,7 +294,7 @@ export class IslandManager {
 
         this.sortIslands();
 
-        var allIslands = new Island(params, localStorage, isFirstRun, this.metaSession);
+        var allIslands = new Island(params, new Storage(ALL_ISLANDS), isFirstRun, this.metaSession);
         this.allIslands = allIslands;
         view.islands.unshift(allIslands);
         if (!view.island())
@@ -307,8 +307,12 @@ export class IslandManager {
         });
 
         this.currentIslandSubscription = ko.computed(() => {
-            var name = view.island().name();
-            localStorage.setItem(islandKey, name);
+            if(view.island().isAllIslands()) {
+                localStorage.setItem(islandKey, ALL_ISLANDS);
+            } else {
+                var name = view.island().name();
+                localStorage.setItem(islandKey, name);
+            }
         });
 
 
@@ -534,7 +538,7 @@ export class Island {
      * @param isNew - Whether this is a newly created island
      * @param session - The session this island belongs to
      */
-    constructor(params: ParamsConfig, localStorage: Storage | any, isNew: boolean, session: Session | null) {
+    constructor(params: ParamsConfig, localStorage: Storage, isNew: boolean, session: Session | null) {
         // Validate required parameters
         if (!params) {
             throw new Error('Island params is required');
@@ -544,13 +548,13 @@ export class Island {
         }
 
         // Explicit assignments
-        if (localStorage instanceof Storage) {
+        if (localStorage.key == ALL_ISLANDS) {
+            this.name = ko.computed(() => window.view.texts.allIslands.name());
+            this.isAllIslands = function () { return true; };
+        } else {
             this.name = ko.observable(localStorage.key);
             this.name.subscribe(() => this.storage.updateKey(this.name()));
             this.isAllIslands = function () { return false; };
-        } else {
-            this.name = ko.computed(() => window.view.texts.allIslands.name());
-            this.isAllIslands = function () { return true; };
         }
         this.storage = localStorage;
 
@@ -607,9 +611,6 @@ export class Island {
                         attr(parseInt(localStorage.getItem(id)));
 
                     attr.subscribe((val: boolean) => localStorage.setItem(id, val ? "1" : "0"));
-
-                    if (isNew) // persist initial values, in case initialization logic changes with newer calculator version
-                        attr.notifySubscribers(attr());
                 }
             }
 
@@ -629,8 +630,6 @@ export class Island {
                         localStorage.setItem(id, val.toString());
                     });
 
-                    if (isNew)
-                        attr.notifySubscribers(attr());
                 }
             }
 
@@ -650,9 +649,6 @@ export class Island {
                         localStorage.setItem(id, val.toString());
                     });
                 }
-
-                if (isNew)
-                    attr.notifySubscribers(attr());
             }
 
             persistString = (obj: any, attributeName: string, storageName?: string) => {
@@ -942,6 +938,10 @@ export class Island {
                     }
                     // Note: Trade routes handled by TradeManager
                 });
+
+                
+                if (isNew) // persist initial values, in case initialization logic changes with newer calculator version
+                    p.defaultSupplier.notifySubscribers(p.defaultSupplier());
             }
         });
 
