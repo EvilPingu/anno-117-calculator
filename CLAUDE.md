@@ -435,6 +435,42 @@ When generating tab IDs dynamically with Knockout:
 - Use inline-list* classes from styles.css when creating floating divs.
 - types.ts is automatically generated and must not be manually edited.
 
+## Storage Architecture (Updated 2025-11)
+
+### SubStorage Pattern
+The application uses the `Storage` class (exported as `SubStorage` in main.ts) to manage localStorage with nested JSON structure:
+
+**Storage Class** (src/world.ts:34-152):
+- Each Storage instance manages one top-level localStorage key
+- Data stored as JSON string, parsed into `this.json` object
+- Internal Map for quick lookups
+- Debounced saving (0ms timeout) to prevent excessive writes
+
+**Three SubStorage Instances**:
+1. `calculatorSettings = new SubStorage("calculatorSettings")` (main.ts:350)
+   - Stores settings like `settings.showAllProducts`, `settings.decimalsForBuildings`
+   - Keys accessed via `settingsStorage.getItem("settings.propertyName")`
+
+2. `sessionSettings = new SubStorage("sessionSettings")` (main.ts:351)
+   - Stores session-level configuration
+   - Used for session effects persistence
+
+3. `globalEffects = new SubStorage("globalEffects")` (main.ts:416)
+   - Stores global effect scaling values
+   - Keys: `{effectGuid}.scaling`
+
+**Island Storage** (per-island JSON):
+- Each island has its own Storage instance: `new Storage(islandName)`
+- Island name used as localStorage key (e.g., "Latium", "All Islands")
+- Contains nested JSON with session, building counts, etc.
+- See tests/CLAUDE.md for complete structure
+
+### ALL_ISLANDS Constant
+- Defined in src/util.ts:51 as `"All Islands"`
+- Used as storage key for the special all-islands view
+- Session GUID: 37135 (Global/Meta session)
+- Must be included in all test fixtures
+
 ## Translation Workflow
 
 ### Overview

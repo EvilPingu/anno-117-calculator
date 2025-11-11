@@ -3,6 +3,10 @@
 **ConfigLoader** (tests/helpers/config-loader.ts):
 - `loadConfig(page, configPath)`: Loads JSON fixture into localStorage before navigation
 - `loadConfigObject(page, config)`: Loads config object directly into localStorage
+- `createIslandConfig(name, session, islandData, calculatorSettings)`: Creates properly structured island config with new SubStorage format
+  - Returns complete config with nested island JSON structure
+  - Includes all required storage keys: calculatorSettings, sessionSettings, globalEffects
+  - Island data stored as stringified JSON under island name key
 - `clearStorage(page)`: Clears all localStorage data
 - `getStorageState(page)`: Returns current localStorage snapshot for debugging
 - **Integration**: Uses `page.addInitScript()` to inject localStorage before page load
@@ -66,6 +70,31 @@
 5. Test persistence patterns: persistBool, persistInt, persistFloat, persistString
 6. Validate storage keys: `${guid}.${attribute}` pattern
 
+**New SubStorage Structure** (Implemented 2025-11):
+- **Global Storage Keys** (top-level in localStorage):
+  - `calculatorSettings`: JSON string containing settings.* keys (e.g., "settings.showAllProducts": "1")
+  - `sessionSettings`: JSON string containing session-level settings
+  - `globalEffects`: JSON string containing global effect scaling values
+  - `islandName`: Current selected island name
+  - `islandNames`: Array of island names
+  - `versionCalculator`: Version string
+  - `tradeRoutes`: JSON array of trade routes
+  - `collapsibleStates`: JSON object for UI state
+  - `debug.enabled`: Debug mode flag
+
+- **Island-Specific Storage** (nested JSON under island name):
+  - Each island (e.g., "Latium", "All Islands") has its own JSON string containing:
+    - `session`: Session GUID the island belongs to
+    - `selectedPatron`: Currently selected patron
+    - `{guid}.buildings.constructed`: Building counts
+    - `{guid}.buildings.fullyUtilizeConstructed`: Building utilization flags
+    - Other island-specific data
+
+**Critical Session GUIDs**:
+- 37135 = Global/Meta session (use for "All Islands")
+- 3245 = Latium session
+- Always use correct session GUID matching the island's region in tests
+
 **Initialization Order Validation**:
 1. Verify objects created before initDemands() called
 2. Assert initDemands() completes before applyBuffs()
@@ -85,7 +114,7 @@ test('factory-tile template binds without errors', async ({ page }) => {
   const configLoader = new ConfigLoader();
   const errorDetector = new BindingErrorDetector();
 
-  // Load basic configuration
+  // Load basic configuration (with new SubStorage format)
   await configLoader.loadConfig(page, 'fixtures/basic.json');
 
   // Enable debug mode before page load
