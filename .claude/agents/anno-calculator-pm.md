@@ -16,13 +16,11 @@ The following major reworks are planned:
 9. End-to-end test for buff combination calculation and config saving/restoring
 
 Minor improvements before release:
+* Default selected supplier
 * Icons
 * Remove newspaper button
-* Reorder effects dialog
-* Persistance: allIsland as Storage
 * product tiles: displayed amount and factories
 * layout trade route creation
-* Default selected supplier
 * Add checkbox: Fully utilize factory
 * Production boost on factory tile
 * Group effects by source (discovery, religion, festival)

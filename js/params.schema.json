@@ -1677,6 +1677,7 @@
           "name",
           "iconPath",
           "buffs",
+          "targets",
           "targetsIsAllProduction",
           "effectScope",
           "excludeEffectSourceGUID",
@@ -2620,12 +2621,6 @@
         "data/ui/fhd/base/icon_content/items_specialist/rival/icon_3d_rival_07_nefernu.png": {
           "type": "string"
         },
-        "data/ui/fhd/base/icon_content/items_specialist/unique/icon_3d_unique_hof_007_economy.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/items_specialist/unique/icon_3d_unique_tutorial_001_brutus_julius.png": {
-          "type": "string"
-        },
         "data/ui/fhd/base/icon_content/items_specialist/unique/icon_3d_unique_campaign_002_elephant_handler.png": {
           "type": "string"
         },
@@ -2857,33 +2852,6 @@
         "data/ui/fhd/base/icon_content/items_specialist/other_female/icon_3d_other_female_010.png": {
           "type": "string"
         },
-        "data/ui/fhd/base/icon_content/items_specialist/roman_female/icon_3d_roman_female_047.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/items_specialist/other_female/icon_3d_other_female_033.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/items_specialist/celtic_female/icon_3d_celtic_female_023.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/items_specialist/nonbinary/icon_3d_roman_nb_01.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/items_specialist/celtic_male/icon_3d_celtic_male_20.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/items_specialist/roman_female/icon_3d_roman_female_032.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/items_specialist/celtic_male/icon_3d_celtic_male_27.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/items_specialist/celtic_female/icon_3d_celtic_female_028.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/items_specialist/celtic_female/icon_3d_celtic_female_038.png": {
-          "type": "string"
-        },
         "data/ui/fhd/base/icon_content/items_specialist/other_male/icon_3d_other_male_028.png": {
           "type": "string"
         },
@@ -2936,12 +2904,6 @@
           "type": "string"
         },
         "data/ui/fhd/base/icon_content/tech_tree/icon_2d_research_progress.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/transporter_cart/icon_2d_cart_filled.png": {
-          "type": "string"
-        },
-        "data/ui/fhd/base/icon_content/generic/icon_2d_ship.png": {
           "type": "string"
         }
       },
@@ -3153,8 +3115,6 @@
         "data/ui/fhd/base/icon_content/items_specialist/rival/icon_3d_rival_05_zarai.png",
         "data/ui/fhd/base/icon_content/items_specialist/rival/icon_3d_rival_06_concordia.png",
         "data/ui/fhd/base/icon_content/items_specialist/rival/icon_3d_rival_07_nefernu.png",
-        "data/ui/fhd/base/icon_content/items_specialist/unique/icon_3d_unique_hof_007_economy.png",
-        "data/ui/fhd/base/icon_content/items_specialist/unique/icon_3d_unique_tutorial_001_brutus_julius.png",
         "data/ui/fhd/base/icon_content/items_specialist/unique/icon_3d_unique_campaign_002_elephant_handler.png",
         "data/ui/fhd/base/icon_content/items_specialist/other_female/icon_3d_other_female_035.png",
         "data/ui/fhd/base/icon_content/items_specialist/roman_male/icon_3d_roman_male_87.png",
@@ -3232,15 +3192,6 @@
         "data/ui/fhd/base/icon_content/items_specialist/unique/icon_3d_unique_015_aisling_ui_democritus.png",
         "data/ui/fhd/base/icon_content/items_specialist/roman_male/icon_3d_roman_male_034.png",
         "data/ui/fhd/base/icon_content/items_specialist/other_female/icon_3d_other_female_010.png",
-        "data/ui/fhd/base/icon_content/items_specialist/roman_female/icon_3d_roman_female_047.png",
-        "data/ui/fhd/base/icon_content/items_specialist/other_female/icon_3d_other_female_033.png",
-        "data/ui/fhd/base/icon_content/items_specialist/celtic_female/icon_3d_celtic_female_023.png",
-        "data/ui/fhd/base/icon_content/items_specialist/nonbinary/icon_3d_roman_nb_01.png",
-        "data/ui/fhd/base/icon_content/items_specialist/celtic_male/icon_3d_celtic_male_20.png",
-        "data/ui/fhd/base/icon_content/items_specialist/roman_female/icon_3d_roman_female_032.png",
-        "data/ui/fhd/base/icon_content/items_specialist/celtic_male/icon_3d_celtic_male_27.png",
-        "data/ui/fhd/base/icon_content/items_specialist/celtic_female/icon_3d_celtic_female_028.png",
-        "data/ui/fhd/base/icon_content/items_specialist/celtic_female/icon_3d_celtic_female_038.png",
         "data/ui/fhd/base/icon_content/items_specialist/other_male/icon_3d_other_male_028.png",
         "data/ui/fhd/base/icon_content/items_specialist/celtic_male/icon_3d_celtic_male_29.png",
         "data/ui/fhd/base/icon_content/items_specialist/roman_female/icon_3d_roman_female_044.png",
@@ -3258,9 +3209,7 @@
         "data/ui/fhd/base/icon_content/items_specialist/unique/icon_3d_specialist_hooded_01.png",
         "data/ui/fhd/base/icon_content/icon_3d_removed.png",
         "data/ui/fhd/base/icon_content/generic/icon_2d_productivity.png",
-        "data/ui/fhd/base/icon_content/tech_tree/icon_2d_research_progress.png",
-        "data/ui/fhd/base/icon_content/transporter_cart/icon_2d_cart_filled.png",
-        "data/ui/fhd/base/icon_content/generic/icon_2d_ship.png"
+        "data/ui/fhd/base/icon_content/tech_tree/icon_2d_research_progress.png"
       ],
       "title": "Icon",
       "description": "Icon data URLs indexed by icon identifier"

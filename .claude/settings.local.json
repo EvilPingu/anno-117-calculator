@@ -20,7 +20,8 @@
       "Bash(tee:*)",
       "Bash(npx playwright test:*)",
       "Bash(git add:*)",
-      "Bash(npm run test:module-boost:*)"
+      "Bash(npm run test:module-boost:*)",
+      "Bash(npm test:*)"
     ],
     "deny": []
   },
