@@ -71,7 +71,7 @@ test.describe('Application Initialization E2E Tests', () => {
       const bindingsApplied = {
         koApplied: document.body.getAttribute('data-bind') !== null ||
                     document.querySelectorAll('[data-bind]').length > 0,
-        componentsRendered: document.querySelectorAll('.factory-tile, .ui-tier-unit').length > 0,
+        componentsRendered: document.querySelectorAll('.product-tile, .ui-tier-unit').length > 0,
       };
 
       return {

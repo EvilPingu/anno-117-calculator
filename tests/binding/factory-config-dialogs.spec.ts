@@ -36,7 +36,7 @@ test.describe('Factory Config Dialog Binding Validation', () => {
     await page.waitForLoadState('networkidle');
 
     // Wait for product tiles to appear (product tiles replaced factory tiles)
-    await page.waitForSelector('.ui-fchain-item, .ui-service-building-item', {
+    await page.waitForSelector('.product-tile, .ui-service-building-item', {
       timeout: 10000,
       state: 'attached',
     });
@@ -64,7 +64,7 @@ test.describe('Factory Config Dialog Binding Validation', () => {
 
     // Get all product/factory config buttons - filter to only visible ones
     // Note: Product tiles now have product-config-dialog, but we keep factory-config-dialog for public services
-    const allButtons = await page.locator('.ui-fchain-item .btn[data-target="#product-config-dialog"], .ui-fchain-item .btn[data-target="#factory-config-dialog"], .ui-service-building-item .btn[data-target="#factory-config-dialog"]').all();
+    const allButtons = await page.locator('.product-tile .btn[data-target="#product-config-dialog"], .product-tile .btn[data-target="#factory-config-dialog"], .ui-service-building-item .btn[data-target="#factory-config-dialog"]').all();
 
     // Filter to only visible buttons
     const factoryButtons: typeof allButtons = [];
@@ -89,10 +89,10 @@ test.describe('Factory Config Dialog Binding Validation', () => {
 
       // Get the category and factory name from the DOM
       const info = await button.evaluate((btn) => {
-        const factoryTile = btn.closest('.ui-fchain-item, .ui-service-building-item');
+        const factoryTile = btn.closest('.product-tile, .ui-service-building-item');
         const categoryFieldset = factoryTile?.closest('fieldset.ui-fieldset');
         const categoryLegend = categoryFieldset?.querySelector('legend');
-        const factoryNameElement = factoryTile?.querySelector('.ui-fchain-item-name, .ui-service-building-item-name');
+        const factoryNameElement = factoryTile?.querySelector('.product-tile-name, .ui-service-building-item-name');
 
         return {
           categoryName: categoryLegend?.textContent?.trim() || 'Unknown Category',

@@ -75,7 +75,9 @@ test.describe('Application Initialization Error Diagnosis', () => {
       console.log('=== LAST 10 CONSOLE ERRORS (ALL TYPES) ===');
       const last10All = allErrors.slice(-10);
       last10All.forEach((error, index) => {
-        console.log(`${index + 1}. [${error.type}] ${error.text}`);
+        const text = typeof error.text === 'function' ? error.text() : error.text;
+        const type = typeof error.type === 'function' ? error.type() : error.type;
+        console.log(`${index + 1}. [${type}] ${text}`);
       });
       console.log('');
     }
@@ -98,9 +100,11 @@ test.describe('Application Initialization Error Diagnosis', () => {
     const hasObservableErrors = knockoutErrors.some(err =>
       err.includes('observable') || err.includes('not a function')
     );
-    const hasUndefinedErrors = allErrors.some(err =>
-      err.text.includes('undefined') && err.type === 'error'
-    );
+    const hasUndefinedErrors = allErrors.some(err => {
+      const text = typeof err.text === 'function' ? err.text() : err.text;
+      const type = typeof err.type === 'function' ? err.type() : err.type;
+      return text.includes('undefined') && type === 'error';
+    });
 
     if (hasTemplateErrors) {
       console.log('⚠️  Template binding errors detected - check template syntax');

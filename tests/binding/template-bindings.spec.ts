@@ -25,7 +25,7 @@ test.describe('Template Binding Validation', () => {
     await page.goto('/');
 
     // Wait for factories section to load
-    await page.waitForSelector('.ui-fchain-item', {
+    await page.waitForSelector('.product-tile', {
       timeout: 10000,
       state: 'attached',
     });
@@ -41,8 +41,8 @@ test.describe('Template Binding Validation', () => {
     ).toHaveLength(0);
 
     // Verify factory tiles or service buildings rendered
-    const factoryCount = await page.locator('.ui-fchain-item, .ui-service-building-item').count();
-    expect(factoryCount, 'Expected at least one factory or service building to be rendered').toBeGreaterThan(0);
+    const factoryCount = await page.locator('.product-tile, .ui-service-building-item').count();
+    expect(factoryCount, 'Expected at least one product tile or service building to be rendered').toBeGreaterThan(0);
   });
 
   test('population-tile template binds without errors', async ({ page }) => {

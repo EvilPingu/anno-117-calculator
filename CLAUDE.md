@@ -135,6 +135,11 @@ npm run test:e2e         # End-to-end integration tests
 - Most assets created per island; regions/sessions/buffs are global
 - Circular imports: production.ts → buffs.ts ← factories.ts
 
+### CSS Class Naming Conventions
+- **Product tiles**: Use `product-tile` and `product-tile-*` classes (e.g., `product-tile-name`, `product-tile-icon`, `product-tile-amount`)
+- **Old naming**: `ui-fchain-item` classes have been removed - do NOT use them
+- **Dark mode support**: All product-tile classes have `.bg-dark .product-tile` variants in style.css
+
 ## Critical Initialization Order (world.ts:518)
 1. Create objects (consumers, factories, products)
 2. `f.initDemands(assetsMap)` - factories register in products  

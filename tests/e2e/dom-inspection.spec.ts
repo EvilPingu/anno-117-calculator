@@ -16,7 +16,7 @@ test.describe('DOM Inspection', () => {
     // Check what actually rendered
     const domInfo = await page.evaluate(() => {
       return {
-        productTiles: document.querySelectorAll('.ui-fchain-item').length,
+        productTiles: document.querySelectorAll('.product-tile').length,
         serviceTiles: document.querySelectorAll('.ui-service-building-item').length,
         populationTiles: document.querySelectorAll('.ui-tier-unit').length,
         collapsibleSections: document.querySelectorAll('fieldset.ui-fieldset').length,
@@ -27,7 +27,7 @@ test.describe('DOM Inspection', () => {
     });
 
     console.log('\n=== DOM INSPECTION RESULTS ===');
-    console.log(`Product tiles (.ui-fchain-item): ${domInfo.productTiles}`);
+    console.log(`Product tiles (.product-tile): ${domInfo.productTiles}`);
     console.log(`Service tiles (.ui-service-building-item): ${domInfo.serviceTiles}`);
     console.log(`Population tiles (.ui-tier-unit): ${domInfo.populationTiles}`);
     console.log(`Collapsible sections: ${domInfo.collapsibleSections}`);

@@ -9,11 +9,14 @@
 
 **BindingErrorDetector** (tests/helpers/binding-detector.ts):
 - `listenForErrors(page)`: Sets up console event listeners for error capture
-- `getErrors()`: Returns all captured console errors
+- `getErrors()`: Returns all captured console errors (ConsoleMessage objects)
 - `hasBindingError()`: Boolean check for Knockout binding errors
 - `getBindingErrors()`: Filters for binding-specific error messages
 - `getKnockoutErrors()`: Returns errors containing "knockout", "binding", "observable"
 - **Detection Patterns**: Watches for "Unable to parse bindings", "undefined is not a function", ko.* errors
+- **CRITICAL**: Error objects have `text` and `type` as methods (functions), not properties
+  - Access via: `error.text()` and `error.type()` (Playwright ConsoleMessage API)
+  - Handle both: `typeof error.text === 'function' ? error.text() : error.text`
 
 **ComputedValueAsserter** (tests/helpers/computed-asserter.ts):
 - `getValue(page, path)`: Evaluates computed observable in page context
@@ -41,7 +44,10 @@
 
 **Computed Observable Verification**:
 1. **Factory Calculations** (src/factories.ts):
-   - `inputAmount()` = max(inputAmountByOutput, inputAmountByExistingBuildings)
+   - **CRITICAL**: Method renamed from `inputAmountByExistingBuildings()` to `throughputByExistingBuildings()`
+   - `throughputByExistingBuildings()` requires `buildings.fullyUtilizeConstructed(true)` to return non-zero values
+   - Formula: `buildings.constructed() * boost() * 60 / cycleTime` (only when fullyUtilizeConstructed is true)
+   - `inputAmount()` = max(inputAmountByOutput, inputAmountByExistingBuildings) [DEPRECATED - use throughput-based methods]
    - `buildings.required()` = inputAmount() / 60 * cycleTime / boost()
    - `boost()` reflects applied buffs (items, modules, effects)
 2. **Population Needs** (src/consumption.ts):
@@ -482,7 +488,7 @@ When writing tests that need to access `window.view` data, you may encounter "co
 ✅ **Correct Pattern** (Used in `template-bindings.spec.ts`):
 ```typescript
 // Wait for DOM elements, not window.view
-await page.waitForSelector('.ui-fchain-item', { timeout: 10000 });
+await page.waitForSelector('.product-tile', { timeout: 10000 });
 await page.waitForLoadState('networkidle');
 
 // Get buttons from DOM

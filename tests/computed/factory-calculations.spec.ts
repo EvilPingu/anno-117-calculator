@@ -50,21 +50,22 @@ test.describe('Factory Calculation Tests', () => {
       ({ buildings, boost }) => {
         const factory = (window as any).view.island().factories[0];
         factory.buildings.constructed(buildings);
+        factory.buildings.fullyUtilizeConstructed(true);
         factory.boost(boost);
       },
       { buildings: testBuildings, boost: testBoost }
     );
 
     // Calculate expected value using params data
-    // Formula: inputAmountByExistingBuildings = buildings.constructed() * boost() * 60 / cycleTime
+    // Formula: throughputByExistingBuildings = buildings.constructed() * boost() * 60 / cycleTime
     const expectedInputAmount = (testBuildings * testBoost * 60) / factoryData.cycleTime;
 
     // Assert the computed value matches
     await asserter.assertEquals(
       page,
-      'window.view.island().factories[0].inputAmountByExistingBuildings()',
+      'window.view.island().factories[0].throughputByExistingBuildings()',
       expectedInputAmount,
-      { tolerance: 0.01, message: 'Factory inputAmountByExistingBuildings should match calculation' }
+      { tolerance: 0.01, message: 'Factory throughputByExistingBuildings should match calculation' }
     );
 
   });
@@ -124,6 +125,7 @@ test.describe('Factory Calculation Tests', () => {
         ({ index, buildings, boost }) => {
           const factory = (window as any).view.island().factories[index];
           factory.buildings.constructed(buildings);
+          factory.buildings.fullyUtilizeConstructed(true);
           factory.boost(boost);
         },
         { index: i, buildings: testBuildings, boost: testBoost }
@@ -135,7 +137,7 @@ test.describe('Factory Calculation Tests', () => {
       // Assert each factory calculates correctly
       await asserter.assertEquals(
         page,
-        `window.view.island().factories[${i}].inputAmountByExistingBuildings()`,
+        `window.view.island().factories[${i}].throughputByExistingBuildings()`,
         expected,
         { tolerance: 0.01, message: `Factory ${i} should calculate independently` }
       );
@@ -162,10 +164,11 @@ test.describe('Factory Calculation Tests', () => {
       ({ buildings, boost }) => {
         const factory = (window as any).view.island().factories[0];
         factory.buildings.constructed(buildings);
+        factory.buildings.fullyUtilizeConstructed(true);
         factory.boost(boost);
         return {
           cycleTime: factory.cycleTime,
-          inputAmount: factory.inputAmountByExistingBuildings(),
+          inputAmount: factory.throughputByExistingBuildings(),
         };
       },
       { buildings: testBuildings, boost: testBoost }
@@ -186,6 +189,7 @@ test.describe('Factory Calculation Tests', () => {
     await page.evaluate(() => {
       const factory = (window as any).view.island().factories[0];
       factory.buildings.constructed(12);
+      factory.buildings.fullyUtilizeConstructed(true);
       factory.boost(1.4);
     });
 
@@ -201,7 +205,7 @@ test.describe('Factory Calculation Tests', () => {
     // Get actual value
     const actual = await asserter.getValue<number>(
       page,
-      'window.view.island().factories[0].inputAmountByExistingBuildings()'
+      'window.view.island().factories[0].throughputByExistingBuildings()'
     );
 
     // Assert they match
