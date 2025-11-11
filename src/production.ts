@@ -22,6 +22,7 @@ declare const $: any;
 export class Product extends NamedElement {
     public guid: number;
     public isAbstract: boolean;
+    public isConstructionMaterial: boolean;
     public factories: Factory[];
     public availableFactories: KnockoutObservableArray<Factory>;
     public extraGoodProductionList?: ExtraGoodProductionList;
@@ -70,8 +71,9 @@ export class Product extends NamedElement {
         
         super(parentConfig);
         this.guid = config.guid;
-        
+
         this.isAbstract = config.isAbstract || false;
+        this.isConstructionMaterial = config.isConstructionMaterial || false;
 
         this.factories = [];
         this.availableFactories = dummyObservableArray("Product.availableFactories");

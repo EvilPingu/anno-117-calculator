@@ -895,21 +895,21 @@ export const options: Record<string, any> = {
             "korean": "생산성 입력 필드 숨기기"
         }
     },
-    "showAllConstructableFactories": {
-        "name": "Show all factories constructable in the region",
+    "showAllProducts": {
+        "name": "Show all products available in the region",
         "locaText": {
-            "english": "Show all factories constructable in the region",
-            "french": "Afficher toutes les usines constructibles dans la région",
-            "polish": "Pokaż wszystkie fabryki możliwe do zbudowania w regionie",
-            "spanish": "Mostrar todas las fábricas construibles en la región",
-            "italian": "Mostra tutte le fabbriche costruibili nella regione",
-            "german": "Zeige alle Fabriken, die in der Region errichtet werden können",
-            "brazilian": "Mostrar todas as fábricas construíveis na região",
-            "russian": "Показать все фабрики, которые можно построить в регионе",
-            "simplified_chinese": "显示该地区所有可建造的工厂",
-            "traditional_chinese": "顯示該地區所有可建造的工廠",
-            "japanese": "地域で建設可能なすべての工場を表示",
-            "korean": "지역에서 건설 가능한 모든 공장 표시"
+            "english": "Show all products available in the region",
+            "french": "Afficher tous les produits disponibles dans la région",
+            "polish": "Pokaż wszystkie produkty dostępne w regionie",
+            "spanish": "Mostrar todos los productos disponibles en la región",
+            "italian": "Mostra tutti i prodotti disponibili nella regione",
+            "german": "Zeige alle in der Region verfügbaren Produkte",
+            "brazilian": "Mostrar todos os produtos disponíveis na região",
+            "russian": "Показать все продукты, доступные в регионе",
+            "simplified_chinese": "显示该地区所有可用的产品",
+            "traditional_chinese": "顯示該地區所有可用的產品",
+            "japanese": "地域で利用可能なすべての製品を表示",
+            "korean": "지역에서 사용 가능한 모든 제품 표시"
         }
     },
     "missingBuildingsHighlight": {

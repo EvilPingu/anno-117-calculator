@@ -347,10 +347,24 @@ export class ProductPresenter {
                 return false;
 
             const product = this.instance();
+
+
+            // Show if showAllProducts is enabled (for non-construction materials)
+            if (window.view.settings.showAllProducts && window.view.settings.showAllProducts.checked())
+                return true;
+
+            if (product.isConstructionMaterial && this.visibleFactories().length > 0)
+                return true;
+
             const extraGoodAmount = product && product.extraGoodProductionList ? product.extraGoodProductionList.amount() : 0;
             const tradeList = this.tradeList();
 
-            if (extraGoodAmount > EPSILON || tradeList.inputAmount() > EPSILON || tradeList.outputAmount() > EPSILON || this.totalDemand() > EPSILON)
+            // Show if there's demand for it
+            if (this.totalDemand() > EPSILON)
+                return true;
+
+            // Show if there's production (extra goods, trade routes, or factories)
+            if (extraGoodAmount > EPSILON || tradeList.inputAmount() > EPSILON || tradeList.outputAmount() > EPSILON)
                 return true;
 
             for (var presenter of this.visibleFactories()){
@@ -361,15 +375,8 @@ export class ProductPresenter {
                     return true;
             }
 
-            const productRegion = this.region();
-            if (this.island().region.id != "Meta" && productRegion && productRegion != this.island().region)
-                return false;
-
-            if (window.view.settings.showAllConstructableFactories && window.view.settings.showAllConstructableFactories.checked())
-                return true;
-
-            // Show if any visible factories exist
-            return this.visibleFactories().length > 0;
+            // Don't show if none of the conditions are met
+            return false;
         });
 
         this.consumerViewVisible = ko.pureComputed(() => this.instance().totalDemand() > ACCURACY);

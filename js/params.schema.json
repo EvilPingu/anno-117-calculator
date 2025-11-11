@@ -930,6 +930,9 @@
           "isAbstract": {
             "type": "boolean"
           },
+          "isConstructionMaterial": {
+            "type": "boolean"
+          },
           "associatedRegions": {
             "type": "array",
             "items": {
@@ -942,7 +945,8 @@
           "name",
           "iconPath",
           "locaText",
-          "isAbstract"
+          "isAbstract",
+          "isConstructionMaterial"
         ]
       },
       "title": "Product",

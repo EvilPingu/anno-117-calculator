@@ -1,6 +1,6 @@
 {
     "collapsibleStates": "{\"factory-config-equipped-items\":1,\"workforce\":0,\"category-public-buildings\":0,\"category-37670\":0,\"category-37671\":0,\"category-37672\":0,\"category-37673\":0,\"category-37674\":0,\"factory-config-consumption\":1,\"factory-config-production-chain\":0}",
-    "settings.showAllConstructableFactories": "1",
+    "settings.showAllProducts": "1",
     "settings.missingBuildingsHighlight": "1",
     "selectedPatron": "",
     "islandName": "Alle Inseln",

@@ -16,7 +16,6 @@ The following major reworks are planned:
 9. End-to-end test for buff combination calculation and config saving/restoring
 
 Minor improvements before release:
-* debug: visible products
 * Icons
 * Remove newspaper button
 * Reorder effects dialog

@@ -531,7 +531,10 @@ export class Factory extends Consumer implements Supplier {
         var product = this.getProduct();
         if (product == null)
             throw new Error(`Factory with GUID ${this.guid} has no products`);
-        this.product = product
+        this.product = product;
+
+        if (this.product.isConstructionMaterial)
+            this.buildings.fullyUtilizeConstructed(true);
 
         // Self-effecting extra goods will be populated when ExtraGoodProduction entries are created
         this.selfEffectingExtraGoods = [];

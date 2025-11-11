@@ -4,17 +4,17 @@
 // Common interface for localized text
 export interface LocaTextConfig {
   english: string;
-  french: string;
-  polish: string;
-  spanish: string;
-  italian: string;
   german: string;
+  spanish: string;
+  french: string;
+  italian: string;
+  japanese: string;
+  korean: string;
+  polish: string;
   brazilian: string;
   russian: string;
   simplified_chinese: string;
   traditional_chinese: string;
-  japanese: string;
-  korean: string;
   [key: string]: string; // Allow string indexing
 }
 
@@ -77,6 +77,7 @@ export interface NeedCategoryConfig {
 export interface NeedConfig {
   guid: number;
   name: string;
+  iconPath: string;
   needProduct: number;
   needCategory: string;
   supplyWeight: number;
@@ -92,7 +93,6 @@ export interface NeedConfig {
     Prestige: number;
     [key: string]: number; // Allow string indexing
   };
-  iconPath?: string;
   locaText?: LocaTextConfig;
 }
 
@@ -112,12 +112,12 @@ export interface ResidenceBuildingConfig {
   iconPath: string;
   locaText: LocaTextConfig;
   associatedRegions: string[];
+  possibleUpgrades?: number[];
   populationLevel: number;
   needsList: {
     need: number;
     needConsumptionRate?: number;
   }[];
-  possibleUpgrades?: number[];
 }
 
 // PopulationLevel configuration interface
@@ -138,6 +138,7 @@ export interface ProductConfig {
   iconPath: string;
   locaText: LocaTextConfig;
   isAbstract: boolean;
+  isConstructionMaterial: boolean;
   associatedRegions?: string[];
 }
 
@@ -165,10 +166,6 @@ export interface FactoryConfig {
   iconPath: string;
   locaText: LocaTextConfig;
   associatedRegions: string[];
-  inputs?: {
-    product: number;
-    amount: number;
-  }[];
   needsFuelInput: boolean;
   outputs: {
     product: number;
@@ -180,6 +177,10 @@ export interface FactoryConfig {
   }[];
   cycleTime: number;
   modulesLimit: number;
+  inputs?: {
+    product: number;
+    amount: number;
+  }[];
   buffs?: number[];
   aqueductProductivityBuff?: number;
   additionalModule?: number;
@@ -234,7 +235,7 @@ export interface BuildingBuffConfig {
 export interface EffectConfig {
   guid: number;
   name: string;
-  iconPath?: string;
+  iconPath: string;
   locaText?: LocaTextConfig;
   buffs: number[];
   targets?: number[];
@@ -272,7 +273,7 @@ export interface ItemConfig {
   guid: number;
   name: string;
   iconPath?: string;
-  locaText: LocaTextConfig;
+  locaText?: LocaTextConfig;
   buffs: number[];
   targets?: number[];
   effectScope: string;
