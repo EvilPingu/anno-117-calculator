@@ -287,27 +287,8 @@ export class ProductPresenter {
 
 
         // Calculate total production (from all local suppliers + trade imports)
-        this.totalProduction = ko.pureComputed(() => {
-            let total = 0;
-
-            // Production from local suppliers (factories, extra goods)
-            const suppliers = this.instance().availableSuppliersNoRoutes();
-            if (suppliers) {
-                for (const supplier of suppliers) {
-                    if ((supplier as any).island === island) {
-                        total += supplier.currentProduction();
-                    }
-                }
-            }
-
-            // Add trade route imports
-            if (this.instance().tradeList) {
-                total += this.instance().tradeList.outputAmount();
-            }
-
-            return total;
-        });
-
+        this.totalProduction = ko.pureComputed(() => this.instance().totalDemand() + this.instance().excessProduction());
+        
         // Aggregate demand
         this.totalDemand = ko.pureComputed(() => this.instance().totalDemand());
 

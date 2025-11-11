@@ -31,6 +31,7 @@ Minor improvements before release:
 * Donations, Github, Discord badges
 * URL
 * Init behaviours: start - no needs selected (add setting to select no need); otherwise all and global buffs
+* Analytics
 * Help text
 * Readme, license
 
