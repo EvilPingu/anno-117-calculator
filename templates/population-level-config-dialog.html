@@ -59,7 +59,7 @@
                             <tbody data-bind="foreach: $data.visiblePopulationLevelNeeds()">
                                 <tr data-bind="debug: 'Population Level Need', css:{inactive: $data.isInactive()}">
                                     <td>
-                                        <span class="custom-control custom-checkbox" data-bind="title: $data.name()">
+                                        <span class="custom-control custom-checkbox" data-bind="src: {title: $data.name()}">
                                             <input type="checkbox" class="custom-control-input" data-bind="checked: $data.checked, disabled: $data.isInactive(), attr: { id: $data.id + '-checked' }">
                                             <label class="custom-control-label" data-bind="attr: { for: $data.id + '-checked' }" src-only style="vertical-align: top;">
                                                 <span class="mr-2">
