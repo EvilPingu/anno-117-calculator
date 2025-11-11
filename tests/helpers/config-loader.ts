@@ -40,6 +40,40 @@ export class ConfigLoader {
   }
 
   /**
+   * Creates a properly structured island config with the new storage format
+   * @param islandName - Name of the island
+   * @param session - Session GUID
+   * @param islandData - Island-specific data (e.g., building counts)
+   * @param calculatorSettings - Calculator settings (e.g., settings.showAllProducts)
+   * @returns Properly structured config object
+   */
+  createIslandConfig(
+    islandName: string,
+    session: number,
+    islandData: Record<string, any> = {},
+    calculatorSettings: Record<string, any> = {}
+  ): Record<string, any> {
+    // Create nested island storage structure
+    const islandStorage = {
+      session: session,
+      selectedPatron: "",
+      ...islandData
+    };
+
+    return {
+      islandName: islandName,
+      versionCalculator: "1.0",
+      tradeRoutes: "[]",
+      collapsibleStates: "{}",
+      "debug.enabled": "false",
+      calculatorSettings: JSON.stringify(calculatorSettings, null, 4),
+      sessionSettings: "{}",
+      globalEffects: "{}",
+      [islandName]: JSON.stringify(islandStorage, null, 4)
+    };
+  }
+
+  /**
    * Clears all localStorage data
    * @param page - Playwright page instance
    */

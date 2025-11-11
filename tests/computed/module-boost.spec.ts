@@ -17,13 +17,10 @@ test.describe('Module Boost Application', () => {
         const configLoader = new ConfigLoader();
 
         // Create config with sheep farm having 5 constructed buildings
-        const config = {
-            "versionCalculator": "1",
-            "session": "37135",
-            "islandName": "Latium",
+        const config = configLoader.createIslandConfig("Latium", 3245, {
             "2786.buildings.constructed": "5",
             "2786.buildings.fullyUtilizeConstructed": "1"
-        };
+        });
 
         await configLoader.loadConfigObject(page, config);
         await page.goto('/');
@@ -178,12 +175,9 @@ test.describe('Module Boost Application', () => {
     test('module buff scaling is controlled by module checked state', async ({ page }) => {
         const configLoader = new ConfigLoader();
 
-        const config = {
-            "versionCalculator": "1",
-            "session": "37135",
-            "islandName": "Latium",
+        const config = configLoader.createIslandConfig("Latium", 3245, {
             "2786.buildings.constructed": "3"
-        };
+        });
 
         await configLoader.loadConfigObject(page, config);
         await page.goto('/');

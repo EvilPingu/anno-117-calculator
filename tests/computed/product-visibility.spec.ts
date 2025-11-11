@@ -11,13 +11,10 @@ test.describe('Product Visibility Logic', () => {
   });
 
   test('product visible when showAllProducts is enabled', async ({ page }) => {
-    const config = {
-      "versionCalculator": "1",
-      "session": "37135",
-      "islandName": "Latium",
-      "settings.showAllProducts": "1",
-      "debug.enabled": "true"
-    };
+    const config = configLoader.createIslandConfig("Latium", 3245, {}, {
+      "settings.showAllProducts": "1"
+    });
+    config["debug.enabled"] = "true";
 
     await configLoader.loadConfigObject(page, config);
     await page.goto('http://localhost:8080/index.html');
@@ -57,13 +54,10 @@ test.describe('Product Visibility Logic', () => {
   });
 
   test('construction material visible when showAllProducts enabled and factories available', async ({ page }) => {
-    const config = {
-      "versionCalculator": "1",
-      "session": "37135",
-      "islandName": "Latium",
-      "settings.showAllProducts": "1", // Enabled
-      "debug.enabled": "true"
-    };
+    const config = configLoader.createIslandConfig("Latium", 3245, {}, {
+      "settings.showAllProducts": "1" // Enabled
+    });
+    config["debug.enabled"] = "true";
 
     await configLoader.loadConfigObject(page, config);
     await page.goto('http://localhost:8080/index.html');
@@ -104,15 +98,12 @@ test.describe('Product Visibility Logic', () => {
   });
 
   test('product visible when there is demand', async ({ page }) => {
-    await configLoader.loadConfig(page, 'tests/fixtures/with-data.json');
-    const config = {
-      "versionCalculator": "1",
-      "session": "37135",
-      "islandName": "Latium",
-      "settings.showAllProducts": "0",
-      "3087.buildings.constructed": "10", // Timber factory with buildings
-      "debug.enabled": "true"
-    };
+    const config = configLoader.createIslandConfig("Latium", 3245, {
+      "3087.buildings.constructed": "10" // Timber factory with buildings
+    }, {
+      "settings.showAllProducts": "0"
+    });
+    config["debug.enabled"] = "true";
 
     await configLoader.loadConfigObject(page, config);
     await page.goto('http://localhost:8080/index.html');
@@ -170,14 +161,10 @@ test.describe('Product Visibility Logic', () => {
   });
 
   test('visibility logic components work correctly', async ({ page }) => {
-    await configLoader.loadConfig(page, 'tests/fixtures/with-data.json');
-    const config = {
-      "versionCalculator": "1",
-      "session": "37135",
-      "islandName": "Latium",
-      "settings.showAllProducts": "0",
-      "debug.enabled": "true"
-    };
+    const config = configLoader.createIslandConfig("Latium", 3245, {}, {
+      "settings.showAllProducts": "0"
+    });
+    config["debug.enabled"] = "true";
 
     await configLoader.loadConfigObject(page, config);
     await page.goto('http://localhost:8080/index.html');
@@ -298,15 +285,10 @@ test.describe('Product Visibility Logic', () => {
   });
 
   test('construction material NOT all visible with showAllProducts disabled unless demand/production', async ({ page }) => {
-    await configLoader.loadConfig(page, 'tests/fixtures/with-data.json');
-    
-    const config = {
-      "versionCalculator": "1",
-      "session": "37135",
-      "islandName": "Latium",
-      "settings.showAllProducts": "0",
-      "debug.enabled": "true"
-    };
+    const config = configLoader.createIslandConfig("Latium", 3245, {}, {
+      "settings.showAllProducts": "0"
+    });
+    config["debug.enabled"] = "true";
 
     await configLoader.loadConfigObject(page, config);
     await page.goto('http://localhost:8080/index.html');

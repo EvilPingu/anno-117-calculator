@@ -6,5 +6,9 @@
     "versionCalculator": "1.0",
     "tradeRoutes": "[]",
     "debug.enabled": "true",
-    "Latium": "{\n    \"session\": 3245,\n    \"selectedPatron\": \"\",\n    \"5475.buildings.constructed\": \"0\",\n    \"6475.buildings.constructed\": \"0\",\n    \"3087.buildings.constructed\": \"10\",\n    \"3171.buildings.constructed\": \"1\"\n}"
+    "calculatorSettings": "{}",
+    "sessionSettings": "{}",
+    "globalEffects": "{}",
+    "Latium": "{\n    \"session\": 3245,\n    \"selectedPatron\": \"\",\n    \"5475.buildings.constructed\": \"0\",\n    \"6475.buildings.constructed\": \"0\",\n    \"3087.buildings.constructed\": \"10\",\n    \"3171.buildings.constructed\": \"1\"\n}",
+    "All Islands": "{\n    \"session\": 37135,\n    \"selectedPatron\": \"\"\n}"
 }

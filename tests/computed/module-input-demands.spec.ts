@@ -18,13 +18,10 @@ test.describe('Module Input Demands', () => {
         const configLoader = new ConfigLoader();
 
         // Create config with sheep farm having 5 constructed buildings
-        const config = {
-            "versionCalculator": "1",
-            "session": "37135",
-            "islandName": "Latium",
+        const config = configLoader.createIslandConfig("Latium", 3245, {
             "2786.buildings.constructed": "5",  // Sheep farm with 5 buildings
             "2786.buildings.fullyUtilizeConstructed": "1"  // 1 = true, 0 = false
-        };
+        });
 
         await configLoader.loadConfigObject(page, config);
         await page.goto('/');
