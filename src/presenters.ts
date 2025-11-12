@@ -104,6 +104,25 @@ export class FactoryPresenter {
     outputAmountFormatted(): string {
         return formatNumber(this.outputAmount()).toString() + ' t/min';
     }
+
+    incConstructedBuildings(): void {
+        this.buildings().constructed(this.buildings().constructed() + 1);
+    }
+
+    canDecConstructedBuildings(): boolean {
+        return this.buildings().constructed() >= 1;
+    }
+
+    decConstructedBuildings(): void {
+        if (this.buildings().constructed() <= 0)
+            return;
+
+        this.buildings().constructed(this.buildings().constructed() - 1);
+    }
+
+    requiredBuildingsFormatted(): string {
+        return (window as any).view.settings.decimalsForBuildings.checked() ? formatNumber( this.buildings().required()) : Math.ceil( this.buildings().required() - 0.01).toString()
+    }
 }
 
 /**
@@ -120,6 +139,7 @@ export class ProductPresenter {
     // === FACTORY PRESENTERS ===
     public factoryPresenters: FactoryPresenter[];
     public visibleFactories: KnockoutComputed<FactoryPresenter[]>;
+    public factoryPresenterIfDefaultSupplier: KnockoutComputed<FactoryPresenter | null>;
 
     // === SUPPLIER MANAGEMENT ===
     public availableSuppliers: KnockoutComputed<SupplierOption[]>;
@@ -176,6 +196,14 @@ export class ProductPresenter {
         this.visibleFactories = ko.pureComputed(() =>
             this.factoryPresenters.filter(fp => fp.visible())
         );
+
+        this.factoryPresenterIfDefaultSupplier = ko.pureComputed(() => {
+            for(const factory of this.visibleFactories())
+                if(factory.isDefaultSupplier())
+                    return factory;
+
+            return null;
+        });
 
         // Available suppliers for selection (excluding islands - they get separate UI)
         this.availableSuppliers = ko.pureComputed(() => {

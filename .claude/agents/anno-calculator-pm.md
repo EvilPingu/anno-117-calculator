@@ -17,7 +17,6 @@ The following major reworks are planned:
 
 Minor improvements before release:
 Remove newspaper button
-product tiles: displayed amount and factories
 Activate all needs setting (after island creation)
 Init behaviours: start - deselect "Activate all needs", open island creation dialog; otherwise select all global buffs
 Translations: Default supplier, manual trade input, current
