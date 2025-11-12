@@ -2,6 +2,78 @@
 
 ## Class Architecture and Interface Patterns
 
+### IslandManager Settings Pattern (IMPLEMENTED)
+
+**Purpose**: IslandManager manages island creation settings that control default behavior for new islands
+
+**Key Pattern**: Settings follow Option class pattern with localization and persistence
+- Each setting is an `Option` instance with `name`, `guid`, and `locaText`
+- Initial values can be set based on `isFirstRun` parameter (start mode vs other modes)
+- Settings are automatically persisted via Option class localStorage integration
+
+**Example Implementation** (world.ts:254-273):
+```typescript
+export class IslandManager {
+    public showIslandOnCreation: Option;
+    public activateAllNeeds: Option;
+
+    constructor(params: ParamsConfig, isFirstRun: boolean) {
+        // Create Option instances
+        this.showIslandOnCreation = new (require('./util').Option)({
+            name: "Show Island on Creation",
+            guid: "showIslandOnCreation",
+            locaText: texts.showIslandOnCreation
+        });
+        this.showIslandOnCreation.checked(true);
+
+        this.activateAllNeeds = new (require('./util').Option)({
+            name: "Activate all needs",
+            guid: "activateAllNeeds",
+            locaText: texts.activateAllNeeds
+        });
+        // Set based on mode: false for start (first run), true otherwise
+        this.activateAllNeeds.checked(!isFirstRun);
+    }
+}
+```
+
+**Using Settings in Island Creation** (world.ts:355):
+```typescript
+var island = new Island(this.params, new Storage(name), true, session);
+island.activateAllNeeds(this.activateAllNeeds.checked());
+```
+
+**Island Method Pattern** (world.ts:1143-1151):
+```typescript
+activateAllNeeds(activate: boolean): void {
+    // Apply setting to all population levels
+    for (let populationLevel of this.populationLevels) {
+        for (let need of populationLevel.needs) {
+            need.checked(activate);
+        }
+    }
+}
+```
+
+**Template Binding** (island-management-dialog.html:45-48):
+```html
+<div class="custom-control custom-checkbox mb-3">
+    <input id="checkbox-activate-all-needs" type="checkbox"
+           class="custom-control-input"
+           data-bind="checked: $root.islandManager.activateAllNeeds.checked">
+    <label class="custom-control-label"
+           for="checkbox-activate-all-needs"
+           data-bind="text: $root.islandManager.activateAllNeeds.name"></label>
+</div>
+```
+
+**Key Principles**:
+- Settings belong to IslandManager, NOT view.settings
+- Settings control new island initialization behavior
+- Island methods apply settings to their internal state
+- Option class handles persistence automatically
+- Initial values can vary by ViewMode (start/plan/master)
+
 ### Constructible Interface Pattern
 - `Constructible` is an interface (not a class) that extends `NamedElement`
 - Required properties: `buildings: BuildingsCalc`, `island: Island`, `addBuff(appliedBuff: AppliedBuff): void`

@@ -16,9 +16,6 @@ The following major reworks are planned:
 9. End-to-end test for buff combination calculation and config saving/restoring
 
 Minor improvements before release:
-Remove newspaper button
-Activate all needs setting (after island creation)
-Init behaviours: start - deselect "Activate all needs", open island creation dialog; otherwise select all global buffs
 Translations: Default supplier, manual trade input, current
 Help text
 Readme, license

@@ -50,6 +50,7 @@ window.view = {
     dlcs: [],
     dlcsMap: new Map(),
     // Add missing properties that are referenced in the original code
+    globalEffects: [] as Effect[],
     selectedFactory: ko.observable(null),
     selectedProduct: ko.observable(null),
     selectedPopulationLevel: ko.observable(null),
@@ -400,7 +401,7 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
     }
 
     // Set up global effects
-    const globalEffects: any[] = [];
+    var globalEffects = window.view.globalEffects as Effect[];
     for (let effect of (params.effects || [])) {
         // create Module owner effects here so that they are avaiable in the constructor of Modules
         if (!effect.effectScope.endsWith("Meta") && effect.effectScope != "ModuleOwner")
@@ -416,19 +417,17 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
         const globalEffectsStorage = new SubStorage("globalEffects");
         for (const effect of globalEffects) {
             const storageKey = `${effect.guid}.scaling`;
-            
+
             // Load saved scaling value
             const savedValue = globalEffectsStorage.getItem(storageKey);
             if (savedValue != null) {
                 effect.scaling(parseFloat(savedValue));
             }
-            
-            // Subscribe to changes for automatic saving
-            effect.scaling.subscribe((val: number) => {
-                globalEffectsStorage.setItem(storageKey, val.toString());
-            });
+
         }
     }
+
+
     
 
     // Set up regions

@@ -240,6 +240,7 @@ export class Session extends NamedElement {
 export class IslandManager {
     public allIslands: Island;
     public showIslandOnCreation: Option;
+    public activateAllNeeds: Option;
     public islandNameInput: KnockoutObservable<string>;
     public availableSessions: KnockoutComputed<Session[]>;
     public metaSession: Session;
@@ -248,7 +249,7 @@ export class IslandManager {
     public islandExists: KnockoutObservable<boolean>;
     public params: ParamsConfig;
     public currentIslandSubscription: KnockoutComputed<void>;
-    
+
     constructor(params: ParamsConfig, isFirstRun: boolean) {
         // Explicit assignments
         const islandKey = "islandName";
@@ -261,16 +262,31 @@ export class IslandManager {
             locaText: texts.showIslandOnCreation
         });
         this.showIslandOnCreation.checked(true);
-        
+
+        // Create the activateAllNeeds option
+        this.activateAllNeeds = new (require('./util').Option)({
+            name: "Activate all needs",
+            guid: "activateAllNeeds",
+            locaText: texts.activateAllNeeds
+        });
+        // Set initial value: false for start mode (first run), true otherwise
+        this.activateAllNeeds.checked(true);
+
         // Create other required properties
         this.islandNameInput = ko.observable();
         this.availableSessions = ko.pureComputed(() => window.view.sessions.filter((s: Session) => s.available()));
         this.metaSession = window.view.sessions[0];
+        var romanSession = null;
         this.availableSessions().forEach(session => {
             if (session.region.id == "Meta")
                 this.metaSession = session;
-        })
-        this.sessionInput = ko.observable(this.metaSession);
+            if (session.region.id == "Roman")
+                romanSession = session;
+        });
+        if(romanSession == null)
+            throw new Error("No roman session!")
+
+        this.sessionInput = ko.observable(romanSession);
         this.renameIsland = ko.observable();
         this.params = params;
         
@@ -295,6 +311,9 @@ export class IslandManager {
         this.sortIslands();
 
         var allIslands = new Island(params, new Storage(ALL_ISLANDS), isFirstRun, this.metaSession);
+        if (isFirstRun)
+            allIslands.activateAllNeeds(true);
+        
         this.allIslands = allIslands;
         view.islands.unshift(allIslands);
         if (!view.island())
@@ -342,6 +361,8 @@ export class IslandManager {
     
     
             var island = new Island(this.params, new Storage(name), true, session);
+            island.activateAllNeeds(this.activateAllNeeds.checked());
+
             view.islands.push(island);
             this.sortIslands();
     
@@ -1031,6 +1052,7 @@ export class Island {
             }
         }
 
+
         for (var category of params.productFilters) {
             let c = new ProductCategory(category, assetsMap);
             assetsMap.set(c.guid, c);
@@ -1118,6 +1140,16 @@ export class Island {
      */
     deleteIsland(_island: Island): void {
         // Implementation handled by IslandManager
+    }
+
+    activateAllNeeds(activate: boolean): void {
+        // Apply activateAllNeeds setting for new islands
+        for (let populationLevel of this.populationLevels) {
+            for (let need of populationLevel.needs) {
+                need.checked(activate);
+            }
+        }
+                
     }
 } 
 

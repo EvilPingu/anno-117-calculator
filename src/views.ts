@@ -90,7 +90,10 @@ export class ViewMode {
      */
     start(): void {
         view.settings.missingBuildingsHighlight.checked(true);
+        view.islandManager.activateAllNeeds.checked(false);
         //view.settings.needUnlockConditions.checked(true);
+
+        setTimeout(() => $('#island-management-dialog').modal('show'), 250);
     }
 
     /**
@@ -99,6 +102,10 @@ export class ViewMode {
      */
     plan(): void {
         view.settings.decimalsForBuildings.checked(true);
+
+        for (const effect of window.view.globalEffects) {
+            effect.scaling(1);
+        }
 
         for (var dlc of view.dlcs.values()) {
             dlc.checked(true);
@@ -119,7 +126,11 @@ export class ViewMode {
         for (var option of view.settings.options)
             option.checked(true);
 
-        view.settings.hideProductionBoost.checked(false);
+        //view.settings.hideProductionBoost.checked(false);
+
+        for (const effect of window.view.globalEffects) {
+            effect.scaling(1);
+        }
 
         for (var dlc of view.dlcs.values()) {
             dlc.checked(true);

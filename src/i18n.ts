@@ -288,19 +288,28 @@ export const texts: Record<string, Record<string, string>> = {
         "english": "Obtain goods from",
         "german": "Ware davon beziehen"
     },
+    afterIslandCreation: {
+        "english": "After creation:",
+        "german": "Nach dem Erstellen:"
+    },
     showIslandOnCreation: {
-        english: "After creating a new island display it",
-        french: "Afficher la nouvelle île après sa création",
-        polish: "Po utworzeniu nowej wyspy ją wyświetl",
-        spanish: "Mostrar la isla después de crearla",
-        italian: "Visualizza la nuova isola dopo la creazione",
-        german: "Nach dem Erstellen einer neuen Insel diese anzeigen",
-        brazilian: "Exibir a ilha após criá-la",
-        russian: "Показать остров после создания",
-        simplified_chinese: "创建新岛屿后显示它",
-        traditional_chinese: "建立新島嶼後顯示它",
-        japanese: "新しい島を作成した後に表示する",
-        korean: "새 섬 생성 후 표시"
+        english: "Display island",
+        german: "Insel anzeigen",
+    },
+    "activateAllNeeds": {
+        "english": "Activate all needs",
+        "french": "Activer tous les besoins",
+        "polish": "Aktywuj wszystkie potrzeby",
+        "spanish": "Activar todas las necesidades",
+        "italian": "Attiva tutti i bisogni",
+        "german": "Alle Bedürfnisse aktivieren",
+        "brazilian": "Ativar todas as necessidades",
+        "russian": "Активировать все потребности",
+        "simplified_chinese": "激活所有需求",
+        "traditional_chinese": "激活所有需求",
+        "japanese": "すべてのニーズを有効にする",
+        "korean": "모든 요구 사항 활성화"
+
     },
     importDeficit: {
         english: "Import deficit",
@@ -551,10 +560,10 @@ export const texts: Record<string, Record<string, string>> = {
     helpContent: {
         german:
             `<h5>Verwendung und Aufbau</h5>
-<p>Trage die aktuellen oder angestrebten Einwohner pro Stufe in die oberste Reihe ein. Die Produktionsketten aktualisieren sich automatisch, sobald man die Eingabe verlässt. Es werden nur diejenigen Fabriken angezeigt, die benötigt werden.</p>
+<p>Trage die aktuellen Wohnhäuser in die oberste Reihe ein. Die Produktionsketten aktualisieren sich automatisch, sobald man die Eingabe verlässt. Es werden nur diejenigen Waren angezeigt, die benötigt werden.</p>
 <p>Der Buchstabe in eckigen Klammern vor dem Bevölkerungsnamen ist der <b>Hotkey</b> zum Fokussieren des Eingabefeldes. Die Anzahl dort kann ebenfalls durch Drücken der Pfeiltasten erhöht und verringert werden.</p><br/>
 <p>In der darunterliegenden Reihe wird die <b>Arbeitskraft</b> angezeigt, die benötigt wird, um alle Gebäude zu betreiben (jeweils auf die nächste ganze Fabrik gerundet).</p><br/>
-<p>Danach folgt ein <b>Überblick über alle benötigten Gebäude</b>, sortiert nach dem produzierten Warentyp. Jeder der Abschnitte kann durch einen Klick auf die Überschrift zusammengeklappt werden.</p><br/>
+<p>Danach folgt ein <b>Überblick über alle benötigten Waren</b> mit Anzahl benötigter Fabriken darunter. Jeder der Abschnitte kann durch einen Klick auf die Überschrift zusammengeklappt werden.</p><br/>
 <p>In jeder Kachel wird der Name der Fabrik, das Icon der hergestellten Ware, die Produktivität, die Anzahl der benötigten Gebäude und die Produktionsrate in Tonnen pro Minute angezeigt. Die Anzahl der Gebäude wird, wenn aktiviert, mit zwei Nachkommastellen angezeigt, um die Höhe der Überkapazitäten direkt ablesen zu können. Am unteren Rand der Kachel wird der (benötigte) <b>Output der Fabrik</b> angezeigt (was im Ausgangslager der Fabrik erzeugt wird plus Zusatzwaren).</p><br/>
 <p>Der Abschnitt öffentliche Gebäude enthält nur diejenigen Gebäude, welche Waren verbrauchen. Für die Post aus dem Reich-der-Lüfte-DLC wird nicht die Anzahl benötigter Postbüros sondern die Bevölkerung, welche sich in Reichweite eines Postbüros befinden muss, angezeigt. Die Rezepte aus dem Reisezeit-DLC sind dabei wie folgt umgesetzt. Jedes Rezept ist durch ein eigenes Gebäude repräsentiert. Um ein Rezept zum ersten Mal zu verwenden, muss es in der Liste ausgewählt und anschließend der Plus-Button geklickt werden. Es erscheint eine neue Kachel, die sich wie ein normales Produktionsgebäude verhält. Der einzige Unterschied besteht, wenn man die Gebäudezahl auf Null setzt. Dann verschwindet die Kachel und das Rezept wird wieder der Liste hinzugefügt.</p><br/>
 <p>Da <b>Baumaterialien</b> sich Zwischenmaterialien mit Konsumgütern teilen sind sie (im Gegensatz zu Warenrechnern früherer Annos) mit aufgeführt, um so den Verbrauch von Minen besser planen zu können. Es muss die Anzahl der Endbetriebe per Hand eingegeben werden.</p><br/>
@@ -868,6 +877,7 @@ export const options: Record<string, any> = {
             "korean": "제품, 건물명 및 인구 이름 숨기기"
         }
     },
+    /*
     "hideProductionBoost": {
         "name": "Hide the input fields for productivity",
         "locaText": {
@@ -885,6 +895,7 @@ export const options: Record<string, any> = {
             "korean": "생산성 입력 필드 숨기기"
         }
     },
+    */
     "showAllProducts": {
         "name": "Show all products available in the region",
         "locaText": {
@@ -919,6 +930,7 @@ export const options: Record<string, any> = {
             "korean": "부족한 건물 강조"
         }
     },
+
     // "needUnlockConditions": {
     //     "name": "Consider unlock conditions for needs",
     //     "locaText": {

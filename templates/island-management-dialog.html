@@ -37,11 +37,17 @@
                         </div>
                     </div>
                 </form>
-                <div class="custom-control custom-checkbox mb-3">
-                    <input id="checkbox-show-island-on-creation" type="checkbox" class="custom-control-input" data-bind="checked: $root.islandManager.showIslandOnCreation.checked">
-                    <label class="custom-control-label" for="checkbox-show-island-on-creation" data-bind="text: $root.islandManager.showIslandOnCreation.name"></label>
+                <div class="inline-list-stretched mt-2">
+                    <span data-bind="text: $root.texts.afterIslandCreation.name"></span>
+                    <div class="custom-control custom-checkbox">
+                        <input id="checkbox-show-island-on-creation" type="checkbox" class="custom-control-input" data-bind="checked: $root.islandManager.showIslandOnCreation.checked">
+                        <label class="custom-control-label" for="checkbox-show-island-on-creation" data-bind="text: $root.islandManager.showIslandOnCreation.name"></label>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                        <input id="checkbox-activate-all-needs" type="checkbox" class="custom-control-input" data-bind="checked: $root.islandManager.activateAllNeeds.checked">
+                        <label class="custom-control-label" for="checkbox-activate-all-needs" data-bind="text: $root.islandManager.activateAllNeeds.name"></label>
+                    </div>
                 </div>
-
                 <table class="table table-striped">
 
                     <tbody data-bind="foreach: $root.islandManager.islandCandidates">
