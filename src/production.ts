@@ -1,4 +1,4 @@
-import { NamedElement, EPSILON, ko, dummyObservableArray, dummyComputed } from './util';
+import { NamedElement, EPSILON, ko, dummyObservableArray, dummyComputed, getForcedDefaultSupplier } from './util';
 import {  AssetsMap } from './types';
 import { ProductConfig, BuildingBuffConfig, PatronsConfig, EffectConfig, ItemConfig, ProductFilterConfig } from './types.config';
 import { Workforce } from './population';
@@ -256,6 +256,17 @@ export class Product extends NamedElement {
      * @returns 
      */
     resetDefaultSupplier(){
+        const guid = getForcedDefaultSupplier(this.island?.region.id, this.guid);
+        if (guid != null){
+            for (const factory of this.factories) {
+                if (factory.canSupply() && factory.guid == guid){
+                    this.updateDefaultSupplier(factory);
+                    return;
+                }
+            }
+        }
+
+
         for (const factory of this.factories) {
             if (factory.canSupply()) {
                 this.updateDefaultSupplier(factory);

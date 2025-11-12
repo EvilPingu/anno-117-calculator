@@ -50,6 +50,18 @@ export let EPSILON = 0.0000001;
 /** Special identifier for "All Islands" view */
 export let ALL_ISLANDS = "All Islands";
 
+/**
+ * When resetting the default supplier this method returns a factory GUID
+ * if the standard procedure should not be applied. Otherwise it returns null
+ */
+export function getForcedDefaultSupplier(regionID: string | undefined, productGUID: number): number | null {
+    if(regionID == "Meta" || regionID == "Roman")
+        if (productGUID == 31697)
+            return 31753
+
+    return null
+}
+
 
 /** Number formatter using the browser's locale */
 const formater = new Intl.NumberFormat(navigator.language || "en").format;
