@@ -83,7 +83,7 @@
                 <ul class="nav nav-tabs" role="tablist" id="product-config-supplier-tabs">
                     <!-- ko foreach: $data.visibleFactories -->
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" data-toggle="tab" type="button" role="tab" data-bind="attr: {'data-target': '#factories-tab-' + $data.guid(), 'aria-controls': 'factories-tab-' + $data.guid(), 'aria-selected': $data.isDefaultSupplier()}" >
+                        <button class="nav-link" data-toggle="tab" type="button" role="tab" data-bind="attr: {'data-target': '#factories-tab-' + $data.guid(), 'aria-controls': 'factories-tab-' + $data.guid(), 'aria-selected': $data.isDefaultSupplier()}, css: {'active': $data.isDefaultSupplier()}" >
                             <span class="d-flex align-items-center">
                                 <span class="icon-sm icon-light mr-2" data-bind="visible: $data.island().region.id == 'Meta', component: {name: 'asset-icon', params: $data.region()}"></span>
                                 <span class="mb-0" data-bind="text: $data.name()"></span>
@@ -93,7 +93,7 @@
                     </li>
                      <!-- /ko -->
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" data-toggle="tab" data-target="#trade-routes-tab" aria-controls="trade-routes-tab" aria-selected="true">
+                        <button class="nav-link" data-toggle="tab" data-target="#trade-routes-tab" aria-controls="trade-routes-tab" data-bind="css: { 'active': $data.showTradeRouteTab()}">
                             <span data-bind="text: $root.texts.trading ? $root.texts.trading.name : 'Trading'"></span>
                             <span class="ml-3" data-bind="text: $data.tradingAmountFormatted()"></span>
                         </button>
@@ -104,13 +104,13 @@
                 <div class="tab-content mt-3">
                     <!-- Factories Tab -->
                      <!-- ko foreach: $data.visibleFactories -->
-                    <div class="tab-pane fade" data-bind="attr: {'id': 'factories-tab-' + $data.guid()}" role="tabpanel">
+                    <div class="tab-pane fade" data-bind="attr: {'id': 'factories-tab-' + $data.guid()}, css: {'show': $data.isDefaultSupplier(), 'active': $data.isDefaultSupplier()}" role="tabpanel">
                         <div data-bind="template: { name: 'factory-config-section', data: $data }"></div>
                     </div>
                     <!-- /ko -->
 
                     <!-- Trade Routes Tab -->
-                    <div class="tab-pane fade show active" id="trade-routes-tab" >
+                    <div class="tab-pane fade " id="trade-routes-tab" data-bind="css: {'show': $data.showTradeRouteTab(), 'active': $data.showTradeRouteTab()}">
                         <div data-bind="if: $data.availableTradeIslands().length">
                             <form class="form form-inline mb-2" style="justify-content: space-between"> 
                                 <!-- Create route for import -->

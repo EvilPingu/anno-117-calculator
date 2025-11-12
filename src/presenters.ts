@@ -376,6 +376,10 @@ export class ProductPresenter {
         })
     }
 
+    showTradeRouteTab(): boolean{
+        return this.defaultSupplier()?.type != "factory"
+    }
+
     /**
      * Handles supplier selection from dropdown
      * @param option - The selected supplier option

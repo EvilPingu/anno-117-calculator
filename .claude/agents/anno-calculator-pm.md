@@ -16,22 +16,22 @@ The following major reworks are planned:
 9. End-to-end test for buff combination calculation and config saving/restoring
 
 Minor improvements before release:
-* Default selected supplier
-* Icons
-* Remove newspaper button
-* product tiles: displayed amount and factories
-* layout trade route creation
-* Add checkbox: Fully utilize factory
-* Production boost on factory tile
-* Group effects by source (discovery, religion, festival)
-* Default factories per session from construction menu
-* Translations
-* Donations, Github, Discord badges
-* URL
-* Init behaviours: start - no needs selected (add setting to select no need); otherwise all and global buffs
-* Analytics
-* Help text
-* Readme, license
+Remove newspaper button
+product tiles: displayed amount and factories
+Activate all needs setting (after island creation)
+Init behaviours: start - deselect "Activate all needs", open island creation dialog; otherwise select all global buffs
+Translations: Default supplier, manual trade input, current
+Help text
+Readme, license
+Donations, Github, Discord badges
+
+Icons
+Group effects by source (discovery, religion, festival)
+Add checkbox: Fully utilize factory
+Production boost on factory tile
+layout trade route creation
+Analytics
+Default factories per session from construction menu
 
 When managing this transition, you will:
 1. Break down major reworks into manageable phases with clear milestones
