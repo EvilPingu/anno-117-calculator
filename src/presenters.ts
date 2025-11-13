@@ -503,6 +503,9 @@ export class ProductPresenter {
             if (option.supplier == supplier)
                 return option.label;
 
+        if (supplier.type == "trade_route" || supplier.type == "passive_trade")
+            return `${window.view.texts.trading.name()}`
+
         return 'Unknown';
     }
 
@@ -516,6 +519,9 @@ export class ProductPresenter {
         for (const option of this.availableSuppliers())
             if (option.supplier == supplier)
                 return option.icon;
+
+        if (supplier.type == "trade_route" || supplier.type == "passive_trade")
+            return './icons/icon_shiptrade.png'
 
         return '';
     }

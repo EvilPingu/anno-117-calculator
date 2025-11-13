@@ -16,8 +16,6 @@ The following major reworks are planned:
 9. End-to-end test for buff combination calculation and config saving/restoring
 
 Minor improvements before release:
-Translations: Default supplier, manual trade input, current
-Readme, license
 Donations, Github, Discord badges
 
 Icons

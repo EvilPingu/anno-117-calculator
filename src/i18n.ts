@@ -285,20 +285,60 @@ export const texts: Record<string, Record<string, string>> = {
         "brazilian": "Toneladas por minuto (t/min)"
     },
     currentSupplier: {
-        "english": "Current:",
-        "german": "Aktuell:"
+        english: "Current:",
+        french: "Actuel :",
+        polish: "Bieżący:",
+        spanish: "Actual:",
+        italian: "Attuale:",
+        german: "Aktuell:",
+        brazilian: "Atual:",
+        russian: "Текущий:",
+        simplified_chinese: "当前：",
+        traditional_chinese: "當前：",
+        japanese: "現在：",
+        korean: "현재:"
     },
     setAsDefault: {
-        "english": "Obtain goods from",
-        "german": "Ware davon beziehen"
+        english: "Obtain goods from",
+        french: "Obtenir des marchandises de",
+        polish: "Uzyskaj towary od",
+        spanish: "Obtener bienes de",
+        italian: "Ottieni beni da",
+        german: "Ware davon beziehen",
+        brazilian: "Obter bens de",
+        russian: "Получить товары от",
+        simplified_chinese: "从此获取货物",
+        traditional_chinese: "從此獲取貨物",
+        japanese: "商品の入手元",
+        korean: "상품 공급처"
     },
     afterIslandCreation: {
-        "english": "After creation:",
-        "german": "Nach dem Erstellen:"
+        english: "After creation:",
+        french: "Après création :",
+        polish: "Po utworzeniu:",
+        spanish: "Después de crear:",
+        italian: "Dopo la creazione:",
+        german: "Nach dem Erstellen:",
+        brazilian: "Após criação:",
+        russian: "После создания:",
+        simplified_chinese: "创建后：",
+        traditional_chinese: "創建後：",
+        japanese: "作成後：",
+        korean: "생성 후:"
     },
     showIslandOnCreation: {
         english: "Display island",
+        french: "Afficher l'île",
+        polish: "Wyświetl wyspę",
+        spanish: "Mostrar isla",
+        italian: "Mostra isola",
         german: "Insel anzeigen",
+        brazilian: "Exibir ilha",
+        russian: "Показать остров",
+        simplified_chinese: "显示岛屿",
+        traditional_chinese: "顯示島嶼",
+        japanese: "島を表示",
+        korean: "섬 표시"
     },
     "activateAllNeeds": {
         "english": "Activate all needs",
@@ -314,6 +354,34 @@ export const texts: Record<string, Record<string, string>> = {
         "japanese": "すべてのニーズを有効にする",
         "korean": "모든 요구 사항 활성화"
 
+    },
+    import: { // good is imported on this trade route
+        english: "Import",
+        french: "Importer",
+        polish: "Importuj",
+        spanish: "Importar",
+        italian: "Importa",
+        german: "Importieren",
+        brazilian: "Importar",
+        russian: "Импорт",
+        simplified_chinese: "进口",
+        traditional_chinese: "進口",
+        japanese: "輸入",
+        korean: "수입"
+    },
+    export: { // good is exported on this trade route
+        english: "Export",
+        french: "Exporter",
+        polish: "Eksportuj",
+        spanish: "Exportar",
+        italian: "Esporta",
+        german: "Exportieren",
+        brazilian: "Exportar",
+        russian: "Экспорт",
+        simplified_chinese: "出口",
+        traditional_chinese: "出口",
+        japanese: "輸出",
+        korean: "수출"
     },
     importDeficit: {
         english: "Import deficit",
@@ -559,7 +627,17 @@ export const texts: Record<string, Record<string, string>> = {
     },
     newFeature: {
         english: "",
+        french: "",
+        polish: "",
+        spanish: "",
+        italian: "",
         german: "",
+        brazilian: "",
+        russian: "",
+        simplified_chinese: "",
+        traditional_chinese: "",
+        japanese: "",
+        korean: ""
     },
     helpContent: {
         german:

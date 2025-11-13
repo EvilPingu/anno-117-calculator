@@ -1,5 +1,5 @@
 ﻿<div id="product-config-dialog" class="modal fade" role="dialog" tabindex="-1" aria-hidden="true" data-bind="debug: 'Product Config Dialog', with: $root.presenter.productByGuid.get($root.selectedProduct().guid)">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <img class="icon-md mr-2" data-bind="component: {name: 'asset-icon', params: $data}">
@@ -133,15 +133,6 @@
                         </div>
 
                         <table class="table table-striped table-sm">
-                            <thead>
-                                <tr>
-                                    <th data-bind="text: $root.texts.island ? $root.texts.island.name : 'Island'"></th>
-                                    <th data-bind="text: $root.texts.direction ? $root.texts.direction.name : 'Direction'"></th>
-                                    <th></th>
-                                    <th data-bind="text: $root.texts.amount ? $root.texts.amount.name : 'Amount'"></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
                             <tbody>
                                 <tr>
                                     <td data-bind="text: $root.texts.traders ? $root.texts.traders.name : 'Traders'"></td>
