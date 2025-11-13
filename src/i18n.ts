@@ -284,6 +284,10 @@ export const texts: Record<string, Record<string, string>> = {
         "russian": "Тонн в минуту (т./мин.)",
         "brazilian": "Toneladas por minuto (t/min)"
     },
+    currentSupplier: {
+        "english": "Current:",
+        "german": "Aktuell:"
+    },
     setAsDefault: {
         "english": "Obtain goods from",
         "german": "Ware davon beziehen"

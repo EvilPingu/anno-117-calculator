@@ -16,35 +16,28 @@
                 </div>
 
                 <!-- Supplier Selection Section -->
-                <div class="mb-4 p-3" style="background-color: rgba(0,0,0,0.05); border-radius: 4px;">
-                    <h5 data-bind="text: $root.texts.defaultSupplier ? $root.texts.defaultSupplier.name : 'Default Supplier'"></h5>
-                    <div class="row">
-                        <div class="col-md-8">
-                            <label data-bind="text: $root.texts.selectSupplier ? $root.texts.selectSupplier.name : 'Select Supplier'"></label>
-                            <select class="custom-select"
-                                    data-bind="options: $data.availableSuppliers,
-                                               optionsText: 'label',
-                                               value: $data.selectedSupplierOption,
-                                               optionsAfterRender: function(option, item) {
-                                                   if (item && item.icon) {
-                                                       $(option).prepend($('<img>').attr('src', item.icon).css({width: '20px', height: '20px', marginRight: '8px'}));
-                                                   }
-                                               }">
-                            </select>
-                            <button class="btn btn-primary mt-2"
-                                    data-bind="click: () => $data.selectSupplier($data.selectedSupplierOption()), enable: $data.selectedSupplierOption()">
-                                <span class="fa fa-check"></span>
-                                <span data-bind="text: $root.texts.apply ? $root.texts.apply.name : 'Apply'"></span>
-                            </button>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="mt-3">
-                                <strong data-bind="text: $root.texts.currentSupplier ? $root.texts.currentSupplier.name : 'Current:'"></strong>
-                                <div class="d-flex align-items-center mt-1">
-                                    <img class="icon-sm mr-2" data-bind="attr: { src: $data.getDefaultSupplierIcon() }" style="width: 24px; height: 24px;">
-                                    <span data-bind="text: $data.getDefaultSupplierLabel()"></span>
-                                </div>
-                            </div>
+                <div class="mt-4 p-3" style="background-color: rgba(0,0,0,0.05); border-radius: 4px;">
+                    <div class="inline-list-stretched">
+                        
+                        <select class="custom-select col-md-4"
+                                data-bind="options: $data.availableSuppliers,
+                                            optionsText: 'label',
+                                            value: $data.selectedSupplierOption,
+                                            optionsAfterRender: function(option, item) {
+                                                if (item && item.icon) {
+                                                    $(option).prepend($('<img>').attr('src', item.icon).css({width: '20px', height: '20px', marginRight: '8px'}));
+                                                }
+                                            }">
+                        </select>
+                        <button class="btn btn-light btn-sm"
+                            data-bind="click: () => $data.selectSupplier($data.selectedSupplierOption()), enable: $data.selectedSupplierOption()">
+                
+                            <span data-bind="text: $root.texts.setAsDefault ? $root.texts.setAsDefault.name : 'Set as Default'"></span>
+                        </button>
+                        <span data-bind="text: $root.texts.currentSupplier ? $root.texts.currentSupplier.name : 'Current:'"></span>
+                        <div class="d-flex align-items-center mt-1">
+                            <img class="icon-sm mr-2" data-bind="attr: { src: $data.getDefaultSupplierIcon() }" style="width: 24px; height: 24px;">
+                            <span data-bind="text: $data.getDefaultSupplierLabel()"></span>
                         </div>
                     </div>
                 </div>

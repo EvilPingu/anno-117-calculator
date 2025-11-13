@@ -229,7 +229,7 @@ export class ProductPresenter {
                         suppliers.push({
                             type: 'extra_good',
                             supplier: supplier,
-                            label: `${supplier.factory.name()} (Extra Goods)`,
+                            label: `${supplier.factory.name()} (${window.view.texts.extraGoods.name()})`,
                             icon: './icons/icon_add_goods_socket_white.png'
                         });
                     }
@@ -240,8 +240,8 @@ export class ProductPresenter {
             suppliers.push({
                 type: 'passive_trade',
                 supplier: this.instance().passiveTradeSupplier,
-                label: 'Manual Trade Input',
-                icon: './icons/icon_transporter_loading_light.png'
+                label: `${window.view.texts.traders.name()}`,
+                icon: './icons/icon_shiptrade.png'
             });
 
             return suppliers;
@@ -499,16 +499,9 @@ export class ProductPresenter {
         const supplier = this.defaultSupplier();
         if (!supplier) return 'None';
 
-        if (supplier.type === 'factory') {
-            return (supplier as Factory).getRegionExtendedName();
-        } else if (supplier.type === 'trade_route') {
-            const route = supplier as TradeRoute;
-            return `Trade: ${route.from.name()}`;
-        } else if (supplier.type === 'extra_good') {
-            return 'Extra Goods';
-        } else if (supplier.type === 'passive_trade') {
-            return 'Manual Trade';
-        }
+        for (const option of this.availableSuppliers())
+            if (option.supplier == supplier)
+                return option.label;
 
         return 'Unknown';
     }
@@ -520,15 +513,9 @@ export class ProductPresenter {
         const supplier = this.defaultSupplier();
         if (!supplier) return '';
 
-        if (supplier.type === 'factory') {
-            return (supplier as Factory).icon || '';
-        } else if (supplier.type === 'trade_route') {
-            return './icons/icon_shiptrade.png';
-        } else if (supplier.type === 'extra_good') {
-            return './icons/icon_add_goods_socket_white.png';
-        } else if (supplier.type === 'passive_trade') {
-            return './icons/icon_transporter_loading_light.png';
-        }
+        for (const option of this.availableSuppliers())
+            if (option.supplier == supplier)
+                return option.icon;
 
         return '';
     }

@@ -17,7 +17,6 @@ The following major reworks are planned:
 
 Minor improvements before release:
 Translations: Default supplier, manual trade input, current
-Help text
 Readme, license
 Donations, Github, Discord badges
 
