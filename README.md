@@ -15,10 +15,10 @@ A production chain calculator for the computer game [Anno 117: Pax Romana](https
 ## How to Use
 
 ### Online Version
-Visit the online calculator at [https://anno-tools.github.io/anno-117-calculator/]
+Visit the online calculator at [https://anno-mods.github.io/anno-117-calculator/]
 
 ### Local Version
-1. Download the latest release from the [Releases page](https://github.com/anno-tools/anno-117-calculator/releases)
+1. Download the latest release from the [Releases page](https://github.com/anno-mods/anno-117-calculator/releases)
 2. Extract the archive to a folder on your computer
 3. Open `index.html` in your web browser
 4. Your data is automatically saved in your browser's local storage
@@ -48,7 +48,7 @@ Choose from three preset configurations to get started:
 ## Support & Feedback
 
 If you encounter any bugs or have suggestions for improvements:
-- Create an issue on [GitHub](https://github.com/anno-tools/anno-117-calculator/issues)
+- Create an issue on [GitHub](https://github.com/anno-mods/anno-117-calculator/issues)
 - Contact: hoellerich.nico@freenet.de
 
 ## Developer Information
