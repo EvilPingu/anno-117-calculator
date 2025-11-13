@@ -1,4 +1,4 @@
-// Core type definitions for the Anno 1800 Calculator
+// Core type definitions for the Anno 117 Calculator
 
 import { NamedElement } from "./util";
 

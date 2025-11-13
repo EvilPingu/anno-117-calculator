@@ -551,7 +551,7 @@ export const texts: Record<string, Record<string, string>> = {
         simplified_chinese: "新版本计算器已推出。点击下载按钮。",
         traditional_chinese: "新版本計算器已推出。點擊下載按鈕。",
         japanese: "新しいバージョンの計算機が利用可能です。ダウンロードボタンをクリックしてください。",
-        korean: "새로운 Anno1800 계산기 버전이 제공됩니다. 다운로드 버튼을 클릭하십시오."
+        korean: "새로운  117 계산기 버전이 제공됩니다. 다운로드 버튼을 클릭하십시오."
     },
     newFeature: {
         english: "",
@@ -560,19 +560,16 @@ export const texts: Record<string, Record<string, string>> = {
     helpContent: {
         german:
             `<h5>Verwendung und Aufbau</h5>
-<p>Trage die aktuellen Wohnhäuser in die oberste Reihe ein. Die Produktionsketten aktualisieren sich automatisch, sobald man die Eingabe verlässt. Es werden nur diejenigen Waren angezeigt, die benötigt werden.</p>
-<p>Der Buchstabe in eckigen Klammern vor dem Bevölkerungsnamen ist der <b>Hotkey</b> zum Fokussieren des Eingabefeldes. Die Anzahl dort kann ebenfalls durch Drücken der Pfeiltasten erhöht und verringert werden.</p><br/>
-<p>In der darunterliegenden Reihe wird die <b>Arbeitskraft</b> angezeigt, die benötigt wird, um alle Gebäude zu betreiben (jeweils auf die nächste ganze Fabrik gerundet).</p><br/>
-<p>Danach folgt ein <b>Überblick über alle benötigten Waren</b> mit Anzahl benötigter Fabriken darunter. Jeder der Abschnitte kann durch einen Klick auf die Überschrift zusammengeklappt werden.</p><br/>
-<p>In jeder Kachel wird der Name der Fabrik, das Icon der hergestellten Ware, die Produktivität, die Anzahl der benötigten Gebäude und die Produktionsrate in Tonnen pro Minute angezeigt. Die Anzahl der Gebäude wird, wenn aktiviert, mit zwei Nachkommastellen angezeigt, um die Höhe der Überkapazitäten direkt ablesen zu können. Am unteren Rand der Kachel wird der (benötigte) <b>Output der Fabrik</b> angezeigt (was im Ausgangslager der Fabrik erzeugt wird plus Zusatzwaren).</p><br/>
-<p>Der Abschnitt öffentliche Gebäude enthält nur diejenigen Gebäude, welche Waren verbrauchen. Für die Post aus dem Reich-der-Lüfte-DLC wird nicht die Anzahl benötigter Postbüros sondern die Bevölkerung, welche sich in Reichweite eines Postbüros befinden muss, angezeigt. Die Rezepte aus dem Reisezeit-DLC sind dabei wie folgt umgesetzt. Jedes Rezept ist durch ein eigenes Gebäude repräsentiert. Um ein Rezept zum ersten Mal zu verwenden, muss es in der Liste ausgewählt und anschließend der Plus-Button geklickt werden. Es erscheint eine neue Kachel, die sich wie ein normales Produktionsgebäude verhält. Der einzige Unterschied besteht, wenn man die Gebäudezahl auf Null setzt. Dann verschwindet die Kachel und das Rezept wird wieder der Liste hinzugefügt.</p><br/>
-<p>Da <b>Baumaterialien</b> sich Zwischenmaterialien mit Konsumgütern teilen sind sie (im Gegensatz zu Warenrechnern früherer Annos) mit aufgeführt, um so den Verbrauch von Minen besser planen zu können. Es muss die Anzahl der Endbetriebe per Hand eingegeben werden.</p><br/>
+<p>Trage die aktuelle Anzahl der Wohnhäuser pro Stufe in die oberste Reihe ein. Die Produktionsketten aktualisieren sich automatisch, sobald man das Eingabefeld verlässt. Es werden nur die benötigten Waren angezeigt.</p>
+<p>Der Buchstabe in eckigen Klammern vor dem Einwohnernamen ist der <b>Hotkey</b> zum Fokussieren des Eingabefeldes. Dort kann man mit den Pfeiltasten die Anzahl erhöhen oder verringern.</p><br/>
+<p>Die Reihe darunter zeigt die <b>Arbeitskraft</b>, die zum Betrieb aller Gebäude benötigt wird (aufgerundet auf die nächste vollständige Fabrik).</p><br/>
+<p>Danach folgt eine <b>Übersicht der benötigten Waren</b>. Durch Klick auf die Überschrift kann jeder Abschnitt zusammengeklappt werden.</p><br/>
+<p>Jede Kachel zeigt den Namen des Produkts, das Icon der produzierten Ware, die Anzahl der gebauten / benötigten Gebäude und die Produktionsrate in Tonnen pro Minute. Die Anzahl der Gebäude hat, wenn aktiviert, zwei Dezimalstellen, um direkt die Menge der Überkapazitäten anzuzeigen. Am unteren Rand der Kachel wird der (benötigte) <b>Output der Fabrik</b> angezeigt (was im Ausgangslager der Fabrik erzeugt wird plus Überschuss).</p>
+<p>Da <b>Baumaterialien</b> Zwischenprodukte mit Konsumgütern teilen, werden sie explizit aufgeführt (im Gegensatz zu Rechnern für frühere Anno-Teile), um die Produktion von Minen besser planen zu können. Die Anzahl der Fabriken muss manuell eingegeben werden.</p><br/>
 
 <h5>Bevölkerungskonfiguration</h5>
-<p>Der Button links oben bei den Bevölkerungsstufen öffnet ein separates Menü. Die angezeigten Einwohner werden automatisch anhand der Gebäude, Effekte und gewählten Bedürfnisse berechnet und wird im Regelfall nicht exakt mit den Zahlen in Anno übereinstimmen (z.B. weil Einwohner noch einziehen müssen). Gibt man dort einen Wert ein, so wird die notwendige Anzahl an Häusern geschätzt, um die Bevölkerung zu erreichen. Entsprechend wird häufig nach dem Verlassen des Eingabefeldes ein etwas anderer Wert darin stehen.</p>
-<p>Durch Klick auf die Überschrift <b>Wolkenkratzer</b> bzw. <b>Alle Wohnhäuser</b> werden die Wolkenkratzerlevel bzw. <b>Hacienda-Unterkünfte</b> angezeigt. Jede Zeile enthält die Anzahl an Gebäuden, die Gesamteinwohner pro Wohnhaustyp sowie die Verbrauchseffekte. Im Tooltip der Verbrauchseffekte wird die Abdeckung angezeigt. Abgesehen von der Wolkenkratzerverwaltung unter Finanzen bietet das Spiel hier keine Hilfe. Sobald ein Wolkenkratzer gebaut ist, fungieren die darüberstehenden Angaben als Zusammenfassung und können nicht mehr geändert werden.</p><br/>
-<p>Unter den Wohnhäusern folgen die Bedürfnisse, gruppiert nach Typ. Die Buttons neben den Waren (ent-)sperren das Bedürfnis. Durch das An-/Abwählen des Kontrollkästchens neben der Überschrift können alle Bedürfnisse gleichzeitig ge- oder entsperrt werden. Der Marktplatz-Button öffnet den <b>Konfigurationsdialog für Verbrauchseffekte</b>. Je nachdem welcher Button geklickt wird, wird ein anderer Filter angewandt. Der neben den Bedürfnissen zeigt nur Effekte, welche diese Bedürfnis beeinflussen sowie die Produktionskette. Der Button <b>Global Anwenden</b> übernimmt Verbrauchseffekte und gesperrte Bedürfnisse für alle Inseln.</p><br/>
-
+<p>Der Button oben links bei den Bevölkerungsstufen öffnet ein separates Menü. Die Einwohner werden automatisch basierend auf der Anzahl der Wohnhäuser, Verbrauchseffekten und versorgten Bedürfnissen berechnet.</p>
+<p>Die nach Kategorie gruppierten Bedürfnisse befinden sich unterhalb der Einwohner. Das Kontrollkästchen neben der Ware (ent-)sperrt das Bedürfnis. Durch Klick auf das Kontrollkästchen neben der Überschrift wird die gesamte Kategorie aktiviert oder deaktiviert. Das Marktplatz-Symbol öffnet die Produktionskettenübersicht.</p><br/>
 
 <h5>Globale Einstellungen</h5>
 <span class="btn-group bg-dark mr-2 float-left">
@@ -581,72 +578,52 @@ export const texts: Record<string, Record<string, string>> = {
 <button class="btn text-light"><span class="fa fa-question-circle-o"> </span></button>
 <button class="btn text-light"><span class="fa fa-download"> </span></button>
 </span>
-<p>Die Buttons rechts in der Navigationsleiste dienen zur Verwaltung des Warenrechners. Sie schalten in den Dark-Mode um, öffnen das Einstellungsmenü, zeigen die Hilfe oder öffnen den Download-Dialog. In den Einstellungen kann die Sprache ausgewählt und die Menge der dargestellten Informationen angepasst werden. Im <b>Downloadbereich</b> kann die <b>Konfiguration</b> (Einstellungen, Inseln, Produktivität, Gebäude, ...) importiert und exportiert werden. Außerdem können dieser Rechner sowie eine zusätzliche Serveranwendung heruntergeladen werden. Mit der <b>Serveranwendung</b> lassen sich die vorhandenen Gebäude, Inseln und Produktivitäten automatisch aus dem Spiel auslesen.</p><br/>
+<p>Die Buttons rechts in der Navigationsleiste dienen der Verwaltung des Rechners. Sie schalten den Dark-Mode um, öffnen die Einstellungen, zeigen die Hilfe oder öffnen den Download-Dialog. In den Einstellungen können Sprache und die Menge der angezeigten Informationen angepasst werden. Im <b>Downloadbereich</b> kann die <b>Konfiguration</b> (Einstellungen, Inseln, Produktivität, Gebäude, ...) importiert und exportiert werden. Außerdem kann dieser Rechner heruntergeladen werden.</p><br/>
 
-<h5>Konfigurationsdialog der Fabrik</h5>
-<p>Der Button links oben bei den Fabriken öffnet ein detaillierteres Menü. Dort können Items ausgerüstet, Gebäude, Produktivität, Module, Effekte und Clipping ausgewählt werden. Es werden nur Items aufgeführt, die Eingangswaren oder Arbeitskräfte ersetzen oder Zusatzwaren erzeugen. Items, die in keine der drei Kategorien fallen, sind aus Gründen der Übersichtlichkeit nicht aufgeführt. Die <b>Produktivität</b> muss z. B. komplett manuell ausgerechnet und eingetragen werden. Außerdem werden in dem Dialog Handelsrouten und Handelsverträge der Speicherstadt angelegt. </p><br/>
+<h5>Warenkonfigurationsdialog</h5>
+<p>Der Button oben links bei der Ware öffnet ein detaillierteres Menü. Dort können Items, Gebäude, Produktivität, Module, Effekte und Wasserversorgung angewendet oder eingegeben werden. Es werden nur Items aufgeführt, die Produktivität, Eingangswaren oder Arbeitskraft verändern oder Zusatzwaren bereitstellen. Items, die in keine der drei Kategorien fallen, sind der Übersichtlichkeit halber nicht enthalten. Außerdem werden in diesem Dialog Handelsrouten und Händler erstellt. Der Button <b>Ware davon beziehen</b> lässt die Fabrik diese Ware produzieren oder importiert die Ware von der ausgewählten Insel oder dem neutralen Händler (je nachdem, welchen Sie anklicken).</p><br/>
+
 
 <h5>Verbrauchseffekte, Produktionsketten und Zusatzwaren-Items</h5>
 <span class="btn-group bg-dark mr-2 float-left">
-<button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_marketplace_2d_light.png" /></button>
-<button class="btn text-light"><span class="fa fa-cogs"></span></button>
-<button type="button" class="btn"><img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="icons/icon_add_goods_socket_white.png" /></button>
+    <button type="button" class="btn">
+        <img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="./icons/icon_add_goods_socket_white.png" />
+    </button>
+    <button type="button" class="btn">
+        <img data-toggle="modal" data-target="#patron-selection-dialog" class="icon-navbar" src="icons/icon_2d_religion_belief_0.webp" />
+    </button>
 </span>
-<p>Die Buttons hierfür befinden sich links in der Navigationsleiste.</p><br/>
+<p>Die Buttons befinden sich links in der Navigationsleiste.</p><br/>
 
-<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_marketplace_2d_light.png" /></button></span>
-<p>Neben der <b>Zeitung</b> können auch weitere Effekte eingestellt werden, welche den <b>Warenverbrauch verändern</b>, z. B. Zoo-Sets, Palasteffekte, Items und Effekte der öffentlichen Gebäude des Reisezeit-DLC. Während Effekt und Items pro Insel aktiviert werden, hat die Zeitung globale Auswirkung. Um das Einstellen zu erleichtern, gibt es deshalb den <b>Global Anwenden</b>-Button, der alle Effekte auf alle anderen Inseln kopiert und die vorhandenen ersetzt.</p><br/>
+<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_add_goods_socket_white.png" /></button></span>
+<p>Der Effekt-Dialog ermöglicht die Anwendung von erforschten Technologien (global), Erhabenem Schutzherren-Effekt (global) und Ereignissen (pro Session oder Insel).</p><br/>
 
+<span class="float-left btn-group bg-dark mr-2">    <button type="button" class="btn">
+        <img data-toggle="modal" data-target="#patron-selection-dialog" class="icon-navbar" src="icons/icon_2d_religion_belief_0.webp" />
+    </button></span>
+<p>Der Schutzherren-Auswahldialog ermöglicht die Auswahl des Schutzherren und die Eingabe der Hingabe. Er zeigt den Bonus und die betroffenen Fabriken an.</p><br/>
 
-<span class="float-left btn-group bg-dark mr-2"><button class="btn text-light"><span class="fa fa-cogs"></span></button></span>
-<p>Im diesem Dialog kann ausgewählt werden, von welcher Fabrik eine Ware hergestellt werden soll, falls es mehrere Möglichkeiten gibt. Standardmäßig ist die <b>Gleiche-Region-Regel</b> eingestellt. Exemplarisch besagt diese, dass das Holz für die Destillerien in der Neuen Welt, das Holz für Nähmaschinen aber in der Alten Welt produziert wird.</p><br/>
-
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"><img class="icon-navbar" src="icons/icon_add_goods_socket_white.png" /></button></span>
-<p>Zunächst muss festgelegt werden, welche Fabriken mit welchen Items ausgerüstet sind. Dies kann über das Einstellungsmenü (Button rechts oben an jeder Fabrik) geschehen oder über die Zusatzwaren-Itemübersicht, bei der die Fabriken per Checkbox ausgewählt werden können. Den <b>Ertrag der Zusatzwaren</b> wird bei den Fabriken angezeigt, die das Produkt normalerweise herstellen. Zusatzwaren lassen sich durch die Checkbox aus der Berechnung herausnehmen. Dies ist notwendig, wenn mehrere Fabriken dasselbe Produkt herstellen, da andernfalls die Zusatzwaren mehrfach gutgeschrieben würden.</p><br/>
-
-<h5>Inselverwaltung und Handelsrouten</h5>
-<div class="input-group mb-2" style=" max-width: 300px; "> <div class="input-group-prepend"> <span class="input-group-text" >Selected Island</span> </div> <select name="islands" class="custom-select" ><option value="">All Islands</option></select> <div class="input-group-append"> <button class="btn btn-secondary" > <span class="fa fa-cog"> </span> </button> </div> </div>
+<h5>Insel- und Handelsroutenverwaltung</h5>
+<div class="input-group mb-2" style=" max-width: 300px; "> <div class="input-group-prepend"> <span class="input-group-text" >Ausgewählte Insel</span> </div> <select name="islands" class="custom-select" ><option value="">Alle Inseln</option></select> <div class="input-group-append"> <button class="btn btn-secondary" > <span class="fa fa-cog"> </span> </button> </div> </div>
 <span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_map.png"> </button></span>
-<p>Als erstes muss über das Zahnrad die <b>Inselverwaltung</b> geöffnet werden. Dort können dann neue Inseln erstellt werden. Wer den <b>Serveranwendung</b> verwendet, erhält dort Vorschläge für Inseln (basieren darauf, welche Inselnamen der Server im Statistikmenü gesehen hat). Mit dem Erstellen der ersten Insel werden in der Mitte der Navigationsleiste neue Bedienelemente angezeigt: Wechseln der Insel, Inselverwaltung öffnen und Handelsroutenmenü öffnen. Neue Inseln bekommen eine <b>Session</b> zugewiesen. Dies beeinflusst, welche Bevölkerungsstufen, Fabriken, Items und Verbrauchseffekte angezeigt werden. Der Button <b>Alles löschen</b> setzt den Warenrechner auf Werkseinstellungen zurück.</p><br/>
-
+<p>Zuerst muss der <b>Inselverwaltungsdialog</b> durch Klick auf das Zahnrad geöffnet werden. Dort können neue Inseln erstellt werden. Nach dem Erstellen der ersten Insel erscheinen drei neue Bedienelemente in der Mitte der Navigationsleiste: Insel wechseln, Inselverwaltung öffnen und Handelsroutenverwaltung öffnen. Neue Inseln werden einer <b>Session</b> zugeordnet. Die Session beeinflusst, welche Bevölkerungsstufen, Fabriken, Items und Warenverbrauchseffekte angezeigt werden. Der Button <b>Alles löschen</b> setzt den Rechner auf den Ausgangszustand zurück.</p><br/>
 
 <div class="float-left mr-2"> <button class="btn btn-light btn-sm" > <span class="fa fa-sliders"></span> </button> </div>
-<p>Das <b>Erstellen von Handelsrouten</b> erfolgt über den <b>Konfigurationsdialog einer Fabrik</b>, die diese Ware normalerweise herstellt. Handelsrouten gibt es in zwei Ausführungen. Zum einen können Waren der <b>Händler eingekauft</b> werden. Durch Auswählen des Kästchens neben dem Händler wird die Route erstellt. Die zweite Möglichkeit ist ein <b>Warentransfer</b> zwischen Inseln. Wie bei Zusatzwaren werden dafür der Bedarf auf der einen Seiter erhöht und auf der anderen erniedrigt. Öffnet man den Dialog, wird die <b>Überproduktion</b> direkt in das Eingabefeld zum Erstellen einer neuen Handelsroute übernommen. Ändern sich Produktion oder Bedarf nachträglich, so werden neben geeigneten Handelsrouten Buttons angezeigt, um die Differenz zu übernehmen. Ein <span class="fa fa-exclamation-triangle " style="color:red"></span> im Eingabefeld weist daraufhin, dass die Quellinsel nicht genug produziert, um die Route vollständig zu bedienen.</p><br/>
+<p><b>Handelsrouten werden erstellt</b> aus dem <b>Waren-Konfigurationsdialog</b>. Es gibt zwei Arten von Handelsrouten. Die erste Art sind Routen zum <b>passiven Wareneinkauf von Händlern</b>. Durch Klick auf den Button <b>Ware davon beziehen</b> wird der Bedarf für dieses Produkt von Händlern eingekauft. Die zweite Art sind Routen zum <b>Warentransfer zwischen Inseln</b>. Wie bei Zusatzwaren wird die zusätzliche Nachfrage auf der einen Seite erhöht und auf der anderen verringert. Beim Öffnen des Waren-Konfigurationsdialogs trägt der Rechner die <b>Überproduktion</b> in das Mengeneingabefeld für eine neue Handelsroute ein. Wenn sich Produktion oder Inselbedarf ändern, erscheinen Buttons neben geeigneten Handelsrouten, die das Hinzufügen der Differenz ermöglichen. Ein <span class="fa fa-exclamation-triangle " style="color:red"></span> bei einem Eingabefeld signalisiert, dass die Quellinsel nicht genug produziert, um die Handelsroute vollständig zu bedienen.</p><br/>
 
 <span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_shiptrade.png"> </button></span>
-<p>Das Handelsroutenmenü enthält eine Übersicht über alle Handelsrouten, in der Reihenfolge der Erstellung. Dort können Handelsrouten außerdem gelöscht und die Transportmenge angepasst werden.</p><br/>
-<span>Es gilt zu beachten, dass <b>Routen an Fabriken gekoppelt</b> sind. Dies bedeutet, dass der Import von derjenigen Fabrik erfolgen muss, von der es auf der anderen Insel produziert wird. Hierfür muss auf der importierenden Insel der Bedarf der richtigen Fabrik zugeordnet werden. Dies lässt sich über </span>
-<span class="btn-group bg-dark">
-<button class="btn text-light"><span class="fa fa-cogs"></span></button>
-</span>
-<span> in der Navigationsleiste einstellen. Andernfalls kann es z.B. passieren, dass vorhandene Gebäude bei Kohleminen eingetragen sind, der Bedarf aber bei Köhlereien anfällt. Grundsätzlich lässt sich schwer abbilden, wenn dieselbe Ware von verschiedenen Fabriktypen hergestellt wird. In solchen Fällen ist es empfehlenswert, sich im Warenrechner nur <b>auf einen Fabriktyp zu beschränken</b> und die Produktion der anderen per künstlicher Handelsroute von einer künstlichen Insel zu simulieren.</span><br/>
-<br/>
-
-<h5>Speicherstadt</h5>
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_docklands_2d_white.png"> </button></span>
-<p>Die Speicherstadt bietet enormes Potential, Waren einzutauschen und sich auf effiziente Produktionen zu beschränken. Jedoch bietet das Spiel nur eingeschränkte Möglichkeiten, um die für den Export notwendigen Produktionskapazitäten zu berechnen. Im Warenrechner werden die Handelsverträge deshalb in t/min angegeben. Der Rechner ermittelt dann, wie viele Tonnen gehandelt werden müssen, um den gewünschten Warenfluss zu erreichen. Das <b>Anlegen eines Vertrags</b> ähnelt dem einer Handelsroute. Im <b>Konfigurationsdialog einer Fabrik</b> werden die Warenmenge und das Tauschprodukt eingestellt. Mittels des Schiebereglers in der Mitte kann eingestellt werden, ob die Ware der ausgewählten Fabrik exportiert oder importiert werden. Wird kein Regler angezeigt, dann kann die Ware nicht importiert werden. <b>Beim Einstellen des Tauschprodukts taucht bei manchen Produkten ein zusätzliches Auswahlfeld auf.</b> Dort muss die Fabrik eingestellt werden, dem die Ware abgezogen bzw. zugeschrieben wird. Bei sämtlichen Auswahlfeldern kann durch Eingeben der Anfangsbuchstaben direkt zum Begriff gesprungen werden. Der Plus-Button erstellt die Route. Anschließend wird die Route in der Export-Fabrik und der Import-Fabrik angezeigt. Außerdem werden alle Verträge im Speicherstadt-Menü angezeigt. Mit einem Klick auf die Produkt-Icons kann zwischen den Menüs gewechselt werden.</p>
-<p>Im oberen Bereich des Menüs wird die <b>Export-Pyramide</b> angezeigt und bearbeitet. Hierfür müssen ein Produkt und der Multiplikator ausgewählt und hinzugefügt werden. Zum Umsortieren müssen erst die alten Produkte gelöscht und mit anderen Multiplikatoren neu erstellt werden. Bereits eingestellte Verträge werden dann so angepasst, dass die importierten Tonnen pro Minute gleich bleiben.</p>
-<img src="wheel_input.gif" class="float-left" style="margin: 0.5rem 0.5rem 0 0"/>
-<p>Im unteren Bereich befindet sich die Übersicht über alle Verträge und zusammenfassende Informationen zum Handel. Hierfür muss als erstes die <b>Ladegeschwindigkeit des Piers</b>, an dem Morris handelt, und seine <p>Reisezeit</p> eingestellt werden (wobei letzteres einen sinnvollen Default-Wert hat). Die Information hierzu kann dem unteren Bereich des Anlegestellen-Infomenüs entnommen werden. Der Rechner ermittelt dann die Umschlagsdauer des Händlers, den Gesamtwarenumschlag in t/min, die benötigte Insellagerkapazität und die einzustellenden Tonnen pro Vertrag. Bei der Berechnung der Werte ist der Ladegeschwindigkeitsbonus des Händlers und die Dauer zum Betreten und Verlassen der Session bereits mit eingerechnet. Sollte dort ∞ stehen, dann übersteigt der eingestellte Warenumschlag den maximal möglichen des Händlers. Dann müssen die Verträge auf mehrere Inseln verteilt, die Ladegeschwindigkeit erhöht oder das Handelsvolumen reduziert werden</p>
-<p>Es gibt noch einen weiteren Anwendungsfall, bei dem man pro Handel möglichst viele Waren tauschen möchte. Zuerst müssen dafür die Verträge eingerichtet und die Ladegeschwindigkeit angegeben werden. Die absolute Warenmenge ist dabei unerheblich, es kommt nur auf die relativen Unterschiede zwischen den Verträgen an. Anschließend muss die Insellagerkapazität eingetragen und daneben der Button <b>Setze Gesamtkapazität</b> geklickt werden. Der bestimmt die Ware, welche die meiste Lagerkapazität c benötigt. Der Vertrag wird um einen Faktor f skaliert, sodass c der Insellagerkapazität entspricht. Schließlich werden alle anderen Verträge ebenfalls mit f multipliziert. Ist das Schlosssymbol neben einem Vertrag aktiviert, wird dieser nicht verändert.</p>
-<p>Eine Besonderheit ergibt sich bei <b>Allen Inseln</b> (standardmäßig ausgewählt, wenn Inselverwaltung deaktiviert). Dort ist es erlaubt dieselbe Ware <b>zu importieren und exportieren</b>, um so Verträge für mehrere Speicherstädte zusammenfassen zu können. Allerdings werden keine zusammenfassenden Informationen zum Handel angezeigt.</p>
-<br/>
-
-<h5>Keim der Hoffnung</h5>
-<p>Die <b>Hacienda</b> beeinflusst viele Spielmechaniken und die Konfigurationsmöglichkeiten verteilen sich über den gesamten Warenrechner. Hier eine kurze Übersicht: Die Einwohnerunterkünfte können in der <b>Bevölkerungskonfiguration</b> durch Ausklappen des Abschnitts <b>Wohnhäuser</b> gefunden werden. Die <b>Initiative für maßvolle Ernährung</b> ist im Zeitungsmenü auswählbar. Hacienda-Farmen können im Konfigurationsmenü für Produktionsketten ausgewählt werden. Die <b>Gleiche Region</b>-Option bevorzugt die traditionellen Produktionsgebäude - wenn beide in derselben Region sind. Neue Inseln werden so eingestellt, dass die traditionellen Produktionsgebäude gewählt werden. Vorhandene Inseln aus älteren Konfigurationen des Warenrechners verwenden die gleiche-Region-Regel für alle Produkte, die jetzt neue Produktionsgebäude erhalten haben. Das bedeutet, dass von Obreras verbrauchtes Bier in der Hacienda-Brauerei hergestellt wird.</p>
-<p>Die <b>Düngerproduktionskette</b> funktioniert ähnlich wie bei Silos. Jede Farm hat eine zusätzliches Kontrollkästchen, um diese zu aktivieren. Damit werden Produktivität, Zusatzwaren und Düngerverbrauch ausgelöst. Bei Farmen der Alten Welt muss man das Konfigurationsdialog der Fabrik öffnen, um die Option angezeigt zu bekommen. Die Mistproduktion ist allerding besonders. Es gibt keine Standard-Fabrik, welche Mist produziert. Also habe ich eine künstliche erstellt: <b>Alle Tierhöfe</b>. Deren Zweck ist den Überblick über die komplette Mistproduktion zu behalten. Die Produktionsparameter sind von der Mistproduktion einer Alpakafarm abgeleitet. Man könnte also das künstliche Produktionsgebäude direkt verwenden. Der korrekte Weg geht allerdings über <b>Zusatzwaren</b>. Die Mistproduktion wird auf Tierhöfen genauso aktiviert wie man ein Item ausrüsten würde. Der gesammelte Mist wird dann unter Zusatzwaren bei Allen Tierhöfen angezeigt. Danach wird er vom Düngerwerk verarbeitet - übrigens eines der wenigen Produktionsgebäude, bei dem sich das Icon von Ware und Fabrik unterscheiden.</p>
+<p>Das Handelsroutenmenü enthält eine Übersicht aller Handelsrouten, aufgelistet in der Reihenfolge ihrer Erstellung. Dort können Handelsrouten gelöscht und ihre Transportmenge angepasst werden.</p><br/>
 <br/>
 
 <h5>Haftungsausschluss</h5>
-<p>Der Warenrechner wird ohne irgendeine Gewährleistung zur Verfügung gestellt. Die Arbeit wurde in KEINER Weise von Ubisoft Blue Byte unterstützt. Alle Assets aus dem Spiel Anno 1800 sind © by Ubisoft.</p><br/>
-<p>Darunter fallen insbesondere, aber nicht ausschließlich alle Icons, Bezeichnungen und Verbrauchswerte.</p><br/>
+<p>Der Rechner wird ohne jegliche Gewährleistung zur Verfügung gestellt. Die Arbeit wurde in KEINER Weise von Ubisoft Mainz unterstützt. Alle Assets aus dem Spiel Anno 117 sind © by Ubisoft.</p><br/>
+<p>Dies betrifft insbesondere, aber nicht ausschließlich alle Icons, Bezeichnungen und Verbrauchswerte.</p><br/>
 
 <p>Diese Software steht unter der MIT-Lizenz.</p><br/>
 
 <h5>Autor</h5>
 <p>Nico Höllerich</p>
-<p>hoellerich.nico@freenet.de</p>
-<br/>
+<p>hoellerich.nico@freenet.de</p><br/>
 
 <h5>Fehler und Verbesserungen</h5>
 <span>Falls Sie auf Fehler oder Unannehmlichkeiten stoßen oder Verbesserungen vorschlagen möchten, erstellen Sie ein Issue auf GitHub (</span><a href="https://github.com/NiHoel/Anno1800Calculator/issues">https://github.com/NiHoel/Anno1800Calculator/issues</a><span>)</span>`,
@@ -654,12 +631,12 @@ export const texts: Record<string, Record<string, string>> = {
 
         english:
             `<h5>Usage and Structure</h5>
-<p>Enter the current of residences per level into the topmost row. The production chains will update automatically when one leaves the input field. Only the required factories are displayed.</p>
+<p>Enter the current of residences per level into the topmost row. The production chains will update automatically when one leaves the input field. Only the required goods are displayed.</p>
 <p>The letter in square brackets before the resident's name is the <b>hotkey</b> to focus the input field. There, one can use the arrow keys to inc-/decrement the number.</p><br/>
 <p>The row below displays the <b>workforce</b> that is required to run all buildings (rounded towards the next complete factory).</p><br/>
 <p>Afterwards an <b>overview of the required goods</b> follows. Clicking the heading collapses each section.</p><br/>
-<p>Each card displays the name of the product, the icon of the produced good, the number of constructed / required buildings, and the production rate in tons per minute. The number of buildings has, if activated, two decimal places to directly show the amount of overcapacities. The bottom of the tile displays the (required) <b>output of the factory</b> (which are generated in the output storage of the factory plus excess goods).</p>
-<p>Since <b>construction materials</b> share intermediate products with consumables they are explicitly listed (unlike in calculators for previous Annos) to better plan the production of mines. The number of factories must be entered manually.</p><br/>
+<p>Each card displays the name of the good, the icon of the produced good, the number of constructed / required buildings, and the production rate in tons per minute. The number of buildings has, if activated, two decimal places to directly show the amount of overcapacities. The bottom of the tile displays the (required) <b>output of the factory</b> (which are generated in the output storage of the factory plus excess goods).</p>
+<p>Since <b>construction materials</b> share intermediate goods with consumables they are explicitly listed (unlike in calculators for previous Annos) to better plan the production of mines. The number of factories must be entered manually.</p><br/>
 
 <h5>Population Configuration</h5>
 <p>The button top left of the population levels opens a dedicated menu. The residents are automatically calculated based on the number of residences, consumption effects and supplied needs.</p>
@@ -689,10 +666,12 @@ export const texts: Record<string, Record<string, string>> = {
 </span>
 <p>The buttons are found in the left of the navigation bar.</p><br/>
 
-<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_newspaper.png" /></button></span>
-<p>The effect dialog lets you apply researched technologies (globally), Exalted Patron Effect (globally), events (per session or island), and Exalted Patron Effect (per island).</p><br/>
+<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_add_goods_socket_white.png" /></button></span>
+<p>The effect dialog lets you apply researched technologies (globally), Exalted Patron Effect (globally) and events (per session or island).</p><br/>
 
-<span class="float-left btn-group bg-dark mr-2"><button class="btn text-light"><span src="./icons/icon_2d_religion_belief_0.webp"></span></button></span>
+<span class="float-left btn-group bg-dark mr-2">    <button type="button" class="btn">
+        <img data-toggle="modal" data-target="#patron-selection-dialog" class="icon-navbar" src="icons/icon_2d_religion_belief_0.webp" />
+    </button></span>
 <p>The patron selection dialog lets you apply the patron and enter the devotion. It displays the buff and affected factories.</p><br/>
 
 <h5>Island and Trade Route Management</h5>
@@ -701,7 +680,7 @@ export const texts: Record<string, Record<string, string>> = {
 <p>First, one must open the <b>island management dialog</b> by clicking the cogwheel. One can create new islands there. After creating the first island three new control elements show up in the center of the navigation bar: Switch island, open island management, and open trade route management. New islands are associated with a <b>session</b>. The session influences which population levels, factories, items and good consumption effects show up. The button <b>Delete All</b> resets the calculator to its initial state.</p><br/>
 
 <div class="float-left mr-2"> <button class="btn btn-light btn-sm" > <span class="fa fa-sliders"></span> </button> </div>
-<p><b>Trade routes are created</b> from the <b>product configuration dialog</b>. There are two kinds of trade routes. The first kind are routes to <b>purchase goods passively from traders</b>. Clicking the <b>obtain goods from</b> button purchases the demand for this product from traders. The second kind are routes to <b>transfer goods between islands</b>. Like for extra goods, the extra demand is increased on one side and decreased on the other. When opening the factory configuration dialog, the calculator enters the <b>overproduction</b> into the amount input field for a new trade route. When production or island demand change, buttons show up next to suitable trade routes that allow to add the difference. A <span class="fa fa-exclamation-triangle " style="color:red"></span> on an input field signals that the source island does not produce enough to fully supply the trade route.</p><br/>
+<p><b>Trade routes are created</b> from the <b>good configuration dialog</b>. There are two kinds of trade routes. The first kind are routes to <b>purchase goods passively from traders</b>. Clicking the <b>obtain goods from</b> button purchases the demand for this good from traders. The second kind are routes to <b>transfer goods between islands</b>. Like for extra goods, the extra demand is increased on one side and decreased on the other. When opening the factory configuration dialog, the calculator enters the <b>overproduction</b> into the amount input field for a new trade route. When production or island demand change, buttons show up next to suitable trade routes that allow to add the difference. A <span class="fa fa-exclamation-triangle " style="color:red"></span> on an input field signals that the source island does not produce enough to fully supply the trade route.</p><br/>
 
 <span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_shiptrade.png"> </button></span>
 <p>The trade route menu contains an overview of all trade routes, listed in the order of creation. One can delete trade routes and adjust their load there.</p><br/>
