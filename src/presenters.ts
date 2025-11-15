@@ -437,7 +437,8 @@ export class ProductPresenter {
             amount
         );
 
-        this.instance().tradeList.routes.push(route);
+        route.fromIslandProduct.tradeList.routes.push(route);
+        route.toIslandProduct.tradeList.routes.push(route);
         view.tradeManager.add(route);
 
         // Reset form
@@ -462,7 +463,8 @@ export class ProductPresenter {
             0
         );
 
-        this.instance().tradeList.routes.push(route);
+        route.fromIslandProduct.tradeList.routes.push(route);
+        route.toIslandProduct.tradeList.routes.push(route);
         view.tradeManager.add(route);
 
         // Set as default supplier if importing
