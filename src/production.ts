@@ -162,6 +162,9 @@ export class Product extends NamedElement {
             // Create one ExtraGoodSupplier per factory
             this.extraGoodSuppliers = [];
             for (const [factory, entries] of entriesByFactory.entries()) {
+                if (factory.product.guid == this.guid)
+                    continue; // Skip self-effecting production
+
                 const supplier = new ExtraGoodSupplier(factory, this, island);
                 supplier.productionList = entries;
                 this.extraGoodSuppliers.push(supplier);
@@ -287,11 +290,13 @@ export class Product extends NamedElement {
         if(supplier == null)
             throw Error(`Supplier on ${this.name()} must not be set to null.`);
 
-        if(supplier == this.defaultSupplier())
+        const prevSupplier = this.defaultSupplier()
+        if(supplier == prevSupplier)
             return;
 
-        this.defaultSupplier()?.unsetAsDefaultSupplier();
         this.defaultSupplier(supplier);
+        prevSupplier?.unsetAsDefaultSupplier();
+        // when unsetting it first, going from trade route to default supplier sets demand to zero.
     }
 
     /**
