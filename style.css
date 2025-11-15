@@ -223,7 +223,7 @@ nav {
     position: fixed !important;
     width: 100%;
     z-index: 1000;
-    margin-top: -1rem;
+    top: 0;
     padding: 0 .5rem!important;
     background-color: #ffe9de !important;
 }
