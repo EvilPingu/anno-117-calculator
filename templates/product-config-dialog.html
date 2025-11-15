@@ -9,7 +9,7 @@
 
             <div class="modal-body">
                 <div data-bind="debug: 'consumerViewVisible', if: $data.consumerViewVisible()">
-                    <collapsible params="id: 'product-config-consumption', heading: $root.texts.consumption.name, collapsed: true, data: $data, summary: $data.totalDemand">
+                    <collapsible params="id: 'product-config-consumption', heading: $root.texts.consumption.name, collapsed: true, data: $data, summary: $data.totalDemandNoRoutes">
                         <!-- Pass the observable and not one fixed product  -->
                         <consumer-view params="product: $data.instance"></consumer-view>
                     </collapsible>

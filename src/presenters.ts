@@ -157,6 +157,7 @@ export class ProductPresenter {
     public extraGoodProduction: KnockoutComputed<number>;
     public totalProduction: KnockoutComputed<number>;
     public totalDemand: KnockoutComputed<number>;
+    public totalDemandNoRoutes: KnockoutComputed<number>;
     public netBalance: KnockoutComputed<number>;
 
     // === TRADE ROUTE MANAGEMENT ===
@@ -319,6 +320,7 @@ export class ProductPresenter {
         
         // Aggregate demand
         this.totalDemand = ko.pureComputed(() => this.instance().totalDemand());
+        this.totalDemandNoRoutes = ko.pureComputed(() => this.instance().totalDemandNoRoutes());
 
         // Net balance (production - demand)
         this.netBalance = ko.pureComputed(() =>
