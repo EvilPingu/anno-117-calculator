@@ -708,7 +708,7 @@ export const texts: Record<string, Record<string, string>> = {
 <p>hoellerich.nico@freenet.de</p><br/>
 
 <h5>Fehler und Verbesserungen</h5>
-<span>Falls Sie auf Fehler oder Unannehmlichkeiten stoßen oder Verbesserungen vorschlagen möchten, erstellen Sie ein Issue auf GitHub (</span><a href="https://github.com/NiHoel/Anno1800Calculator/issues">https://github.com/NiHoel/Anno1800Calculator/issues</a><span>)</span>`,
+<span>Um auf Fehler oder Unannehmlichkeiten hinzuweisen oder Verbesserungen vorzuschlagen, tritt dem Discord-Server bei (siehe Link oben) oder eröffne ein Issue auf GitHub (</span><a href="https://github.com/anno-mods/anno-117-calculator/issues">https://github.com/anno-mods/anno-117-calculator/issues</a><span>)</span>`,
 
 
         english:
@@ -779,7 +779,7 @@ export const texts: Record<string, Record<string, string>> = {
 <p>hoellerich.nico@freenet.de</p><br/>
 
 <h5>Bugs and improvements</h5>
-<span>If you encounter any bugs or inconveniences or if you want to suggest improvements, create an Issue on GitHub (</span><a href="https://github.com/NiHoel/Anno1800Calculator/issues">https://github.com/NiHoel/Anno1800Calculator/issues</a><span>)</span>`
+<span>If you encounter any bugs or inconveniences or if you want to suggest improvements, join the Discord server (see link above) or open an Issue on GitHub (</span><a href="https://github.com/anno-mods/anno-117-calculator/issues">https://github.com/anno-mods/anno-117-calculator/issues</a><span>)</span>`
     }
 };
 
