@@ -646,7 +646,7 @@ export const texts: Record<string, Record<string, string>> = {
 <p>Der Buchstabe in eckigen Klammern vor dem Einwohnernamen ist der <b>Hotkey</b> zum Fokussieren des Eingabefeldes. Dort kann man mit den Pfeiltasten die Anzahl erhöhen oder verringern.</p><br/>
 <p>Die Reihe darunter zeigt die <b>Arbeitskraft</b>, die zum Betrieb aller Gebäude benötigt wird (aufgerundet auf die nächste vollständige Fabrik).</p><br/>
 <p>Danach folgt eine <b>Übersicht der benötigten Waren</b>. Durch Klick auf die Überschrift kann jeder Abschnitt zusammengeklappt werden.</p><br/>
-<p>Jede Kachel zeigt den Namen des Produkts, das Icon der produzierten Ware, die Anzahl der gebauten / benötigten Gebäude und die Produktionsrate in Tonnen pro Minute. Die Anzahl der Gebäude hat, wenn aktiviert, zwei Dezimalstellen, um direkt die Menge der Überkapazitäten anzuzeigen. Am unteren Rand der Kachel wird der (benötigte) <b>Output der Fabrik</b> angezeigt (was im Ausgangslager der Fabrik erzeugt wird plus Überschuss).</p>
+<p>Jede Kachel zeigt den Namen des Ware, ihr Icon, die Anzahl der gebauten / benötigten Gebäude und die Produktionsrate in Tonnen pro Minute. Die Anzahl der Gebäude hat, wenn aktiviert, zwei Dezimalstellen, um direkt die Menge der Überkapazitäten anzuzeigen. Am unteren Rand der Kachel wird der (benötigte) <b>Output der Fabrik</b> angezeigt (was im Ausgangslager der Fabrik erzeugt wird plus Überschuss).</p>
 <p>Da <b>Baumaterialien</b> Zwischenprodukte mit Konsumgütern teilen, werden sie explizit aufgeführt (im Gegensatz zu Rechnern für frühere Anno-Teile), um die Produktion von Minen besser planen zu können. Die Anzahl der Fabriken muss manuell eingegeben werden.</p><br/>
 
 <h5>Bevölkerungskonfiguration</h5>
@@ -717,7 +717,7 @@ export const texts: Record<string, Record<string, string>> = {
 <p>The letter in square brackets before the resident's name is the <b>hotkey</b> to focus the input field. There, one can use the arrow keys to inc-/decrement the number.</p><br/>
 <p>The row below displays the <b>workforce</b> that is required to run all buildings (rounded towards the next complete factory).</p><br/>
 <p>Afterwards an <b>overview of the required goods</b> follows. Clicking the heading collapses each section.</p><br/>
-<p>Each card displays the name of the good, the icon of the produced good, the number of constructed / required buildings, and the production rate in tons per minute. The number of buildings has, if activated, two decimal places to directly show the amount of overcapacities. The bottom of the tile displays the (required) <b>output of the factory</b> (which are generated in the output storage of the factory plus excess goods).</p>
+<p>Each card displays the name of the good, its icon, the number of constructed / required buildings, and the production rate in tons per minute. The number of buildings has, if activated, two decimal places to directly show the amount of overcapacities. The bottom of the tile displays the (required) <b>output of the factory</b> (which are generated in the output storage of the factory plus excess goods).</p>
 <p>Since <b>construction materials</b> share intermediate goods with consumables they are explicitly listed (unlike in calculators for previous Annos) to better plan the production of mines. The number of factories must be entered manually.</p><br/>
 
 <h5>Population Configuration</h5>
