@@ -180,3 +180,91 @@ When enabled, debug bindings log to console with `[DebugKO]` prefix:
 - **init callback**: Fires once when binding is established (requires `debug.enabled` = true)
 - **update callback**: Fires on observable changes (requires `debug.verboseMode` = true)
 - No performance impact when debug mode is disabled (observable check returns false immediately)
+
+## External Link Component (IMPLEMENTED)
+
+### Purpose
+Provides language-aware external links to annolayouts.de resources with automatic language mapping.
+
+### Component Usage
+```html
+<!-- Basic usage -->
+<external-link params="subpage: 'research'"></external-link>
+
+<!-- In collapsible component -->
+<collapsible params="id: 'effects', heading: $root.texts.effects.name, externalLink: 'research'">
+```
+
+### Language Mapping
+The component maps calculator language codes to annolayouts.de URL codes:
+- english → en
+- german → de
+- french → fr
+- spanish → es
+- italian → it
+- russian → ru
+- simplified_chinese → cn
+- traditional_chinese → cn
+- korean → kr
+- polish → en (fallback)
+- brazilian → en (fallback)
+- japanese → en (fallback)
+
+### URL Structure
+Generated URLs follow the pattern: `https://annolayouts.de/117/{langCode}/{subpage}`
+
+Examples:
+- English: `https://annolayouts.de/117/en/research`
+- German: `https://annolayouts.de/117/de/research`
+- Chinese: `https://annolayouts.de/117/cn/research`
+
+### CORS Limitations
+**Important**: URL existence checking via fetch() is not possible due to CORS restrictions. The component always displays the link without verifying the page exists. This is acceptable as:
+1. User gets 404 page on annolayouts.de if page doesn't exist
+2. External links are expected to navigate away from calculator
+3. Alternative: Server-side checking would require backend infrastructure
+
+### Tooltip Text
+Uses `$root.texts.showInformation.name` from params.js (not i18n.ts) for the tooltip.
+
+### Integration with Collapsible Component
+The collapsible component accepts an optional `externalLink` parameter:
+```typescript
+// In collapsible viewModel
+this.externalLink = params.externalLink;
+this.hasExternalLink = this.externalLink != null;
+```
+
+Template rendering:
+```html
+<!-- ko if: hasExternalLink -->
+    <external-link params="subpage: externalLink"></external-link>
+<!-- /ko -->
+```
+
+### Styling
+- Icon: Font Awesome `fa-external-link`
+- Size: `font-size: 0.8em` (80% of heading size)
+- Spacing: `ml-2` (left margin)
+- Target: `_blank` with `rel="noopener noreferrer"`
+
+### Examples in Use
+1. **Effects Dialog** (effects-dialog.html):
+   ```html
+   <h4>
+       <span data-bind="text: $root.texts.effects.name">Effect</span>
+       <external-link params="subpage: 'research'"></external-link>
+   </h4>
+   ```
+
+2. **Via Collapsible** (potential usage):
+   ```html
+   <collapsible params="id: 'category-id',
+                         heading: category.name,
+                         externalLink: 'buildings'">
+   ```
+
+### Implementation Location
+- **Component Registration**: `src/components.ts:725-764`
+- **Collapsible Integration**: `src/components.ts:450-539`
+- **Usage Example**: `templates/effects-dialog.html:7`
