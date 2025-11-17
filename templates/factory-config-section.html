@@ -14,10 +14,29 @@
                     </div>
                 </td>
                 <td>
-                    <div data-bind="text: formatNumber(100 * $data.boost()) + '%'"></div>
+                    <div data-bind="text: formatNumber(100 * $data.boost()) + '%', attr: {title: $root.texts.productivity.name()}"></div>
                 </td>
                 <td>
                     <btn-default-supplier params="supplier: $data.instance()"></btn-default-supplier>
+                </td>
+            </tr>
+            <tr>
+                <!-- capacity utilization -->
+                <td>
+                    <span data-bind="text: $root.texts.capacityUtilisation.name"></span>
+                </td>
+                <td>
+                    <div data-bind="text: formatPercentage(100 * $data.instance().buildings.capacityUtilisation(), false)"></div>
+                </td>
+                <td>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input"
+                               data-bind="checked: $data.instance().buildings.fullyUtilizeConstructed,
+                                          attr: {id: $data.instance().guid + '-fully-utilize'}" />
+                        <label class="custom-control-label"
+                               data-bind="text: $root.texts.fullyUtilize.name,
+                                          attr: {for: $data.instance().guid + '-fully-utilize'}"></label>
+                    </div>
                 </td>
             </tr>
             <tr data-bind="debug: 'Workforce Demand', with: $data.instance().workforceDemand">

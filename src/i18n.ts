@@ -312,6 +312,34 @@ export const texts: Record<string, Record<string, string>> = {
         japanese: "商品の入手元",
         korean: "상품 공급처"
     },
+    capacityUtilisation: { // of a factory
+        english: "Capacity utilisation:",
+        french: "Utilisation de la capacité :",
+        polish: "Wykorzystanie mocy produkcyjnych:",
+        spanish: "Utilización de capacidad:",
+        italian: "Utilizzo della capacità:",
+        german: "Auslastung:",
+        brazilian: "Utilização de capacidade:",
+        russian: "Использование мощности:",
+        simplified_chinese: "产能利用率：",
+        traditional_chinese: "產能利用率：",
+        japanese: "稼働率：",
+        korean: "가동률:"
+    },
+    fullyUtilize: { // of a factory
+        english: "fully utilise",
+        french: "utiliser pleinement",
+        polish: "w pełni wykorzystać",
+        spanish: "utilizar completamente",
+        italian: "utilizzare completamente",
+        german: "voll auslasten",
+        brazilian: "utilizar totalmente",
+        russian: "полностью использовать",
+        simplified_chinese: "全力生产",
+        traditional_chinese: "全力生產",
+        japanese: "完全稼働",
+        korean: "전력 가동"
+    },
     afterIslandCreation: {
         english: "After creation:",
         french: "Après création :",

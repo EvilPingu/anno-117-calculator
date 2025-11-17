@@ -443,6 +443,7 @@ export class BuildingsCalc {
     public planned: KnockoutObservable<number>;
     public required: KnockoutObservable<number>; // set by parent class
     public utilized: KnockoutComputed<number>;
+    public capacityUtilisation: KnockoutComputed<number>;
 
 
     constructor(){
@@ -452,6 +453,15 @@ export class BuildingsCalc {
         this.required = ko.observable(0);
         this.utilized = ko.computed(() => this.fullyUtilizeConstructed() ? Math.max(this.constructed(), this.required()) : this.required());   
 
+        this.capacityUtilisation = ko.pureComputed(() => {
+            const utilized = this.utilized();
+            const constructed = this.constructed();
+            const denominator = Math.ceil(Math.max(constructed, utilized));
+
+            if (denominator <= EPSILON) return 0;
+
+            return utilized / denominator;
+        });
     }
 
 
