@@ -690,6 +690,9 @@ ko.components.register('buff-display', {
     }, template:
         `<div class="inline-list" data-bind="debug: 'Buffs', foreach: buffs">
             <!-- productivity -->
+            <div data-bind="debug: 'Base Productivity Upgrade', if: $data.baseProductivityUpgrade != 0">
+                <span data-bind="text: formatNumber($data.baseProductivityUpgrade, true) + ' %'"></span>
+            </div>
             <div data-bind="debug: 'Productivity Upgrade', if: $data.productivityUpgrade != 0">
                 <span data-bind="text: formatNumber($data.productivityUpgrade, true) + ' %'"></span>
             </div>

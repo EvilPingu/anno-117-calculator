@@ -200,17 +200,54 @@ Avoid: `(() => {...})` or `((val as boolean) => {...})`
 - **Module**: Extends Consumer (provides conditional buffs with multiplicative bonuses)
 - **PublicConsumerBuilding**: Extends Consumer (services, no production)
 
-## Productivity Bonus System
+## Productivity Bonus System (IMPLEMENTED)
 
-### Multiplicative vs Additive Calculation
-The productivity boost calculation uses a mixed approach:
-- **Module buffs**: Multiplicative - each module buff multiplies the existing productivity
-- **All other buffs**: Additive - items, effects, and aqueduct buffs add together
+### Two-Stage Productivity Calculation
+The productivity boost calculation uses a two-stage approach with `baseProductivityUpgrade` and `productivityUpgrade`:
+
+**Stage 1 - Base Productivity (Additive)**:
+- `baseProductivityUpgrade` values are summed and added to the base value of 100
+- Applied from all sources: buffs (items/effects/modules) and aqueduct buffs
+- Example: If two buffs have baseProductivityUpgrade of 10 and 15:
+  - Base = 100 + 10 + 15 = 125
+
+**Stage 2 - Percentage Multiplier (Additive, then Multiplicative)**:
+- `productivityUpgrade` percentages are summed together
+- The sum is applied as a multiplier: `(1 + sum / 100)`
+- Multiplied with the base productivity from Stage 1
+- Example: If buffs have productivityUpgrade of 20 and 10:
+  - Multiplier = 1 + (20 + 10) / 100 = 1.3
+
+**Final Formula**:
+```typescript
+const baseValue = 100 + sum(baseProductivityUpgrade);
+const multiplier = 100 + sum(productivityUpgrade);
+const totalBoost = (baseValue * multiplier) / 10000;
+```
+
+**Example Calculation**:
+- baseProductivityUpgrade = 20, productivityUpgrade = 30
+- baseValue = 100 + 20 = 120
+- multiplier = 100 + 30 = 130
+- totalBoost = (120 × 130) / 10000 = 1.56 (156% productivity)
 
 ### Implementation Pattern
-See the implementation in `src/factories.ts:179-203` in the `Consumer.initDemands()` method and the helper method `isModuleBuff()` at `src/factories.ts:354-356`.
+See the implementation in `src/factories.ts:177-202` in the `Consumer.initDemands()` boostSubscription.
 
-This approach prevents modules from having diminishing returns when stacked with other productivity bonuses.
+**Critical Detail**: Division is performed at the end (`/ 10000`) to avoid floating-point rounding issues that can cause display problems (e.g., showing 315.01% instead of 315%).
+
+### Buff Property Architecture
+**Buff Class** (production.ts:478, 516):
+- `baseProductivityUpgrade: number` - Added to base 100 before multiplication
+- `productivityUpgrade: number` - Percentage multiplier applied to base
+
+**AppliedBuff Class** (buffs.ts:21, 84-90):
+- `baseProductivityUpgrade: KnockoutObservable<number>` - Scales buff value by `scaling()`
+- `productivityUpgrade: KnockoutObservable<number>` - Scales buff value by `scaling()`
+
+**AqueductBuff Class** (production.ts:828, 854-860):
+- Same observable pattern as AppliedBuff
+- Both properties scaled by aqueduct `scaling()` value
 
 ### BuildingDemand Pattern
 - **BuildingDemand**: Subclass of Demand that accepts `KnockoutObservable<number>` as factor

@@ -63,6 +63,10 @@
                         </td>
                         <td>
                             <div style="float: right;">
+                                <!-- base productivity -->
+                                <div data-bind="if: $data.buff.baseProductivityUpgrade != 0">
+                                    <span data-bind="text: formatNumber($data.buff.baseProductivityUpgrade, true) + ' %"></span>
+                                </div>
                                 <!-- productivity -->
                                 <div data-bind="if: $data.buff.productivityUpgrade != 0">
                                     <span data-bind="text: formatNumber($data.buff.productivityUpgrade, true) + ' %'"></span>

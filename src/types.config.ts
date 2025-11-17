@@ -210,6 +210,7 @@ export interface BuildingBuffConfig {
   iconPath: string;
   locaText?: LocaTextConfig;
   isStackable: boolean;
+  baseProductivityUpgrade: number;
   workforceModifierInPercent: number;
   productivityUpgrade: number;
   fuelDurationPercent: number;

@@ -475,6 +475,7 @@ export class Buff extends NamedElement {
     public guid: number;
     public isStackable: boolean;
     public workforceModifierInPercent: number;
+    public baseProductivityUpgrade: number;
     public productivityUpgrade: number;
     public fuelDurationPercent: number;
     public replaceInputs: {
@@ -512,6 +513,7 @@ export class Buff extends NamedElement {
         this.guid = config.guid;
         this.isStackable = config.isStackable;
         this.workforceModifierInPercent = config.workforceModifierInPercent;
+        this.baseProductivityUpgrade = config.baseProductivityUpgrade;
         this.productivityUpgrade = config.productivityUpgrade;
         this.fuelDurationPercent = config.fuelDurationPercent;
         this.workforceMaintenanceFactorUpgrade = config.workforceMaintenanceFactorUpgrade;
@@ -823,6 +825,7 @@ export class Item extends NamedElement {
 export class AqueductBuff {
     public target: Constructible;
     public buff: Buff;
+    public baseProductivityUpgrade: KnockoutObservable<number>;
     public productivityUpgrade: KnockoutObservable<number>;
     public available: KnockoutComputed<boolean>;
     public visible: KnockoutComputed<boolean>;
@@ -848,6 +851,9 @@ export class AqueductBuff {
         this.buff = buff;
         this.scaling = ko.observable(0); // indicates wheter item/effect is not applied (0), applied (1), multiple times applied (> 1); child class updates this value
 
+        this.baseProductivityUpgrade = ko.pureComputed(() => {
+            return this.scaling() * this.buff.baseProductivityUpgrade;
+        });
 
         this.productivityUpgrade = ko.pureComputed(() => {
             return this.scaling() * this.buff.productivityUpgrade;
