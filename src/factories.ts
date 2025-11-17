@@ -175,30 +175,30 @@ export class Consumer extends NamedElement{
      */
     initDemands(assetsMap: AssetsMap): void {
         this.boostSubscription = ko.computed(() => {
-            // Separate module buffs (multiplicative) from other buffs (additive)
-            let additivePercentBuff = 0;
-            let multiplicativeFactor = 1;
+            // Base productivity upgrade (added to base 100 before multiplication)
+            let baseProductivitySum = 0;
+            // Regular productivity upgrade (multiplicative percentage)
+            let productivityUpgradeSum = 0;
 
             // Unwrap observable array to track changes
             for (const buff of this.buffs()) {
-                //if (this.isModuleBuff(buff)) {
-                    // Module buffs are no longer multiplicative, but we keep the logic for now
-                    //multiplicativeFactor *= (1 + buff.productivityUpgrade() / 100);
-                //} else {
-                    // Non-module buffs remain additive
-                    additivePercentBuff += buff.productivityUpgrade();
-                //}
+                baseProductivitySum += buff.baseProductivityUpgrade();
+                productivityUpgradeSum += buff.productivityUpgrade();
             }
 
-            // Add aqueduct buff to additive buffs
-            if (this.aqueductBuff != null)
-                additivePercentBuff += this.aqueductBuff.productivityUpgrade();
+            // Add aqueduct buff to productivity upgrades
+            if (this.aqueductBuff != null) {
+                baseProductivitySum += this.aqueductBuff.baseProductivityUpgrade();
+                productivityUpgradeSum += this.aqueductBuff.productivityUpgrade();
+            }
 
-            // Combine additive and multiplicative factors
-            const additiveFactor = Math.max(ACCURACY, additivePercentBuff / 100 + 1);
-            const totalFactor = additiveFactor * multiplicativeFactor;
+            // Calculate boost: (100 + baseProductivitySum) * (100 + productivityUpgradeSum) / 10000
+            // This is equivalent to: (base / 100) * (1 + productivityUpgradeSum / 100)
+            const baseValue = 100 + baseProductivitySum;
+            const multiplier = 100 + productivityUpgradeSum;
+            const totalBoost = (baseValue * multiplier) / 10000; // do division in the end to avoid rounding issues
 
-            this.boost(Math.max(ACCURACY, totalFactor));
+            this.boost(Math.max(ACCURACY, totalBoost));
         });
 
         this.inputDemandsSubscription = ko.computed(() => {

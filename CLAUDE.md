@@ -742,6 +742,71 @@ Critical keywords for German market:
 - Build backlinks from German Anno community sites
 - Monitor Search Console for German query impressions
 
+## Community and Social Integration (IMPLEMENTED)
+
+### Badge Integration
+
+**README.md Badges** (lines 3-6):
+```markdown
+[![GitHub Stars](https://img.shields.io/github/stars/anno-mods/anno-117-calculator?style=social)](...)
+[![Discord](https://img.shields.io/discord/1439668406973497376?logo=discord&label=Discord&color=5865F2)](...)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg?logo=paypal)](...)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+```
+
+**Help Dialog Badges** (templates/help-dialog.html):
+- GitHub Stars badge with social style
+- Discord server badge with member count
+- PayPal donation badge
+- Displayed at top of help content, centered with spacing
+
+### Discord Server Integration
+
+**Server ID**: 1439668406973497376
+**Invite Link**: https://discord.gg/jSBrJZvAEq
+
+**Badge Display**:
+- Shows real-time member count via shields.io API
+- Color: `#5865F2` (Discord brand color)
+- Includes Discord logo icon
+
+### PayPal Donations
+
+**Hosted Button ID**: 8P2Y93KGWJHXQ
+**Direct Link**: https://www.paypal.com/donate/?hosted_button_id=8P2Y93KGWJHXQ
+
+**Badge Styling**:
+- Blue PayPal brand color
+- PayPal logo included
+- Consistent with other badge sizing
+
+### Help Dialog Structure
+
+**Template Location**: `templates/help-dialog.html` (extracted from index.html)
+**Template Binding**: `<div data-bind="template: 'help-dialog'"></div>` in index.html
+
+**Content Structure**:
+1. **Badge Section** (centered, top of body):
+   - GitHub Stars link
+   - Discord invite link
+   - PayPal donation link
+2. **Help Content**: Rendered via `$root.texts.helpContent.name` (from i18n.ts)
+
+**Debug Binding**: Includes `data-bind="debug: 'Help Dialog'"` for troubleshooting
+
+### Translation Consistency
+
+**Bug Report Links in helpContent**:
+- English: References Discord + GitHub issues
+- Traditional Chinese: Updated to match English (line 851 in i18n.ts):
+  ```
+  請加入 Discord 伺服器（見上方連結）或在 GitHub 上建立 Issue
+  ```
+- GitHub URL: https://github.com/anno-mods/anno-117-calculator/issues
+- German version also includes Discord reference
+
+**Important**: The `helpContent` key is the only translation that can be incomplete (doesn't require all 12 languages) as it contains extensive HTML documentation managed separately.
+
 ## Product-Based Presenter Architecture (PLANNED)
 
 ### Motivation and Design Goals

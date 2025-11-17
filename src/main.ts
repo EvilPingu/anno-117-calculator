@@ -596,7 +596,8 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
             let isDigit = evt.key >= "0" && evt.key <= "9";
             return ['ArrowUp', 'ArrowDown', 'Backspace', 'Delete'].includes(evt.key) || isDigit || evt.key === "." || evt.key === ",";
         }
-        return false;
+
+        return undefined;
     });
 
 }

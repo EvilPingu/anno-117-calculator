@@ -1486,6 +1486,9 @@
           "isStackable": {
             "type": "boolean"
           },
+          "baseProductivityUpgrade": {
+            "type": "integer"
+          },
           "workforceModifierInPercent": {
             "type": "number"
           },
@@ -1569,6 +1572,7 @@
           "name",
           "iconPath",
           "isStackable",
+          "baseProductivityUpgrade",
           "workforceModifierInPercent",
           "productivityUpgrade",
           "fuelDurationPercent",

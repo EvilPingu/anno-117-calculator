@@ -18,6 +18,7 @@ export class AppliedBuff {
     public replacements?: Map<Product, Product>;
     public replacementArray?: {old: Product, new: Product}[];
     public replacingWorkforce?: Workforce;
+    public baseProductivityUpgrade: KnockoutObservable<number>;
     public productivityUpgrade: KnockoutObservable<number>;
     public fuelDurationPercent: KnockoutObservable<number>;
     public workforceMaintenanceFactorUpgrade: KnockoutObservable<number>;
@@ -80,11 +81,15 @@ export class AppliedBuff {
             }
         }
 
+        this.baseProductivityUpgrade = ko.pureComputed(() => {
+            return this.scaling() * this.buff.baseProductivityUpgrade;
+        });
+
         this.productivityUpgrade = ko.pureComputed(() => {
             return this.scaling() * this.buff.productivityUpgrade;
         });
 
-        
+
         this.fuelDurationPercent = ko.pureComputed(() => {
             return this.scaling() * this.buff.fuelDurationPercent;
         });
