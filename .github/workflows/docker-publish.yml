@@ -1,3 +1,4 @@
+# Build and publish Docker image to GHCR
 name: Build and publish Docker image to GHCR
 
 on:
@@ -15,6 +16,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # required to count commits in branch
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -29,15 +32,25 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set image name (lowercased) and version (commit count)
+        run: |
+          # Lowercase the owner/repo (GITHUB_REPOSITORY) and expose as IMAGE_NAME
+          echo "IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
+          # Count commits reachable from HEAD to use as version
+          COMMIT_COUNT=$(git rev-list --count HEAD || echo "0")
+          echo "VERSION=${COMMIT_COUNT}" >> $GITHUB_ENV
+          echo "Computed IMAGE_NAME=${IMAGE_NAME-}, VERSION=${COMMIT_COUNT}"
+
       - name: Build and push image
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/arm64
           push: true
           tags: |
-            ghcr.io/${{ toLower(github.repository) }}:latest
-            ghcr.io/${{ toLower(github.repository) }}:${{ github.sha }}
+            ${{ env.IMAGE_NAME }}:v${{ env.VERSION }}
+            ${{ env.IMAGE_NAME }}:${{ github.sha }}
+            ${{ env.IMAGE_NAME }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
