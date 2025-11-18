@@ -1,28 +1,21 @@
-# Build stage: use Node 20 LTS to install deps and produce the production bundle
-FROM node:20-alpine AS build
-WORKDIR /app
+FROM nginx:stable-alpine
 
-# Copy package metadata first for dependency install
-COPY package*.json ./
+WORKDIR /usr/share/nginx/html
 
-# If a lockfile exists, use `npm ci`; otherwise fall back to `npm install`
-RUN if [ -f package-lock.json ]; then \
-  npm ci --prefer-offline --no-audit --progress=false; \
-  else \
-  npm install --prefer-offline --no-audit --progress=false; \
-  fi
+# Clean default nginx content
+RUN rm -rf ./*
 
-# Copy source and build. Adjust build script and output dir if needed.
-COPY . .
-RUN npm run build --if-present
+# Copy repository into image
+COPY . /usr/share/nginx/html
 
-# Final stage: serve with nginx
-FROM nginx:stable-alpine AS runtime
-# Replace nginx default content; ensure nginx serves from /usr/share/nginx/html
-ARG DIST_DIR=dist
-RUN rm -rf /usr/share/nginx/html/*
-COPY --from=build /app/${DIST_DIR} /usr/share/nginx/html
+# Remove files/folders you requested not to include in the image
+RUN rm -f /usr/share/nginx/html/package.json /usr/share/nginx/html/Dockerfile && \
+  rm -rf /usr/share/nginx/html/.github /usr/share/nginx/html/.gitattributes /usr/share/nginx/html/.gitignore /usr/share/nginx/html/.git /usr/share/nginx/html/.claude /usr/share/nginx/html/.cursor /usr/share/nginx/html/logs /usr/share/nginx/html/tests
+
+# Optional: set safe permissions for nginx
+RUN chown -R nginx:nginx /usr/share/nginx/html || true
 
 EXPOSE 80
 STOPSIGNAL SIGTERM
+
 CMD ["nginx", "-g", "daemon off;"]
