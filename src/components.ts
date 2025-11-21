@@ -371,14 +371,14 @@ ko.components.register('constructed-buildings-input', {
         this.texts = window.view.texts;
     }, template:
         `<div class="input-group input-group-short spinner float-left" style="max-width: 10rem;">
-            <div class="input-group-prepend" data-bind="debug: 'Constructed buildings input', src: {title: texts.residences.name()}">
-                <div class="input-group-text">
-                    <img class="icon-sm icon-light" src="icons/icon_house_white.png" />
-                </div>
-            </div>
             <input class="form-control" type="number" value="0" step="1" min="0" data-bind="value: buildings.constructed, attr: {id: guid + '-constructed-buildings-input'}" />
             <div class="input-group-append">
                 <div data-bind="component: { name: 'number-input-increment', params: { obs: buildings.constructed, id: guid + '-constructed-buildings-input' }}"></div>
+            </div>
+            <div class="input-group-append" data-bind="debug: 'Constructed buildings input', src: {title: texts.residences.name()}">
+                <div class="input-group-text">
+                    <img class="icon-sm icon-light" src="icons/icon_house_white.png" />
+                </div>
             </div>
         </div>`
 });
