@@ -20,6 +20,7 @@
                     <btn-default-supplier params="supplier: $data.instance()"></btn-default-supplier>
                 </td>
             </tr>
+            <!-- ko if: $data.instance().buildings.constructed() > 0 -->
             <tr>
                 <!-- capacity utilization -->
                 <td>
@@ -39,6 +40,7 @@
                     </div>
                 </td>
             </tr>
+            <!-- /ko -->
             <tr data-bind="debug: 'Workforce Demand', with: $data.instance().workforceDemand">
                 <!-- workforce -->
                 <td>

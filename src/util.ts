@@ -455,12 +455,10 @@ export class BuildingsCalc {
 
         this.capacityUtilisation = ko.pureComputed(() => {
             const utilized = this.utilized();
-            const constructed = this.constructed();
-            const denominator = Math.ceil(Math.max(constructed, utilized));
 
-            if (denominator <= EPSILON) return 0;
+            if (utilized <= EPSILON) return 0;
 
-            return utilized / denominator;
+            return Math.min(1, utilized / this.constructed());
         });
     }
 
