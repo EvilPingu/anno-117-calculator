@@ -24978,6 +24978,24 @@ if(window.params == null)window.params={
       "name": "all"
     },
     {
+      "lineID": -6911533831834980623,
+      "locaText": {
+        "brazilian": null,
+        "english": "All Area Effects",
+        "french": null,
+        "german": null,
+        "italian": null,
+        "japanese": null,
+        "korean": null,
+        "polish": null,
+        "russian": null,
+        "simplified_chinese": null,
+        "spanish": null,
+        "traditional_chinese": null
+      },
+      "name": "allAreaEffects"
+    },
+    {
       "lineID": -6905197213145912196,
       "locaText": {
         "brazilian": "Todas as construções",
@@ -25410,6 +25428,24 @@ if(window.params == null)window.params={
       "name": "islandBuffs"
     },
     {
+      "lineID": -6911394270208630347,
+      "locaText": {
+        "brazilian": "Efeitos em toda a ilha",
+        "english": "Island-wide Effects",
+        "french": "Effets à l'échelle de l'île",
+        "german": "Inselweite Effekte",
+        "italian": "Effetti in tutta l'isola",
+        "japanese": "​島​全体​へ​の​効果",
+        "korean": "​섬 ​전역 ​효과",
+        "polish": "Efekty tylko na wyspie",
+        "russian": "Эффекты всего острова",
+        "simplified_chinese": "​岛​内​效果",
+        "spanish": "Efectos de toda la isla",
+        "traditional_chinese": "​島嶼​效果"
+      },
+      "name": "islandWideEffects"
+    },
+    {
       "lineID": -6910251369175148580,
       "locaText": {
         "brazilian": "Idioma",
@@ -25786,6 +25822,24 @@ if(window.params == null)window.params={
         "traditional_chinese": "​貿易​路線"
       },
       "name": "tradeRoutes"
+    },
+    {
+      "lineID": -6915910452867912431,
+      "locaText": {
+        "brazilian": "Efeitos de Veneração",
+        "english": "Veneration Effects",
+        "french": "Effets de vénération",
+        "german": "Anbetungseffekte",
+        "italian": "Effetti venerazione",
+        "japanese": "​崇拝​の​効果",
+        "korean": "​숭배 ​효과",
+        "polish": "Efekty czci",
+        "russian": "Эффекты поклонения",
+        "simplified_chinese": "​敬神​效果",
+        "spanish": "Efectos de veneración",
+        "traditional_chinese": "​崇敬​效果"
+      },
+      "name": "venerationEffects"
     },
     {
       "lineID": -6905498542987856790,
