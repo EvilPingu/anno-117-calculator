@@ -2,19 +2,12 @@
     <table class="table table-striped table-fixed">
         <tbody>
             <tr>
-                <!-- constructed buildings and boost -->
+                <!-- constructed buildings and supplier button -->
                 <td>
-                    <div data-bind="component: { name: 'constructed-buildings-input', params: $data.instance()}"></div>
-
-                    <!-- aqueduct buff -->
-                    <div data-bind="with: $data.instance().aqueductBuff" style="float: right;">
-                        <div class="inline-list">
-                            <div data-bind="component: {name: 'icon-checkbox', params: {asset: $data.buff, checked: $data.scaling, id: $data.target.guid + '-aqueduct-buff'}}"></div>
-                        </div>
-                    </div>
+                    <div data-bind="text: $data.name()"></div>  
                 </td>
                 <td>
-                    <div data-bind="text: formatNumber(100 * $data.boost()) + '%', attr: {title: $root.texts.productivity.name()}"></div>
+                    <div data-bind="component: { name: 'constructed-buildings-input', params: $data.instance()}"></div>
                 </td>
                 <td>
                     <btn-default-supplier params="supplier: $data.instance()"></btn-default-supplier>
@@ -42,14 +35,32 @@
             </tr>
             <!-- /ko -->
             <tr>
-                <!-- capacity utilization -->
+                <!-- productivity -->
                 <td>
-                    <span data-bind="text: $root.texts.capacityUtilisation.name"></span>
+                    <span data-bind="text: $root.texts.productivity.name"></span>
                 </td>
                 <td>
-                    <div data-bind="text: formatPercentage(100 * $data.instance().buildings.capacityUtilisation(), false)"></div>
+                    <div data-bind="text: formatNumber(100 * $data.boost()) + '%', attr: {title: $root.texts.productivity.name()}"></div>
                 </td>
-                <td></td>
+                <td>
+                    <div class="inline-list float-right">
+                        <!-- aqueduct buff -->
+                        <div data-bind="with: $data.instance().aqueductBuff" style="float: right;">
+                            <div class="inline-list">
+                                <div data-bind="component: {name: 'icon-checkbox', params: {asset: $data.buff, checked: $data.scaling, id: $data.target.guid + '-aqueduct-buff'}}"></div>
+                            </div>
+                        </div>
+
+                        <!-- modules -->
+                        <div class="inline-list" data-bind="foreach: $data.instance().modules.filter(m => m.visible())">
+                            <div data-bind="component: {name: 'icon-checkbox', params: {asset: $data, checked: $data.checked, id: $parent.guid() + '-' + $data.guid}}"></div>
+                            <span class="ml-1" data-bind="text: $data.name"></span>
+                        </div>
+
+
+                    </div>
+                </td>
+            </tr>
             <tr data-bind="debug: 'Workforce Demand', with: $data.instance().workforceDemand">
                 <!-- workforce -->
                 <td>
@@ -63,20 +74,6 @@
                     </div>
                 </td>
             </tr>
-
-            <!-- ko foreach: $data.instance().modules.filter(m => m.visible()) -->
-            <tr data-bind="debug: 'Module Config'">
-                <!-- extra goods module -->
-                <td>
-                    <div class="inline-list">
-                        <div data-bind="component: {name: 'icon-checkbox', params: {asset: $data, checked: $data.checked, id: $parent.guid() + '-' + $data.guid}}"></div>
-                        <span class="ml-1" data-bind="text: $data.name"></span>
-                    </div>
-                </td>
-                <td></td>
-                <td></td>
-            </tr>
-            <!-- /ko -->
         </tbody>
     </table>
 
