@@ -20,7 +20,7 @@
                     <btn-default-supplier params="supplier: $data.instance()"></btn-default-supplier>
                 </td>
             </tr>
-            <!-- ko if: $data.instance().buildings.constructed() > 0 -->
+            <!-- ko if: $data.isCapacityUtilizationVisible()  -->
             <tr>
                 <!-- capacity utilization -->
                 <td>
@@ -41,6 +41,15 @@
                 </td>
             </tr>
             <!-- /ko -->
+            <tr>
+                <!-- capacity utilization -->
+                <td>
+                    <span data-bind="text: $root.texts.capacityUtilisation.name"></span>
+                </td>
+                <td>
+                    <div data-bind="text: formatPercentage(100 * $data.instance().buildings.capacityUtilisation(), false)"></div>
+                </td>
+                <td></td>
             <tr data-bind="debug: 'Workforce Demand', with: $data.instance().workforceDemand">
                 <!-- workforce -->
                 <td>
