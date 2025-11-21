@@ -762,6 +762,15 @@ input[type=number]::-webkit-inner-spin-button {
     width: 100%;
 }
 
+.buff-list {
+    float: right;
+    align-items: end;
+    display: flex;
+    flex-flow: column;
+    flex-wrap: nowrap;
+    flex-wrap: wrap-reverse;
+}
+
 .dlc-list li {
     display: inline-block;
     vertical-align: top;

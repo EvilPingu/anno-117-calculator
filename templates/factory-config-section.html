@@ -89,14 +89,21 @@
                             </div>
                         </td>
                         <td>
-                            <div style="float: right;">
+                            <div class="buff-list">
                                 <!-- base productivity -->
-                                <div data-bind="if: $data.buff.baseProductivityUpgrade != 0">
+                                <div data-bind="if: $data.buff.baseProductivityUpgrade != 0, attr:{title: $root.texts.productivity.name()}">
                                     <span data-bind="text: formatNumber($data.buff.baseProductivityUpgrade, true) + ' %"></span>
+                                    <img class="icon-sm" src="../icons/icon_2d_productivity_0.webp"></span>
                                 </div>
                                 <!-- productivity -->
-                                <div data-bind="if: $data.buff.productivityUpgrade != 0">
+                                <div data-bind="if: $data.buff.productivityUpgrade != 0, attr:{title: $root.texts.productivity.name()}">
                                     <span data-bind="text: formatNumber($data.buff.productivityUpgrade, true) + ' %'"></span>
+                                    <img class="icon-sm" src="../icons/icon_2d_productivity_0.webp"></span>
+                                </div>
+                                <!-- fuel upgrade-->
+                                <div data-bind="debug: 'Fuel duration',if: $data.buff.fuelDurationPercent != 0, attr:{title: $root.texts.fuelEfficiency.name()}">
+                                    <span data-bind="text: formatNumber($data.buff.fuelDurationPercent, true) + ' % s /'"></span>
+                                    <img class="icon-sm" src="../icons/icon_3d_charcoal_goods_0.webp"></span>
                                 </div>
                                 <!-- extra goods -->
                                 <span data-bind="if: $data.extraGoods">
