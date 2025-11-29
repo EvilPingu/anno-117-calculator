@@ -10,7 +10,7 @@
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label" data-bind="text: $root.texts.currentPatron.name">Selected Patron:</label>
                     <div class="col-sm-4">
-                        <select class="form-control" data-bind="options: $data.availablePatrons, optionsText: 'name', value: $data.selectedPatron, optionsCaption: 'None'"></select>
+                        <select class="form-control" data-bind="options: $data.availablePatrons, optionsText: 'name', value: $data.selectedPatron, optionsCaption: $root.texts.noPatron.name()"></select>
                     </div>
                     <label class="col-sm-2 col-form-label" data-bind="text: $root.texts.devotion.name">Devotion:</label>
                     <div class="col-sm-4">

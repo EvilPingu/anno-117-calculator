@@ -19,21 +19,7 @@ export const languageCodes: Record<string, string> = {
 }
 
 export const texts: Record<string, Record<string, string>> = {
-    residents: {
-        "french": "Résidents",
-        "english": "Residents",
-        "italian": "Residenti",
-        "simplified_chinese": "居民",
-        "spanish": "Residentes",
-        "japanese": "住民",
-        "traditional_chinese": "居民",
-        "polish": "Mieszkańcy",
-        "german": "Einwohner",
-        "korean": "주민",
-        "russian": "Жители",
-        "brazilian": "Residentes"
-    },
- 
+
     workforce: {
         english: "Required Workforce",
         french: "Main-d'œuvre requise",
@@ -75,6 +61,34 @@ export const texts: Record<string, Record<string, string>> = {
         "japanese": "追加品物",
         "russian": "Дополнительные товары",
         "brazilian": "Bens extras"
+    },
+    "islandEvent": {
+        "english": "Island-wide event",
+        "german": "Inselweites Ereignis",
+        "french": "Événement à l'échelle de l'île",
+        "polish": "Wydarzenie na całej wyspie",
+        "spanish": "Evento de toda la isla",
+        "italian": "Evento sull'intera isola",
+        "brazilian": "Evento em toda a ilha",
+        "russian": "Событие на острове",
+        "simplified_chinese": "全岛事件",
+        "traditional_chinese": "全島事件",
+        "japanese": "島全体のイベント",
+        "korean": "섬 전체 이벤트"
+    },
+    "sessionEvent": {
+        "english": "Session-wide event",
+        "german": "Regionsweites Ereignis",
+        "french": "Événement à l'échelle de la session",
+        "polish": "Wydarzenie dla całej sesji",
+        "spanish": "Evento de toda la sesión",
+        "italian": "Evento per tutta la sessione",
+        "brazilian": "Evento para toda a sessão",
+        "russian": "Событие сессии",
+        "simplified_chinese": "全区域事件",
+        "traditional_chinese": "全區域事件",
+        "japanese": "セッション全体のイベント",
+        "korean": "세션 전체 이벤트"
     },
     "devotion": {
         "english": "Devotion",

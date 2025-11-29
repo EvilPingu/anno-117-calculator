@@ -481,6 +481,23 @@ The application uses the `Storage` class (exported as `SubStorage` in main.ts) t
 ### Overview
 The calculator supports 12 languages. All translation keys in `src/i18n.ts` must include all languages for completeness. See `src/CLAUDE.md` for i18n-specific technical details.
 
+### Two Translation Sources (CRITICAL)
+
+**i18n.ts** - Application UI text (manually managed):
+- Calculator-specific UI elements and messages
+- File: `src/i18n.ts`
+- Requires all 12 languages for every key
+- Accessed via `window.view.texts` as observables
+- Example: `$root.texts.settings.name()`
+
+**params.js** - Game data translations (extracted from Anno 117):
+- Buildings, products, effects, needs, etc.
+- Generated from Anno 117 game files via Jupyter notebook
+- Accessed via `window.view.texts` (same as i18n.ts)
+- Example: `$root.texts.festival.name()`
+
+**Important**: When adding game-related features (effects, buildings, products), use params.js translations, NOT i18n.ts. Only add to i18n.ts for calculator-specific UI elements.
+
 ### Required Languages (12 total)
 1. english
 2. french

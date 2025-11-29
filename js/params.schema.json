@@ -1675,22 +1675,27 @@
           },
           "effectDuration": {
             "type": "integer"
+          },
+          "source": {
+            "type": "string"
           }
         },
         "required": [
           "guid",
           "name",
           "iconPath",
+          "locaText",
           "buffs",
           "targets",
           "targetsIsAllProduction",
           "effectScope",
           "excludeEffectSourceGUID",
-          "effectDuration"
+          "effectDuration",
+          "source"
         ]
       },
       "title": "Effect",
-      "description": "Building buff combined with targets (pool of building GUIDs)."
+      "description": "Building buff combined with targets (pool of building GUIDs). Source is an enum with literals 'module', 'tech', 'festival', 'veneration-effect', 'session-even', 'island-event'"
     },
     "techs": {
       "type": "array",

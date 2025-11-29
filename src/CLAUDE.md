@@ -293,6 +293,78 @@ island.effect.${effectGuid}.scaling          // Island effects (via persistFloat
 - Global objects (regions, sessions, effects) now have persistence for their scaling states
 - Island-level persistence happens in Island constructor using persistBuildings() flow
 
+## Effect Source Types and Display (IMPLEMENTED)
+
+### Effect Source Property
+**Purpose**: Identifies the origin/type of an effect for UI display
+
+**Source Enum Values** (production.ts:655):
+- `'module'` - Effect from factory modules
+- `'tech'` - Effect from technology/discoveries
+- `'festival'` - Effect from festival events
+- `'veneration-effect'` - Effect from patron veneration
+- `'session-event'` - Session-wide event effect
+- `'island-event'` - Island-specific event effect
+
+**Property Declaration**:
+```typescript
+public source?: string; // Optional, set from config
+public effectDuration?: number; // Duration in seconds (for events)
+```
+
+### Source Text Localization (production.ts:699-737)
+
+**getSourceText() Method**: Returns localized source name with optional duration
+- Maps source enum to params.js translation keys (NOT i18n.ts)
+- Accesses translations via `window.view.texts`
+- Appends duration in brackets if `effectDuration > 0`: `"Festival (2h)"`
+- Uses global `formatNumber()` function for duration formatting
+
+**Source to Translation Key Mapping**:
+```typescript
+'module' → 'silo'
+'tech' → 'discovery'
+'festival' → 'festival'
+'veneration-effect' → 'venerationEffects'
+'session-event' → 'sessionEvent'
+'island-event' → 'islandEvent'
+```
+
+**Important**: Always use params.js translations (accessed via `window.view.texts`), not i18n.ts translations, for game-related text.
+
+### Effect Filtering by Session (IMPLEMENTED)
+
+**Location**: Island.availableEffects computed observable (world.ts:818-843)
+
+**Filtering Logic**:
+1. **Meta Session (All Islands)**: Shows all effects without filtering
+   - Check: `this.isAllIslands()` returns true
+   - No target validation needed
+
+2. **Regular Islands**: Shows effects only if they meet one of:
+   - `effect.targetsIsAllProduction === true` (global effects)
+   - Effect has at least one target in the island's session/region
+
+**Region Matching**:
+```typescript
+const hasTargetsInSession = e.targets.some(target => {
+    return target.associatedRegions.some(region =>
+        region.guid === this.island.session.region.guid
+    );
+});
+```
+
+**Key Behavior**:
+- Session-specific effects (e.g., Latium-only) hidden on islands from other sessions
+- All effects visible in "All Islands" view for comprehensive overview
+- Uses Constructible interface: targets have `associatedRegions` property
+- Patron effects always filtered out via `this.patronEffects.indexOf(e) != -1`
+
+**Template Integration** (templates/effects-dialog.html:36):
+- Duration column replaced with source display
+- Binding: `data-bind="text: $data.getSourceText()"`
+- Shows source type with duration in brackets when applicable
+
 ## Population-Level Need Management (IMPLEMENTED)
 
 ### Architecture Transformation

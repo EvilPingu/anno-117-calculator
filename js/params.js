@@ -5264,6 +5264,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​高效​風​箱"
       },
       "name": "TechEffect Production FuelConsumption 01",
+      "source": "tech",
       "targets": [
         31756,
         3074,
@@ -5320,6 +5321,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​戈​巴​努​風​箱"
       },
       "name": "TechEffect Production FuelConsumption 02",
+      "source": "tech",
       "targets": [
         31756,
         3074,
@@ -5354,36 +5356,6 @@ if(window.params == null)window.params={
     },
     {
       "buffs": [
-        82165
-      ],
-      "effectDuration": 0,
-      "effectScope": "ObjectsInMeta",
-      "excludeEffectSourceGUID": false,
-      "guid": 82164,
-      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_timber_goods.png",
-      "locaText": {
-        "brazilian": "Carpintaria Capaz",
-        "english": "Clever Carpentry",
-        "french": "Menuiserie ingénieuse",
-        "german": "Schlaue Schreinerei",
-        "italian": "Falegnameria intelligente",
-        "japanese": "​賢い​大工​仕事",
-        "korean": "​영리한 ​목공술",
-        "polish": "Mądre stolarstwo",
-        "russian": "Резвый распил",
-        "simplified_chinese": "​精明​木工",
-        "spanish": "Carpintería competente",
-        "traditional_chinese": "​精明​木工"
-      },
-      "name": "TechEffect Sawmill Productivity",
-      "targets": [
-        3089,
-        5945
-      ],
-      "targetsIsAllProduction": false
-    },
-    {
-      "buffs": [
         54118
       ],
       "effectDuration": 0,
@@ -5406,6 +5378,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​蜜​香​林園"
       },
       "name": "TechEffect Production Honey Terrain",
+      "source": "tech",
       "targets": [
         2795,
         8427
@@ -5436,6 +5409,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​河​狸​兄弟"
       },
       "name": "TechEffect Production Beaver Terrain",
+      "source": "tech",
       "targets": [
         31759
       ],
@@ -5465,6 +5439,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​鳥類​飛行"
       },
       "name": "TechEffect Production Bird Terrain",
+      "source": "tech",
       "targets": [
         5851
       ],
@@ -5494,6 +5469,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​基岩​之下"
       },
       "name": "TechEffect Repeat Mining Productivity",
+      "source": "tech",
       "targets": [
         5290,
         5980,
@@ -5528,6 +5504,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​圓形​劇場​輝煌​效果 ​I"
       },
       "name": "Effect Colosseum Small 01",
+      "source": "island-event",
       "targets": [
         3174,
         3075,
@@ -5568,6 +5545,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​圓形​劇場​輝煌​效果 ​II"
       },
       "name": "Effect Colosseum Small 02",
+      "source": "island-event",
       "targets": [
         3170,
         3070,
@@ -5609,6 +5587,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​儲存​穀倉"
       },
       "name": "Effect Silo Roman",
+      "source": "module",
       "targets": [
         2786,
         2793,
@@ -5640,6 +5619,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​儲存​穀倉"
       },
       "name": "Effect Silo Roman Celtic",
+      "source": "module",
       "targets": [
         5974,
         15514,
@@ -5649,39 +5629,9 @@ if(window.params == null)window.params={
     },
     {
       "buffs": [
-        118556
-      ],
-      "effectDuration": 0,
-      "effectScope": "ObjectsInArea",
-      "excludeEffectSourceGUID": false,
-      "guid": 118552,
-      "iconPath": "data/ui/fhd/base/icon_content/religion/icon_2d_deity_mercury.png",
-      "locaText": {
-        "brazilian": "Lugnasad, Festival de Mercúrio-Lugus",
-        "english": "Lugnasad, Festival of Mercury-Lugus",
-        "french": "Lugnasad, Festival de Mercure-Lug",
-        "german": "Lugnasad, Fest des Merkur-Lugus",
-        "italian": "Lugnasad, o Festa di Mercurio-Lugus",
-        "japanese": "​ルグナサード​祭",
-        "korean": "​루그나사드, ​메르쿠리우스-​루구스의 ​축제",
-        "polish": "Lugnasad, festiwal ku czci Merkurego-Lugusa",
-        "russian": "Лугнасад, празднество Меркурия-Луга",
-        "simplified_chinese": "​丰收​节，​敬奉​墨​丘​利/​卢​格​斯​的​庆典",
-        "spanish": "Lugnasad, el festival de Mercurio-Lugo",
-        "traditional_chinese": "​商​智之​神​慶典​「收穫​節」"
-      },
-      "name": "Effect Mercury Lugus Festival Gold Production -UNUSED-",
-      "targets": [
-        31753,
-        50280
-      ],
-      "targetsIsAllProduction": false
-    },
-    {
-      "buffs": [
         118570
       ],
-      "effectDuration": 0,
+      "effectDuration": 14400,
       "effectScope": "ObjectsInArea",
       "excludeEffectSourceGUID": false,
       "guid": 118679,
@@ -5701,6 +5651,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​農神​節"
       },
       "name": "Effect Cernunnos Festival Cernunnos Material Buildings",
+      "source": "festival",
       "targets": [
         3089,
         2878,
@@ -5720,7 +5671,7 @@ if(window.params == null)window.params={
       "buffs": [
         118681
       ],
-      "effectDuration": 0,
+      "effectDuration": 14400,
       "effectScope": "ObjectsInArea",
       "excludeEffectSourceGUID": false,
       "guid": 118685,
@@ -5740,6 +5691,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​智慧​女神​慶典​「五日​節」"
       },
       "name": "Effect Minerva Festival Minerva Material Buildings",
+      "source": "festival",
       "targets": [
         3129,
         2916,
@@ -5754,336 +5706,6 @@ if(window.params == null)window.params={
         2880
       ],
       "targetsIsAllProduction": false
-    },
-    {
-      "buffs": [
-        97791
-      ],
-      "effectDuration": 14400,
-      "effectScope": "ObjectsInArea",
-      "excludeEffectSourceGUID": false,
-      "guid": 97795,
-      "iconPath": "data/ui/fhd/base/icon_content/tech_tree/icon_2d_research_progress.png",
-      "locaText": {
-        "brazilian": "Mão e coração",
-        "english": "Hand and Heart",
-        "french": "La main et le cœur",
-        "german": "Hand und Herz",
-        "italian": "Mano e cuore",
-        "japanese": "​誠意",
-        "korean": "​손과 ​마음",
-        "polish": "Ręka i serce",
-        "russian": "Рука и сердце",
-        "simplified_chinese": "​铁腕​与​民心",
-        "spanish": "Mano y corazón",
-        "traditional_chinese": "​手​與​心"
-      },
-      "name": "Effect Productivity Option 0 DQ 050 Hand and Heart DEPRECATED",
-      "targets": [
-        2955,
-        2956,
-        2957,
-        8580,
-        2958,
-        8586,
-        2200,
-        2693,
-        2694,
-        2698,
-        2699,
-        2669,
-        8579,
-        31750,
-        2878,
-        2880,
-        31752,
-        2795,
-        2918,
-        2954,
-        2920,
-        2916,
-        2786,
-        2794,
-        2793,
-        2970,
-        31753,
-        2971,
-        2994,
-        31756,
-        2999,
-        3079,
-        3081,
-        8887,
-        5481,
-        3070,
-        3074,
-        3082,
-        31755,
-        3075,
-        8893,
-        3171,
-        3174,
-        3185,
-        3177,
-        3186,
-        3187,
-        3188,
-        3189,
-        3190,
-        3191,
-        3192,
-        3199,
-        4831,
-        3201,
-        3202,
-        3198,
-        4832,
-        3089,
-        3091,
-        3129,
-        3138,
-        3203,
-        3168,
-        3169,
-        3170,
-        13808,
-        8431,
-        10929,
-        23723,
-        5972,
-        31762,
-        31764,
-        5971,
-        5976,
-        5977,
-        31761,
-        5299,
-        5851,
-        8427,
-        5978,
-        5982,
-        5980,
-        5974,
-        15514,
-        5475,
-        31766,
-        5969,
-        5472,
-        5967,
-        5477,
-        5960,
-        5959,
-        5604,
-        23753,
-        5958,
-        5605,
-        31769,
-        5615,
-        5945,
-        5947,
-        5946,
-        5955,
-        5956,
-        5954,
-        2796,
-        5278,
-        2799,
-        2800,
-        5849,
-        5847,
-        31759,
-        5848,
-        5975,
-        5291,
-        5295,
-        5290,
-        5973,
-        5469,
-        31772,
-        5611,
-        5470,
-        5474,
-        6586,
-        5570,
-        31767,
-        5609,
-        5608,
-        5606,
-        5614,
-        31770,
-        55963,
-        31773,
-        5616,
-        5935,
-        41811,
-        50280
-      ],
-      "targetsIsAllProduction": true
-    },
-    {
-      "buffs": [
-        97818
-      ],
-      "effectDuration": 14400,
-      "effectScope": "ObjectsInArea",
-      "excludeEffectSourceGUID": false,
-      "guid": 97812,
-      "iconPath": "data/ui/fhd/base/icon_content/tech_tree/icon_2d_research_progress.png",
-      "locaText": {
-        "brazilian": "Mão e coração",
-        "english": "Hand and Heart",
-        "french": "La main et le cœur",
-        "german": "Hand und Herz",
-        "italian": "Mano e cuore",
-        "japanese": "​誠意",
-        "korean": "​손과 ​마음",
-        "polish": "Ręka i serce",
-        "russian": "Рука и сердце",
-        "simplified_chinese": "​铁腕​与​民心",
-        "spanish": "Mano y corazón",
-        "traditional_chinese": "​手​與​心"
-      },
-      "name": "Effect Productivity Option 2 DQ 050 Hand and Heart DEPRECATED",
-      "targets": [
-        2955,
-        2956,
-        2957,
-        8580,
-        2958,
-        8586,
-        2200,
-        2693,
-        2694,
-        2698,
-        2699,
-        2669,
-        8579,
-        31750,
-        2878,
-        2880,
-        31752,
-        2795,
-        2918,
-        2954,
-        2920,
-        2916,
-        2786,
-        2794,
-        2793,
-        2970,
-        31753,
-        2971,
-        2994,
-        31756,
-        2999,
-        3079,
-        3081,
-        8887,
-        5481,
-        3070,
-        3074,
-        3082,
-        31755,
-        3075,
-        8893,
-        3171,
-        3174,
-        3185,
-        3177,
-        3186,
-        3187,
-        3188,
-        3189,
-        3190,
-        3191,
-        3192,
-        3199,
-        4831,
-        3201,
-        3202,
-        3198,
-        4832,
-        3089,
-        3091,
-        3129,
-        3138,
-        3203,
-        3168,
-        3169,
-        3170,
-        13808,
-        8431,
-        10929,
-        23723,
-        5972,
-        31762,
-        31764,
-        5971,
-        5976,
-        5977,
-        31761,
-        5299,
-        5851,
-        8427,
-        5978,
-        5982,
-        5980,
-        5974,
-        15514,
-        5475,
-        31766,
-        5969,
-        5472,
-        5967,
-        5477,
-        5960,
-        5959,
-        5604,
-        23753,
-        5958,
-        5605,
-        31769,
-        5615,
-        5945,
-        5947,
-        5946,
-        5955,
-        5956,
-        5954,
-        2796,
-        5278,
-        2799,
-        2800,
-        5849,
-        5847,
-        31759,
-        5848,
-        5975,
-        5291,
-        5295,
-        5290,
-        5973,
-        5469,
-        31772,
-        5611,
-        5470,
-        5474,
-        6586,
-        5570,
-        31767,
-        5609,
-        5608,
-        5606,
-        5614,
-        31770,
-        55963,
-        31773,
-        5616,
-        5935,
-        41811,
-        50280
-      ],
-      "targetsIsAllProduction": true
     },
     {
       "buffs": [
@@ -6109,6 +5731,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​軍備"
       },
       "name": "Effect Boost MarsGoods",
+      "source": "island-event",
       "targets": [
         5974,
         2793,
@@ -6152,6 +5775,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​豐收​女神​奧​古​斯​塔"
       },
       "name": "Effect Boost Ceres Goods",
+      "source": "island-event",
       "targets": [
         2200,
         2693,
@@ -6199,6 +5823,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​犁田​神​的​犁"
       },
       "name": "Effect CeresMoreFields",
+      "source": "veneration-effect",
       "targets": [
         2693,
         5972,
@@ -6241,6 +5866,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​深海​女神​的​果實"
       },
       "name": "Effect Boost Neptune Goods",
+      "source": "island-event",
       "targets": [
         2955,
         5278,
@@ -6279,6 +5905,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​百獸​女王"
       },
       "name": "Effect Boost Epona Goods",
+      "source": "island-event",
       "targets": [
         2786,
         2793,
@@ -6315,6 +5942,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​野性​本質"
       },
       "name": "Effect Boost Cernnunos Goods",
+      "source": "island-event",
       "targets": [
         2878,
         31752,
@@ -6355,6 +5983,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​樹​棲​根莖"
       },
       "name": "Effect CernunnosExtraGoods",
+      "source": "veneration-effect",
       "targets": [
         2878,
         31752,
@@ -6389,6 +6018,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​阿拉​克​妮​的​紡錘"
       },
       "name": "Effect Boost Minerva Goods",
+      "source": "island-event",
       "targets": [
         3191,
         3079,
@@ -6407,26 +6037,6 @@ if(window.params == null)window.params={
         2800,
         5290,
         5469
-      ],
-      "targetsIsAllProduction": false
-    },
-    {
-      "buffs": [
-        49805
-      ],
-      "effectDuration": 0,
-      "effectScope": "ObjectsInArea",
-      "excludeEffectSourceGUID": false,
-      "guid": 49804,
-      "iconPath": "data/ui/fhd/base/icon_content/icon_3d_removed.png",
-      "name": "Effect Prydein Legendary Mines",
-      "targets": [
-        5982,
-        5980,
-        5291,
-        5295,
-        5978,
-        5290
       ],
       "targetsIsAllProduction": false
     },
@@ -6454,6 +6064,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​奈​斯​特​的​聖心"
       },
       "name": "Potion Effect Full",
+      "source": "session-event",
       "targets": [
         3170,
         3070,
@@ -6488,6 +6099,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​維​恩​托​的​熾熱​活力"
       },
       "name": "Potion Effect Diminished",
+      "source": "session-event",
       "targets": [
         3170,
         3070,
@@ -6522,6 +6134,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​他們​必將​饗宴"
       },
       "name": "Improved productivity Pigs and Butcher Effect",
+      "source": "island-event",
       "targets": [
         5974,
         5959
@@ -6552,6 +6165,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​他們​必將​茁壯"
       },
       "name": "Improved productivity Vineyard and Cellars Effect",
+      "source": "island-event",
       "targets": [
         23723,
         23753
@@ -13596,7 +13210,6 @@ if(window.params == null)window.params={
     "data/ui/fhd/base/icon_content/tech_tree/economy/icon_3d_tech_wood_bird.png": "data:image/webp;base64,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",
     "data/ui/fhd/base/icon_content/tech_tree/economy/icon_3d_tech_wood_honey.png": "data:image/webp;base64,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",
     "data/ui/fhd/base/icon_content/tech_tree/icon_2d_irrigation_aqueduct.png": "data:image/webp;base64,UklGRhgFAABXRUJQVlA4WAoAAAAQAAAAfwAAfwAAQUxQSH4EAAABoID9/9lI+uXfjmdW41l7zPOtbe8Ozl7btm3btm3bNsfdKlqk/ef3T+asiJgA+A/hboUifzVLeOMUGbTz13LXzA85lKitb341r9TGidgg/2pcqPFrdx4p8lfkQk2kzW9+NS/Xwik5/dbNX8k7m8ri5Pq4YYNfyUYVAwCX+xWFvypyuQoWLpTjFy7sa8BzqTdv1Yocf9XS5rnx3LumiYJKUSmwFJUCQ1EpqBStcwIYdMt4o1LmszPMovwGX7JnZVqkNwwla2aWTXqjkp8XyKBrOpWUum9q79bN2w9acM6MIz7eMrZ7yxadhq+8YcOx31o9onOLll3HbnooUNnnaiV1xQ/xuQ2EEJegit0PW9XJj2YmhXkSQohb4TpDLwrqhKsj6xZxI4QQz9BmU+7JmpOutC9GwLn7xxOeqeEPfRnEgfNc1Ve9VmNaVTs3UAYk77NrTDzS2BPog7rcp7OtL2sEai50YhpdxqRQDqiNn62yaOtUHRdQm7frMxph84ccqC082URjnlEU1HJxa3ktPfzGDdQHTjRTnK1MQH3pdYIzcWskqOfKndCQbYIvYMYfdJbe0R0QSZ2bzu42MiCAW8tU7VyqBqgePTIcybsiAdV/us2RfV4QoJbeKmlFmuWHAx+edWTp7oFDGjx29LyZAcetg0krmW0Jkt8yycGD2oAcesTR6WhArnpHK9frckhe/bMU8oF4rOB5doWwtCBW1C5ZI0c/AWS3n58rpFXFsfIMMSuso32xCi8WNbI/FsuY8tjBggJY3j1NCnP/XFjBswSN7I3CMiQ+UojzQrA8u2UrXvfxxgqcoZV9scSA65rsaH5BYkAlPj0cmPvlJgZUEjJLK1e6JSahJiZPTFNIB1omJqEmfrPMqrCt+i4xCTWx+R5RI/ZXz7AzRMUby4unz1CfPs+WFbLp+dNnqE9fWN5oJKf/Q0YWTI8unj53M9UmaUHms+6eP33+biYv5RRi2r5RzRtVLleh1pc9lt62suKfbBr0Q71K5SrW/X7Ahsd8TiCnrv4uLhcHDl0K1xh6yc5CejCjSagHOHYv3WjafVF3/MlWJQxAnbvKvFQ88/akYKAPbLLZpDPzqgruoLpQz3tYadNjjKDWEDn2pa7M86M4QMzb6jZO6qgigBnS/4WO7GujATd3hycYrycVAtyQMVn6OVmZIEHAOLM6cVM4YIeuFPXyqq07oMfsk1TdrEfQuFpXdSJtLAr4bs1fqbGP9QX8XKOs+njRwpUBhO2TVdyqCSyrXNDHsXBg6d3bRCctKsDEd76sB/vsfEygxmM6SwcjE2OnDD2ktnVnE32C7lEjYEpqX9PDg/qETZFVItWpMmwg5rAebpUBtkHT7DTyrhhGhXbo4XoCI9+xVqrNYYwCNuvhagyrMXQbQxn5bfhfEXNY9DTR3Ixl5DdRoHmzLYzVZhppIQO3X07fuO705rYwRnl6XrpOO7MYo7zTb153fnmELx4p8EkZ52UTvBgZi35Whjbcg5FLeNkyzj8r6YIHHKEG1hyh5oA1oebgv0UDVlA4IHQAAADwCACdASqAAIAAPzV8tlOvJyUisn8YAeAmiWlu3QA8fIAh/lKJFRJ+oLsyukepD6+ARADeHJHdYk4HcV111gvc51wQM1wxusePvi3rvXuGAAD+75ZcP//nMgEqeAaP3ICP09gTXrqz//83CW9YJD2QqAAAAA==",
-    "data/ui/fhd/base/icon_content/tech_tree/icon_2d_research_progress.png": "data:image/webp;base64,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",
     "data/ui/fhd/base/icon_content/workforce/icon_2d_aldermen_workforce_albion.png": "data:image/webp;base64,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",
     "data/ui/fhd/base/icon_content/workforce/icon_2d_equites_workforce_roman.png": "data:image/webp;base64,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",
     "data/ui/fhd/base/icon_content/workforce/icon_2d_libertus_workforce_roman.png": "data:image/webp;base64,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",
@@ -25212,6 +24825,24 @@ if(window.params == null)window.params={
       "name": "devotion"
     },
     {
+      "lineID": -6913479974945708503,
+      "locaText": {
+        "brazilian": "Descoberta",
+        "english": "Discovery",
+        "french": "Découverte",
+        "german": "Entdeckung",
+        "italian": "Scoperta",
+        "japanese": "​発見",
+        "korean": "​발견",
+        "polish": "Odkrycie",
+        "russian": "Открытие",
+        "simplified_chinese": "​发现",
+        "spanish": "Descubrimiento",
+        "traditional_chinese": "​發現"
+      },
+      "name": "discovery"
+    },
+    {
       "lineID": -6912820157918341621,
       "locaText": {
         "brazilian": "Baixar",
@@ -25300,6 +24931,24 @@ if(window.params == null)window.params={
         "traditional_chinese": null
       },
       "name": "extraGoods"
+    },
+    {
+      "lineID": -6908773579491322283,
+      "locaText": {
+        "brazilian": "Festival",
+        "english": "Festival",
+        "french": "Festival",
+        "german": "Fest",
+        "italian": "Festa",
+        "japanese": "​祭り",
+        "korean": "​축제",
+        "polish": "Festiwal",
+        "russian": "Празднество",
+        "simplified_chinese": "​庆典",
+        "spanish": "Festival",
+        "traditional_chinese": "​城市​慶典"
+      },
+      "name": "festival"
     },
     {
       "lineID": -6901428646395682482,
@@ -25518,6 +25167,24 @@ if(window.params == null)window.params={
       "name": "needs"
     },
     {
+      "lineID": -6899884938127726030,
+      "locaText": {
+        "brazilian": "Nenhum patrono",
+        "english": "No Patron",
+        "french": "Pas de dieu tutélaire",
+        "german": "Keine Schutzgottheit",
+        "italian": "Nessuna divinità",
+        "japanese": "​祭神​なし",
+        "korean": "​수호신 ​없음",
+        "polish": "Brak patrona",
+        "russian": "Нет покровителя",
+        "simplified_chinese": "​无​守​护​神",
+        "spanish": "Sin deidad tutelar",
+        "traditional_chinese": "​沒有​守護神"
+      },
+      "name": "noPatron"
+    },
+    {
       "lineID": -6913551300295748472,
       "locaText": {
         "brazilian": "Armazenamento de saída",
@@ -25680,22 +25347,40 @@ if(window.params == null)window.params={
       "name": "residences"
     },
     {
-      "lineID": -6904910280097787367,
+      "lineID": -6900991602074423381,
       "locaText": {
-        "brazilian": null,
+        "brazilian": "Residentes",
         "english": "Residents",
-        "french": null,
-        "german": null,
-        "italian": null,
-        "japanese": null,
-        "korean": null,
-        "polish": null,
-        "russian": null,
-        "simplified_chinese": null,
-        "spanish": null,
-        "traditional_chinese": null
+        "french": "Résidents",
+        "german": "Einwohner",
+        "italian": "Residenti",
+        "japanese": "​住民",
+        "korean": "​주민",
+        "polish": "Mieszkańcy",
+        "russian": "Жители",
+        "simplified_chinese": "​住所",
+        "spanish": "Residentes",
+        "traditional_chinese": "​居民"
       },
       "name": "residents"
+    },
+    {
+      "lineID": -6900991734456921008,
+      "locaText": {
+        "brazilian": "Evento em andamento",
+        "english": "Running Event",
+        "french": "Événement en cours",
+        "german": "Laufendes Ereignis",
+        "italian": "Evento in corso",
+        "japanese": "​開催​中​の​イベント",
+        "korean": "​진행 ​중인 ​이벤트",
+        "polish": "Wydarzenie w toku",
+        "russian": "Текущее событие",
+        "simplified_chinese": "​进行​中的​活动",
+        "spanish": "Evento en activo",
+        "traditional_chinese": "​正​發生​事件"
+      },
+      "name": "runningEvent"
     },
     {
       "lineID": -6915422247772755926,
@@ -25732,6 +25417,24 @@ if(window.params == null)window.params={
         "traditional_chinese": "​顯示​該​人口​階級​的​需求"
       },
       "name": "showNeedsOfPopulationTier"
+    },
+    {
+      "lineID": -6907773021498254428,
+      "locaText": {
+        "brazilian": "Silo",
+        "english": "Silo",
+        "french": "Silo",
+        "german": "Silo",
+        "italian": "Silo",
+        "japanese": "​サイロ",
+        "korean": "​곡물 ​저장고",
+        "polish": "Spichlerz",
+        "russian": "Силосный амбар",
+        "simplified_chinese": "​筒​仓",
+        "spanish": "Silo",
+        "traditional_chinese": "​筒​倉"
+      },
+      "name": "silo"
     },
     {
       "lineID": -6909909211298253262,

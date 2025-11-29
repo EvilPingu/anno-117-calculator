@@ -33,9 +33,7 @@
                                 </div> 
                             </td>     
                             <td data-bind="text: $data.name"></td> <!-- item name -->
-                            <td data-bind="if: $data.effectDuration">
-                                <span data-bind="text: formatNumber($data.effectDuration / 3600)"></span><span>h</span>
-                            </td>
+                            <td data-bind="text: $data.getSourceText()"></td> <!-- source type -->
                             <td>
                                 <div data-bind="if: $data.targetsIsAllProduction" style="text-align: center;">
                                     <span data-bind="text: $root.texts.allBuildings.name"></span>

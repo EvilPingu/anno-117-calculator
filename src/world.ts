@@ -815,7 +815,32 @@ export class Island {
                 this.allEffects.push(e);
             }
         }
-        this.availableEffects = ko.pureComputed(() => this.allEffects.filter(e => e.available() && this.patronEffects.indexOf(e) == -1 ));
+        this.availableEffects = ko.pureComputed(() => {
+            // For meta session (All Islands), show all effects
+            if (this.isAllIslands()) {
+                return this.allEffects.filter(e => e.available() && this.patronEffects.indexOf(e) == -1);
+            }
+
+            // For regular islands, only show effects that have targets in this island's session
+            return this.allEffects.filter(e => {
+                if (!e.available() || this.patronEffects.indexOf(e) != -1) {
+                    return false;
+                }
+
+                // If effect targets all production, it's always relevant
+                if (e.targetsIsAllProduction) {
+                    return true;
+                }
+
+                // Check if any target is in this island's session (same region)
+                const hasTargetsInSession = e.targets.some(target => {
+                    // Check if target's associated regions include this island's region
+                    return target.associatedRegions.some(region => region.guid === this.session.region.guid);
+                });
+
+                return hasTargetsInSession;
+            });
+        });
 
         // Set up persistence for island effects
         for (const effect of this.allEffects) {

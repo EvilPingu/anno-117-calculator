@@ -237,13 +237,14 @@ export interface EffectConfig {
   guid: number;
   name: string;
   iconPath: string;
-  locaText?: LocaTextConfig;
+  locaText: LocaTextConfig;
   buffs: number[];
   targets: number[];
   targetsIsAllProduction: boolean;
   effectScope: string;
   excludeEffectSourceGUID: boolean;
   effectDuration: number;
+  source: string;
 }
 
 // Tech configuration interface
