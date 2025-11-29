@@ -587,7 +587,7 @@ export class WorkforceDemand {
     updateAmount(buildings: number): void {
         this.buildings = buildings;
 
-        const perBuilding = Math.ceil(this.amountPerBuilding * this.boost());
+        const perBuilding = Math.round(this.amountPerBuilding * this.boost());
         this.amount(Math.ceil(buildings) * perBuilding);
     }
 } 

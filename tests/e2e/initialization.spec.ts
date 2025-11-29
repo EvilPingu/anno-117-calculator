@@ -200,11 +200,19 @@ test.describe('Application Initialization E2E Tests', () => {
 
     // Wait for persistence (debounced save is 0ms but still async)
     await page.waitForTimeout(1000);
+    await page.evaluate(() => {
+      console.log(localStorage.getItem("All Islands"));
+    });
+
 
     // Reload page - localStorage should persist now (no init script overwriting it)
     await page.reload();
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1000);
+
+    await page.evaluate(() => {
+      console.log(localStorage.getItem("All Islands"));
+    });
 
     // Verify value persisted
     const reloadedValue = await page.evaluate(() => {
