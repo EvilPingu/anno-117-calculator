@@ -322,6 +322,24 @@ When the user runs this command with a translation key:
       },
       "name": "devotion"
     },
+        {
+      "lineID": -6913479974945708503,
+      "locaText": {
+        "brazilian": "Descoberta",
+        "english": "Discovery",
+        "french": "Découverte",
+        "german": "Entdeckung",
+        "italian": "Scoperta",
+        "japanese": "​発見",
+        "korean": "​발견",
+        "polish": "Odkrycie",
+        "russian": "Открытие",
+        "simplified_chinese": "​发现",
+        "spanish": "Descubrimiento",
+        "traditional_chinese": "​發現"
+      },
+      "name": "discovery"
+    },
     {
       "lineID": -6912820157918341621,
       "locaText": {
@@ -393,24 +411,6 @@ When the user runs this command with a translation key:
         "traditional_chinese": "​事件​持續​時間"
       },
       "name": "eventDuration"
-    },
-    {
-      "lineID": -6900061796493286420,
-      "locaText": {
-        "brazilian": null,
-        "english": "Extra Goods  ",
-        "french": null,
-        "german": null,
-        "italian": null,
-        "japanese": null,
-        "korean": null,
-        "polish": null,
-        "russian": null,
-        "simplified_chinese": null,
-        "spanish": null,
-        "traditional_chinese": null
-      },
-      "name": "extraGoods"
     },
     {
       "lineID": -6910306885876902499,
@@ -771,6 +771,24 @@ When the user runs this command with a translation key:
         "traditional_chinese": null
       },
       "name": "residents"
+    },
+        {
+      "lineID": -6900991734456921008,
+      "locaText": {
+        "brazilian": "Evento em andamento",
+        "english": "Running Event",
+        "french": "Événement en cours",
+        "german": "Laufendes Ereignis",
+        "italian": "Evento in corso",
+        "japanese": "​開催​中​の​イベント",
+        "korean": "​진행 ​중인 ​이벤트",
+        "polish": "Wydarzenie w toku",
+        "russian": "Текущее событие",
+        "simplified_chinese": "​进行​中的​活动",
+        "spanish": "Evento en activo",
+        "traditional_chinese": "​正​發生​事件"
+      },
+      "name": "runningEvent"
     },
     {
       "lineID": -6915422247772755926,

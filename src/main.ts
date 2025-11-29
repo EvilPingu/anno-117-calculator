@@ -617,7 +617,6 @@ $(document).ready(function () {
     
     // Parse the texts - create NamedElement instances for each text entry
     for (let text of window.params.texts as TextConfig[]) {
-        console.log(text);
         window.view.texts[text.name] = new (require('./util').NamedElement)({ 
             name: text.name, 
             guid: text.lineID,
