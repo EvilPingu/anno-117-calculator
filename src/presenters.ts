@@ -235,7 +235,7 @@ export class ProductPresenter {
                             type: 'extra_good',
                             supplier: supplier,
                             label: `${supplier.factory.name()} (${window.view.texts.extraGoods.name()})`,
-                            icon: './icons/icon_add_goods_socket_white.png'
+                            icon: './icons/icon_extra_goods.webp'
                         });
                     }
                 }
@@ -246,7 +246,7 @@ export class ProductPresenter {
                 type: 'passive_trade',
                 supplier: this.instance().passiveTradeSupplier,
                 label: `${window.view.texts.traders.name()}`,
-                icon: './icons/icon_shiptrade.png'
+                icon: './icons/icon_trade_routes_0.webp'
             });
 
             return suppliers;
@@ -529,7 +529,7 @@ export class ProductPresenter {
                 return option.icon;
 
         if (supplier.type == "trade_route" || supplier.type == "passive_trade")
-            return './icons/icon_shiptrade.png'
+            return './icons/icon_trade_routes_0.webp'
 
         return '';
     }

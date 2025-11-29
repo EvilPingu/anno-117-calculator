@@ -709,7 +709,7 @@ export const texts: Record<string, Record<string, string>> = {
 <h5>Efeitos de Consumo, Cadeias de Produção e Itens de Bens Extras</h5>
 <span class="btn-group bg-dark mr-2 float-left">
     <button type="button" class="btn">
-        <img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="./icons/icon_add_goods_socket_white.png" />
+        <img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="./icons/icon_2d_reward_buff_0.webp" />
     </button>
     <button type="button" class="btn">
         <img data-toggle="modal" data-target="#patron-selection-dialog" class="icon-navbar" src="./icons/icon_2d_religion_belief_0.webp" />
@@ -717,7 +717,7 @@ export const texts: Record<string, Record<string, string>> = {
 </span>
 <p>Os botões estão à esquerda da barra de navegação.</p><br/>
 
-<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_add_goods_socket_white.png" /></button></span>
+<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_2d_reward_buff_0.webp" /></button></span>
 <p>O diálogo de efeitos permite aplicar tecnologias pesquisadas (globalmente), Efeito de Patrono Exaltado (globalmente) e eventos (por sessão ou ilha).</p><br/>
 
 <span class="float-left btn-group bg-dark mr-2">    <button type="button" class="btn">
@@ -727,13 +727,13 @@ export const texts: Record<string, Record<string, string>> = {
 
 <h5>Gerenciamento de Ilhas e Rotas Comerciais</h5>
 <div class="input-group mb-2" style=" max-width: 300px; "> <div class="input-group-prepend"> <span class="input-group-text" >Ilha Selecionada</span> </div> <select name="islands" class="custom-select" ><option value="">Todas as Ilhas</option></select> <div class="input-group-append"> <button class="btn btn-secondary" > <span class="fa fa-cog"> </span> </button> </div> </div>
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_map.png"> </button></span>
+<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_2d_item_scope_global_islands_0.webp"> </button></span>
 <p>Primeiro, é necessário abrir o <b>diálogo de gerenciamento de ilhas</b> clicando na engrenagem. Lá é possível criar novas ilhas. Depois de criar a primeira ilha, três novos elementos de controle aparecem no centro da barra de navegação: Trocar ilha, abrir gerenciamento de ilhas e abrir gerenciamento de rotas comerciais. Novas ilhas são associadas a uma <b>sessão</b>. A sessão influencia quais níveis de população, fábricas, itens e efeitos de consumo de bens aparecem. O botão <b>Deletar Tudo</b> reinicia a calculadora para seu estado inicial.</p><br/>
 
 <div class="float-left mr-2"> <button class="btn btn-light btn-sm" > <span class="fa fa-sliders"></span> </button> </div>
 <p><b>Rotas comerciais são criadas</b> a partir do <b>diálogo de configuração de bens</b>. Existem dois tipos de rotas comerciais. O primeiro tipo são rotas para <b>comprar bens passivamente de comerciantes</b>. Clicando no botão <b>obter bens de</b> compra a demanda por esse bem de comerciantes. O segundo tipo são rotas para <b>transferir bens entre ilhas</b>. Como para bens extras, a demanda extra é aumentada de um lado e diminuída do outro. Ao abrir o diálogo de configuração de fábrica, a calculadora insere a <b>superprodução</b> no campo de entrada de quantidade para uma nova rota comercial. Quando a produção ou demanda da ilha mudam, botões aparecem ao lado de rotas comerciais adequadas que permitem adicionar a diferença. Um <span class="fa fa-exclamation-triangle " style="color:red"></span> em um campo de entrada sinaliza que a ilha de origem não produz o suficiente para suprir totalmente a rota comercial.</p><br/>
 
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_shiptrade.png"> </button></span>
+<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_trade_routes_0.webp"> </button></span>
 <p>O menu de rotas comerciais contém uma visão geral de todas as rotas comerciais, listadas na ordem de criação. É possível deletar rotas comerciais e ajustar sua carga lá.</p><br/>
 <br/>
 
@@ -777,7 +777,7 @@ export const texts: Record<string, Record<string, string>> = {
 <h5>Эффекты Потребления, Производственные Цепочки и Предметы Дополнительных Товаров</h5>
 <span class="btn-group bg-dark mr-2 float-left">
     <button type="button" class="btn">
-        <img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="./icons/icon_add_goods_socket_white.png" />
+        <img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="./icons/icon_2d_reward_buff_0.webp" />
     </button>
     <button type="button" class="btn">
         <img data-toggle="modal" data-target="#patron-selection-dialog" class="icon-navbar" src="./icons/icon_2d_religion_belief_0.webp" />
@@ -785,7 +785,7 @@ export const texts: Record<string, Record<string, string>> = {
 </span>
 <p>Кнопки находятся слева на панели навигации.</p><br/>
 
-<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_add_goods_socket_white.png" /></button></span>
+<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_2d_reward_buff_0.webp" /></button></span>
 <p>Диалог эффектов позволяет применить исследованные технологии (глобально), Эффект Главного Покровителя (глобально) и события (по сессиям или островам).</p><br/>
 
 <span class="float-left btn-group bg-dark mr-2">    <button type="button" class="btn">
@@ -795,13 +795,13 @@ export const texts: Record<string, Record<string, string>> = {
 
 <h5>Управление Островами и Торговыми Маршрутами</h5>
 <div class="input-group mb-2" style=" max-width: 300px; "> <div class="input-group-prepend"> <span class="input-group-text" >Выбранный Остров</span> </div> <select name="islands" class="custom-select" ><option value="">Все Острова</option></select> <div class="input-group-append"> <button class="btn btn-secondary" > <span class="fa fa-cog"> </span> </button> </div> </div>
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_map.png"> </button></span>
+<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_2d_item_scope_global_islands_0.webp"> </button></span>
 <p>Сначала нужно открыть <b>диалог управления островами</b>, нажав на шестерёнку. Там можно создавать новые острова. После создания первого острова три новых элемента управления появляются в центре панели навигации: Переключить остров, открыть управление островами и открыть управление торговыми маршрутами. Новые острова связаны с <b>сессией</b>. Сессия влияет на то, какие уровни населения, фабрики, предметы и эффекты потребления товаров отображаются. Кнопка <b>Удалить Всё</b> сбрасывает калькулятор в исходное состояние.</p><br/>
 
 <div class="float-left mr-2"> <button class="btn btn-light btn-sm" > <span class="fa fa-sliders"></span> </button> </div>
 <p><b>Торговые маршруты создаются</b> из <b>диалога конфигурации товаров</b>. Существует два вида торговых маршрутов. Первый вид — это маршруты для <b>пассивной покупки товаров у торговцев</b>. Нажатие кнопки <b>получить товары от</b> покупает спрос на этот товар у торговцев. Второй вид — это маршруты для <b>передачи товаров между островами</b>. Как и для дополнительных товаров, дополнительный спрос увеличивается с одной стороны и уменьшается с другой. При открытии диалога конфигурации фабрики калькулятор вводит <b>перепроизводство</b> в поле ввода количества для нового торгового маршрута. Когда производство или спрос острова изменяются, рядом с подходящими торговыми маршрутами появляются кнопки, позволяющие добавить разницу. <span class="fa fa-exclamation-triangle " style="color:red"></span> в поле ввода сигнализирует, что исходный остров производит недостаточно, чтобы полностью обеспечить торговый маршрут.</p><br/>
 
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_shiptrade.png"> </button></span>
+<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_trade_routes_0.webp"> </button></span>
 <p>Меню торговых маршрутов содержит обзор всех торговых маршрутов, перечисленных в порядке создания. Там можно удалять торговые маршруты и корректировать их нагрузку.</p><br/>
 <br/>
 
@@ -845,7 +845,7 @@ export const texts: Record<string, Record<string, string>> = {
 <h5>Efekty Konsumpcji, Łańcuchy Produkcyjne i Przedmioty Dodatkowych Towarów</h5>
 <span class="btn-group bg-dark mr-2 float-left">
     <button type="button" class="btn">
-        <img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="./icons/icon_add_goods_socket_white.png" />
+        <img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="./icons/icon_2d_reward_buff_0.webp" />
     </button>
     <button type="button" class="btn">
         <img data-toggle="modal" data-target="#patron-selection-dialog" class="icon-navbar" src="./icons/icon_2d_religion_belief_0.webp" />
@@ -853,7 +853,7 @@ export const texts: Record<string, Record<string, string>> = {
 </span>
 <p>Przyciski znajdują się po lewej stronie paska nawigacji.</p><br/>
 
-<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_add_goods_socket_white.png" /></button></span>
+<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_2d_reward_buff_0.webp" /></button></span>
 <p>Okno efektów pozwala zastosować zbadane technologie (globalnie), Efekt Podniosłego Patrona (globalnie) oraz wydarzenia (na sesję lub wyspę).</p><br/>
 
 <span class="float-left btn-group bg-dark mr-2">    <button type="button" class="btn">
@@ -863,13 +863,13 @@ export const texts: Record<string, Record<string, string>> = {
 
 <h5>Zarządzanie Wyspami i Trasami Handlowymi</h5>
 <div class="input-group mb-2" style=" max-width: 300px; "> <div class="input-group-prepend"> <span class="input-group-text" >Wybrana Wyspa</span> </div> <select name="islands" class="custom-select" ><option value="">Wszystkie Wyspy</option></select> <div class="input-group-append"> <button class="btn btn-secondary" > <span class="fa fa-cog"> </span> </button> </div> </div>
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_map.png"> </button></span>
+<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_2d_item_scope_global_islands_0.webp"> </button></span>
 <p>Najpierw należy otworzyć <b>okno zarządzania wyspami</b>, klikając koło zębate. Tam można tworzyć nowe wyspy. Po utworzeniu pierwszej wyspy, trzy nowe elementy sterujące pojawiają się na środku paska nawigacji: Przełącz wyspę, otwórz zarządzanie wyspami i otwórz zarządzanie trasami handlowymi. Nowe wyspy są powiązane z <b>sesją</b>. Sesja wpływa na to, które poziomy populacji, fabryki, przedmioty i efekty konsumpcji towarów się pojawiają. Przycisk <b>Usuń Wszystko</b> resetuje kalkulator do stanu początkowego.</p><br/>
 
 <div class="float-left mr-2"> <button class="btn btn-light btn-sm" > <span class="fa fa-sliders"></span> </button> </div>
 <p><b>Trasy handlowe są tworzone</b> z <b>okna konfiguracji towarów</b>. Istnieją dwa rodzaje tras handlowych. Pierwszy rodzaj to trasy do <b>pasywnego zakupu towarów od kupców</b>. Kliknięcie przycisku <b>uzyskaj towary od</b> kupuje popyt na ten towar od kupców. Drugi rodzaj to trasy do <b>transferu towarów między wyspami</b>. Podobnie jak w przypadku dodatkowych towarów, dodatkowy popyt jest zwiększany po jednej stronie i zmniejszany po drugiej. Podczas otwierania okna konfiguracji fabryki, kalkulator wprowadza <b>nadprodukcję</b> do pola wprowadzania ilości dla nowej trasy handlowej. Gdy produkcja lub popyt wyspy się zmienią, przyciski pojawiają się obok odpowiednich tras handlowych, które pozwalają dodać różnicę. <span class="fa fa-exclamation-triangle " style="color:red"></span> przy polu wprowadzania sygnalizuje, że wyspa źródłowa nie produkuje wystarczająco dużo, aby w pełni zaopatrzyć trasę handlową.</p><br/>
 
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_shiptrade.png"> </button></span>
+<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_trade_routes_0.webp"> </button></span>
 <p>Menu tras handlowych zawiera przegląd wszystkich tras handlowych, wymienionych w kolejności tworzenia. Tam można usuwać trasy handlowe i dostosowywać ich ładunek.</p><br/>
 <br/>
 
@@ -913,7 +913,7 @@ export const texts: Record<string, Record<string, string>> = {
 <h5>소비 효과, 생산 체인 및 추가 물품 아이템</h5>
 <span class="btn-group bg-dark mr-2 float-left">
     <button type="button" class="btn">
-        <img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="./icons/icon_add_goods_socket_white.png" />
+        <img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="./icons/icon_2d_reward_buff_0.webp" />
     </button>
     <button type="button" class="btn">
         <img data-toggle="modal" data-target="#patron-selection-dialog" class="icon-navbar" src="./icons/icon_2d_religion_belief_0.webp" />
@@ -921,7 +921,7 @@ export const texts: Record<string, Record<string, string>> = {
 </span>
 <p>버튼은 탐색 모음 왼쪽에 있습니다.</p><br/>
 
-<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_add_goods_socket_white.png" /></button></span>
+<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_2d_reward_buff_0.webp" /></button></span>
 <p>효과 대화 상자에서 연구된 기술(전역), 고귀한 수호신 효과(전역) 및 이벤트(세션 또는 섬별)를 적용할 수 있습니다.</p><br/>
 
 <span class="float-left btn-group bg-dark mr-2">    <button type="button" class="btn">
@@ -931,13 +931,13 @@ export const texts: Record<string, Record<string, string>> = {
 
 <h5>섬 및 무역로 관리</h5>
 <div class="input-group mb-2" style=" max-width: 300px; "> <div class="input-group-prepend"> <span class="input-group-text" >선택된 섬</span> </div> <select name="islands" class="custom-select" ><option value="">모든 섬</option></select> <div class="input-group-append"> <button class="btn btn-secondary" > <span class="fa fa-cog"> </span> </button> </div> </div>
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_map.png"> </button></span>
+<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_2d_item_scope_global_islands_0.webp"> </button></span>
 <p>먼저 톱니바퀴를 클릭하여 <b>섬 관리 대화 상자</b>를 열어야 합니다. 거기에서 새 섬을 만들 수 있습니다. 첫 번째 섬을 만든 후 탐색 모음 중앙에 세 개의 새로운 제어 요소가 나타납니다: 섬 전환, 섬 관리 열기, 무역로 관리 열기. 새 섬은 <b>세션</b>과 연결됩니다. 세션은 어떤 인구 레벨, 공장, 아이템 및 물품 소비 효과가 표시되는지에 영향을 줍니다. <b>모두 삭제</b> 버튼은 계산기를 초기 상태로 재설정합니다.</p><br/>
 
 <div class="float-left mr-2"> <button class="btn btn-light btn-sm" > <span class="fa fa-sliders"></span> </button> </div>
 <p><b>무역로는</b> <b>물품 구성 대화 상자</b>에서 <b>생성됩니다</b>. 무역로에는 두 가지 유형이 있습니다. 첫 번째 유형은 <b>상인으로부터 물품을 수동적으로 구매하는</b> 경로입니다. <b>물품 공급처</b> 버튼을 클릭하면 상인으로부터 이 물품에 대한 수요를 구매합니다. 두 번째 유형은 <b>섬 간에 물품을 전송하는</b> 경로입니다. 추가 물품과 마찬가지로 추가 수요는 한쪽에서 증가하고 다른 쪽에서 감소합니다. 공장 구성 대화 상자를 열면 계산기는 새 무역로의 수량 입력 필드에 <b>초과 생산</b>을 입력합니다. 생산 또는 섬 수요가 변경되면 적절한 무역로 옆에 버튼이 나타나 차이를 추가할 수 있습니다. 입력 필드의 <span class="fa fa-exclamation-triangle " style="color:red"></span>는 원천 섬이 무역로를 완전히 공급하기에 충분하게 생산하지 못함을 나타냅니다.</p><br/>
 
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_shiptrade.png"> </button></span>
+<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_trade_routes_0.webp"> </button></span>
 <p>무역로 메뉴에는 생성 순서대로 나열된 모든 무역로의 개요가 포함되어 있습니다. 거기에서 무역로를 삭제하고 화물을 조정할 수 있습니다.</p><br/>
 <br/>
 
@@ -981,7 +981,7 @@ export const texts: Record<string, Record<string, string>> = {
 <h5>消費効果、生産チェーン、追加品物アイテム</h5>
 <span class="btn-group bg-dark mr-2 float-left">
     <button type="button" class="btn">
-        <img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="./icons/icon_add_goods_socket_white.png" />
+        <img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="./icons/icon_2d_reward_buff_0.webp" />
     </button>
     <button type="button" class="btn">
         <img data-toggle="modal" data-target="#patron-selection-dialog" class="icon-navbar" src="./icons/icon_2d_religion_belief_0.webp" />
@@ -989,7 +989,7 @@ export const texts: Record<string, Record<string, string>> = {
 </span>
 <p>ボタンはナビゲーションバーの左側にあります。</p><br/>
 
-<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_add_goods_socket_white.png" /></button></span>
+<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_2d_reward_buff_0.webp" /></button></span>
 <p>効果ダイアログでは、研究された技術（グローバル）、高位祭神の効果（グローバル）、およびイベント（セッションまたは島ごと）を適用できます。</p><br/>
 
 <span class="float-left btn-group bg-dark mr-2">    <button type="button" class="btn">
@@ -999,13 +999,13 @@ export const texts: Record<string, Record<string, string>> = {
 
 <h5>島と貿易ルートの管理</h5>
 <div class="input-group mb-2" style=" max-width: 300px; "> <div class="input-group-prepend"> <span class="input-group-text" >選択された島</span> </div> <select name="islands" class="custom-select" ><option value="">すべての島</option></select> <div class="input-group-append"> <button class="btn btn-secondary" > <span class="fa fa-cog"> </span> </button> </div> </div>
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_map.png"> </button></span>
+<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_2d_item_scope_global_islands_0.webp"> </button></span>
 <p>まず、歯車をクリックして<b>島管理ダイアログ</b>を開く必要があります。そこで新しい島を作成できます。最初の島を作成すると、ナビゲーションバーの中央に3つの新しいコントロール要素が表示されます：島の切り替え、島管理を開く、貿易ルート管理を開く。新しい島は<b>セッション</b>に関連付けられます。セッションは、どの人口レベル、工場、アイテム、および品物消費効果が表示されるかに影響します。<b>すべて削除</b>ボタンは、計算機を初期状態にリセットします。</p><br/>
 
 <div class="float-left mr-2"> <button class="btn btn-light btn-sm" > <span class="fa fa-sliders"></span> </button> </div>
 <p><b>貿易ルートは</b><b>品物設定ダイアログ</b>から<b>作成されます</b>。貿易ルートには2種類あります。最初のタイプは、<b>商人から品物を受動的に購入する</b>ルートです。<b>品物の入手元</b>ボタンをクリックすると、商人からこの品物の需要が購入されます。2番目のタイプは、<b>島間で品物を転送する</b>ルートです。追加品物と同様に、追加需要は一方で増加し、他方で減少します。工場設定ダイアログを開くと、計算機は新しい貿易ルートの数量入力フィールドに<b>過剰生産</b>を入力します。生産または島の需要が変化すると、適切な貿易ルートの横にボタンが表示され、差分を追加できます。入力フィールドの<span class="fa fa-exclamation-triangle " style="color:red"></span>は、供給元の島が貿易ルートを完全に供給するのに十分な生産をしていないことを示します。</p><br/>
 
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_shiptrade.png"> </button></span>
+<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_trade_routes_0.webp"> </button></span>
 <p>貿易ルートメニューには、作成順にリストされたすべての貿易ルートの概要が含まれています。そこで貿易ルートを削除し、その負荷を調整できます。</p><br/>
 <br/>
 
@@ -1049,7 +1049,7 @@ export const texts: Record<string, Record<string, string>> = {
 <h5>Effetti di Consumo, Catene di Produzione e Oggetti Beni Extra</h5>
 <span class="btn-group bg-dark mr-2 float-left">
     <button type="button" class="btn">
-        <img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="./icons/icon_add_goods_socket_white.png" />
+        <img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="./icons/icon_2d_reward_buff_0.webp" />
     </button>
     <button type="button" class="btn">
         <img data-toggle="modal" data-target="#patron-selection-dialog" class="icon-navbar" src="./icons/icon_2d_religion_belief_0.webp" />
@@ -1057,7 +1057,7 @@ export const texts: Record<string, Record<string, string>> = {
 </span>
 <p>I pulsanti si trovano a sinistra della barra di navigazione.</p><br/>
 
-<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_add_goods_socket_white.png" /></button></span>
+<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_2d_reward_buff_0.webp" /></button></span>
 <p>La finestra degli effetti consente di applicare tecnologie ricercate (globalmente), Effetto Divinità Eccelsa (globalmente) ed eventi (per sessione o isola).</p><br/>
 
 <span class="float-left btn-group bg-dark mr-2">    <button type="button" class="btn">
@@ -1067,13 +1067,13 @@ export const texts: Record<string, Record<string, string>> = {
 
 <h5>Gestione Isole e Rotte Commerciali</h5>
 <div class="input-group mb-2" style=" max-width: 300px; "> <div class="input-group-prepend"> <span class="input-group-text" >Isola Selezionata</span> </div> <select name="islands" class="custom-select" ><option value="">Tutte le Isole</option></select> <div class="input-group-append"> <button class="btn btn-secondary" > <span class="fa fa-cog"> </span> </button> </div> </div>
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_map.png"> </button></span>
+<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_2d_item_scope_global_islands_0.webp"> </button></span>
 <p>Per prima cosa, è necessario aprire la <b>finestra di gestione isole</b> cliccando sull'ingranaggio. Lì è possibile creare nuove isole. Dopo aver creato la prima isola, tre nuovi elementi di controllo appaiono al centro della barra di navigazione: Cambia isola, apri gestione isole e apri gestione rotte commerciali. Le nuove isole sono associate a una <b>sessione</b>. La sessione influenza quali livelli di popolazione, fabbriche, oggetti ed effetti di consumo beni appaiono. Il pulsante <b>Elimina Tutto</b> ripristina il calcolatore al suo stato iniziale.</p><br/>
 
 <div class="float-left mr-2"> <button class="btn btn-light btn-sm" > <span class="fa fa-sliders"></span> </button> </div>
 <p><b>Le rotte commerciali vengono create</b> dalla <b>finestra di configurazione beni</b>. Esistono due tipi di rotte commerciali. Il primo tipo sono le rotte per <b>acquistare beni passivamente dai mercanti</b>. Cliccando il pulsante <b>ottieni beni da</b> si acquista la domanda per questo bene dai mercanti. Il secondo tipo sono le rotte per <b>trasferire beni tra isole</b>. Come per i beni extra, la domanda extra è aumentata da un lato e diminuita dall'altro. Quando si apre la finestra di configurazione della fabbrica, il calcolatore inserisce la <b>sovrapproduzione</b> nel campo di input della quantità per una nuova rotta commerciale. Quando la produzione o la domanda dell'isola cambiano, compaiono pulsanti accanto alle rotte commerciali appropriate che permettono di aggiungere la differenza. Un <span class="fa fa-exclamation-triangle " style="color:red"></span> su un campo di input segnala che l'isola di origine non produce abbastanza per rifornire completamente la rotta commerciale.</p><br/>
 
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_shiptrade.png"> </button></span>
+<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_trade_routes_0.webp"> </button></span>
 <p>Il menu delle rotte commerciali contiene una panoramica di tutte le rotte commerciali, elencate nell'ordine di creazione. È possibile eliminare le rotte commerciali e regolare il loro carico lì.</p><br/>
 <br/>
 
@@ -1119,7 +1119,7 @@ export const texts: Record<string, Record<string, string>> = {
 <h5>Verbrauchseffekte, Produktionsketten und Zusatzwaren-Items</h5>
 <span class="btn-group bg-dark mr-2 float-left">
     <button type="button" class="btn">
-        <img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="./icons/icon_add_goods_socket_white.png" />
+        <img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="./icons/icon_2d_reward_buff_0.webp" />
     </button>
     <button type="button" class="btn">
         <img data-toggle="modal" data-target="#patron-selection-dialog" class="icon-navbar" src="icons/icon_2d_religion_belief_0.webp" />
@@ -1127,7 +1127,7 @@ export const texts: Record<string, Record<string, string>> = {
 </span>
 <p>Die Buttons befinden sich links in der Navigationsleiste.</p><br/>
 
-<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_add_goods_socket_white.png" /></button></span>
+<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_2d_reward_buff_0.webp" /></button></span>
 <p>Der Effekt-Dialog ermöglicht die Anwendung von erforschten Technologien (global), Erhabenem Schutzherren-Effekt (global) und Ereignissen (pro Session oder Insel).</p><br/>
 
 <span class="float-left btn-group bg-dark mr-2">    <button type="button" class="btn">
@@ -1137,13 +1137,13 @@ export const texts: Record<string, Record<string, string>> = {
 
 <h5>Insel- und Handelsroutenverwaltung</h5>
 <div class="input-group mb-2" style=" max-width: 300px; "> <div class="input-group-prepend"> <span class="input-group-text" >Ausgewählte Insel</span> </div> <select name="islands" class="custom-select" ><option value="">Alle Inseln</option></select> <div class="input-group-append"> <button class="btn btn-secondary" > <span class="fa fa-cog"> </span> </button> </div> </div>
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_map.png"> </button></span>
+<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_2d_item_scope_global_islands_0.webp"> </button></span>
 <p>Zuerst muss der <b>Inselverwaltungsdialog</b> durch Klick auf das Zahnrad geöffnet werden. Dort können neue Inseln erstellt werden. Nach dem Erstellen der ersten Insel erscheinen drei neue Bedienelemente in der Mitte der Navigationsleiste: Insel wechseln, Inselverwaltung öffnen und Handelsroutenverwaltung öffnen. Neue Inseln werden einer <b>Session</b> zugeordnet. Die Session beeinflusst, welche Bevölkerungsstufen, Fabriken, Items und Warenverbrauchseffekte angezeigt werden. Der Button <b>Alles löschen</b> setzt den Rechner auf den Ausgangszustand zurück.</p><br/>
 
 <div class="float-left mr-2"> <button class="btn btn-light btn-sm" > <span class="fa fa-sliders"></span> </button> </div>
 <p><b>Handelsrouten werden erstellt</b> aus dem <b>Waren-Konfigurationsdialog</b>. Es gibt zwei Arten von Handelsrouten. Die erste Art sind Routen zum <b>passiven Wareneinkauf von Händlern</b>. Durch Klick auf den Button <b>Ware davon beziehen</b> wird der Bedarf für dieses Produkt von Händlern eingekauft. Die zweite Art sind Routen zum <b>Warentransfer zwischen Inseln</b>. Wie bei Zusatzwaren wird die zusätzliche Nachfrage auf der einen Seite erhöht und auf der anderen verringert. Beim Öffnen des Waren-Konfigurationsdialogs trägt der Rechner die <b>Überproduktion</b> in das Mengeneingabefeld für eine neue Handelsroute ein. Wenn sich Produktion oder Inselbedarf ändern, erscheinen Buttons neben geeigneten Handelsrouten, die das Hinzufügen der Differenz ermöglichen. Ein <span class="fa fa-exclamation-triangle " style="color:red"></span> bei einem Eingabefeld signalisiert, dass die Quellinsel nicht genug produziert, um die Handelsroute vollständig zu bedienen.</p><br/>
 
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_shiptrade.png"> </button></span>
+<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_trade_routes_0.webp"> </button></span>
 <p>Das Handelsroutenmenü enthält eine Übersicht aller Handelsrouten, aufgelistet in der Reihenfolge ihrer Erstellung. Dort können Handelsrouten gelöscht und ihre Transportmenge angepasst werden.</p><br/>
 <br/>
 
@@ -1190,7 +1190,7 @@ export const texts: Record<string, Record<string, string>> = {
 <h5>Consumption Effects, Production Chains, and Extra Goods Items</h5>
 <span class="btn-group bg-dark mr-2 float-left">
     <button type="button" class="btn">
-        <img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="./icons/icon_add_goods_socket_white.png" />
+        <img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="./icons/icon_2d_reward_buff_0.webp" />
     </button>
     <button type="button" class="btn">
         <img data-toggle="modal" data-target="#patron-selection-dialog" class="icon-navbar" src="./icons/icon_2d_religion_belief_0.webp" />
@@ -1198,7 +1198,7 @@ export const texts: Record<string, Record<string, string>> = {
 </span>
 <p>The buttons are found in the left of the navigation bar.</p><br/>
 
-<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_add_goods_socket_white.png" /></button></span>
+<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_2d_reward_buff_0.webp" /></button></span>
 <p>The effect dialog lets you apply researched technologies (globally), Exalted Patron Effect (globally) and events (per session or island).</p><br/>
 
 <span class="float-left btn-group bg-dark mr-2">    <button type="button" class="btn">
@@ -1208,13 +1208,13 @@ export const texts: Record<string, Record<string, string>> = {
 
 <h5>Island and Trade Route Management</h5>
 <div class="input-group mb-2" style=" max-width: 300px; "> <div class="input-group-prepend"> <span class="input-group-text" >Selected Island</span> </div> <select name="islands" class="custom-select" ><option value="">All Islands</option></select> <div class="input-group-append"> <button class="btn btn-secondary" > <span class="fa fa-cog"> </span> </button> </div> </div>
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_map.png"> </button></span>
+<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_2d_item_scope_global_islands_0.webp"> </button></span>
 <p>First, one must open the <b>island management dialog</b> by clicking the cogwheel. One can create new islands there. After creating the first island three new control elements show up in the center of the navigation bar: Switch island, open island management, and open trade route management. New islands are associated with a <b>session</b>. The session influences which population levels, factories, items and good consumption effects show up. The button <b>Delete All</b> resets the calculator to its initial state.</p><br/>
 
 <div class="float-left mr-2"> <button class="btn btn-light btn-sm" > <span class="fa fa-sliders"></span> </button> </div>
 <p><b>Trade routes are created</b> from the <b>good configuration dialog</b>. There are two kinds of trade routes. The first kind are routes to <b>purchase goods passively from traders</b>. Clicking the <b>obtain goods from</b> button purchases the demand for this good from traders. The second kind are routes to <b>transfer goods between islands</b>. Like for extra goods, the extra demand is increased on one side and decreased on the other. When opening the factory configuration dialog, the calculator enters the <b>overproduction</b> into the amount input field for a new trade route. When production or island demand change, buttons show up next to suitable trade routes that allow to add the difference. A <span class="fa fa-exclamation-triangle " style="color:red"></span> on an input field signals that the source island does not produce enough to fully supply the trade route.</p><br/>
 
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_shiptrade.png"> </button></span>
+<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_trade_routes_0.webp"> </button></span>
 <p>The trade route menu contains an overview of all trade routes, listed in the order of creation. One can delete trade routes and adjust their load there.</p><br/>
 <br/>
 
@@ -1258,7 +1258,7 @@ export const texts: Record<string, Record<string, string>> = {
 <h5>Effets de Consommation, Chaînes de Production et Objets de Biens Supplémentaires</h5>
 <span class="btn-group bg-dark mr-2 float-left">
     <button type="button" class="btn">
-        <img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="./icons/icon_add_goods_socket_white.png" />
+        <img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="./icons/icon_2d_reward_buff_0.webp" />
     </button>
     <button type="button" class="btn">
         <img data-toggle="modal" data-target="#patron-selection-dialog" class="icon-navbar" src="./icons/icon_2d_religion_belief_0.webp" />
@@ -1266,7 +1266,7 @@ export const texts: Record<string, Record<string, string>> = {
 </span>
 <p>Les boutons se trouvent à gauche de la barre de navigation.</p><br/>
 
-<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_add_goods_socket_white.png" /></button></span>
+<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_2d_reward_buff_0.webp" /></button></span>
 <p>Le dialogue des effets vous permet d'appliquer des technologies recherchées (globalement), l'Effet de Dieu Tutélaire Exalté (globalement) et des événements (par session ou île).</p><br/>
 
 <span class="float-left btn-group bg-dark mr-2">    <button type="button" class="btn">
@@ -1276,13 +1276,13 @@ export const texts: Record<string, Record<string, string>> = {
 
 <h5>Gestion des Îles et des Routes Commerciales</h5>
 <div class="input-group mb-2" style=" max-width: 300px; "> <div class="input-group-prepend"> <span class="input-group-text" >Île Sélectionnée</span> </div> <select name="islands" class="custom-select" ><option value="">Toutes les Îles</option></select> <div class="input-group-append"> <button class="btn btn-secondary" > <span class="fa fa-cog"> </span> </button> </div> </div>
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_map.png"> </button></span>
+<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_2d_item_scope_global_islands_0.webp"> </button></span>
 <p>D'abord, il faut ouvrir le <b>dialogue de gestion des îles</b> en cliquant sur la roue dentée. On peut y créer de nouvelles îles. Après avoir créé la première île, trois nouveaux éléments de contrôle apparaissent au centre de la barre de navigation : Changer d'île, ouvrir la gestion des îles et ouvrir la gestion des routes commerciales. Les nouvelles îles sont associées à une <b>session</b>. La session influence quels niveaux de population, usines, objets et effets de consommation de biens apparaissent. Le bouton <b>Tout Supprimer</b> réinitialise la calculatrice à son état initial.</p><br/>
 
 <div class="float-left mr-2"> <button class="btn btn-light btn-sm" > <span class="fa fa-sliders"></span> </button> </div>
 <p><b>Les routes commerciales sont créées</b> à partir du <b>dialogue de configuration des biens</b>. Il existe deux types de routes commerciales. Le premier type sont des routes pour <b>acheter des biens passivement auprès de marchands</b>. En cliquant sur le bouton <b>obtenir des marchandises de</b>, on achète la demande pour ce bien auprès de marchands. Le deuxième type sont des routes pour <b>transférer des biens entre îles</b>. Comme pour les biens supplémentaires, la demande supplémentaire est augmentée d'un côté et diminuée de l'autre. Lors de l'ouverture du dialogue de configuration d'usine, la calculatrice saisit la <b>surproduction</b> dans le champ de saisie de quantité pour une nouvelle route commerciale. Lorsque la production ou la demande de l'île changent, des boutons apparaissent à côté des routes commerciales appropriées qui permettent d'ajouter la différence. Un <span class="fa fa-exclamation-triangle " style="color:red"></span> sur un champ de saisie signale que l'île source ne produit pas assez pour approvisionner complètement la route commerciale.</p><br/>
 
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_shiptrade.png"> </button></span>
+<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_trade_routes_0.webp"> </button></span>
 <p>Le menu des routes commerciales contient un aperçu de toutes les routes commerciales, listées dans l'ordre de création. On peut supprimer des routes commerciales et ajuster leur charge là.</p><br/>
 <br/>
 
@@ -1328,7 +1328,7 @@ export const texts: Record<string, Record<string, string>> = {
 <h5>消費效果、生產鏈和額外貨物物品</h5>
 <span class="btn-group bg-dark mr-2 float-left">
     <button type="button" class="btn">
-        <img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="./icons/icon_add_goods_socket_white.png" />
+        <img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="./icons/icon_2d_reward_buff_0.webp" />
     </button>
     <button type="button" class="btn">
         <img data-toggle="modal" data-target="#patron-selection-dialog" class="icon-navbar" src="./icons/icon_2d_religion_belief_0.webp" />
@@ -1336,7 +1336,7 @@ export const texts: Record<string, Record<string, string>> = {
 </span>
 <p>這些按鈕位於導覽列的左側。</p><br/>
 
-<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_add_goods_socket_white.png" /></button></span>
+<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_2d_reward_buff_0.webp" /></button></span>
 <p>效果對話框讓您套用已研究的技術（全域）、崇高守護神效果（全域）和事件（每個時段或島嶼）。</p><br/>
 
 <span class="float-left btn-group bg-dark mr-2"> <button type="button" class="btn">
@@ -1346,13 +1346,13 @@ export const texts: Record<string, Record<string, string>> = {
 
 <h5>島嶼和貿易路線管理</h5>
 <div class="input-group mb-2" style=" max-width: 300px; "> <div class="input-group-prepend"> <span class="input-group-text" >已選擇的島嶼</span> </div> <select name="islands" class="custom-select" ><option value="">所有島嶼</option></select> <div class="input-group-append"> <button class="btn btn-secondary" > <span class="fa fa-cog"> </span> </button> </div> </div>
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_map.png"> </button></span>
+<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_2d_item_scope_global_islands_0.webp"> </button></span>
 <p>首先，必須點擊齒輪圖示開啟<b>島嶼管理對話框</b>。可以在那裡建立新島嶼。建立第一個島嶼後，導覽列中央會出現三個新的控制元素：切換島嶼、開啟島嶼管理和開啟貿易路線管理。新島嶼會與一個<b>時段</b>關聯。時段會影響顯示哪些人口等級、工廠、物品和貨物消費效果。<b>全部刪除</b>按鈕會將計算器重置為初始狀態。</p><br/>
 
 <div class="float-left mr-2"> <button class="btn btn-light btn-sm" > <span class="fa fa-sliders"></span> </button> </div>
 <p><b>貿易路線是從</b><b>貨物配置對話框</b><b>建立的</b>。有兩種貿易路線。第一種是<b>從貿易商被動購買貨物</b>的路線。點擊<b>從以下取得貨物</b>按鈕會從貿易商購買該貨物的需求量。第二種是<b>在島嶼之間運輸貨物</b>的路線。就像額外貨物一樣，額外需求會在一側增加，在另一側減少。開啟工廠配置對話框時，計算器會將<b>超額產量</b>輸入到新貿易路線的數量輸入欄位中。當生產或島嶼需求改變時，適合的貿易路線旁會出現按鈕，允許添加差額。輸入欄位上的<span class="fa fa-exclamation-triangle " style="color:red"></span>表示來源島嶼的產量不足以完全供應該貿易路線。</p><br/>
 
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_shiptrade.png"> </button></span>
+<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_trade_routes_0.webp"> </button></span>
 <p>貿易路線選單包含所有貿易路線的總覽，按建立順序列出。可以在那裡刪除貿易路線並調整其載貨量。</p><br/> <br/>
 
 <h5>免責聲明</h5>
@@ -1395,7 +1395,7 @@ export const texts: Record<string, Record<string, string>> = {
 <h5>消费效果、生产链和额外商品物品</h5>
 <span class="btn-group bg-dark mr-2 float-left">
     <button type="button" class="btn">
-        <img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="./icons/icon_add_goods_socket_white.png" />
+        <img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="./icons/icon_2d_reward_buff_0.webp" />
     </button>
     <button type="button" class="btn">
         <img data-toggle="modal" data-target="#patron-selection-dialog" class="icon-navbar" src="./icons/icon_2d_religion_belief_0.webp" />
@@ -1403,7 +1403,7 @@ export const texts: Record<string, Record<string, string>> = {
 </span>
 <p>按钮位于导航栏左侧。</p><br/>
 
-<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_add_goods_socket_white.png" /></button></span>
+<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_2d_reward_buff_0.webp" /></button></span>
 <p>效果对话框允许您应用研究的技术（全局）、首席赞助人效果（全局）和事件（按会话或岛屿）。</p><br/>
 
 <span class="float-left btn-group bg-dark mr-2">    <button type="button" class="btn">
@@ -1413,13 +1413,13 @@ export const texts: Record<string, Record<string, string>> = {
 
 <h5>岛屿和贸易路线管理</h5>
 <div class="input-group mb-2" style=" max-width: 300px; "> <div class="input-group-prepend"> <span class="input-group-text" >选定岛屿</span> </div> <select name="islands" class="custom-select" ><option value="">所有岛屿</option></select> <div class="input-group-append"> <button class="btn btn-secondary" > <span class="fa fa-cog"> </span> </button> </div> </div>
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_map.png"> </button></span>
+<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_2d_item_scope_global_islands_0.webp"> </button></span>
 <p>首先需要通过点击齿轮打开<b>岛屿管理对话框</b>。在那里可以创建新岛屿。创建第一个岛屿后，导航栏中央会出现三个新控件：切换岛屿、打开岛屿管理和打开贸易路线管理。新岛屿与<b>会话</b>关联。会话影响显示哪些人口等级、工厂、物品和商品消费效果。<b>删除全部</b>按钮将计算器重置为初始状态。</p><br/>
 
 <div class="float-left mr-2"> <button class="btn btn-light btn-sm" > <span class="fa fa-sliders"></span> </button> </div>
 <p><b>贸易路线</b>从<b>商品配置对话框</b>创建。有两种类型的贸易路线。第一种是<b>从商人被动购买商品</b>的路线。点击<b>从此获取商品</b>按钮会从商人购买对此商品的需求。第二种是<b>在岛屿之间转移商品</b>的路线。与额外商品类似，额外需求在一侧增加，在另一侧减少。打开工厂配置对话框时，计算器会将<b>过剩生产</b>输入到新贸易路线的数量输入字段中。当岛屿的生产或需求发生变化时，相应贸易路线旁边会出现按钮，允许您添加差额。输入字段中的<span class="fa fa-exclamation-triangle " style="color:red"></span>表示源岛屿生产不足，无法完全供应贸易路线。</p><br/>
 
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_shiptrade.png"> </button></span>
+<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_trade_routes_0.webp"> </button></span>
 <p>贸易路线菜单包含所有贸易路线的概览，按创建顺序列出。在那里可以删除贸易路线并调整其货物。</p><br/>
 <br/>
 
@@ -1463,7 +1463,7 @@ export const texts: Record<string, Record<string, string>> = {
 <h5>Efectos de Consumo, Cadenas de Producción y Artículos de Bienes Adicionales</h5>
 <span class="btn-group bg-dark mr-2 float-left">
     <button type="button" class="btn">
-        <img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="./icons/icon_add_goods_socket_white.png" />
+        <img data-toggle="modal" data-target="#effects-dialog" class="icon-navbar" src="./icons/icon_2d_reward_buff_0.webp" />
     </button>
     <button type="button" class="btn">
         <img data-toggle="modal" data-target="#patron-selection-dialog" class="icon-navbar" src="./icons/icon_2d_religion_belief_0.webp" />
@@ -1471,7 +1471,7 @@ export const texts: Record<string, Record<string, string>> = {
 </span>
 <p>Los botones están a la izquierda en la barra de navegación.</p><br/>
 
-<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_add_goods_socket_white.png" /></button></span>
+<span class="btn-group bg-dark mr-2 float-left"><button type="button" class="btn"><img data-toggle="modal" data-target="#good-consumption-island-upgrade-dialog" class="icon-navbar" src="icons/icon_2d_reward_buff_0.webp" /></button></span>
 <p>El diálogo de efectos permite aplicar tecnologías investigadas (globalmente), el Efecto del Patrón Principal (globalmente) y eventos (por sesión o isla).</p><br/>
 
 <span class="float-left btn-group bg-dark mr-2">    <button type="button" class="btn">
@@ -1481,13 +1481,13 @@ export const texts: Record<string, Record<string, string>> = {
 
 <h5>Gestión de Islas y Rutas Comerciales</h5>
 <div class="input-group mb-2" style=" max-width: 300px; "> <div class="input-group-prepend"> <span class="input-group-text" >Isla Seleccionada</span> </div> <select name="islands" class="custom-select" ><option value="">Todas las Islas</option></select> <div class="input-group-append"> <button class="btn btn-secondary" > <span class="fa fa-cog"> </span> </button> </div> </div>
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_map.png"> </button></span>
+<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img class="icon-navbar" src="icons/icon_2d_item_scope_global_islands_0.webp"> </button></span>
 <p>Primero es necesario abrir el <b>diálogo de gestión de islas</b> haciendo clic en el engranaje. Allí puedes crear nuevas islas. Después de crear la primera isla, aparecen tres nuevos controles en el centro de la barra de navegación: Cambiar isla, abrir gestión de islas y abrir gestión de rutas comerciales. Las nuevas islas están vinculadas a una <b>sesión</b>. La sesión afecta qué niveles de población, fábricas, artículos y efectos de consumo de bienes se muestran. El botón <b>Eliminar Todo</b> restablece la calculadora al estado inicial.</p><br/>
 
 <div class="float-left mr-2"> <button class="btn btn-light btn-sm" > <span class="fa fa-sliders"></span> </button> </div>
 <p>Las <b>rutas comerciales se crean</b> desde el <b>diálogo de configuración de bienes</b>. Hay dos tipos de rutas comerciales. El primer tipo son las rutas para <b>comprar bienes pasivamente a comerciantes</b>. Al hacer clic en el botón <b>obtener bienes de</b> compra la demanda de este bien a los comerciantes. El segundo tipo son las rutas para <b>transferir bienes entre islas</b>. Similar a los bienes adicionales, la demanda adicional se incrementa en un lado y se reduce en el otro. Al abrir el diálogo de configuración de la fábrica, la calculadora introduce la <b>sobreproducción</b> en el campo de entrada de cantidad para la nueva ruta comercial. Cuando la producción o demanda de la isla cambian, aparecen botones junto a las rutas comerciales apropiadas que permiten agregar la diferencia. <span class="fa fa-exclamation-triangle " style="color:red"></span> en el campo de entrada indica que la isla de origen no está produciendo lo suficiente para abastecer completamente la ruta comercial.</p><br/>
 
-<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_shiptrade.png"> </button></span>
+<span class="float-left btn-group bg-dark mr-2"><button type="button" class="btn"> <img data-toggle="modal" data-target="#trade-routes-management-dialog" class="icon-navbar" src="icons/icon_trade_routes_0.webp"> </button></span>
 <p>El menú de rutas comerciales contiene una visión general de todas las rutas comerciales, enumeradas en orden de creación. Allí puedes eliminar rutas comerciales y ajustar su carga.</p><br/>
 <br/>
 
