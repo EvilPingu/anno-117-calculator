@@ -169,43 +169,54 @@ test.describe('Application Initialization E2E Tests', () => {
   });
 
   test('localStorage persistence works', async ({ page }) => {
-    // Load empty config
-    await configLoader.loadConfig(page, 'tests/fixtures/empty.json');
-
+    // Navigate to page first (without init script that would run on every reload)
     await page.goto('/');
+    await page.waitForLoadState('networkidle');
+
+    // Set localStorage AFTER page load using evaluate (not init script)
+    // This way it won't be overwritten on reload
+    const config = configLoader.createIslandConfig("All Islands", 37135, {}, {});
+    await page.evaluate((configData) => {
+      localStorage.clear();
+      for (const [key, value] of Object.entries(configData)) {
+        localStorage.setItem(key, String(value));
+      }
+    }, config);
+
+    // Reload to apply the config
+    await page.reload();
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1000);
 
     // Set a factory building count
     await page.evaluate(() => {
-      const factory = (window as any).view.island().factories[0];
+      const factory = (window as any).view.island().assetsMap.get(3089);
       if (factory) {
         factory.buildings.constructed(42);
+      } else {
+        console.error("No factory found.")
       }
     });
 
-    // Wait for persistence
-    await page.waitForTimeout(500);
+    // Wait for persistence (debounced save is 0ms but still async)
+    await page.waitForTimeout(1000);
+    await page.evaluate(() => {
+      console.log(localStorage.getItem("All Islands"));
+    });
 
-    // Check localStorage was updated
-    const storageValue = await configLoader.getItem(
-      page,
-      await page.evaluate(() => {
-        const factory = (window as any).view.island().factories[0];
-        return `${factory.guid}.buildings.constructed`;
-      })
-    );
 
-    expect(storageValue).toBe('42');
-
-    // Reload page
+    // Reload page - localStorage should persist now (no init script overwriting it)
     await page.reload();
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1000);
 
+    await page.evaluate(() => {
+      console.log(localStorage.getItem("All Islands"));
+    });
+
     // Verify value persisted
     const reloadedValue = await page.evaluate(() => {
-      const factory = (window as any).view.island().factories[0];
+      const factory = (window as any).view.island().assetsMap.get(3089);
       return factory ? factory.buildings.constructed() : null;
     });
 

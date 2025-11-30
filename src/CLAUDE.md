@@ -4,75 +4,14 @@
 
 ### IslandManager Settings Pattern (IMPLEMENTED)
 
-**Purpose**: IslandManager manages island creation settings that control default behavior for new islands
+**Purpose**: Manages island creation settings (world.ts:254-273)
 
-**Key Pattern**: Settings follow Option class pattern with localization and persistence
-- Each setting is an `Option` instance with `name`, `guid`, and `locaText`
-- Initial values can be set based on `isFirstRun` parameter (start mode vs other modes)
-- Settings are automatically persisted via Option class localStorage integration
-
-**Example Implementation** (world.ts:254-273):
-```typescript
-export class IslandManager {
-    public showIslandOnCreation: Option;
-    public activateAllNeeds: Option;
-
-    constructor(params: ParamsConfig, isFirstRun: boolean) {
-        // Create Option instances
-        this.showIslandOnCreation = new (require('./util').Option)({
-            name: "Show Island on Creation",
-            guid: "showIslandOnCreation",
-            locaText: texts.showIslandOnCreation
-        });
-        this.showIslandOnCreation.checked(true);
-
-        this.activateAllNeeds = new (require('./util').Option)({
-            name: "Activate all needs",
-            guid: "activateAllNeeds",
-            locaText: texts.activateAllNeeds
-        });
-        // Set based on mode: false for start (first run), true otherwise
-        this.activateAllNeeds.checked(!isFirstRun);
-    }
-}
-```
-
-**Using Settings in Island Creation** (world.ts:355):
-```typescript
-var island = new Island(this.params, new Storage(name), true, session);
-island.activateAllNeeds(this.activateAllNeeds.checked());
-```
-
-**Island Method Pattern** (world.ts:1143-1151):
-```typescript
-activateAllNeeds(activate: boolean): void {
-    // Apply setting to all population levels
-    for (let populationLevel of this.populationLevels) {
-        for (let need of populationLevel.needs) {
-            need.checked(activate);
-        }
-    }
-}
-```
-
-**Template Binding** (island-management-dialog.html:45-48):
-```html
-<div class="custom-control custom-checkbox mb-3">
-    <input id="checkbox-activate-all-needs" type="checkbox"
-           class="custom-control-input"
-           data-bind="checked: $root.islandManager.activateAllNeeds.checked">
-    <label class="custom-control-label"
-           for="checkbox-activate-all-needs"
-           data-bind="text: $root.islandManager.activateAllNeeds.name"></label>
-</div>
-```
-
-**Key Principles**:
+**Key Pattern**:
+- Settings are Option instances with localization and persistence
+- Initial values set by `isFirstRun` parameter (ViewMode dependent)
+- Applied via Island methods (e.g., `island.activateAllNeeds(checked)`)
 - Settings belong to IslandManager, NOT view.settings
-- Settings control new island initialization behavior
-- Island methods apply settings to their internal state
-- Option class handles persistence automatically
-- Initial values can vary by ViewMode (start/plan/master)
+- Template binding: `data-bind="checked: $root.islandManager.activateAllNeeds.checked"`
 
 ### Constructible Interface Pattern
 - `Constructible` is an interface (not a class) that extends `NamedElement`
@@ -156,39 +95,9 @@ When encountering "missing" properties that exist at runtime:
 - Wrong: `appliedBuff.effect.guid`
 
 ### Object Lookup Best Practices
-1. Always validate the result of `_assetsMap.get(id)` before using
-2. Use descriptive error messages that include the GUID and context
+1. Always validate `_assetsMap.get(id)` results before using
+2. Use descriptive error messages with GUID and context
 3. Cast to appropriate types after validation: `buff as Buff`
-4. Handle optional references properly with conditional checks
-
-## Code Documentation Standards
-
-### Class Attribute Grouping
-When documenting class properties, group them logically with section headers:
-
-```typescript
-export class Consumer extends NamedElement {
-    // === BASIC PROPERTIES ===
-    public guid: number;
-    public isFactory: boolean;
-    
-    // === PRODUCTION CONFIGURATION ===  
-    public defaultInputs: Map<Product, number>;
-    public cycleTime: number;
-    
-    // === BUFF SYSTEM ===
-    public items: AppliedBuff[];           // Applied item effects
-    public buffs: AppliedBuff[];           // All applied effects
-    
-    // === INPUT DEMAND SYSTEM ===
-    public inputDemandsMap: Map<Product, Demand>;
-    public inputDemands: KnockoutObservableArray<Demand>;
-    
-    // === REACTIVE SUBSCRIPTIONS ===
-    public boostSubscription!: KnockoutComputed<void>;
-}
-```
-
 
 ## Syntax Fixes
 Knockout computed: `read: () => { return value; }, write: (val: boolean) => { setValue(val); }`  
@@ -293,6 +202,78 @@ island.effect.${effectGuid}.scaling          // Island effects (via persistFloat
 - Global objects (regions, sessions, effects) now have persistence for their scaling states
 - Island-level persistence happens in Island constructor using persistBuildings() flow
 
+## Effect Source Types and Display (IMPLEMENTED)
+
+### Effect Source Property
+**Purpose**: Identifies the origin/type of an effect for UI display
+
+**Source Enum Values** (production.ts:655):
+- `'module'` - Effect from factory modules
+- `'tech'` - Effect from technology/discoveries
+- `'festival'` - Effect from festival events
+- `'veneration-effect'` - Effect from patron veneration
+- `'session-event'` - Session-wide event effect
+- `'island-event'` - Island-specific event effect
+
+**Property Declaration**:
+```typescript
+public source?: string; // Optional, set from config
+public effectDuration?: number; // Duration in seconds (for events)
+```
+
+### Source Text Localization (production.ts:699-737)
+
+**getSourceText() Method**: Returns localized source name with optional duration
+- Maps source enum to params.js translation keys (NOT i18n.ts)
+- Accesses translations via `window.view.texts`
+- Appends duration in brackets if `effectDuration > 0`: `"Festival (2h)"`
+- Uses global `formatNumber()` function for duration formatting
+
+**Source to Translation Key Mapping**:
+```typescript
+'module' → 'silo'
+'tech' → 'discovery'
+'festival' → 'festival'
+'veneration-effect' → 'venerationEffects'
+'session-event' → 'sessionEvent'
+'island-event' → 'islandEvent'
+```
+
+**Important**: Always use params.js translations (accessed via `window.view.texts`), not i18n.ts translations, for game-related text.
+
+### Effect Filtering by Session (IMPLEMENTED)
+
+**Location**: Island.availableEffects computed observable (world.ts:818-843)
+
+**Filtering Logic**:
+1. **Meta Session (All Islands)**: Shows all effects without filtering
+   - Check: `this.isAllIslands()` returns true
+   - No target validation needed
+
+2. **Regular Islands**: Shows effects only if they meet one of:
+   - `effect.targetsIsAllProduction === true` (global effects)
+   - Effect has at least one target in the island's session/region
+
+**Region Matching**:
+```typescript
+const hasTargetsInSession = e.targets.some(target => {
+    return target.associatedRegions.some(region =>
+        region.guid === this.island.session.region.guid
+    );
+});
+```
+
+**Key Behavior**:
+- Session-specific effects (e.g., Latium-only) hidden on islands from other sessions
+- All effects visible in "All Islands" view for comprehensive overview
+- Uses Constructible interface: targets have `associatedRegions` property
+- Patron effects always filtered out via `this.patronEffects.indexOf(e) != -1`
+
+**Template Integration** (templates/effects-dialog.html:36):
+- Duration column replaced with source display
+- Binding: `data-bind="text: $data.getSourceText()"`
+- Shows source type with duration in brackets when applicable
+
 ## Population-Level Need Management (IMPLEMENTED)
 
 ### Architecture Transformation
@@ -338,24 +319,13 @@ island.effect.${effectGuid}.scaling          // Island effects (via persistFloat
 **Delegation Pattern**: ResidenceNeed observables delegate to PopulationLevel for single source of truth
 **Dynamic Property Addition**: Add computed properties directly to existing objects to preserve methods
 
-## Need Categorization Architecture (IMPLEMENTED)
+## Need Categorization Architecture 
 
 ### Category Identification Issue
 **Problem**: Need categories use `id` as unique identifier, NOT `guid`
 **Root Cause**: `NeedCategory` extends `NamedElement` which has optional `guid?: number`, but categories are identified by their `id: string` property
 **Critical Fix**: Always use `category.id` for Map keys when grouping needs by category
 
-```typescript
-// WRONG - causes all needs to appear under same category
-if (!categories.has(category.guid)) {
-    categories.set(category.guid, categoryObj);
-}
-
-// CORRECT - properly groups needs by category
-if (!categories.has(category.id)) {
-    categories.set(category.id, categoryObj);
-}
-```
 
 ### Two-Way Observable Delegation Pattern
 **Problem**: Population-level need changes not reflected in residence-level consumption
@@ -412,248 +382,35 @@ populationLevelNeed.prepareResidenceEffectView = prepareResidenceEffectView;
 
 ## Knockout Debug System (IMPLEMENTED)
 
-### Debug Utilities (src/util.ts:542-772)
+**Debug Utilities** (src/util.ts:542-772):
+- `window.debugKO.inspect(selector)`, `.type(obj)`, `.log(obj, label)`, `.context(element)`
+- Template wrapper detection, safe observable unwrapping, asset type identification
 
-**Core Functions**:
-- `isKnockoutObservable(obj)`: Type guard for observables/computeds/observable arrays
-- `safeUnwrap(value)`: Unwraps observables safely, handles write-only observables
-- `getAssetType(data)`: Detects asset type (Factory, Consumer, Template wrapper, etc.)
-- `debugBindingContext(element)`: Inspects Knockout binding context for DOM element
-- `logAssetInfo(data, label?)`: Logs detailed asset information with observable properties
-- `inspectElement(selector)`: Inspects element by CSS selector or HTMLElement
+**Debug Binding** (src/components.ts:75-134):
+- Template usage: `<div data-bind="debug: 'Label'">`
+- Logs `[DebugKO]` with asset type, GUID, name, binding context
+- Requires `window.view.debug.enabled()` for init, `verboseMode()` for updates
 
-**Type Safety**: All functions use `unknown` types instead of `any` for strict typing
-
-**Key Features**:
-- Template wrapper detection: Recognizes and unwraps `Template(instance)` pattern
-- Constructor name detection: Uses `obj.constructor.name` for class identification
-- NamedElement detection: Checks for `guid` + `name` properties
-- Safe error handling: Try-catch around observable unwrapping for write-only observables
-
-### Debug Binding Handler (src/components.ts:75-134)
-
-**Registration**: `ko.bindingHandlers.debug` registered before `ko.applyBindings()`
-
-**Callbacks**:
-- `init`: Logs initial binding when element is bound (requires `window.view.debug.enabled()`)
-- `update`: Logs observable changes (requires `window.view.debug.verboseMode()`)
-
-**Template Usage**:
-```typescript
-<div data-bind="debug: 'Label', [other bindings]">
-<div data-bind="debug: true, visible: observable">
-```
-
-**Output**: `[DebugKO]` prefixed console logs with asset type, GUID, name, region, binding context
-
-### Debug Settings Persistence (src/main.ts:79-110)
-
-**Critical Implementation**: Debug settings must be restored from localStorage on initialization
-
-**Observable Creation** (lines 79-84):
-```typescript
-debug: {
-    enabled: ko.observable(false),
-    logBindings: ko.observable(false),
-    verboseMode: ko.observable(false)
-}
-```
-
-**localStorage Restoration** (lines 87-99):
-```typescript
-const debugEnabled = localStorage.getItem('debug.enabled');
-if (debugEnabled === 'true') {
-    window.view.debug.enabled(true);
-}
-// Same for verboseMode and logBindings
-```
-
-**Two-Way Sync** (lines 102-110):
-```typescript
-window.view.debug.enabled.subscribe((value: boolean) => {
-    localStorage.setItem('debug.enabled', value.toString());
-});
-// Same for verboseMode and logBindings
-```
-
-**Without this code**: Debug mode won't persist across page reloads, even if set in localStorage
-
-### Global Debug Object (src/main.ts:29-35)
-
-Exposed as `window.debugKO` for console access:
-```typescript
-window.debugKO = {
-    context: debugBindingContext,
-    type: getAssetType,
-    log: logAssetInfo,
-    inspect: inspectElement
-};
-```
-
-**Usage from Console**:
-```javascript
-debugKO.inspect('.factory-tile');
-debugKO.type(window.view.selectedFactory());
-debugKO.log(window.view.island(), 'Current Island');
-```
-
-### Common Debugging Patterns
-
-**Enable Before Page Load**:
-```javascript
-localStorage.setItem('debug.enabled', 'true');
-// Reload page
-```
-
-**Enable After Load** (auto-persists):
-```javascript
-window.view.debug.enabled(true);
-window.view.debug.verboseMode(true);
-```
-
-**Check Binding Context**:
-```javascript
-const ctx = ko.contextFor(document.querySelector('.factory-tile'));
-debugKO.log(ctx.$data, 'Factory Tile Context');
-```
-
-**Inspect Template Instance**:
-```javascript
-// $data is Template object
-debugKO.type($data); // "Template(Factory)"
-debugKO.type($data.instance()); // "Factory"
-```
-
-### Performance Considerations
-
-- **Zero Overhead When Disabled**: Observable check `window.view.debug.enabled()` returns false immediately
-- **Verbose Mode**: Update callback fires on every observable change - use sparingly
-- **Template Bindings**: All 15 templates have debug bindings at strategic points (see templates/CLAUDE.md)
+**Persistence** (src/main.ts:79-110):
+- localStorage restore on init: `debug.enabled`, `verboseMode`, `logBindings`
+- Two-way sync via observable subscriptions
+- Enable: `localStorage.setItem('debug.enabled', 'true')` OR `window.view.debug.enabled(true)`
 
 ## Internationalization (i18n.ts)
 
-### Language Code Conventions
+**Required Languages** (12 total): english, french, polish, spanish, italian, german, brazilian, russian, simplified_chinese, traditional_chinese, japanese, korean
 
-**CRITICAL**: Always use the standardized language codes in `src/i18n.ts`:
-- ✅ `simplified_chinese` - Simplified Chinese
-- ✅ `traditional_chinese` - Traditional Chinese
-- ✅ `brazilian` - Brazilian Portuguese
-- ❌ `chinese` - NEVER use this (ambiguous)
+**CRITICAL**: Use `simplified_chinese` and `traditional_chinese`, NEVER `chinese`
 
-### Complete Language List (12 required for all keys)
+**Workflow**:
+- Add key with English: `newKey: { english: "text" }`
+- Complete: `/translate newKey` OR `npm run check-translations`
+- Verify: `npm run check-translations`
+- Template: `<span data-bind="text: $root.texts.newKey"></span>`
 
-Every translation key MUST include all 12 languages:
-```typescript
-keyName: {
-    english: "...",
-    french: "...",
-    polish: "...",
-    spanish: "...",
-    italian: "...",
-    german: "...",
-    brazilian: "...",
-    russian: "...",
-    simplified_chinese: "...",
-    traditional_chinese: "...",
-    japanese: "...",
-    korean: "..."
-}
-```
+**Excluded**: `helpContent` (managed separately, doesn't require all 12 languages)
 
-### Language Code Mapping
-
-The `languageCodes` object maps browser locale codes to internal language names:
-```typescript
-export const languageCodes: Record<string, string> = {
-    'en': 'english',
-    'de': 'german',
-    'zh_TW': 'chinese_traditional',
-    'zh_HK': 'chinese_traditional',
-    'zh_HANT': 'chinese_traditional',
-    'zh': 'chinese_simplified',
-    'fr': 'french',
-    'es': 'spanish',
-    'pt-br': 'brazilian',
-    'ru': 'russian',
-    'ko': 'korean',
-    'ja': 'japanese',
-    'it': 'italien',  // Note: maps to "italien" not "italian"
-    'pl': 'polish'
-}
-```
-
-**Important**: The `languageCodes` map uses `chinese_traditional` and `chinese_simplified` with underscores, but the translation keys themselves use the same names.
-
-### Translation Key Structure
-
-```typescript
-export const texts: Record<string, Record<string, string>> = {
-    keyName: {
-        // All 12 languages required
-        // Can use either quoted or unquoted keys
-        "english": "...",
-        french: "...",
-        // ...
-    }
-}
-```
-
-### Adding New Translation Keys
-
-When adding new UI text:
-
-1. **Add to src/i18n.ts with English translation:**
-   ```typescript
-   newKey: {
-       english: "Your English text"
-   }
-   ```
-
-2. **Complete all languages:**
-   ```bash
-   /translate newKey
-   ```
-   Or manually add all 12 languages if translations are already known.
-
-3. **Verify completeness:**
-   ```bash
-   npm run check-translations
-   ```
-
-4. **Use in templates:**
-   ```html
-   <span data-bind="text: $root.texts.newKey"></span>
-   ```
-
-### Excluded Keys
-
-**`helpContent`**: Contains long HTML documentation, managed separately. Does NOT require all 12 languages.
-
-### Common Errors
-
-1. **Using `chinese:` instead of `simplified_chinese:`**
-   - ❌ `chinese: "文本"`
-   - ✅ `simplified_chinese: "文本"`
-
-2. **Missing languages**
-   - Run `npm run check-translations` to detect
-   - Use `/translate keyName` to complete
-
-3. **Inconsistent quoting**
-   - Both `"english":` and `english:` are valid
-   - Be consistent within each key
-
-4. **Special characters in translations**
-   - Properly escape quotes: `"It's"` → `"It\\'s"` or use `"It's"`
-   - HTML entities work: `&nbsp;`, `&mdash;`, etc.
-
-### Translation Workflow Tools
-
-See root `CLAUDE.md` for complete translation workflow documentation including:
-- `npm run check-translations` - Check completeness
-- `/translate keyName` - Interactive translation
-- `./scripts/auto-translate.sh` - Automated batch translation
-- `docs/CLAUDE_HEADLESS.md` - Headless mode documentation
+**Common Errors**: Using `chinese` instead of `simplified_chinese`/`traditional_chinese`, missing languages, special character escaping
 
 ## Presenter Pattern Architecture (IMPLEMENTED)
 
@@ -804,147 +561,64 @@ window.view.presenter.productByGuid = new Map();  // Quick lookup
 - Provides reactive access to current data
 - Updates automatically when observable source changes
 
+### Product-Based Presenter Pattern (PLANNED)
+
+**ProductPresenter** - Wraps Product with UI-specific observables:
+- `factoryPresenters: FactoryPresenter[]` - Nested presenters for factories
+- `availableSuppliers: KnockoutComputed<SupplierOption[]>` - All supplier options for dropdown
+- `totalProduction`, `totalDemand`, `netBalance` - Aggregate calculations
+
+**UI Templates**:
+- `product-tile.html` - Single tile per product showing aggregate production/demand
+- `product-config-dialog.html` - Tabbed dialog (Factories | Extra Goods | Trade Routes | Production Chain)
+- `factory-config-section.html` - Individual factory configuration within product dialog
+
+**Critical Patterns**:
+- Object method preservation: Add properties directly, never use spread operator
+- Supplier dropdown: Integrates factories, islands (for trade routes), extra goods, passive trade
+- Trade route auto-creation: Selecting island creates TradeRoute with minAmount=0
+- Init order: Create presenters after initDemands/applyBuffs, before persistBuildings
+
 ## Supplier Interface Architecture (PLANNED)
 
-### Current Demand System (production.ts:112-184)
+**Problem**: Demands tightly coupled to Factory suppliers. No unified way to handle trade routes, passive trade, or extra goods as alternative sources.
 
-**Problem**: Demands are tightly coupled to Factory suppliers
-- Demand class has `factory: KnockoutObservable<Factory>` property (line 118)
-- `updateFixedProductFactory()` method (lines 152-175) assigns factory based on region matching
-- Product.fixedFactory determines which factory fulfills demand (line 143-144)
-- Trade routes and extra goods exist but don't integrate into demand resolution
-
-**Limitation**: No unified way to specify whether a product comes from:
-1. Local factory production
-2. Trade route import
-3. Passive trade (manual input without demand propagation)
-4. Extra good production (items affecting factories)
-
-### Proposed Supplier Interface
-
-**Core Concept**: Abstract the concept of "where does this product come from" into a Supplier interface
-
+**Supplier Interface**:
 ```typescript
 interface Supplier {
-    // Identification
-    readonly type: 'factory' | 'trade_route' | 'passive_trade' | 'extra_good';
-    readonly product: Product;
-    readonly island: Island;
-
-    // Production capabilities
-    defaultProduction(): number;      // Current/baseline production amount
-    canSupply(amount: number): boolean; // Can this supplier fulfill amount?
-
-    // Demand integration
-    setDemand(amount: number): void;  // Request supplier to produce/import amount
-    overProduction(): number;         // Excess production available
+    type: 'factory' | 'trade_route' | 'passive_trade' | 'extra_good';
+    defaultProduction(): number;
+    setDemand(amount: number): void;
 }
 ```
 
-### Supplier Implementations
+**Implementations**:
+- **FactorySupplier**: Wraps Factory, generates recursive input demands
+- **TradeRouteSupplier**: Auto-creates trade routes with `userSetAmount` floor constraint
+- **PassiveTradeSupplier**: Manual input, no demand propagation ("joker" supplier)
+- **ExtraGoodSupplier**: Wraps items producing extra goods
 
-**1. FactorySupplier** (wraps existing Factory)
-- `defaultProduction()`: Returns `factory.inputAmount() * factory.extraGoodFactor()`
-- `setDemand()`: Updates `factory.inputAmountByOutput()`
-- `canSupply()`: Checks if factory `available()` and in correct region
-- Generates its own input demands recursively
+**Product Changes**:
+- Add `defaultSupplier: KnockoutObservable<Supplier>` (user-selected per island)
+- Add `availableSuppliers: KnockoutComputed<Supplier[]>` (all options)
+- Deprecate `fixedFactory` property
 
-**2. TradeRouteSupplier** (wraps TradeList)
-- `defaultProduction()`: Returns sum of trade route amounts importing to this island
-- `setDemand()`: Creates/updates trade route with `userSetAmount` constraint
-- `userSetAmount`: User-set floor - trade route amount can increase but not decrease below this
-- Auto-creates trade route if none exists (with userSetAmount = 0)
-- Auto-deletes route if supplier changed and userSetAmount = 0
+**Demand Simplification**:
+- Remove `Demand.factory` property
+- Demand resolution at Product level via `defaultSupplier.setDemand()`
 
-**3. PassiveTradeSupplier** (new concept)
-- `defaultProduction()`: Returns manually entered amount
-- `setDemand()`: No-op (doesn't propagate demands)
-- "Joker" supplier - provides goods without generating upstream demand
-- Useful for representing external sources or simplified scenarios
-
-**4. ExtraGoodSupplier** (wraps ExtraGoodProductionList)
-- `defaultProduction()`: Returns `extraGoodProductionList.amount()`
-- `setDemand()`: Updates `factory.demandByExtraGoodSupplier()`
-- Only available if items produce this specific product
-- Typically used in combination with factory supplier
-
-### Product-Level Supplier Selection
-
-**Key Change**: Move from Factory selection to Supplier selection at Product level
-
-```typescript
-class Product {
-    // Existing
-    public factories: Factory[];
-    public fixedFactory: KnockoutObservable<Factory | null>;  // DEPRECATED
-
-    // New
-    public availableSuppliers: KnockoutComputed<Supplier[]>;  // All possible suppliers
-    public defaultSupplier: KnockoutObservable<Supplier | null>; // User-selected default
-}
-```
-
-**Per-Island Supplier Selection**: Each product has one default supplier per island
-- Storage key: `island.product.${productGuid}.supplier.type` and `.supplier.id`
-- Supplier types identified by: `factory.guid`, `'trade'`, `'passive'`, `extra_good_item.guid`
-
-### Demand Refactoring
-
-**Simplify Demand class** (remove factory coupling):
-
-```typescript
-class Demand {
-    public consumer: Constructible;
-    public product: Product;
-    public amount: KnockoutObservable<number>;
-
-    // REMOVED: factory, updateFixedProductFactory()
-}
-```
-
-**Demand Resolution** happens at Product level:
-- Product.defaultSupplier receives all demand
-- Supplier.setDemand() handles fulfillment strategy
-- Factory suppliers generate recursive demands for their inputs
-
-### Presenter Pattern for UI
-
-**FactoryPresenter** (similar to ResidencePresenter pattern):
-- Wraps Factory/Product combination for UI binding
-- Provides computed observables for supplier selection
-- **Supplier Options Calculation**:
-  - `availableFactorySuppliers`: Factories producing this product (filter by region)
-  - `availableTradeIslands`: Islands that can export via trade route
-  - `availableExtraGoodSuppliers`: Items that produce this product as extra good
-  - `canUsePassiveTrade`: Always true (passive trade always available)
-
-**Benefits of Presenter**:
-- Separates UI logic from data model
-- Reusable computed properties for supplier selection
-- Handles complex observable chains for supplier availability
-- Example: `availableTradeIslands()` filters islands by session/region and existing routes
-
-### Critical Initialization Order
-
-**Existing Pattern** (world.ts:518):
-```typescript
-1. Create objects (factories, products, consumers)
-2. f.initDemands(assetsMap)    // Factories register in products
-3. e.applyBuffs(assetsMap)     // Effects create AppliedBuff
-4. persistBuildings(factory)   // Load saved state
-```
-
-**With Suppliers**:
-```typescript
+**Init Order**:
 1. Create objects (factories, products, consumers, suppliers)
-2. f.initDemands(assetsMap)    // Register factories in products
-3. p.initSuppliers(assetsMap)  // Create supplier instances for each product
-4. e.applyBuffs(assetsMap)     // Effects still apply to factories
-5. p.restoreDefaultSupplier()  // Load supplier selection from localStorage
-6. persistBuildings(factory)   // Load factory-specific state
-```
+2. `f.initDemands()` - Factories register in products
+3. `p.initSuppliers()` - Create supplier instances
+4. `e.applyBuffs()` - Effects apply buffs
+5. `p.restoreDefaultSupplier()` - Load supplier selection
+6. `persistBuildings()` - Load factory state
 
-### Trade Route Integration Changes
+**Trade Route Changes**:
+- Add `userSetAmount` observable - user-set minimum
+- Auto-cleanup: Delete routes where `userSetAmount == 0 && !manuallySet`
+- Storage: `island.product.${productGuid}.supplier.type|.id`
 
 **TradeList modifications** (trade.ts:180-331):
 - `userSetAmount: KnockoutObservable<number>` - user-set minimum
@@ -952,99 +626,6 @@ class Demand {
 - `routes` includes `userSetAmount` property per route
 - Auto-cleanup: Remove routes where `userSetAmount == 0 && !manuallySet`
 
-**TradeRoute persistence** (trade.ts:403-418):
-- Add `userSetAmount` to JSON serialization
-- Restore userSetAmount on load
+**Patterns**: Strategy (Supplier interface), Presenter (UI separation), Delegation (Demand→Product→Supplier)
 
-### Implementation Strategy
-
-**Phase 1: Supplier Infrastructure**
-1. Create Supplier interface and implementations
-2. Add Product.defaultSupplier and Product.availableSuppliers
-3. Implement supplier persistence (localStorage integration)
-
-**Phase 2: Demand Refactoring**
-1. Remove Demand.factory property
-2. Move demand resolution to Product level
-3. Update Demand.updateAmount() to work through Product.defaultSupplier
-
-**Phase 3: UI Integration**
-1. Create FactoryPresenter class
-2. Build supplier selection dialog/dropdown
-3. Update templates to use presenter pattern
-4. Add trade route userSetAmount UI
-
-**Phase 4: Migration & Cleanup**
-1. Migrate existing fixedFactory selections to default suppliers
-2. Remove deprecated Product.fixedFactory
-3. Update all demand creation to use new pattern
-
-### Design Patterns in Use
-
-**Strategy Pattern**: Supplier interface with multiple implementations (FactorySupplier, TradeRouteSupplier, etc.)
-- Benefit: Pluggable fulfillment strategies without changing Product/Demand code
-
-**Presenter Pattern**: FactoryPresenter separates UI logic from data model (see ResidencePresenter:702-758)
-- Benefit: Computed observables for complex supplier selection logic
-- Preserves reactivity through Knockout observables
-
-**Delegation Pattern**: Demand → Product → Supplier chain
-- Benefit: Single source of truth for supplier selection
-- Similar to ResidenceNeed → PopulationLevelNeed delegation
-
-### Key Files to Modify
-
-**Core Classes**:
-- `src/production.ts` - Product, Demand classes
-- `src/factories.ts` - Factory integration with suppliers
-- `src/trade.ts` - TradeList, TradeRoute with userSetAmount
-
-**New Files**:
-- `src/suppliers.ts` - Supplier interface and implementations
-- `src/views.ts` - FactoryPresenter (add to existing file)
-
-**Initialization**:
-- `src/world.ts` - Island constructor supplier initialization
-
-**UI Templates**:
-- `templates/factory-config-dialog.html` - Supplier selection UI
-- `templates/product-supplier-dialog.html` - New supplier management dialog
-
-### References to Similar Code
-
-**Presenter Pattern**: See ResidencePresenter (views.ts:702-758)
-- Observable delegation to underlying data
-- Computed properties for UI-specific calculations
-- Update() method for switching underlying instance
-
-**Persistence Pattern**: See Effect persistence (CLAUDE.md:122-158)
-- Three-tier system (global, session, island)
-- Observable subscriptions for auto-save
-- localStorage key patterns: `${scope}.${guid}.${attribute}`
-
-**Object Lookup**: See AppliedBuff constructor (buffs.ts:36-141)
-- Validate assetsMap.get() results
-- Descriptive error messages with GUIDs
-- Type casting after validation
-
-### Avoiding Common Pitfalls
-
-**1. Circular Dependencies**
-- Supplier → Factory → Product → Supplier cycle risk
-- Solution: Keep Supplier interface in separate file, import carefully
-- Similar to AppliedBuff separation (buffs.ts) to avoid Factory ↔ Production cycle
-
-**2. Observable Method Preservation**
-- NEVER use object spread with Knockout objects
-- See Object Method Preservation Pattern (CLAUDE.md:256-269)
-- Add properties directly: `obj.newProp = ko.computed(...)`
-
-**3. Initialization Order**
-- Suppliers must be created AFTER factories register in products
-- Supplier selection must load BEFORE demands are calculated
-- Critical section: Island constructor (world.ts:536+)
-
-**4. Type Safety**
-- Avoid `as any` casts
-- Use proper type guards: `isSupplier(obj)` helper function
-- See Type Safety Improvements (CLAUDE.md:37-44)
+**Pitfalls**: Circular dependencies (use separate suppliers.ts file), Observable method preservation (never use spread operator), Init order (suppliers after factories register, selection before demands)

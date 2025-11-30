@@ -652,6 +652,7 @@ export class Effect extends NamedElement {
     public excludeEffectSourceGUID: boolean;
     public isStackable: boolean;
     public effectDuration?: number; // duration of the event in seconds
+    public source?: string; // source type: 'module', 'tech', 'festival', 'veneration-effect', 'session-event', 'island-event'
 
     public scaling: KnockoutObservable<number>;
 
@@ -687,9 +688,52 @@ export class Effect extends NamedElement {
         if(config.effectDuration > 0)
             this.effectDuration = config.effectDuration;
 
+        if(config.source)
+            this.source = config.source;
+
         this.scaling = ko.observable(0);
         this.isStackable = false;
- 
+
+    }
+
+    /**
+     * Returns the localized source text based on the source type
+     * Maps source enum to appropriate translation from params.js
+     * Includes duration in brackets if available (e.g., "Festival (2h)")
+     */
+    getSourceText(): string {
+        if (!this.source) {
+            return '';
+        }
+
+        // Map source enum to params.js translation keys
+        const sourceKeyMap: Record<string, string> = {
+            'module': 'silo', // Using outputStorage as placeholder - need to find correct module translation
+            'tech': 'discovery',
+            'festival': 'festival',
+            'veneration-effect': 'venerationEffects',
+            'session-event': 'sessionEvent',
+            'island-event': 'islandEvent'
+        };
+
+        const translationKey = sourceKeyMap[this.source];
+        let sourceText = this.source; // fallback to raw source value
+
+        // Access the translation from window.view.texts (params.js translations)
+        const texts = (window as any).view?.texts;
+        if (translationKey && texts && texts[translationKey]) {
+            sourceText = texts[translationKey].name();
+        }
+
+        // Add duration in brackets if available
+        if (this.effectDuration && this.effectDuration > 0) {
+            const hours = this.effectDuration / 3600;
+            const formatNumber = (window as any).formatNumber;
+            const formattedHours = formatNumber ? formatNumber(hours) : hours.toString();
+            return `${sourceText} (${formattedHours}h)`;
+        }
+
+        return sourceText;
     }
 
     // for session and global buffs this method is called mutliple times on the same object

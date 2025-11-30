@@ -8,12 +8,12 @@
             <div class="modal-body" data-bind="with: $root.island()">
                 <!-- Patron Selection and Devotion in one row -->
                 <div class="form-group row">
-                    <label class="col-sm-2 col-form-label" data-bind="text: $root.texts.currentPatron.name">Selected Patron:</label>
+                    <label class="col-sm-3 col-form-label" data-bind="text: $root.texts.currentPatron.name">Selected Patron:</label>
                     <div class="col-sm-4">
-                        <select class="form-control" data-bind="options: $data.availablePatrons, optionsText: 'name', value: $data.selectedPatron, optionsCaption: 'None'"></select>
+                        <select class="form-control" data-bind="options: $data.availablePatrons, optionsText: 'name', value: $data.selectedPatron, optionsCaption: $root.texts.noPatron.name()"></select>
                     </div>
                     <label class="col-sm-2 col-form-label" data-bind="text: $root.texts.devotion.name">Devotion:</label>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <div class="input-group input-group-sm spinner">
                             <input class="form-control" type="number" value="0" step="1" min="0" data-bind="value: $data.devotion, attr: {id: 'devotion-input'}" />
                             <div class="input-group-append">
@@ -25,12 +25,12 @@
 
                 <!-- Wonder Effect Checkbox -->
                 <div class="form-group row" data-bind="if: $data.selectedPatron() && $data.selectedPatron().wonder">
-                    <label class="col-sm-2 col-form-label" data-bind="text: $root.texts.wonderEffect.name">Wonder Effect:</label>
+                    <label class="col-sm-3 col-form-label" data-bind="text: $root.texts.wonderEffect.name">Wonder Effect:</label>
                     <div class="col-sm-4">
                         <div data-bind="component:{name:'icon-checkbox', params:{asset: $data.selectedPatron().wonder, checked: $data.selectedPatron().wonder.scaling}}"></div>
                     </div>
                     <label class="col-sm-2 col-form-label" data-bind="text: $root.texts.buffs.name">Buffs:</label>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <div data-bind="component: {name: 'buff-display', params: {buffs: $data.selectedPatron().wonder.buffs}}"></div>
                     </div>
                 </div>

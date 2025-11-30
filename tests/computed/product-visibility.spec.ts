@@ -221,13 +221,10 @@ test.describe('Product Visibility Logic', () => {
   });
 
   test('product NOT visible when no conditions are met', async ({ page }) => {
-    const config = {
-      "versionCalculator": "1",
-      "session": "37135",
-      "islandName": "Latium",
-      "settings.showAllProducts": "0",
-      "debug.enabled": "true"
-    };
+    const config = configLoader.createIslandConfig("Latium", 37135, {}, {
+      "settings.showAllProducts": "0"
+    });
+    config["debug.enabled"] = "true";
 
     await configLoader.loadConfigObject(page, config);
     await page.goto('http://localhost:8080/index.html');
