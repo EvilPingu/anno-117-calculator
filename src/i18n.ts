@@ -667,6 +667,7 @@ export const texts: Record<string, Record<string, string>> = {
         japanese: "新しいバージョンの計算機が利用可能です。ダウンロードボタンをクリックしてください。",
         korean: "새로운  117 계산기 버전이 제공됩니다. 다운로드 버튼을 클릭하십시오."
     },
+    /*
     newFeature: {
         english: "Run factories at full capacity. Veneration effects are global.",
         french: "Faire tourner les usines à pleine capacité. Les effets de vénération sont globaux.",
@@ -681,6 +682,7 @@ export const texts: Record<string, Record<string, string>> = {
         japanese: "工場をフル稼働させる。崇拝の効果は世界規模です。",
         korean: "공장을 최대 용량으로 가동합니다. 숭배 효과는 전역입니다."
     }, 
+    */
     helpContent: {
         brazilian: `<h5>Uso e Estrutura</h5>
 <p>Digite o número atual de residências por nível na linha superior. As cadeias de produção serão atualizadas automaticamente ao sair do campo de entrada. Apenas os bens necessários são exibidos.</p>
