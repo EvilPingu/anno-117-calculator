@@ -348,12 +348,7 @@ export class ProductPresenter {
         this.icon = ko.pureComputed(() => this.product.icon as string);
 
         this.isHighlightedAsMissing = ko.pureComputed(() => {
-            const supplier = this.defaultSupplier();
-
-            if(!(supplier instanceof Factory))
-                return false;
-
-            return supplier.isHighlightedAsMissing();
+            return this.instance().isHighlightedAsMissing();
          });
 
 

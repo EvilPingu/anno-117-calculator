@@ -170,6 +170,24 @@ export class TradeRoute implements Supplier {
         else
             this.delete();
     }
+
+    /**
+     * Checks if this trade route should be highlighted as missing buildings
+     * Delegates to the source island's product to check factory capacity
+     */
+    isHighlightedAsMissing(): boolean {
+        // Check if setting is enabled
+        if (!window.view.settings.missingBuildingsHighlight ||
+            !window.view.settings.missingBuildingsHighlight.checked())
+            return false;
+
+        // Only highlight if this route is the default supplier
+        if (!this.isDefaultSupplier())
+            return false;
+
+        // Delegate to source island's product to check its factory capacity
+        return this.fromIslandProduct.isHighlightedAsMissing();
+    }
 }
 
 

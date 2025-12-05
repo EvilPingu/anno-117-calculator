@@ -99,10 +99,19 @@ export class Product extends NamedElement {
         this.isHighlightedAsMissing = ko.pureComputed(() => {
             const supplier = this.defaultSupplier();
 
-            if(!supplier || supplier.type != "factory")
+            if(!supplier)
                 return false;
 
-            return (supplier as Factory).isHighlightedAsMissing();
+            // Check Factory suppliers
+            if(supplier.type === "factory")
+                return (supplier as Factory).isHighlightedAsMissing();
+
+            // Check TradeRoute suppliers - delegate to source island
+            if(supplier.type === "trade_route")
+                return (supplier as TradeRoute).isHighlightedAsMissing();
+
+            // Other supplier types (passive_trade, extra_good) never show warning
+            return false;
          });
 
         this.notes = ko.observable("");
