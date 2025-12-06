@@ -37,11 +37,13 @@ If during your session:
 
 ...that is relevant, was not known initially, and should be persisted, add it to the appropriate `CLAUDE.md` (for shared context) or 
 `CLAUDE.local.md` (for private notes) file. If the information is relevant for a subdirectory only, 
-place or update it in the `CLAUDE.md` file within that subdirectory. If it is structured information (e.g. relationship between classes, variables, or knockout observables, store it in "memory" - a model context protocol server for storing a knowledge graph)
+place or update it in the `CLAUDE.md` file within that subdirectory.
 
 When specific information belongs to a particular subcomponent, ensure you place it in the CLAUDE file for that component.
 For example: 
 * Information A belongs exclusively to writing html code with knockout bindings → put it in `templates/CLAUDE.md`
 * Information B belongs exclusively to programming in typescript → put it in `src/CLAUDE.md`
+* Information C belongs exclusively to testing -> ptu it in `tests/CLAUDE.md`
 
-This ensures important knowledge is retained and available in future sessions.
+This ensures important knowledge is retained and available in future sessions. 
+**Important**: Keept the information concise and compact. Provide a **summary** of the final architecture and encountered pitfalls.

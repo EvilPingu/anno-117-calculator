@@ -303,7 +303,12 @@ export class Consumer extends NamedElement{
                 this.workforceDemand.updateWorkforce(null);
             }
 
-            const percentBuff = this.buffs().reduce((a:number, b: AppliedBuff)=> a+b.workforceMaintenanceFactorUpgrade() , 0);
+            // Unwrap all workforceMaintenanceFactorUpgrade observables first to ensure proper dependency tracking
+            const allBuffs = this.buffs();
+            let percentBuff = 0;
+            for (const buff of allBuffs) {
+                percentBuff += buff.workforceMaintenanceFactorUpgrade();
+            }
             const factor = Math.max(0, percentBuff / 100 + 1);
             this.workforceDemand.boost(factor);
         });

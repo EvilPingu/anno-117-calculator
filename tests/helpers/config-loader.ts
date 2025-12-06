@@ -62,6 +62,7 @@ export class ConfigLoader {
 
     return {
       islandName: islandName,
+      islandNames: JSON.stringify([islandName]),
       versionCalculator: "1.0",
       tradeRoutes: "[]",
       collapsibleStates: "{}",
@@ -136,5 +137,71 @@ export class ConfigLoader {
     await page.addInitScript((isEnabled) => {
       localStorage.setItem('debug.enabled', isEnabled ? 'true' : 'false');
     }, enabled);
+  }
+
+  /**
+   * Sets a calculator setting in a config object
+   * @param config - Config object to modify
+   * @param settingKey - Setting key (e.g., "settings.showAllProducts")
+   * @param value - Setting value
+   */
+  setSetting(config: Record<string, any>, settingKey: string, value: string): void {
+    // Parse existing calculatorSettings if present
+    let settings: Record<string, string> = {};
+    if (config.calculatorSettings) {
+      try {
+        settings = JSON.parse(config.calculatorSettings);
+      } catch (e) {
+        // If parsing fails, start fresh
+        settings = {};
+      }
+    }
+
+    // Update the setting
+    settings[settingKey] = value;
+
+    // Serialize back to config
+    config.calculatorSettings = JSON.stringify(settings, null, 4);
+  }
+
+  /**
+   * Gets a calculator setting from a config object
+   * @param config - Config object
+   * @param settingKey - Setting key (e.g., "settings.showAllProducts")
+   * @returns The setting value or undefined if not found
+   */
+  getSetting(config: Record<string, any>, settingKey: string): string | undefined {
+    if (!config.calculatorSettings) {
+      return undefined;
+    }
+
+    try {
+      const settings = JSON.parse(config.calculatorSettings);
+      return settings[settingKey];
+    } catch (e) {
+      return undefined;
+    }
+  }
+
+  /**
+   * Gets a calculator setting value from the page's localStorage
+   * @param page - Playwright page instance
+   * @param settingKey - Setting key (e.g., "settings.showAllProducts")
+   * @returns The setting value or undefined if not found
+   */
+  async getSettingFromPage(page: Page, settingKey: string): Promise<string | undefined> {
+    return await page.evaluate((key) => {
+      const calculatorSettings = localStorage.getItem('calculatorSettings');
+      if (!calculatorSettings) {
+        return undefined;
+      }
+
+      try {
+        const settings = JSON.parse(calculatorSettings);
+        return settings[key];
+      } catch (e) {
+        return undefined;
+      }
+    }, settingKey);
   }
 }

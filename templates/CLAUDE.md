@@ -1,6 +1,7 @@
 # Template Design Guidelines for Anno Calculator
 
 ## UI Design Patterns (IMPLEMENTED)
+- **Dark mode support**: All product-tile classes have `.bg-dark .product-tile` variants in style.css
 
 ### Residents Display Guidelines
 When displaying resident counts in templates, follow these patterns:
@@ -114,6 +115,24 @@ When displaying resident counts in templates, follow these patterns:
 <asset-icon params="asset: $data.product"></asset-icon>
 ```
 
+**Error 2: Custom Click Handlers Interfering**
+```html
+<!-- WRONG - custom handler prevents Bootstrap behavior -->
+<button class="nav-link" data-toggle="tab" data-bind="click: customHandler">
+
+<!-- CORRECT - let Bootstrap handle tab switching -->
+<button class="nav-link" data-toggle="tab">
+```
+
+**Error 3: Wrong Attribute for Buttons**
+```html
+<!-- WRONG - buttons should use data-target, not href -->
+<button data-toggle="tab" href="#tab-id">
+
+<!-- CORRECT -->
+<button data-toggle="tab" data-target="#tab-id">
+````
+
 ### Key Points
 1. **Always use colon**: `params: {key: value}` not `params={key: value}`
 2. **No quotes on property names**: `{supplier: $data}` not `{'supplier': $data}`
@@ -183,88 +202,45 @@ When enabled, debug bindings log to console with `[DebugKO]` prefix:
 
 ## External Link Component (IMPLEMENTED)
 
-### Purpose
-Provides language-aware external links to annolayouts.de resources with automatic language mapping.
+**Purpose**: Language-aware links to annolayouts.de (https://annolayouts.de/117/{lang}/{subpage})
 
-### Component Usage
-```html
-<!-- Basic usage -->
-<external-link params="subpage: 'research'"></external-link>
+**Usage**:
+- Direct: `<external-link params="subpage: 'research'"></external-link>`
+- Via collapsible: `<collapsible params="..., externalLink: 'research'">`
 
-<!-- In collapsible component -->
-<collapsible params="id: 'effects', heading: $root.texts.effects.name, externalLink: 'research'">
-```
+**Language Mapping**: english→en, german→de, french→fr, spanish→es, italian→it, russian→ru, simplified/traditional_chinese→cn, korean→kr, polish/brazilian/japanese→en (fallback)
 
-### Language Mapping
-The component maps calculator language codes to annolayouts.de URL codes:
-- english → en
-- german → de
-- french → fr
-- spanish → es
-- italian → it
-- russian → ru
-- simplified_chinese → cn
-- traditional_chinese → cn
-- korean → kr
-- polish → en (fallback)
-- brazilian → en (fallback)
-- japanese → en (fallback)
+**CORS Note**: No URL existence checking (CORS restrictions). User gets 404 on annolayouts.de if page doesn't exist.
 
-### URL Structure
-Generated URLs follow the pattern: `https://annolayouts.de/117/{langCode}/{subpage}`
+**Implementation**: src/components.ts:725-764 (component), :450-539 (collapsible integration)
 
-Examples:
-- English: `https://annolayouts.de/117/en/research`
-- German: `https://annolayouts.de/117/de/research`
-- Chinese: `https://annolayouts.de/117/cn/research`
+## Registered Components (src/components.ts)
 
-### CORS Limitations
-**Important**: URL existence checking via fetch() is not possible due to CORS restrictions. The component always displays the link without verifying the page exists. This is acceptable as:
-1. User gets 404 page on annolayouts.de if page doesn't exist
-2. External links are expected to navigate away from calculator
-3. Alternative: Server-side checking would require backend infrastructure
+**Input/UI Controls**:
+- `number-input-increment` - Numeric input with +/- buttons
+- `notes-section` - Notes textarea with toggle
+- `lock-toggle` - Lock/unlock toggle button
+- `icon-checkbox` - Checkbox with icon label
+- `constructed-buildings-input` - Building count input
 
-### Tooltip Text
-Uses `$root.texts.showInformation.name` from params.js (not i18n.ts) for the tooltip.
+**Asset Display**:
+- `asset-icon` - Asset icon with name/tooltip
+- `factory-header` - Factory tile header
+- `residence-label` - Residence name/icon
+- `residence-effect-entry` - Residence need effect display
+- `buff-display` - Buff/item effect display
 
-### Integration with Collapsible Component
-The collapsible component accepts an optional `externalLink` parameter:
-```typescript
-// In collapsible viewModel
-this.externalLink = params.externalLink;
-this.hasExternalLink = this.externalLink != null;
-```
+**Supplier/Trade**:
+- `btn-default-supplier` - Default supplier button
+- `trade-route-amount` - Trade route amount input
+- `additional-output` - Extra good production display
 
-Template rendering:
-```html
-<!-- ko if: hasExternalLink -->
-    <external-link params="subpage: externalLink"></external-link>
-<!-- /ko -->
-```
+**Consumer/Demand**:
+- `consumer-unknown`, `consumer-residence`, `consumer-factory`, `consumer-module` - Consumer type components
+- `consumer-entry` - Single consumer entry
+- `consumer-view` - Consumer list view
+- `replacement` - Residence replacement info
 
-### Styling
-- Icon: Font Awesome `fa-external-link`
-- Size: `font-size: 0.8em` (80% of heading size)
-- Spacing: `ml-2` (left margin)
-- Target: `_blank` with `rel="noopener noreferrer"`
-
-### Examples in Use
-1. **Effects Dialog** (effects-dialog.html):
-   ```html
-   <h4>
-       <span data-bind="text: $root.texts.effects.name">Effect</span>
-       <external-link params="subpage: 'research'"></external-link>
-   </h4>
-   ```
-
-2. **Via Collapsible** (potential usage):
-   ```html
-   <collapsible params="id: 'category-id',
-                         heading: category.name,
-                         externalLink: 'buildings'">
-   ```
-
-### Implementation Location
-- **Component Registration**: `src/components.ts:725-764`
-- **Collapsible Integration**: `src/components.ts:450-539`
-- **Usage Example**: `templates/effects-dialog.html:7`
+**Layout**:
+- `collapsible` - Collapsible section with optional external link
+- `external-link` - Language-aware external links

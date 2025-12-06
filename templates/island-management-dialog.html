@@ -90,9 +90,15 @@
                                 </div>
                             </td>
                             <td>
+                                <span class="ui-tier-unit-icon" data-bind="with: $data.selectedPatron()">
+                                    <img class="icon-sm" src="../icons/icon_marketplace_2d_light.png" data-bind="attr: { src: $data.icon ? $data.icon : null, alt: $data.name, title: $data.name }">
+
+                                </span>
+                            </td>
+                            <td>
                                 <div class="inline-list">
                                     <span class="mr-3">
-                                        <img class="icon-sm" src="../icons/icon_residence.png">
+                                        <img class="icon-sm" src="../icons/icon_3d_population.webp">
                                     </span>
                                     <span data-bind="if: !$data.top2Population().length">0</span>
                                     <!-- ko foreach: $data.top2Population -->
@@ -109,7 +115,7 @@
                             <td>
                                 <div class="inline-list">
                                     <span class="mr-3">
-                                        <img class="icon-sm" src="../icons/icon_resource_storage_amount.png">
+                                        <img class="icon-sm" src="../icons/icon_3d_construction_main_group_construction_0.webp">
                                     </span>
                                     <span data-bind="if: !$data.top5Factories().length">0</span>
                                     <!-- ko foreach: $data.top5Factories -->

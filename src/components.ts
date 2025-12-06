@@ -322,7 +322,7 @@ ko.components.register('residence-effect-entry', {
                     <span data-bind="text: '+' + residents"></span>
                 </div>
                 <div class="inline-list" data-bind="if: suppliedBy.length !== 0">
-                    <img class="icon-sm icon-light ml-1" src="icons/icon_transfer_goods_light.png" data-bind="attr: {title: $parent.texts.bonusSupply.name}">
+                    <img class="icon-sm icon-light ml-1" src="icons/icon_2d_generic_good_exchange_0.webp" data-bind="attr: {title: $parent.texts.bonusSupply.name}">
                     <div class="inline-list" data-bind="foreach: {data: suppliedBy, as: 'product'}">
                         <span data-bind="debug: 'Supplied by', component: {name: 'asset-icon', params: product}"></span>
                     </div>
@@ -429,7 +429,7 @@ ko.components.register('additional-output', {
         this.texts = window.view.texts;
     }, template:
         `<div data-bind="debug: 'Additional output', src: { title: texts.extraGoods.name}">
-            <img class="icon-sm icon-light mr-2" src="icons/icon_add_goods_socket_white.png"/>
+            <img class="icon-sm icon-light mr-2" src="icons/icon_extra_goods.webp"/>
             <span data-bind="text: formatNumber(amount()) + ' t/min'"></span>
         </div>`
 });
@@ -706,7 +706,7 @@ ko.components.register('buff-display', {
             <!-- extra goods -->
             <span data-bind="debug: 'additional outputs', if: $data.additionalOutputs && $data.additionalOutputs.length">
                 <span class="inline-list-centered">
-                    <img class="icon-sm icon-light mr-2" src="icons/icon_add_goods_socket_white.png" />
+                    <img class="icon-sm icon-light mr-2" src="icons/icon_extra_goods.webp" />
                     <!-- ko foreach: $data.additionalOutputs -->
                     <span style="flex: 100 1 auto;"></span>
                     <span style="flex: auto;" data-bind="debug: 'Product', if: !!$data.product && $data.product.available()">

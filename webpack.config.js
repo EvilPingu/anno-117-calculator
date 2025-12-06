@@ -32,7 +32,12 @@ module.exports = {
   devServer: {
     static: {
       directory: __dirname,
-      watch: true,
+      watch: {
+        ignored: ['**/node_modules/**', '**/test-results/**', '**/dist/**']
+      },
+      staticOptions: {
+        ignore: ['**/test-results/**']
+      }
     },
     compress: true,
     port: 8080,
@@ -47,5 +52,8 @@ module.exports = {
   },
   optimization: {
 	  minimize: true
+  },
+  watchOptions: {
+    ignored: ['**/node_modules/**', '**/test-results/**']
   }
 };
