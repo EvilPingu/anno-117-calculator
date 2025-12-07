@@ -107,9 +107,6 @@ export class Product extends NamedElement {
                 return this.totalDemand() > this.totalCurrentProduction();
             }
 
-            if(supplier.type != "factory")
-                return false;
-
             // Check Factory suppliers
             if(supplier.type === "factory")
                 return (supplier as Factory).isHighlightedAsMissing();

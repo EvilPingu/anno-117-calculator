@@ -69,7 +69,7 @@ export class TradeRoute implements Supplier {
         this.product = toIslandProduct;
 
         this.userSetAmount = createFloatInput(userSetAmount, 0);
-        this.amount = ko.observable(userSetAmount);
+        this.amount = ko.observable(0);
 
         this.active = ko.observable(true);
     }
