@@ -1,6 +1,6 @@
 import { NamedElement, EPSILON, ko, dummyObservableArray, dummyComputed, getForcedDefaultSupplier } from './util';
 import {  AssetsMap } from './types';
-import { ProductConfig, BuildingBuffConfig, PatronsConfig, EffectConfig, ItemConfig, ProductFilterConfig } from './types.config';
+import { ProductConfig, BuildingBuffConfig, PatronsConfig, EffectConfig, ItemConfig, ProductFilterConfig, FertilityConfig } from './types.config';
 import { Workforce } from './population';
 import { Region, Constructible, isConstructible, Island } from './world';
 
@@ -386,7 +386,7 @@ export class MetaProduct extends NamedElement {
             name: config.name,
             locaText: config.locaText || {},
             iconPath: config.iconPath || "",
-            dlcs: []
+            dlcUnlocks: []
         };
         
         super(parentConfig);
@@ -473,7 +473,7 @@ export class ProductCategory extends NamedElement {
             guid: config.guid,
             locaText: config.locaText || {},
             iconPath: config.iconPath || "",
-            dlcs: []
+            dlcUnlocks: []
         };
         
         super(parentConfig);
@@ -489,6 +489,18 @@ export class ProductCategory extends NamedElement {
             }
             return product;
         }).filter((p: any) => p != null && p instanceof Product);
+    }
+}
+
+/**
+ * Represents a fertility or deposit type required by farms/mines
+ */
+export class Fertility extends NamedElement {
+    public guid: number;
+
+    constructor(config: FertilityConfig) {
+        super(config);
+        this.guid = config.guid;
     }
 }
 
@@ -519,6 +531,8 @@ export class Buff extends NamedElement {
         amount: number;
     }[];
     public additionalWorkforces?: Workforce[];
+    public addedFertility?: Fertility;
+    public fertilityPercent: number;
 
     /**
      * Creates a new Buff instance
@@ -542,7 +556,15 @@ export class Buff extends NamedElement {
         this.productivityUpgrade = config.productivityUpgrade;
         this.fuelDurationPercent = config.fuelDurationPercent;
         this.workforceMaintenanceFactorUpgrade = config.workforceMaintenanceFactorUpgrade;
-        
+        this.fertilityPercent = config.fertilityPercent ?? 0;
+
+        if (config.addedFertility) {
+            const fertility = _assetsMap.get(config.addedFertility);
+            if (fertility instanceof Fertility) {
+                this.addedFertility = fertility;
+            }
+        }
+
         // Look up workforce replacements
         if (config.replaceWorkforce.oldWorkforce != 0){
             const newWorkforce = _assetsMap.get(config.replaceWorkforce.newWorkforce);

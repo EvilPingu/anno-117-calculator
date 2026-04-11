@@ -14,7 +14,7 @@ import {
 } from './types.config';
 
 import { Workforce, ResidenceBuilding, PopulationLevel, PopulationGroup } from './population';
-import { Product, MetaProduct, Item, ProductCategory, AppliedBuff, Buff, Effect, Patron } from './production';
+import { Product, MetaProduct, Item, ProductCategory, AppliedBuff, Buff, Effect, Patron, Fertility } from './production';
 import { PublicConsumerBuilding, Factory, Consumer } from './factories';
 import { ResidenceEffectView } from './views';
 import { Need, NeedCategory, RecipeList, } from './consumption';
@@ -621,6 +621,7 @@ export class Island {
         var persistInt: (obj: any, attributeName: string, storageName?: string) => void;
         var persistFloat: (obj: any, attributeName: string, storageName?: string) => void;
         var persistString: (obj: any, attributeName: string, storageName?: string) => void;
+        var persistNeedChecked: (need: any, storageKey: string) => void;
         var persistBuildings: (obj: any) => void;
 
         if (localStorage) {
@@ -690,8 +691,32 @@ export class Island {
                 persistBool(obj.buildings as BuildingsCalc, "fullyUtilizeConstructed", obj.guid + ".buildings.fullyUtilizeConstructed");
             }
 
+            persistNeedChecked = (need: any, storageKey: string) => {
+                // Initial load: skip restoring when need is DLC-locked
+                if (need.available()) {
+                    if (localStorage.getItem(storageKey) != null)
+                        need.checked(parseInt(localStorage.getItem(storageKey)));
+                }
+
+                // Write only when available
+                need.checked.subscribe((val: boolean) => {
+                    if (need.available())
+                        localStorage.setItem(storageKey, val ? "1" : "0");
+                });
+
+                // React to DLC toggle
+                need.available.subscribe((isAvailable: boolean) => {
+                    if (isAvailable) {
+                        if (localStorage.getItem(storageKey) != null)
+                            need.checked(parseInt(localStorage.getItem(storageKey)));
+                        else
+                            need.checked(view.islandManager.activateAllNeeds.checked());
+                    }
+                });
+            };
+
         } else {
-            persistBool = persistInt = persistFloat = persistString = persistBuildings = () => { };
+            persistBool = persistInt = persistFloat = persistString = persistBuildings = persistNeedChecked = () => { };
         }
 
         // objects
@@ -772,6 +797,11 @@ export class Island {
         //     if (!list.region || !this.region || list.region === this.region.guid)
         //         this.recipeLists.push(new RecipeList(list, assetsMap, this));
         // }
+
+        for (let f of (params.fertilities || [])) {
+            let fertility = new Fertility(f);
+            assetsMap.set(fertility.guid, fertility);
+        }
 
         for (let buff of (params.buildingBuffs || [])) {
             let b = new Buff(buff, assetsMap);
@@ -1075,7 +1105,7 @@ export class Island {
         // Persist population-level needs instead of residence-level needs
         for (let populationLevel of this.populationLevels) {
             for (let need of populationLevel.needs) {
-                persistBool(need, "checked", `${populationLevel.guid}[${need.need.guid}].checked`);
+                persistNeedChecked(need, `${populationLevel.guid}[${need.need.guid}].checked`);
                 persistString(need, "notes", `${populationLevel.guid}[${need.need.guid}].notes`);
             }
         }

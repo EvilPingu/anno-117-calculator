@@ -20,6 +20,20 @@ export const languageCodes: Record<string, string> = {
 
 export const texts: Record<string, Record<string, string>> = {
 
+    fertility: {
+        english: "Required Fertility",
+        french: "Fertilité requise",
+        polish: "Wymagana żyzność",
+        spanish: "Fertilidad requerida",
+        italian: "Fertilità richiesta",
+        german: "Benötigte Fruchtbarkeit",
+        brazilian: "Fertilidade necessária",
+        russian: "Требуемое плодородие",
+        simplified_chinese: "所需肥力",
+        traditional_chinese: "所需肥力",
+        japanese: "必要な肥沃度",
+        korean: "필요한 토지 비옥도"
+    },
     workforce: {
         english: "Required Workforce",
         french: "Main-d'œuvre requise",

@@ -733,6 +733,11 @@ ko.components.register('buff-display', {
             <div data-bind="debug: 'replace workforce', if: $data.replaceWorkforce">
                 <replacement params="{old: $data.replaceWorkforce.oldWorkforce, new: $data.replaceWorkforce.newWorkforce}"></replacement>
             </div>
+            <!-- fertility buff -->
+            <div data-bind="if: $data.addedFertility" class="inline-list-centered">
+                <span data-bind="text: formatNumber($data.fertilityPercent, true) + ' %'"></span>
+                <img class="icon-sm ml-1" data-bind="attr: { src: $data.addedFertility && $data.addedFertility.icon ? $data.addedFertility.icon : null, alt: $data.addedFertility && $data.addedFertility.name, title: $data.addedFertility && $data.addedFertility.name }">
+            </div>
         </div>`
 });
 

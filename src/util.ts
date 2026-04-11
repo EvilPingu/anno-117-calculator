@@ -321,8 +321,23 @@ export class NamedElement {
         }
 
         // Set up DLC management
-        this.available = ko.pureComputed(() => true);
         this.dlcLockingObservables = [];
+
+        if (config.dlcUnlocks && config.dlcUnlocks.length > 0) {
+            const dlcsGuidMap: Map<number, DLC> | undefined = (window as any).view?.dlcsGuidMap;
+            if (dlcsGuidMap) {
+                this.dlcs = config.dlcUnlocks
+                    .map(guid => dlcsGuidMap.get(guid))
+                    .filter((d): d is DLC => d != null);
+            }
+        }
+
+        if (this.dlcs && this.dlcs.length > 0) {
+            const dlcs = this.dlcs;
+            this.available = ko.pureComputed(() => dlcs.some(d => d.checked()));
+        } else {
+            this.available = ko.pureComputed(() => true);
+        }
     }
 
     /**
@@ -330,7 +345,7 @@ export class NamedElement {
      * @param obs - The observable to lock
      */
     lockDLCIfSet(obs: any): void {
-        if (!this.dlcs || this.dlcs.length !== 1) {
+        if (!this.dlcs || this.dlcs.length !== 1 || typeof obs !== 'function') {
             return;
         }
 

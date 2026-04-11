@@ -110,12 +110,6 @@ export class ViewMode {
         for (var dlc of view.dlcs.values()) {
             dlc.checked(true);
         }
-
-        for (var dlcIndex of [0, 2, 8, 11]) {
-            var d = view.dlcsMap.get("dlc" + dlcIndex);
-            if (d)
-                d.checked(false);
-        }
     }
 
     /**

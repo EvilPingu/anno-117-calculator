@@ -1,6 +1,15 @@
 // Generated TypeScript interfaces from params.schema.json
 // This file contains configuration interfaces for Anno 117 calculator parameters
 
+// Fertility configuration interface
+export interface FertilityConfig {
+  guid: number;
+  name: string;
+  iconPath: string;
+  locaText: LocaTextConfig;
+  dlcUnlocks?: number[];
+}
+
 // Common interface for localized text
 export interface LocaTextConfig {
   english: string;
@@ -94,6 +103,7 @@ export interface NeedConfig {
     [key: string]: number; // Allow string indexing
   };
   locaText?: LocaTextConfig;
+  dlcUnlocks?: number[];
 }
 
 // PopulationGroup configuration interface
@@ -129,6 +139,7 @@ export interface PopulationLevelConfig {
   connectedWorkforce: number;
   populationToWorkforceFactor: number;
   associatedRegions: string[];
+  dlcUnlocks?: number[];
 }
 
 // Product configuration interface
@@ -140,6 +151,7 @@ export interface ProductConfig {
   isAbstract: boolean;
   isConstructionMaterial: boolean;
   associatedRegions?: string[];
+  dlcUnlocks?: number[];
 }
 
 // Workforce configuration interface
@@ -177,6 +189,7 @@ export interface FactoryConfig {
   }[];
   cycleTime: number;
   modulesLimit: number;
+  neededFertility?: number;
   inputs?: {
     product: number;
     amount: number;
@@ -184,6 +197,7 @@ export interface FactoryConfig {
   buffs?: number[];
   aqueductProductivityBuff?: number;
   additionalModule?: number;
+  dlcUnlocks?: number[];
 }
 
 // Module configuration interface
@@ -230,6 +244,9 @@ export interface BuildingBuffConfig {
     newInput: number;
     oldInput: number;
   }[];
+  addedFertility?: number;
+  fertilityPercent?: number;
+  dlcUnlocks?: number[];
 }
 
 // Effect configuration interface
@@ -245,6 +262,7 @@ export interface EffectConfig {
   excludeEffectSourceGUID: boolean;
   effectDuration: number;
   source: string;
+  dlcUnlocks?: number[];
 }
 
 // Tech configuration interface
@@ -255,6 +273,7 @@ export interface TechConfig {
   locaText: LocaTextConfig;
   effects: number[];
   isRepeatable: boolean;
+  dlcUnlocks?: number[];
 }
 
 // Patrons configuration interface
@@ -281,6 +300,7 @@ export interface ItemConfig {
   effectScope: string;
   excludeEffectSourceGUID: boolean;
   rarity: string;
+  dlcUnlocks?: number[];
 }
 
 // Icon configuration interface
@@ -294,6 +314,13 @@ export interface TextConfig {
   name: string;
   lineID: number;
   locaText: LocaTextConfig;
+}
+
+export interface DLCParamConfig {
+  guid: number;
+  name: string;
+  iconPath: string;
+  id: string;
 }
 
 // Root configuration interface combining all parameter types
@@ -314,6 +341,7 @@ export interface ParamsConfig {
   productFilters: ProductFilterConfig[];
   factories: FactoryConfig[];
   modules: ModuleConfig[];
+  fertilities?: FertilityConfig[];
   buildingBuffs: BuildingBuffConfig[];
   effects: EffectConfig[];
   techs: TechConfig[];
@@ -321,4 +349,5 @@ export interface ParamsConfig {
   items: ItemConfig[];
   icons: IconConfig;
   texts: TextConfig[];
+  dlcs?: DLCParamConfig[];
 }

@@ -49,6 +49,7 @@ window.view = {
     texts: {},
     dlcs: [],
     dlcsMap: new Map(),
+    dlcsGuidMap: new Map(),
     // Add missing properties that are referenced in the original code
     globalEffects: [] as Effect[],
     selectedFactory: ko.observable(null),
@@ -347,6 +348,7 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
     // Set up DLCs
     window.view.dlcs = [];
     window.view.dlcsMap = new Map();
+    window.view.dlcsGuidMap = new Map();
 
     const settingsStorage = localStorage ? new SubStorage("calculatorSettings") : undefined;
     const sessionStorage = localStorage ? new SubStorage("sessionSettings") : undefined;
@@ -355,6 +357,7 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
         const d = new (require('./util').DLC)(dlc);
         window.view.dlcs.push(d);
         window.view.dlcsMap.set(d.id, d);
+        if (d.guid) window.view.dlcsGuidMap.set(d.guid, d);
         if (settingsStorage) {
             let id = d.id;
             if (settingsStorage.getItem(id) != null)

@@ -33,7 +33,8 @@
       "Bash(then cat .gitattributes)",
       "Bash(else echo \"File does not exist\")",
       "Bash(fi)",
-      "Bash(git config:*)"
+      "Bash(git config:*)",
+      "Bash(python -c ':*)"
     ],
     "deny": []
   },

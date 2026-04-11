@@ -1,6 +1,6 @@
 import { NamedElement, ACCURACY, EPSILON, ko, BuildingsCalc } from './util';
 import { Workforce, WorkforceDemand } from './population';
-import { Demand, Product, AqueductBuff, Item, Buff, ExtraGoodProduction } from './production';
+import { Demand, Product, AqueductBuff, Item, Buff, ExtraGoodProduction, Fertility } from './production';
 import { AppliedBuff } from './buffs';
 import {
     ConsumerConfig,
@@ -131,7 +131,6 @@ export class Consumer extends NamedElement{
         this.buildingsSubscription = ko.computed(() => {        
             this.buildings.required(this.throughput() / 60 * this.cycleTime / this.boost());
         }).extend({ deferred: true });
-        this.lockDLCIfSet(this.buildings);
 
         this.defaultInputs = new Map();
         if (config.inputs) {
@@ -492,6 +491,7 @@ export class Factory extends Consumer implements Supplier {
 
     // === FACTORY IDENTIFICATION ===
     public isFactory: boolean;                              // Always true for Factory instances
+    public neededFertility?: Fertility;                     // Fertility/deposit required to operate
 
     // === PRODUCTION OUTPUTS ===
     public outputs: Product[];                              // Products this factory produces
@@ -525,6 +525,14 @@ export class Factory extends Consumer implements Supplier {
         
         // Explicit assignments
         this.isFactory = true;
+
+        if (config.neededFertility) {
+            const fertility = assetsMap.get(config.neededFertility);
+            if (fertility instanceof Fertility) {
+                this.neededFertility = fertility;
+            }
+        }
+
         this.outputs = []
         for (let entry of config.outputs) {
             const product = assetsMap.get(entry.product);
