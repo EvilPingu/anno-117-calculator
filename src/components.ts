@@ -274,7 +274,7 @@ ko.components.register('factory-header', {
 
         <div class="ui-fchain-item-icon mb-2">
             <img class="icon-tile" data-bind="attr: { src: $data.icon ? $data.icon : null, alt: $data.name }">
-            <img class="superscript-icon icon-light" data-bind="visible: $data.island.region.id == 'Meta', attr: {src: $data.associatedRegions[0] ? $data.associatedRegions[0].icon : null, title: $data.associatedRegions[0] ? $data.associatedRegions[0].name : null}">
+            <img class="superscript-icon icon-light" data-bind="visible: $data.island.region.id == 'Meta', attr: {src: $data.availableRegions()[0] ? $data.availableRegions()[0].icon : null, title: $data.availableRegions()[0] ? $data.availableRegions()[0].name : null}">
         </div>`
 });
 

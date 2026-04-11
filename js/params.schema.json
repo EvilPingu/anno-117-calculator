@@ -1892,7 +1892,7 @@
         ]
       },
       "title": "AreaBuff",
-      "description": "Area buff assets that add a fertility to a whole region."
+      "description": "Area buff assets that add a fertility to all buildings in range."
     },
     "effects": {
       "type": "array",

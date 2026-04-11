@@ -14,7 +14,7 @@ import {
 } from './types.config';
 
 import { Workforce, ResidenceBuilding, PopulationLevel, PopulationGroup } from './population';
-import { Product, MetaProduct, Item, ProductCategory, AppliedBuff, Buff, Effect, Patron, Fertility } from './production';
+import { Product, MetaProduct, Item, ProductCategory, AppliedBuff, Buff, Effect, Patron, Fertility, AreaBuff, IslandFertility } from './production';
 import { PublicConsumerBuilding, Factory, Consumer } from './factories';
 import { ResidenceEffectView } from './views';
 import { Need, NeedCategory, RecipeList, } from './consumption';
@@ -166,6 +166,10 @@ export class Region extends NamedElement {
         
         super(regionConfig);
         this.guid = regionConfig.guid;
+
+        if (config.iconPath && window.params && window.params.icons) {
+            this.icon = window.params.icons[config.iconPath];
+        }
     }
 }
 
@@ -528,6 +532,10 @@ export class Island {
     public factories: Factory[];
     public categories: ProductCategory[];
     public multiFactoryProducts: Product[];
+    public islandFertilities: Map<number, IslandFertility>;
+    public areaBuffs: AreaBuff[];
+    public allFertilitiesSet: KnockoutComputed<boolean>;
+    public fertilitiesExpanded: KnockoutObservable<boolean>;
     public items: Item[];
     public replaceInputItems: Item[];
     public extraGoodItems: Item[];
@@ -798,10 +806,41 @@ export class Island {
         //         this.recipeLists.push(new RecipeList(list, assetsMap, this));
         // }
 
+        const islandFertilityConfigs: Fertility[] = [];
         for (let f of (params.fertilities || [])) {
             let fertility = new Fertility(f);
             assetsMap.set(fertility.guid, fertility);
+            islandFertilityConfigs.push(fertility);
         }
+
+        // New: per-island AreaBuff instances
+        this.areaBuffs = [];
+        for (const abConfig of (params.areaBuffs || [])) {
+            const ab = new AreaBuff(abConfig, assetsMap);
+            this.areaBuffs.push(ab);
+            assetsMap.set(ab.guid, ab);
+        }
+
+        // New: per-island IslandFertility instances, region-filtered
+        this.islandFertilities = new Map();
+        if (!this.isAllIslands()) {
+            for (const fertility of islandFertilityConfigs) {
+                if (fertility.regions.length > 0 && !fertility.regions.includes(this.region.id || ''))
+                    continue;
+                this.islandFertilities.set(
+                    fertility.guid,
+                    new IslandFertility(fertility, this.areaBuffs)
+                );
+            }
+        }
+
+        this.allFertilitiesSet = ko.pureComputed(() => {
+            for (const [, f] of this.islandFertilities) {
+                if (!f.checked()) return false;
+            }
+            return true;
+        });
+        this.fertilitiesExpanded = ko.observable(false);
 
         for (let buff of (params.buildingBuffs || [])) {
             let b = new Buff(buff, assetsMap);
@@ -944,6 +983,15 @@ export class Island {
             this.extraGoodItems.sort((a, b) => a.name().localeCompare(b.name()));
         });
 
+
+        if (localStorage) {
+            for (const [guid, islandFertility] of this.islandFertilities) {
+                persistBool(islandFertility, "checked", `island.fertility.${guid}.checked`);
+            }
+            for (const areaBuff of this.areaBuffs) {
+                persistFloat(areaBuff, "scaling", `island.areaBuff.${areaBuff.guid}.scaling`);
+            }
+        }
 
         this.consumers.forEach(f => {
             f.initDemands(assetsMap);
@@ -1208,6 +1256,10 @@ export class Island {
             }
         }
                 
+    }
+
+    getIslandFertility(guid: number): IslandFertility | undefined {
+        return this.islandFertilities?.get(guid);
     }
 } 
 

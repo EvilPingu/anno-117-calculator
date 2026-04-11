@@ -1,6 +1,6 @@
 import { NamedElement, EPSILON, ko, dummyObservableArray, dummyComputed, getForcedDefaultSupplier } from './util';
 import {  AssetsMap } from './types';
-import { ProductConfig, BuildingBuffConfig, PatronsConfig, EffectConfig, ItemConfig, ProductFilterConfig, FertilityConfig } from './types.config';
+import { ProductConfig, BuildingBuffConfig, PatronsConfig, EffectConfig, ItemConfig, ProductFilterConfig, FertilityConfig, AreaBuffConfig } from './types.config';
 import { Workforce } from './population';
 import { Region, Constructible, isConstructible, Island } from './world';
 
@@ -70,6 +70,7 @@ export class Product extends NamedElement {
             name: config.name,
             locaText: config.locaText || {},
             iconPath: config.iconPath || "",
+            dlcUnlocks: config.dlcUnlocks || []
         };
         
         super(parentConfig);
@@ -386,7 +387,7 @@ export class MetaProduct extends NamedElement {
             name: config.name,
             locaText: config.locaText || {},
             iconPath: config.iconPath || "",
-            dlcUnlocks: []
+            dlcUnlocks: config.dlcUnlocks || []
         };
         
         super(parentConfig);
@@ -473,7 +474,7 @@ export class ProductCategory extends NamedElement {
             guid: config.guid,
             locaText: config.locaText || {},
             iconPath: config.iconPath || "",
-            dlcUnlocks: []
+            dlcUnlocks: (config as any).dlcUnlocks
         };
         
         super(parentConfig);
@@ -497,10 +498,12 @@ export class ProductCategory extends NamedElement {
  */
 export class Fertility extends NamedElement {
     public guid: number;
+    public regions: string[];
 
     constructor(config: FertilityConfig) {
         super(config);
         this.guid = config.guid;
+        this.regions = config.regions || [];
     }
 }
 
@@ -626,6 +629,59 @@ export class Buff extends NamedElement {
                 return workforce as Workforce;
             });
         }
+    }
+}
+
+/**
+ * Represents an island-wide structure that artificially adds fertility
+ */
+export class AreaBuff extends Buff {
+    public scaling: KnockoutObservable<number>;
+
+    constructor(config: AreaBuffConfig, assetsMap: AssetsMap) {
+        const buffConfig: BuildingBuffConfig = {
+            guid: config.guid,
+            name: config.name,
+            iconPath: config.iconPath,
+            locaText: config.locaText,
+            isStackable: false,
+            baseProductivityUpgrade: 0,
+            workforceModifierInPercent: 0,
+            productivityUpgrade: 0,
+            fuelDurationPercent: 0,
+            replaceWorkforce: { newWorkforce: 0, oldWorkforce: 0 },
+            workforceMaintenanceFactorUpgrade: 0,
+            fertilityPercent: config.fertilityPercent,
+            addedFertility: config.addedFertility
+        };
+        super(buffConfig, assetsMap);
+        this.scaling = ko.observable(0);
+    }
+}
+
+/**
+ * Represents the fertility state on a specific island
+ */
+export class IslandFertility {
+    public fertility: Fertility;
+    public checked: KnockoutObservable<boolean>;
+    public factor: KnockoutComputed<number>;
+
+    constructor(fertility: Fertility, islandAreaBuffs: AreaBuff[]) {
+        this.fertility = fertility;
+        this.checked = ko.observable(true);
+
+        const relevantBuffs = islandAreaBuffs.filter(b => b.addedFertility?.guid === fertility.guid);
+
+        this.factor = ko.pureComputed(() => {
+            if (this.checked()) return 1.0;
+            
+            let total = 0;
+            for (const buff of relevantBuffs) {
+                if (buff.scaling() > 0) total += buff.fertilityPercent;
+            }
+            return Math.min(1.0, total / 100);
+        });
     }
 }
 

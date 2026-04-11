@@ -23,28 +23,6 @@ if(window.params == null)window.params={
       "name": "TechEffect Fertility Mackerel Buff"
     },
     {
-      "addedFertility": 2202,
-      "dlcUnlocks": [],
-      "fertilityPercent": 50,
-      "guid": 38420,
-      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_flax_goods.png",
-      "locaText": {
-        "brazilian": "Trama Latina",
-        "english": "Latin Weave",
-        "french": "Tissage latin",
-        "german": "Lateinische Webmuster",
-        "italian": "Tessuto latino",
-        "japanese": "​ラテン​織",
-        "korean": "​라틴식 ​직조",
-        "polish": "Łacińska tkanina",
-        "russian": "Латинский лен",
-        "simplified_chinese": "​拉丁​编织​技法",
-        "spanish": "Hilado latino",
-        "traditional_chinese": "​拉丁​編織​技法"
-      },
-      "name": "TechEffect Fertility Flax Buff"
-    },
-    {
       "addedFertility": 2205,
       "dlcUnlocks": [],
       "fertilityPercent": 50,
@@ -89,28 +67,6 @@ if(window.params == null)window.params={
       "name": "TechEffect Fertility Iron Buff"
     },
     {
-      "addedFertility": 4052,
-      "dlcUnlocks": [],
-      "fertilityPercent": 50,
-      "guid": 38414,
-      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_cypress_wood_goods.png",
-      "locaText": {
-        "brazilian": "Resinagem Natural",
-        "english": "Natural Resinance",
-        "french": "Essence résineuse",
-        "german": "Harzlich",
-        "italian": "Resina naturale",
-        "japanese": "​自然​の​共鳴",
-        "korean": "​자연의 ​수지 ​생산력",
-        "polish": "Naturalna żywica",
-        "russian": "Природная смолистость",
-        "simplified_chinese": "​自然​共振",
-        "spanish": "Resinencia natural",
-        "traditional_chinese": "​自然​共振"
-      },
-      "name": "TechEffect Fertility Sandarac Buff"
-    },
-    {
       "addedFertility": 32027,
       "dlcUnlocks": [],
       "fertilityPercent": 50,
@@ -131,94 +87,6 @@ if(window.params == null)window.params={
         "traditional_chinese": "​金​雀​濾​溝"
       },
       "name": "TechEffect Fertility Gold Buff"
-    },
-    {
-      "addedFertility": 2210,
-      "dlcUnlocks": [],
-      "fertilityPercent": 50,
-      "guid": 38413,
-      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_olive_oil_goods.png",
-      "locaText": {
-        "brazilian": "Sabedoria do Olivicultor",
-        "english": "Olive-Grower Wisdom",
-        "french": "Sagesse de l'oléiculteur",
-        "german": "Olivenbauernweisheit",
-        "italian": "La saggezza dell'olivicoltore",
-        "japanese": "​オリーブ​農家​の​知恵",
-        "korean": "​올리브 ​재배자의 ​지혜",
-        "polish": "Wiedza o uprawie oliwek",
-        "russian": "Познание выращивания оливок",
-        "simplified_chinese": "​橄榄​种植​者​的​智慧",
-        "spanish": "Sabiduría aceitunera",
-        "traditional_chinese": "​橄欖​種植​者​的​智慧"
-      },
-      "name": "TechEffect Fertility Olives Buff"
-    },
-    {
-      "addedFertility": 2212,
-      "dlcUnlocks": [],
-      "fertilityPercent": 50,
-      "guid": 38422,
-      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_barley_goods.png",
-      "locaText": {
-        "brazilian": "Cevada Selvagem",
-        "english": "Wild Barley",
-        "french": "Orge sauvage",
-        "german": "Wildgerste",
-        "italian": "Orzo selvatico",
-        "japanese": "​野生​の​大麦",
-        "korean": "​야생 ​보리",
-        "polish": "Dziki jęczmień",
-        "russian": "Дикий ячмень",
-        "simplified_chinese": "​野生​大麦",
-        "spanish": "Cebada salvaje",
-        "traditional_chinese": "​野生​大麥"
-      },
-      "name": "TechEffect Fertility Barley Buff"
-    },
-    {
-      "addedFertility": 2214,
-      "dlcUnlocks": [],
-      "fertilityPercent": 50,
-      "guid": 38421,
-      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_herbs_goods.png",
-      "locaText": {
-        "brazilian": "Herbalismo Celta",
-        "english": "Celtic Herbalism",
-        "french": "Herbaliste celte",
-        "german": "Keltische Kräuterkunde",
-        "italian": "Erboristeria celtica",
-        "japanese": "​ケルト​の​薬草​学",
-        "korean": "​켈트 ​약초학",
-        "polish": "Celtyckie zielarstwo",
-        "russian": "Кельтское травничество",
-        "simplified_chinese": "​凯​尔​特​草药​学",
-        "spanish": "Herbología celta",
-        "traditional_chinese": "​凱​爾​特​草​藥學"
-      },
-      "name": "TechEffect Fertility Herbs Buff"
-    },
-    {
-      "addedFertility": 2218,
-      "dlcUnlocks": [],
-      "fertilityPercent": 50,
-      "guid": 38426,
-      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_samphire_goods.png",
-      "locaText": {
-        "brazilian": "Sabedoria da Barrilha",
-        "english": "Saltwort Wisdom",
-        "french": "Sagesse de salicorne",
-        "german": "Das Salz der Erde",
-        "italian": "La saggezza della salicornia",
-        "japanese": "​アッ​ケシ​ソウ​の​知恵",
-        "korean": "​함초 ​지혜",
-        "polish": "Znajomość solanki",
-        "russian": "Познание солероса",
-        "simplified_chinese": "​海​蓬​菜​智慧",
-        "spanish": "Sabiduría de salicornias",
-        "traditional_chinese": "​海​蓬​菜​智慧"
-      },
-      "name": "TechEffect Fertility Samphire Buff"
     }
   ],
   "buildingBuffs": [
@@ -8963,6 +8831,133 @@ if(window.params == null)window.params={
   "effects": [
     {
       "buffs": [
+        51796
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 0,
+      "effectScope": "AreasInMeta",
+      "excludeEffectSourceGUID": false,
+      "guid": 51795,
+      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_mackerels_goods.png",
+      "locaText": {
+        "brazilian": "Captura de Cavalas",
+        "english": "Mackerel Hauling",
+        "french": "Halage de maquereaux",
+        "german": "Makrelenfang",
+        "italian": "Trasporto degli sgombri",
+        "japanese": "​サバ​釣り",
+        "korean": "​고등어 ​어획",
+        "polish": "Połów makreli",
+        "russian": "Ловля скумбрии",
+        "simplified_chinese": "​鲭鱼​丰收",
+        "spanish": "Acumulación de caballas",
+        "traditional_chinese": "​鯖魚​豐收"
+      },
+      "name": "TechEffect Fertility Mackerel",
+      "source": "tech",
+      "targets": [
+        2956
+      ],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
+        30467
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 0,
+      "effectScope": "AreasInMeta",
+      "excludeEffectSourceGUID": false,
+      "guid": 38434,
+      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_grapes_goods.png",
+      "locaText": {
+        "brazilian": "Vino Veritas",
+        "english": "Vino Veritas",
+        "french": "Vino Veritas",
+        "german": "Vino Veritas",
+        "italian": "In vino veritas",
+        "japanese": "​真実​は​酒​の​中​に",
+        "korean": "​포도주와 ​진리",
+        "polish": "Vino Veritas",
+        "russian": "Vino Veritas",
+        "simplified_chinese": "​葡萄​美酒",
+        "spanish": "In vino veritas",
+        "traditional_chinese": "​葡萄​美酒"
+      },
+      "name": "TechEffect Fertility Grapes",
+      "source": "tech",
+      "targets": [
+        2694,
+        23723
+      ],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
+        38412
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 0,
+      "effectScope": "AreasInMeta",
+      "excludeEffectSourceGUID": false,
+      "guid": 38433,
+      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_iron_ore_goods.png",
+      "locaText": {
+        "brazilian": "Sangue da Terra",
+        "english": "Blood of Terra",
+        "french": "Sang de la Terre",
+        "german": "Blut von Terra",
+        "italian": "Sangue di Terra",
+        "japanese": "​大地​の​血",
+        "korean": "​대지의 ​피",
+        "polish": "Krew ziemi",
+        "russian": "Кровь Терры",
+        "simplified_chinese": "​大地​之​血",
+        "spanish": "Sangre de Tierra",
+        "traditional_chinese": "​大地​之​血"
+      },
+      "name": "TechEffect Fertility Iron",
+      "source": "tech",
+      "targets": [
+        2918,
+        5982
+      ],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
+        38411
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 0,
+      "effectScope": "AreasInMeta",
+      "excludeEffectSourceGUID": false,
+      "guid": 38441,
+      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_gold_ore_goods.png",
+      "locaText": {
+        "brazilian": "Ulex e Agogae",
+        "english": "Ulex & Agogae",
+        "french": "Ulex et Agôgè",
+        "german": "Ulex & Agogae",
+        "italian": "Ulex e agogae",
+        "japanese": "​水力​採鉱",
+        "korean": "​울렉스와 ​아고가이",
+        "polish": "Ulex i agoge",
+        "russian": "Улекс и рвы",
+        "simplified_chinese": "​金​雀​滤​沟",
+        "spanish": "Urce y agogía",
+        "traditional_chinese": "​金​雀​濾​溝"
+      },
+      "name": "TechEffect Fertility Gold",
+      "source": "tech",
+      "targets": [
+        31753,
+        50280
+      ],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
         71203
       ],
       "dlcUnlocks": [],
@@ -17495,9 +17490,7 @@ if(window.params == null)window.params={
         32344
       ],
       "cycleTime": 30,
-      "dlcUnlocks": [
-        67902
-      ],
+      "dlcUnlocks": [],
       "guid": 2918,
       "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_iron_ore_goods.png",
       "inputs": [],
@@ -17544,9 +17537,7 @@ if(window.params == null)window.params={
         32356
       ],
       "cycleTime": 30,
-      "dlcUnlocks": [
-        67902
-      ],
+      "dlcUnlocks": [],
       "guid": 2916,
       "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_limestone_goods.png",
       "inputs": [],
@@ -17593,9 +17584,7 @@ if(window.params == null)window.params={
         32397
       ],
       "cycleTime": 60,
-      "dlcUnlocks": [
-        67902
-      ],
+      "dlcUnlocks": [],
       "guid": 2954,
       "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_marble_goods.png",
       "inputs": [],
@@ -17642,9 +17631,7 @@ if(window.params == null)window.params={
         32379
       ],
       "cycleTime": 45,
-      "dlcUnlocks": [
-        67902
-      ],
+      "dlcUnlocks": [],
       "guid": 2920,
       "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_minerals_goods.png",
       "inputs": [],
@@ -17692,9 +17679,7 @@ if(window.params == null)window.params={
         50282
       ],
       "cycleTime": 150,
-      "dlcUnlocks": [
-        67902
-      ],
+      "dlcUnlocks": [],
       "guid": 50280,
       "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_gold_ore_mine_goods.png",
       "inputs": [],

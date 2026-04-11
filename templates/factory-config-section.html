@@ -67,11 +67,19 @@
                 <td>
                     <span data-bind="text: $root.texts.fertility.name"></span>
                 </td>
-                <td></td>
                 <td>
-                    <div class="inline-list-centered">
-                        <img class="icon-sm mr-1" data-bind="attr: { src: $data.instance().neededFertility.icon ? $data.instance().neededFertility.icon : null, alt: $data.instance().neededFertility.name }">
-                        <span data-bind="text: $data.instance().neededFertility.name"></span>
+                    <img class="icon-sm mr-1" data-bind="attr: { src: $data.instance().neededFertility.icon ? $data.instance().neededFertility.icon : null, alt: $data.instance().neededFertility.name }">
+                    <span class="mr-4" data-bind="text: $data.instance().neededFertility.name"></span>
+                </td>
+                <td>
+                    <div class="inline-list-centered">                       
+
+                        <!-- ko with: $root.island().getIslandFertility($data.instance().neededFertility.guid) -->
+                        <div class="inline-list-centered">
+                            <input type="checkbox" data-bind="checked: $data.checked, attr: { id: 'fert-config-' + $data.fertility.guid }">
+                            <label class="ml-1 mb-0" data-bind="text: $root.texts.availableOnIsland.name, attr: { for: 'fert-config-' + $data.fertility.guid }"></label>
+                        </div>
+                        <!-- /ko -->
                     </div>
                 </td>
             </tr>

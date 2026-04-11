@@ -34,6 +34,48 @@ export const texts: Record<string, Record<string, string>> = {
         japanese: "必要な肥沃度",
         korean: "필요한 토지 비옥도"
     },
+    missingFertility: {
+        english: "Missing Fertility",
+        german: "Fehlende Fruchtbarkeit",
+        french: "Fertilité manquante",
+        spanish: "Fertilidad faltante",
+        italian: "Fertilità mancante",
+        brazilian: "Fertilidade ausente",
+        russian: "Нет плодородия",
+        simplified_chinese: "缺少肥力",
+        traditional_chinese: "缺少肥力",
+        japanese: "肥沃度なし",
+        korean: "비옥도 없음",
+        polish: "Brak żyzności"
+    },
+    islandFertilities: {
+        english: "Island Fertilities",
+        german: "Insel-Fruchtbarkeiten",
+        french: "Fertilités de l'île",
+        spanish: "Fertilidades de la isla",
+        italian: "Fertilità dell'isola",
+        brazilian: "Fertilidades da ilha",
+        russian: "Плодородие острова",
+        simplified_chinese: "岛屿肥力",
+        traditional_chinese: "島嶼肥力",
+        japanese: "島の肥沃度",
+        korean: "섬 비옥도",
+        polish: "Żyzność wyspy"
+    },
+    availableOnIsland: {
+        english: "Available on Island",
+        german: "Auf Insel vorhanden",
+        french: "Disponible sur l'île",
+        spanish: "Disponible en la isla",
+        italian: "Disponibile sull'isola",
+        brazilian: "Disponível na ilha",
+        russian: "Доступно на острове",
+        simplified_chinese: "岛上可用",
+        traditional_chinese: "島上可用",
+        japanese: "島で利用可能",
+        korean: "섬에서 사용 가능",
+        polish: "Dostępne na wyspie"
+    },
     workforce: {
         english: "Required Workforce",
         french: "Main-d'œuvre requise",

@@ -34,7 +34,8 @@
       "Bash(else echo \"File does not exist\")",
       "Bash(fi)",
       "Bash(git config:*)",
-      "Bash(python -c ':*)"
+      "Bash(python -c ':*)",
+      "WebFetch(domain:)"
     ],
     "deny": []
   },

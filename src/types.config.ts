@@ -8,6 +8,17 @@ export interface FertilityConfig {
   iconPath: string;
   locaText: LocaTextConfig;
   dlcUnlocks?: number[];
+  regions?: string[];
+}
+
+export interface AreaBuffConfig {
+  guid: number;
+  name: string;
+  iconPath: string;
+  locaText: LocaTextConfig;
+  dlcUnlocks?: number[];
+  addedFertility: number;
+  fertilityPercent: number;
 }
 
 // Common interface for localized text
@@ -342,6 +353,7 @@ export interface ParamsConfig {
   factories: FactoryConfig[];
   modules: ModuleConfig[];
   fertilities?: FertilityConfig[];
+  areaBuffs?: AreaBuffConfig[];
   buildingBuffs: BuildingBuffConfig[];
   effects: EffectConfig[];
   techs: TechConfig[];

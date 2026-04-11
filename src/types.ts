@@ -127,6 +127,7 @@ export interface WorkforceConfig extends NamedElementConfig {
 
 export interface RegionConfig extends NamedElementConfig {
   islands?: string[];
+  iconPath: string;
 }
 
 export interface SessionConfig extends NamedElementConfig {

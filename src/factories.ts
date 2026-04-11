@@ -68,6 +68,7 @@ export class Consumer extends NamedElement{
     // === UI/DISPLAY ===
     public availableItems!: KnockoutComputed<AppliedBuff[]>;     // Items available for this consumer
     public product!: Product | null;                             // Primary product (for factories)
+    public availableRegions: KnockoutComputed<Region[]>;         // Regions where this consumer is available
 
 
     /**
@@ -99,6 +100,10 @@ export class Consumer extends NamedElement{
         this.associatedRegions = [];
         for (var r of config.associatedRegions)
             this.associatedRegions.push(literalsMap.get(r) as Region);
+
+        this.availableRegions = ko.pureComputed(() => {
+            return this.associatedRegions.filter(r => r.available() || r.id === 'Meta');
+        });
  
         this.items = [];
         this.buffs = ko.observableArray([]);
@@ -197,7 +202,28 @@ export class Consumer extends NamedElement{
             const multiplier = 100 + productivityUpgradeSum;
             const totalBoost = (baseValue * multiplier) / 10000; // do division in the end to avoid rounding issues
 
-            this.boost(Math.max(ACCURACY, totalBoost));
+            let fertilityFactor = 1.0;
+            if (this.isFactory && (this as any).neededFertility) {
+                const factory = this as unknown as Factory;
+                const fertility = factory.neededFertility!;
+                const islandFertility = factory.island.getIslandFertility(fertility.guid);
+                
+                let totalFertilityPercent = islandFertility ? islandFertility.factor() * 100 : 0;
+                if (islandFertility && islandFertility.checked()) {
+                    totalFertilityPercent = 100;
+                }
+
+                // Add factory-specific buffs that provide this fertility
+                for (const appliedBuff of factory.buffs()) {
+                    if (appliedBuff.buff.addedFertility?.guid === fertility.guid) {
+                        totalFertilityPercent += appliedBuff.fertilityPercent();
+                    }
+                }
+
+                fertilityFactor = Math.min(1.0, totalFertilityPercent / 100);
+            }
+
+            this.boost(Math.max(ACCURACY, totalBoost * fertilityFactor));
         });
 
         this.inputDemandsSubscription = ko.computed(() => {
@@ -710,11 +736,28 @@ export class Factory extends Consumer implements Supplier {
 
     /**
      * Checks if this factory can supply the requested amount (Supplier interface)
-     * @param amount - The requested amount
-     * @returns True if factory is available and in correct region
+     * @returns True if factory is available and has required fertility
      */
     canSupply(): boolean {
-        return this.available();
+        if (!this.available()) return false;
+        if (this.neededFertility) {
+            const islandFertility = this.island.getIslandFertility(this.neededFertility.guid);
+            
+            let totalFertilityPercent = islandFertility ? islandFertility.factor() * 100 : 0;
+            if (islandFertility && islandFertility.checked()) {
+                totalFertilityPercent = 100;
+            }
+
+            // Add factory-specific buffs that provide this fertility
+            for (const appliedBuff of this.buffs()) {
+                if (appliedBuff.buff.addedFertility?.guid === this.neededFertility.guid) {
+                    totalFertilityPercent += appliedBuff.fertilityPercent();
+                }
+            }
+
+            if (totalFertilityPercent <= EPSILON) return false;
+        }
+        return true;
     }
 
     isDefaultSupplier(): boolean {
