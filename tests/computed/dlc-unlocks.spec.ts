@@ -29,16 +29,22 @@ test.describe('DLC Unlock Logic', () => {
     });
 
     const availabilityInfo = await page.evaluate(() => {
-        const island = window.view.island();
-        if (!island) return { totalDlcAssets: 0, availableDlcAssets: 0 };
+        const island = (window as any).view.island();
+        if (!island) return { totalDlcAssets: 0, availableDlcAssets: 0, availableNames: [] };
         const assets = Array.from(island.assetsMap.values());
         const dlcAssets = assets.filter((a: any) => a.dlcs && a.dlcs.length > 0);
+        const availableDlcAssets = dlcAssets.filter((a: any) => a.available());
         
         return {
             totalDlcAssets: dlcAssets.length,
-            availableDlcAssets: dlcAssets.filter((a: any) => a.available()).length
+            availableDlcAssets: availableDlcAssets.length,
+            availableNames: availableDlcAssets.map((a: any) => `${a.name()} (${a.guid})`)
         };
     });
+
+    if (availabilityInfo.availableDlcAssets > 0) {
+        console.log('Available DLC assets (should be 0):', availabilityInfo.availableNames);
+    }
 
     expect(availabilityInfo.totalDlcAssets).toBeGreaterThan(0);
     expect(availabilityInfo.availableDlcAssets).toBe(0);

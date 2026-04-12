@@ -6,8 +6,11 @@ import * as path from 'path';
 test.describe('Session Icons on Factory Tiles', () => {
   let configLoader: ConfigLoader;
 
-  test.beforeEach(async () => {
+  test.beforeEach(async ({ page }) => {
     configLoader = new ConfigLoader();
+    page.on('console', msg => {
+        if (msg.type() === 'log') console.log(`[Browser] ${msg.text()}`);
+    });
   });
 
   async function getBasicConfig() {
@@ -16,65 +19,112 @@ test.describe('Session Icons on Factory Tiles', () => {
     return JSON.parse(configContent);
   }
 
-  const checkProduct = async (page: any, productGuid: number, productName: string) => {
-    const found = await page.evaluate((guid: number) => {
-        const presenter = window.view.presenter;
-        const p = presenter.categories
-            .flatMap((cat: any) => cat.productPresenters)
-            .find((p: any) => p.instance().guid === guid);
-        
-        if (p) {
-            p.openConfigDialog();
-            return true;
-        }
-        return false;
-    }, productGuid);
+  async function getWithDataConfig() {
+    const fullPath = path.resolve(process.cwd(), "tests/fixtures/with-data.json");
+    const configContent = fs.readFileSync(fullPath, 'utf-8');
+    return JSON.parse(configContent);
+  }
 
-    if (!found) {
-        return false;
-    }
-
-    // Wait for dialog to be visible
-    try {
-        await page.waitForSelector('#product-config-dialog', { state: 'visible', timeout: 5000 });
-    } catch (e) {
-        // Continue anyway, maybe it's already there or selector differs
-    }
-
+  const checkProduct = async (page: any, productGuid: number) => {
     const info = await page.evaluate((guid: number) => {
         const presenter = window.view.presenter;
         const p = presenter.categories
             .flatMap((cat: any) => cat.productPresenters)
             .find((p: any) => p.instance().guid === guid);
         
-        if (!p.factoryPresenters || p.factoryPresenters.length === 0) {
-            return { hasIcon: false };
+        if (!p) {
+            return { hasIcon: false, title: null, error: "Product not found" };
         }
 
-        const dialog = document.querySelector('#product-config-dialog');
-        if (!dialog) return { hasIcon: false };
-        
-        const producers = Array.from(dialog.querySelectorAll('.ui-fchain-item'));
-        const superscript = producers[0]?.querySelector('.superscript-icon');
-        const hasIcon = superscript !== null && superscript?.getAttribute('src') !== null;
-
         return {
-            hasIcon: hasIcon
+            hasIcon: p.regionIconVisible(),
+            title: p.region() ? p.region().name() : null,
+            regionCount: p.product.regions.length,
+            visibleFactories: p.visibleFactories().length,
+            totalFactories: p.factoryPresenters.length,
+            factoryRegions: p.factoryPresenters.map(f => f.region() ? f.region().id : null),
+            factoryAssociatedRegionsCount: p.factoryPresenters[0] ? p.factoryPresenters[0].factory.associatedRegions.length : null,
+            islandName: window.view.island().name(),
+            islandRegion: window.view.island().region.id,
+            productRegionId: p.region() ? p.region().id : null,
+            regionIsNull: p.region() == null
         };
     }, productGuid);
-
-    // Close dialog reliably
-    await page.evaluate(() => {
-        const dialog = $('#product-config-dialog');
-        dialog.modal('hide');
-        $('body').removeClass('modal-open');
-        $('.modal-backdrop').remove();
-    });
-    
-    await page.waitForTimeout(500);
-
-    return info.hasIcon;
+    return info;
   };
+
+  test.describe('with-data fixture', () => {
+    test.beforeEach(async ({ page }) => {
+      const config = await getWithDataConfig();
+      config["calculatorSettings"] = JSON.stringify({ "settings.showAllProducts": "1" });
+      await configLoader.loadConfigObject(page, config);
+      await page.goto('http://localhost:8080/index.html');
+      await page.waitForLoadState('networkidle');
+    });
+
+    test('Latium, product Cheese -> session icon Albion', async ({ page }) => {
+      // Select Latium
+      await page.evaluate(() => {
+          const island = window.view.islands().find((i: any) => i.name() === "Latium");
+          if (island) { window.view.island(island); }
+      });
+
+      const info = await checkProduct(page, 2153); // Cheese
+      console.log('Cheese on Latium:', info);
+      expect(info.hasIcon).toBe(true);
+      expect(info.title).toBe("Albion");
+    });
+
+    test('Latium, product wine -> no session icon', async ({ page }) => {
+      // Select Latium
+      await page.evaluate(() => {
+          const island = window.view.islands().find((i: any) => i.name() === "Latium");
+          if (island) { window.view.island(island); }
+      });
+
+      const info = await checkProduct(page, 2138); // Wine
+      console.log('Wine on Latium:', info);
+      expect(info.hasIcon).toBe(false);
+    });
+
+    test('Albion, product Oysters with Caviar -> session icon Latium', async ({ page }) => {
+      // Select Albion
+      await page.evaluate(() => {
+          const island = window.view.islands().find((i: any) => i.name() === "Albion");
+          if (island) { window.view.island(island); }
+      });
+
+      const info = await checkProduct(page, 2140); // Oysters with Caviar
+      console.log('Oysters on Albion:', info);
+      expect(info.hasIcon).toBe(true);
+      expect(info.title).toBe("Latium");
+    });
+
+    test('Albion, product Fine Glass -> session icon Latium', async ({ page }) => {
+      // Select Albion
+      await page.evaluate(() => {
+          const island = window.view.islands().find((i: any) => i.name() === "Albion");
+          if (island) { window.view.island(island); }
+      });
+
+      const info = await checkProduct(page, 2151); // Fine Glass
+      console.log('Fine Glass on Albion:', info);
+      expect(info.hasIcon).toBe(true);
+      expect(info.title).toBe("Latium");
+    });
+
+    test('All islands, product wine -> no session icon', async ({ page }) => {
+      // Select All Islands
+      await page.evaluate(() => {
+          const allIslands = window.view.islands().find((i: any) => i.name() === "All Islands");
+          if (allIslands) { window.view.island(allIslands); }
+      });
+
+      const info = await checkProduct(page, 2138); // Wine
+      console.log('Wine on All Islands:', info);
+      expect(info.hasIcon).toBe(false);
+    });
+  });
 
   test('DLC active: Idols has session icon on factory tile in allIslands view', async ({ page }) => {
     const config = await getBasicConfig();
@@ -95,8 +145,8 @@ test.describe('Session Icons on Factory Tiles', () => {
         window.view.dlcs.forEach((d: any) => d.checked(true));
     });
 
-    const hasIcon = await checkProduct(page, 145220, "Idols");
-    expect(hasIcon).toBe(true);
+    const info = await checkProduct(page, 145220);
+    expect(info.hasIcon).toBe(true);
   });
 
   test('DLC inactive: session icons for marble are present', async ({ page }) => {
@@ -119,8 +169,9 @@ test.describe('Session Icons on Factory Tiles', () => {
     });
 
     // Marble (2179)
-    const marbleHasIcon = await checkProduct(page, 2179, "Marble");
-    expect(marbleHasIcon).toBe(true);
+    const info = await checkProduct(page, 2179);
+    console.log('Marble on All Islands:', info);
+    expect(info.hasIcon).toBe(true);
   });
 
   test('DLC active: Minerals has session icon', async ({ page }) => {
@@ -143,7 +194,7 @@ test.describe('Session Icons on Factory Tiles', () => {
     });
 
     // Minerals (8563)
-    const mineralsHasIcon = await checkProduct(page, 8563, "Minerals");
-    expect(mineralsHasIcon).toBe(true);
+    const info = await checkProduct(page, 8563);
+    expect(info.hasIcon).toBe(true);
   });
 });

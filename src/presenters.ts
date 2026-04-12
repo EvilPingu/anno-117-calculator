@@ -68,6 +68,7 @@ export class FactoryPresenter {
         this.name = ko.pureComputed(() => this.instance()?.name());
         this.region = ko.pureComputed(() => this.instance()?.associatedRegions[0]);
         this.buildings = ko.pureComputed(() => this.instance()?.buildings || 0);
+
         this.boost = ko.pureComputed(() => this.instance()?.boost() || 1);
         this.outputAmount = ko.pureComputed(() => this.instance()?.outputAmount() || 0);
         this.modules = ko.pureComputed(() => this.instance()?.modules || []);

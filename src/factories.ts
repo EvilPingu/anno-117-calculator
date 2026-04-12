@@ -740,7 +740,7 @@ export class Factory extends Consumer implements Supplier {
      */
     canSupply(): boolean {
         if (!this.available()) return false;
-        if (this.neededFertility) {
+        if (this.neededFertility && !this.island.isAllIslands()) {
             const islandFertility = this.island.getIslandFertility(this.neededFertility.guid);
             
             let totalFertilityPercent = islandFertility ? islandFertility.factor() * 100 : 0;

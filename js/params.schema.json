@@ -97,7 +97,10 @@
         },
         "required": [
           "guid",
-          "name"
+          "name",
+          "iconPath",
+          "locaText",
+          "id"
         ]
       },
       "title": "DLC",
@@ -2429,14 +2432,6 @@
     "productFilters",
     "factories",
     "modules",
-    "buildingBuffs",
-    "areaBuffs",
-    "effects",
-    "techs",
-    "patrons",
-    "items",
-    "icons",
-    "texts",
     "buildingBuffs",
     "areaBuffs",
     "effects",
