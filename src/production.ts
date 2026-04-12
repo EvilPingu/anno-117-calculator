@@ -670,11 +670,11 @@ export class IslandFertility {
     public checked: KnockoutObservable<boolean>;
     public factor: KnockoutComputed<number>;
 
-    constructor(fertility: Fertility, islandAreaBuffs: AreaBuff[]) {
+    constructor(fertility: Fertility, globalAreaBuffs: AreaBuff[]) {
         this.fertility = fertility;
         this.checked = ko.observable(true);
 
-        const relevantBuffs = islandAreaBuffs.filter(b => b.addedFertility?.guid === fertility.guid);
+        const relevantBuffs = globalAreaBuffs.filter(b => b.addedFertility?.guid === fertility.guid);
 
         this.factor = ko.pureComputed(() => {
             if (this.checked()) return 1.0;

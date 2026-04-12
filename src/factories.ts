@@ -202,26 +202,7 @@ export class Consumer extends NamedElement{
             const multiplier = 100 + productivityUpgradeSum;
             const totalBoost = (baseValue * multiplier) / 10000; // do division in the end to avoid rounding issues
 
-            let fertilityFactor = 1.0;
-            if (this.isFactory && (this as any).neededFertility) {
-                const factory = this as unknown as Factory;
-                const fertility = factory.neededFertility!;
-                const islandFertility = factory.island.getIslandFertility(fertility.guid);
-                
-                let totalFertilityPercent = islandFertility ? islandFertility.factor() * 100 : 0;
-                if (islandFertility && islandFertility.checked()) {
-                    totalFertilityPercent = 100;
-                }
-
-                // Add factory-specific buffs that provide this fertility
-                for (const appliedBuff of factory.buffs()) {
-                    if (appliedBuff.buff.addedFertility?.guid === fertility.guid) {
-                        totalFertilityPercent += appliedBuff.fertilityPercent();
-                    }
-                }
-
-                fertilityFactor = Math.min(1.0, totalFertilityPercent / 100);
-            }
+            const fertilityFactor = (this as any).fertilityFactor ? (this as any).fertilityFactor() : 1.0;
 
             this.boost(Math.max(ACCURACY, totalBoost * fertilityFactor));
         });
@@ -538,6 +519,7 @@ export class Factory extends Consumer implements Supplier {
     public substitutableOutputAmount: KnockoutComputed<number>; // Output that can be substituted
     public overProduction: KnockoutComputed<number>;         // Excess production over demand
     public isHighlightedAsMissing: KnockoutComputed<boolean>;
+    public fertilityFactor: KnockoutComputed<number>;
 
     /**
      * Creates a new Factory instance
@@ -558,6 +540,24 @@ export class Factory extends Consumer implements Supplier {
                 this.neededFertility = fertility;
             }
         }
+
+        this.fertilityFactor = ko.computed(() => {
+            if (!this.neededFertility || this.island.isAllIslands()) return 1.0;
+
+            const islandFertility = this.island.getIslandFertility(this.neededFertility.guid);
+            
+            // Island-level fertility (from checked state + global area buffs)
+            let totalFertilityPercent = islandFertility ? islandFertility.factor() * 100 : 0;
+
+            // Factory-specific building buffs that add this fertility
+            for (const appliedBuff of this.buffs()) {
+                if (appliedBuff.buff.addedFertility?.guid === this.neededFertility.guid) {
+                    totalFertilityPercent += appliedBuff.fertilityPercent();
+                }
+            }
+
+            return Math.min(1.0, totalFertilityPercent / 100);
+        });
 
         this.outputs = []
         for (let entry of config.outputs) {

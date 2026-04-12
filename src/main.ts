@@ -12,7 +12,7 @@ import { DarkMode, ResidencePresenter } from './views';
 import { CategoryPresenter } from './presenters';
 import { ConstantsConfig, NeedConsumptionConfig, TextConfig } from './types.config';
 import { Storage as SubStorage, Island, Region, Session } from './world';
-import { Effect, ProductCategory } from './production';
+import { Effect, ProductCategory, Fertility, AreaBuff } from './production';
 
 
 declare const $: any;
@@ -52,6 +52,7 @@ window.view = {
     dlcsGuidMap: new Map(),
     // Add missing properties that are referenced in the original code
     globalEffects: [] as Effect[],
+    areaBuffs: [] as AreaBuff[],
     selectedFactory: ko.observable(null),
     selectedProduct: ko.observable(null),
     selectedPopulationLevel: ko.observable(null),
@@ -430,8 +431,36 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
         }
     }
 
+    // Create fertilities globally so AreaBuffs can resolve addedFertility references
+    for (let f of (params.fertilities || [])) {
+        if (!window.view.assetsMap.has(f.guid)) {
+            const fertility = new Fertility(f);
+            window.view.assetsMap.set(fertility.guid, fertility);
+        }
+    }
 
-    
+    // Set up global area buffs
+    const globalAreaBuffs = window.view.areaBuffs as AreaBuff[];
+    for (let ab of (params.areaBuffs || [])) {
+        const areaBuff = new AreaBuff(ab, window.view.assetsMap);
+        window.view.assetsMap.set(areaBuff.guid, areaBuff);
+        globalAreaBuffs.push(areaBuff);
+    }
+
+    // Persist global area buff scaling
+    if (localStorage) {
+        const areaBuffsStorage = new SubStorage("areaBuffs");
+        for (const ab of globalAreaBuffs) {
+            const storageKey = `${ab.guid}.scaling`;
+            const savedValue = areaBuffsStorage.getItem(storageKey);
+            if (savedValue != null) {
+                ab.scaling(parseFloat(savedValue));
+            }
+            ab.scaling.subscribe((val: number) => {
+                areaBuffsStorage.setItem(storageKey, val.toString());
+            });
+        }
+    }
 
     // Set up regions
     window.view.regions = [];

@@ -348,19 +348,14 @@
             "items": {
               "type": "string"
             }
-          },
-          "dlcUnlocks": {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            }
           }
         },
         "required": [
           "guid",
           "name",
           "iconPath",
-          "locaText"
+          "locaText",
+          "regions"
         ]
       },
       "title": "Fertility",
@@ -2420,6 +2415,27 @@
     "languages",
     "needConsumptions",
     "regions",
+    "fertilities",
+    "sessions",
+    "needAttributes",
+    "needCategories",
+    "needs",
+    "populationGroups",
+    "residenceBuildings",
+    "populationLevels",
+    "products",
+    "workforce",
+    "productFilters",
+    "factories",
+    "modules",
+    "buildingBuffs",
+    "areaBuffs",
+    "effects",
+    "techs",
+    "patrons",
+    "items",
+    "icons",
+    "texts",
     "fertilities",
     "sessions",
     "needAttributes",

@@ -18344,48 +18344,6 @@ if(window.params == null)window.params={
   "fertilities": [
     {
       "dlcUnlocks": [],
-      "guid": 2203,
-      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_oats_goods.png",
-      "locaText": {
-        "brazilian": "Fertilidade de Aveia",
-        "english": "Oat Fertility",
-        "french": "Fertilité (avoine)",
-        "german": "Haferanbau",
-        "italian": "Fertilità avena",
-        "japanese": "​オーツ​麦​の​生産​力",
-        "korean": "​귀리 ​토착 ​자원",
-        "polish": "Urodzaj - owies",
-        "russian": "Ареал овса",
-        "simplified_chinese": "​小麦​物产​条件",
-        "spanish": "Fertilidad de avena",
-        "traditional_chinese": "​小麥​生產力"
-      },
-      "name": "Fertility Oats",
-      "regions": []
-    },
-    {
-      "dlcUnlocks": [],
-      "guid": 2204,
-      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_wheat_goods.png",
-      "locaText": {
-        "brazilian": "Fertilidade de trigo",
-        "english": "Wheat Fertility",
-        "french": "Fertilité (blé)",
-        "german": "Weizenanbau",
-        "italian": "Fertilità grano",
-        "japanese": "​小麦​の​生産​力",
-        "korean": "​밀 ​토착 ​자원",
-        "polish": "Urodzaj - pszenica",
-        "russian": "Ареал пшеницы",
-        "simplified_chinese": "​小麦​物产​条件",
-        "spanish": "Fertilidad de trigo",
-        "traditional_chinese": "​小麥​生產力"
-      },
-      "name": "Fertility Wheat",
-      "regions": []
-    },
-    {
-      "dlcUnlocks": [],
       "guid": 4049,
       "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_iron_ore_goods.png",
       "locaText": {
@@ -18407,27 +18365,6 @@ if(window.params == null)window.params={
         "Celtic",
         "Roman"
       ]
-    },
-    {
-      "dlcUnlocks": [],
-      "guid": 4050,
-      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_coal_ore_goods.png",
-      "locaText": {
-        "brazilian": "Depósito de carvão",
-        "english": "Coal Deposit",
-        "french": "Gisement de charbon",
-        "german": "Kohlevorkommen",
-        "italian": "Giacimento di carbone",
-        "japanese": "​石炭​鉱床",
-        "korean": "​석탄 ​매장지",
-        "polish": "Złoże węgla",
-        "russian": "Месторождение угля",
-        "simplified_chinese": "​煤矿​床",
-        "spanish": "Yacimiento de carbón",
-        "traditional_chinese": "​煤礦​床"
-      },
-      "name": "Deposit Coal",
-      "regions": []
     },
     {
       "dlcUnlocks": [],
@@ -18476,48 +18413,6 @@ if(window.params == null)window.params={
         "Celtic",
         "Roman"
       ]
-    },
-    {
-      "dlcUnlocks": [],
-      "guid": 2201,
-      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_sardines_goods.png",
-      "locaText": {
-        "brazilian": "População de sardinhas",
-        "english": "Sardine Population",
-        "french": "Population de sardines",
-        "german": "Sardinenschwärme",
-        "italian": "Popolosità delle sardine",
-        "japanese": "​イワシ​の​生産​力",
-        "korean": "​정어리 ​개체군",
-        "polish": "Populacja - sardynki",
-        "russian": "Популяция сардин",
-        "simplified_chinese": "​沙丁鱼​群",
-        "spanish": "Población de sardinas",
-        "traditional_chinese": "​沙丁魚​群"
-      },
-      "name": "Fertility Roman Sardines",
-      "regions": []
-    },
-    {
-      "dlcUnlocks": [],
-      "guid": 32456,
-      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_clay_goods.png",
-      "locaText": {
-        "brazilian": "Depósito de argila",
-        "english": "Clay Deposit",
-        "french": "Gisement d'argile",
-        "german": "Lehmvorkommen",
-        "italian": "Giacimento di argilla",
-        "japanese": "​粘土​鉱床",
-        "korean": "​점토 ​매장지",
-        "polish": "Złoże gliny",
-        "russian": "Месторождение глины",
-        "simplified_chinese": "​黏土​矿床",
-        "spanish": "Yacimiento de arcilla",
-        "traditional_chinese": "​黏土​礦床"
-      },
-      "name": "Deposit Roman Clay",
-      "regions": []
     },
     {
       "dlcUnlocks": [],
@@ -19047,29 +18942,6 @@ if(window.params == null)window.params={
       "regions": [
         "Celtic"
       ]
-    },
-    {
-      "dlcUnlocks": [
-        67902
-      ],
-      "guid": 145337,
-      "iconPath": "data/ui/fhd/dlc01/icon_content/production_goods/icon_3d_obsidian_goods.png",
-      "locaText": {
-        "brazilian": "Depósito de obsidiana",
-        "english": "Obsidian Deposit",
-        "french": "Gisement d'obsidienne",
-        "german": "Obsidian-Vorkommen",
-        "italian": "Deposito di ossidiana",
-        "japanese": "​黒曜石​鉱床",
-        "korean": "​흑요석 ​매장지",
-        "polish": "Złoże obsydianu",
-        "russian": "Месторождение обсидиана",
-        "simplified_chinese": "​黑​曜​石​矿藏",
-        "spanish": "Yacimiento de obsidiana",
-        "traditional_chinese": "​黑​曜​石​礦床"
-      },
-      "name": "Deposit Limited Roman Obsidian",
-      "regions": []
     }
   ],
   "icons": {

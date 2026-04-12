@@ -14,7 +14,7 @@ import {
 } from './types.config';
 
 import { Workforce, ResidenceBuilding, PopulationLevel, PopulationGroup } from './population';
-import { Product, MetaProduct, Item, ProductCategory, AppliedBuff, Buff, Effect, Patron, Fertility, AreaBuff, IslandFertility } from './production';
+import { Product, MetaProduct, Item, ProductCategory, AppliedBuff, Buff, Effect, Patron, Fertility, IslandFertility, AreaBuff } from './production';
 import { PublicConsumerBuilding, Factory, Consumer } from './factories';
 import { ResidenceEffectView } from './views';
 import { Need, NeedCategory, RecipeList, } from './consumption';
@@ -533,7 +533,7 @@ export class Island {
     public categories: ProductCategory[];
     public multiFactoryProducts: Product[];
     public islandFertilities: Map<number, IslandFertility>;
-    public areaBuffs: AreaBuff[];
+    public visibleIslandFertilities: IslandFertility[];
     public allFertilitiesSet: KnockoutComputed<boolean>;
     public fertilitiesExpanded: KnockoutObservable<boolean>;
     public items: Item[];
@@ -806,36 +806,43 @@ export class Island {
         //         this.recipeLists.push(new RecipeList(list, assetsMap, this));
         // }
 
+        // Fertilities are created globally in main.ts; reuse them here
         const islandFertilityConfigs: Fertility[] = [];
         for (let f of (params.fertilities || [])) {
-            let fertility = new Fertility(f);
-            assetsMap.set(fertility.guid, fertility);
+            let fertility = assetsMap.get(f.guid) as Fertility;
+            if (!fertility) {
+                fertility = new Fertility(f);
+                assetsMap.set(fertility.guid, fertility);
+            }
             islandFertilityConfigs.push(fertility);
         }
 
-        // New: per-island AreaBuff instances
-        this.areaBuffs = [];
-        for (const abConfig of (params.areaBuffs || [])) {
-            const ab = new AreaBuff(abConfig, assetsMap);
-            this.areaBuffs.push(ab);
-            assetsMap.set(ab.guid, ab);
-        }
+        // Collect global AreaBuff instances (created in main.ts, available via assetsMap copy)
+        const globalAreaBuffs = Array.from(assetsMap.values()).filter(a => a instanceof AreaBuff) as AreaBuff[];
 
-        // New: per-island IslandFertility instances, region-filtered
+        // Per-island IslandFertility instances
         this.islandFertilities = new Map();
+        const isMetaRegion = this.region.id === 'Meta';
         if (!this.isAllIslands()) {
             for (const fertility of islandFertilityConfigs) {
-                if (fertility.regions.length > 0 && !fertility.regions.includes(this.region.id || ''))
-                    continue;
-                this.islandFertilities.set(
-                    fertility.guid,
-                    new IslandFertility(fertility, this.areaBuffs)
-                );
+                const matchesRegion = isMetaRegion || fertility.regions.length === 0 || fertility.regions.includes(this.region.id || '');
+                const islandFertility = new IslandFertility(fertility, globalAreaBuffs);
+
+                // Default to unchecked if it's not naturally present in this region
+                if (!matchesRegion) {
+                    islandFertility.checked(false);
+                }
+
+                this.islandFertilities.set(fertility.guid, islandFertility);
             }
         }
 
+        // Visible fertilities: Meta shows all; other regions show only region-matching ones
+        this.visibleIslandFertilities = Array.from(this.islandFertilities.values())
+            .filter(f => isMetaRegion || f.fertility.regions.length === 0 || f.fertility.regions.includes(this.region.id || ''));
+
         this.allFertilitiesSet = ko.pureComputed(() => {
-            for (const [, f] of this.islandFertilities) {
+            for (const f of this.visibleIslandFertilities) {
                 if (!f.checked()) return false;
             }
             return true;
@@ -987,9 +994,6 @@ export class Island {
         if (localStorage) {
             for (const [guid, islandFertility] of this.islandFertilities) {
                 persistBool(islandFertility, "checked", `island.fertility.${guid}.checked`);
-            }
-            for (const areaBuff of this.areaBuffs) {
-                persistFloat(areaBuff, "scaling", `island.areaBuff.${areaBuff.guid}.scaling`);
             }
         }
 

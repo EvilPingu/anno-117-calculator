@@ -32,7 +32,7 @@ test.describe('Fertility Management Tests', () => {
       const island = (window as any).view.island();
       // Find a fertility that has at least one area buff
       const islandFertility = Array.from(island.islandFertilities.values()).find((f: any) => {
-        const relevantBuffs = island.areaBuffs.filter((b: any) => b.addedFertility?.guid === f.fertility.guid);
+        const relevantBuffs = (window as any).view.areaBuffs.filter((b: any) => b.addedFertility?.guid === f.fertility.guid);
         return relevantBuffs.length > 0;
       }) as any;
 
@@ -41,7 +41,7 @@ test.describe('Fertility Management Tests', () => {
       islandFertility.checked(false);
       const initialFactor = islandFertility.factor();
 
-      const relevantBuffs = island.areaBuffs.filter((b: any) => b.addedFertility?.guid === islandFertility.fertility.guid);
+      const relevantBuffs = (window as any).view.areaBuffs.filter((b: any) => b.addedFertility?.guid === islandFertility.fertility.guid);
       relevantBuffs[0].scaling(1); // Enable first area buff
       const factorWithOneBuff = islandFertility.factor();
       const buffPercent = relevantBuffs[0].fertilityPercent;
@@ -72,7 +72,7 @@ test.describe('Fertility Management Tests', () => {
 
       islandFertility.checked(false);
       // Ensure no area buffs are active for this fertility
-      island.areaBuffs.filter((b: any) => b.addedFertility?.guid === factory.neededFertility.guid)
+      (window as any).view.areaBuffs.filter((b: any) => b.addedFertility?.guid === factory.neededFertility.guid)
         .forEach((b: any) => b.scaling(0));
       
       const boostZero = factory.boost();
@@ -99,7 +99,7 @@ test.describe('Fertility Management Tests', () => {
       const canSupplyFull = factory.canSupply();
 
       islandFertility.checked(false);
-      island.areaBuffs.filter((b: any) => b.addedFertility?.guid === factory.neededFertility.guid)
+      (window as any).view.areaBuffs.filter((b: any) => b.addedFertility?.guid === factory.neededFertility.guid)
         .forEach((b: any) => b.scaling(0));
       
       const canSupplyZero = factory.canSupply();
@@ -121,7 +121,7 @@ test.describe('Fertility Management Tests', () => {
 
       const islandFertility = island.getIslandFertility(factory.neededFertility.guid);
       islandFertility.checked(false);
-      island.areaBuffs.filter((b: any) => b.addedFertility?.guid === factory.neededFertility.guid)
+      (window as any).view.areaBuffs.filter((b: any) => b.addedFertility?.guid === factory.neededFertility.guid)
         .forEach((b: any) => b.scaling(0));
       
       // Factory is not available for supply, but should still be in product.factories
@@ -188,5 +188,89 @@ test.describe('Fertility Management Tests', () => {
       const text = await label.innerText();
       expect(text.length).toBeGreaterThan(0);
     }
+  });
+
+  test.describe('Vineyard Fertility Scenarios', () => {
+    const GRAPES_FERTILITY = 2205;
+    const VINO_VERITAS = 30467;
+    const LATIUM_VINEYARD = 2694;
+    const ALBION_VINEYARD = 23723;
+
+    test('Albion vineyard, no vino veritas -> fertility = 0', async ({ page }) => {
+      const factor = await page.evaluate(({ GRAPES_FERTILITY, ALBION_VINEYARD }) => {
+        const view = (window as any).view;
+        const albion = view.islands().find((i: any) => i.name() === "Albion");
+        view.island(albion);
+        
+        const island = view.island();
+        const islandFertility = island.getIslandFertility(GRAPES_FERTILITY);
+        if (!islandFertility) return -1;
+
+        islandFertility.checked(false);
+        const vinoVeritas = island.assetsMap.get(30467);
+        if (vinoVeritas) vinoVeritas.scaling(0);
+
+        const factory = island.factories.find((f: any) => f.guid === ALBION_VINEYARD);
+        return factory.fertilityFactor();
+      }, { GRAPES_FERTILITY, ALBION_VINEYARD });
+
+      expect(factor).toBe(0);
+    });
+
+    test('Albion vineyard, with vino veritas -> fertility = 0.5', async ({ page }) => {
+      const factor = await page.evaluate(({ GRAPES_FERTILITY, ALBION_VINEYARD, VINO_VERITAS }) => {
+        const view = (window as any).view;
+        const albion = view.islands().find((i: any) => i.name() === "Albion");
+        view.island(albion);
+        
+        const island = view.island();
+        const islandFertility = island.getIslandFertility(GRAPES_FERTILITY);
+        if (!islandFertility) return -1;
+
+        islandFertility.checked(false);
+        const vinoVeritas = island.assetsMap.get(VINO_VERITAS);
+        if (vinoVeritas) vinoVeritas.scaling(1);
+
+        const factory = island.factories.find((f: any) => f.guid === ALBION_VINEYARD);
+        return factory.fertilityFactor();
+      }, { GRAPES_FERTILITY, ALBION_VINEYARD, VINO_VERITAS });
+
+      expect(factor).toBe(0.5);
+    });
+
+    test('All islands vineyard -> fertility = 1.0', async ({ page }) => {
+      const factor = await page.evaluate(({ ALBION_VINEYARD }) => {
+        const view = (window as any).view;
+        const allIslands = view.islands().find((i: any) => i.isAllIslands());
+        view.island(allIslands);
+        
+        const island = view.island();
+        const factory = island.factories.find((f: any) => f.guid === ALBION_VINEYARD);
+        return factory.fertilityFactor();
+      }, { ALBION_VINEYARD });
+
+      expect(factor).toBe(1.0);
+    });
+
+    test('Latium vineyard, with vino veritas, fertility grapes unchecked -> fertility = 0.5', async ({ page }) => {
+      const factor = await page.evaluate(({ GRAPES_FERTILITY, LATIUM_VINEYARD, VINO_VERITAS }) => {
+        const view = (window as any).view;
+        const latium = view.islands().find((i: any) => i.name() === "Latium");
+        view.island(latium);
+        
+        const island = view.island();
+        const islandFertility = island.getIslandFertility(GRAPES_FERTILITY);
+        if (!islandFertility) return -1;
+
+        islandFertility.checked(false);
+        const vinoVeritas = island.assetsMap.get(VINO_VERITAS);
+        if (vinoVeritas) vinoVeritas.scaling(1);
+
+        const factory = island.factories.find((f: any) => f.guid === LATIUM_VINEYARD);
+        return factory.fertilityFactor();
+      }, { GRAPES_FERTILITY, LATIUM_VINEYARD, VINO_VERITAS });
+
+      expect(factor).toBe(0.5);
+    });
   });
 });
