@@ -1729,6 +1729,9 @@
           "workforceMaintenanceFactorUpgrade": {
             "type": "integer"
           },
+          "population": {
+            "type": "number"
+          },
           "additionalOutputs": {
             "type": "array",
             "items": {
@@ -1798,7 +1801,8 @@
           "addedFertility",
           "fertilityPercent",
           "replaceWorkforce",
-          "workforceMaintenanceFactorUpgrade"
+          "workforceMaintenanceFactorUpgrade",
+          "population"
         ]
       },
       "title": "BuildingBuff",
@@ -2001,7 +2005,6 @@
           "iconPath",
           "locaText",
           "buffs",
-          "targets",
           "targetsIsAllProduction",
           "effectScope",
           "excludeEffectSourceGUID",
@@ -2010,7 +2013,7 @@
         ]
       },
       "title": "Effect",
-      "description": "Building buff combined with targets (pool of building GUIDs). Source is an enum with literals 'module', 'tech', 'festival', 'veneration-effect', 'session-even', 'island-event'"
+      "description": "Building buff combined with targets (pool of building GUIDs). Source is an enum with literals 'module', 'tech', 'festival', 'veneration-effect', 'session-event', 'island-event', 'street-distance'"
     },
     "techs": {
       "type": "array",

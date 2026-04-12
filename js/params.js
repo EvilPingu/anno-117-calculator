@@ -116,6 +116,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​已​連結​至​水道"
       },
       "name": "AqueductEffect Production Buff",
+      "population": 0.0,
       "productivityUpgrade": 50.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -151,6 +152,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​承​運​官"
       },
       "name": "TechEffect Warehouse Maintenance Buff ",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -186,6 +188,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​高效​風​箱"
       },
       "name": "TechEffect Production FuelConsumption 01 Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -221,6 +224,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​戈​巴​努​風​箱"
       },
       "name": "TechEffect Production FuelConsumption 02 Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -256,6 +260,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​精明​木工"
       },
       "name": "TechEffect Sawmill Productivity Buff",
+      "population": 0.0,
       "productivityUpgrade": 100.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -291,6 +296,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​蜜​香​林園"
       },
       "name": "TechEffect Production Honey Terrain Buff",
+      "population": 0.0,
       "productivityUpgrade": 25.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -326,6 +332,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​河​狸​兄弟"
       },
       "name": "TechEffect Production Beaver Terrain Buff",
+      "population": 0.0,
       "productivityUpgrade": 25.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -361,6 +368,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​鳥類​飛行"
       },
       "name": "TechEffect Production Bird Terrain Buff",
+      "population": 0.0,
       "productivityUpgrade": 25.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -396,7 +404,620 @@ if(window.params == null)window.params={
         "traditional_chinese": "​基岩​之下"
       },
       "name": "TechEffect Repeat Mining Productivity Buff",
+      "population": 0.0,
       "productivityUpgrade": 5.0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 31836,
+      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_porridge_goods.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Mó próxima",
+        "english": "Nearby Grindstone",
+        "french": "Meule à proximité",
+        "german": "Mahlstein in der Nähe",
+        "italian": "Mola nelle vicinanze",
+        "japanese": "​付近​に​石臼​あり",
+        "korean": "​주변 ​숫돌",
+        "polish": "Pobliski szlifierz",
+        "russian": "Жернов поблизости",
+        "simplified_chinese": "​附近​有​砂​轮",
+        "spanish": "Afiladora cercana",
+        "traditional_chinese": "​附近​的​磨石"
+      },
+      "name": "UNUSED Buff Porridge Building",
+      "population": 1.0,
+      "productivityUpgrade": 0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 32385,
+      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_oysters_and_caviar_goods.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Epicure da Água próximo",
+        "english": "Nearby Epicure of Water",
+        "french": "Épicurien de l'eau à proximité",
+        "german": "Meeresgourmet in der Nähe",
+        "italian": "Epicureo dell'acqua nelle vicinanze",
+        "japanese": "​付近​に​水​の​美食​家​あり",
+        "korean": "​주변 ​수질 ​감정사",
+        "polish": "Pobliskie owoce morza",
+        "russian": "Морские деликатесы поблизости",
+        "simplified_chinese": "​附近​有​水产​珍​馐​作坊",
+        "spanish": "Epicurería de agua cercana",
+        "traditional_chinese": "​附近​的​魚子醬​美食​坊"
+      },
+      "name": "Buff Oysters with Caviar Building",
+      "population": 1.0,
+      "productivityUpgrade": 0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 32526,
+      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_roast_goods.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Forno de Terra próximo",
+        "english": "Nearby Earth Oven",
+        "french": "Four enterré à proximité",
+        "german": "Erdofen in der Nähe",
+        "italian": "Forno a terra nelle vicinanze",
+        "japanese": "​付近​に​地​窯​あり",
+        "korean": "​주변 ​땅속 ​화덕",
+        "polish": "Pobliski piec ziemny",
+        "russian": "Земляная печь поблизости",
+        "simplified_chinese": "​附近​有​炕​窑",
+        "spanish": "Horno de tierra cercano",
+        "traditional_chinese": "​附近​的​窯​烤爐"
+      },
+      "name": "Buff Roast Beef Building",
+      "population": 1.0,
+      "productivityUpgrade": 0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 32538,
+      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_sausages_goods.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Salsicium próximo",
+        "english": "Nearby Salsicium",
+        "french": "Salsicium à proximité",
+        "german": "Salsicium in der Nähe",
+        "italian": "Salsicium nelle vicinanze",
+        "japanese": "​付近​に​ソーセージ​職人​あり",
+        "korean": "​주변 ​소시지 ​제작소",
+        "polish": "Pobliskie salsicium",
+        "russian": "Сальсиций поблизости",
+        "simplified_chinese": "​附近​有​香肠​作坊",
+        "spanish": "Salsicio cercano",
+        "traditional_chinese": "​附近​的​香腸​工​坊"
+      },
+      "name": "Buff Sausages Building",
+      "population": 1.0,
+      "productivityUpgrade": 0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 32542,
+      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_brooch_goods.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Fibularium próximo",
+        "english": "Nearby Fibularium",
+        "french": "Fibularium à proximité",
+        "german": "Fibularium in der Nähe",
+        "italian": "Fibularium nelle vicinanze",
+        "japanese": "​付近​に​ブローチ​職人​あり",
+        "korean": "​주변 ​걸쇠 ​제작소",
+        "polish": "Pobliskie fibularium",
+        "russian": "Фибулария поблизости",
+        "simplified_chinese": "​附近​有​别针​作坊",
+        "spanish": "Fibulario cercano",
+        "traditional_chinese": "​附近​的​胸針​工​坊"
+      },
+      "name": "Buff Brooches Building",
+      "population": 1.0,
+      "productivityUpgrade": 0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 80712,
+      "iconPath": "data/ui/fhd/base/icon_content/ornaments/shrines/icon_3d_shrine_mars.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Sacrário de Marte",
+        "english": "Shrine of Mars",
+        "french": "Sanctuaire de Mars",
+        "german": "Mars‘ Schrein",
+        "italian": "Sacrario di Marte",
+        "japanese": "​マルス​の​祭壇",
+        "korean": "​마르스의 ​제단",
+        "polish": "Kapliczka Marsa",
+        "russian": "Святыня Марса",
+        "simplified_chinese": "​玛​尔​斯​的​圣坛",
+        "spanish": "Altar de Marte",
+        "traditional_chinese": "​戰神​聖壇"
+      },
+      "name": "Attribute Buff Mars Shrine",
+      "population": 1.0,
+      "productivityUpgrade": 0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 81023,
+      "iconPath": "data/ui/fhd/base/icon_content/ornaments/shrines/icon_3d_shrine_ceres.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Sacrário de Ceres",
+        "english": "Shrine of Ceres",
+        "french": "Sanctuaire de Cérès",
+        "german": "Ceres‘ Schrein",
+        "italian": "Sacrario di Cerere",
+        "japanese": "​ケレース​の​祭壇",
+        "korean": "​세레스의 ​제단",
+        "polish": "Kapliczka Ceres",
+        "russian": "Святыня Цереры",
+        "simplified_chinese": "​刻​瑞​斯​的​圣坛",
+        "spanish": "Altar de Ceres",
+        "traditional_chinese": "​豐收​女神​聖壇"
+      },
+      "name": "Attribute Buff Ceres Shrine",
+      "population": 1.0,
+      "productivityUpgrade": 0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 81066,
+      "iconPath": "data/ui/fhd/base/icon_content/ornaments/shrines/icon_3d_shrine_epona.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Sacrário de Epona",
+        "english": "Shrine of Epona",
+        "french": "Sanctuaire d'Epona",
+        "german": "Eponas Schrein",
+        "italian": "Sacrario di Epona",
+        "japanese": "​エポナ​の​祭壇",
+        "korean": "​에포나의 ​제단",
+        "polish": "Kapliczka Epony",
+        "russian": "Святыня Эпоны",
+        "simplified_chinese": "​艾​波​娜​的​圣坛",
+        "spanish": "Altar de Epona",
+        "traditional_chinese": "​馬​之​女神​聖壇"
+      },
+      "name": "Attribute Buff Epona Shrine",
+      "population": 1.0,
+      "productivityUpgrade": 0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 44532,
+      "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_public_roman_marketplace.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Mercado próximo",
+        "english": "Nearby Market",
+        "french": "Marché à proximité",
+        "german": "Markt in der Nähe",
+        "italian": "Mercato nelle vicinanze",
+        "japanese": "​付近​に​市場​あり",
+        "korean": "​주변 ​시장",
+        "polish": "Pobliskie targowisko",
+        "russian": "Рынок поблизости",
+        "simplified_chinese": "​附近​有​市场",
+        "spanish": "Mercado cercano",
+        "traditional_chinese": "​附近​的​市場"
+      },
+      "name": "Attribute Buff Market Building",
+      "population": 1.0,
+      "productivityUpgrade": 0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 44533,
+      "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_public_roman_tavern.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Taverna próxima",
+        "english": "Nearby Tavern",
+        "french": "Taverne à proximité",
+        "german": "Taberna in der Nähe",
+        "italian": "Taverna nelle vicinanze",
+        "japanese": "​付近​に​酒場​あり",
+        "korean": "​주변 ​선술집",
+        "polish": "Pobliska karczma",
+        "russian": "Таберна поблизости",
+        "simplified_chinese": "​附近​有​酒馆",
+        "spanish": "Taberna cercana",
+        "traditional_chinese": "​附近​的​酒館"
+      },
+      "name": "Buff Tavern Building",
+      "population": 1.0,
+      "productivityUpgrade": 0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 44538,
+      "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_public_roman_gambling_house.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Casa de Apostas próxima",
+        "english": "Nearby Gambling House",
+        "french": "Maison de jeu à proximité",
+        "german": "Aleatorium in der Nähe",
+        "italian": "Casa da gioco nelle vicinanze",
+        "japanese": "​付近​に​賭博​場​あり",
+        "korean": "​주변 ​도박장",
+        "polish": "Pobliska szulernia",
+        "russian": "Игорный дом поблизости",
+        "simplified_chinese": "​附近​有​赌场",
+        "spanish": "Casa de apuestas cercana",
+        "traditional_chinese": "​附近​的​賭場"
+      },
+      "name": "Buff Gambling House Building",
+      "population": 2.0,
+      "productivityUpgrade": 0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 44540,
+      "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_public_roman_temple.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Templo próximo",
+        "english": "Nearby Temple",
+        "french": "Temple à proximité",
+        "german": "Tempel in der Nähe",
+        "italian": "Tempio nelle vicinanze",
+        "japanese": "​付近​に​神殿​あり",
+        "korean": "​주변 ​사원",
+        "polish": "Pobliska świątynia",
+        "russian": "Храм поблизости",
+        "simplified_chinese": "​附近​有​神庙",
+        "spanish": "Templo cercano",
+        "traditional_chinese": "​附近​的​神廟"
+      },
+      "name": "Buff Temple Building",
+      "population": 2.0,
+      "productivityUpgrade": 0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 50432,
+      "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_public_celtic_bardic_hall.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Casa Bárdica Próxima",
+        "english": "Nearby Bardic Hearth",
+        "french": "Théâtre bardique à proximité",
+        "german": "Sängerstube in der Nähe",
+        "italian": "Focolare del bardo nelle vicinanze",
+        "japanese": "​付近​に​吟遊詩人​の​暖炉​あり",
+        "korean": "​근처 ​음유시인의 ​화로",
+        "polish": "Pobliska scena barda",
+        "russian": "Подмостки барда поблизости",
+        "simplified_chinese": "​附近​的​吟游​诗人​火炉",
+        "spanish": "Corral bárdico cercano",
+        "traditional_chinese": "​附近​的​吟遊詩人​聚​所"
+      },
+      "name": "Buff Bardic Hall Building",
+      "population": 1.0,
+      "productivityUpgrade": 0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 50434,
+      "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_public_celtic_town_hall.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Conselho de Edis próximo",
+        "english": "Nearby Alder Council",
+        "french": "Conseil des anciens à proximité",
+        "german": "Ältestenrat in der Nähe",
+        "italian": "Consiglio degli aldermanni nelle vicinanze",
+        "japanese": "​付近​に​長老​の​集​会場​あり",
+        "korean": "​주변 ​의회",
+        "polish": "Pobliska Rada Starszych",
+        "russian": "Совет олдерменов поблизости",
+        "simplified_chinese": "​附近​有​桤​木​议会",
+        "spanish": "Concejo de álderes cercano",
+        "traditional_chinese": "​附近​的​長老​議會"
+      },
+      "name": "Buff Town Hall Building",
+      "population": 2.0,
+      "productivityUpgrade": 0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 44541,
+      "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_wonder_roman_bathhouse.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Banhos próximos",
+        "english": "Nearby Baths",
+        "french": "Thermes à proximité",
+        "german": "Bäder in der Nähe",
+        "italian": "Bagni nelle vicinanze",
+        "japanese": "​付近​に​浴場​あり",
+        "korean": "​주변 ​목욕탕",
+        "polish": "Pobliskie łaźnie",
+        "russian": "Термы поблизости",
+        "simplified_chinese": "​附近​有​浴场",
+        "spanish": "Termas cercanas",
+        "traditional_chinese": "​附近​的​浴場"
+      },
+      "name": "Buff Baths Building",
+      "population": 2.0,
+      "productivityUpgrade": 0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 44542,
+      "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_wonder_roman_forum.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Fórum próximo",
+        "english": "Nearby Forum",
+        "french": "Forum à proximité",
+        "german": "Forum in der Nähe",
+        "italian": "Foro nelle vicinanze",
+        "japanese": "​付近​に​広場​あり",
+        "korean": "​주변 ​포럼",
+        "polish": "Pobliskie forum",
+        "russian": "Форум поблизости",
+        "simplified_chinese": "​附近​有​广场",
+        "spanish": "Foro cercano",
+        "traditional_chinese": "​附近​的​廣場"
+      },
+      "name": "Buff Forum Building",
+      "population": 2.0,
+      "productivityUpgrade": 0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 44543,
+      "iconPath": "data/ui/fhd/base/icon_content/colosseum/icon_3d_colosseum.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Anfiteatro próximo",
+        "english": "Nearby Amphitheatre",
+        "french": "Amphithéâtre à proximité",
+        "german": "Amphitheater in der Nähe",
+        "italian": "Anfiteatro nelle vicinanze",
+        "japanese": "​付近​に​円形​闘技​場​あり",
+        "korean": "​주변 ​원형 ​극장",
+        "polish": "Pobliski amfiteatr",
+        "russian": "Амфитеатр поблизости",
+        "simplified_chinese": "​附近​有​圆形​剧场",
+        "spanish": "Anfiteatro cercano",
+        "traditional_chinese": "​附近​的​圓形​劇場"
+      },
+      "name": "Buff Amphitheater Building",
+      "population": 3.0,
+      "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
         "newWorkforce": 0,
@@ -431,6 +1052,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​圓形​劇場​輝煌​效果 ​I"
       },
       "name": "BuildingBuff Colosseum 01",
+      "population": 0.0,
       "productivityUpgrade": 50.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -466,7 +1088,44 @@ if(window.params == null)window.params={
         "traditional_chinese": "​圓形​劇場​輝煌​效果 ​II"
       },
       "name": "BuildingBuff Colosseum 02",
+      "population": 0.0,
       "productivityUpgrade": 50.0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 107936,
+      "iconPath": "data/ui/fhd/base/icon_content/colosseum/icon_3d_buff_colosseum_medium_bronze.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Esplendor de Anfiteatro IV",
+        "english": "Amphitheatre Splendour IV",
+        "french": "Splendeur de l'amphithéâtre IV",
+        "german": "Amphitheater-Pracht IV",
+        "italian": "Splendore anfiteatro IV",
+        "japanese": "​円形​闘技​場​の​輝き ​IV",
+        "korean": "​원형 ​극장 ​영광 ​IV",
+        "polish": "Splendor amfiteatru IV",
+        "russian": "Размах амфитеатра IV",
+        "simplified_chinese": "​圆形​剧场​辉煌 ​IV",
+        "spanish": "Esplendor anfiteatral IV",
+        "traditional_chinese": "​圓形​劇場​輝煌​效果 ​IV"
+      },
+      "name": "BuildingBuff Colosseum 04 FunctionalEffect Buff",
+      "population": 1.0,
+      "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
         "newWorkforce": 0,
@@ -508,6 +1167,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​儲存​穀倉"
       },
       "name": "BuildingBuff Silo",
+      "population": 0.0,
       "productivityUpgrade": 100.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -543,6 +1203,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​商​智之​神​慶典​「收穫​節」"
       },
       "name": "Buff Mercury Lugus Festival Gold Production -UNUSED-",
+      "population": 0.0,
       "productivityUpgrade": 100.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -578,6 +1239,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​農神​節"
       },
       "name": "Buff Cernunnos Festival Cernunnos Material Buildings",
+      "population": 0.0,
       "productivityUpgrade": 50.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -613,6 +1275,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​智慧​女神​慶典​「五日​節」"
       },
       "name": "Buff Minerva Festival Minerva Material Buildings",
+      "population": 0.0,
       "productivityUpgrade": 50.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -648,6 +1311,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​手​與​心"
       },
       "name": "Buff Productivity DQ 050 Hand and Heart DEPRECATED",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -683,7 +1347,80 @@ if(window.params == null)window.params={
         "traditional_chinese": "​手​與​心"
       },
       "name": "Buff Productivity DQ 050 Hand and Heart DEPRECATED",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 140764,
+      "iconPath": "data/ui/fhd/base/icon_content/attributes/icon_2d_population.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Espaço para os Deslocados",
+        "english": "Space for the Displaced",
+        "french": "De la place pour les déportés",
+        "german": "Raum für die Vertriebenen",
+        "italian": "Folla di sfollati",
+        "japanese": "​難民​の​ため​の​場所",
+        "korean": "​난민을 ​위한 ​공간",
+        "polish": "Miejsce dla wysiedlonych",
+        "russian": "Приют для лишившихся крова",
+        "simplified_chinese": "​安置​难民",
+        "spanish": "Lugar para los desplazados",
+        "traditional_chinese": "​安置​流離失所​者"
+      },
+      "name": "Buff Population DQ 150 Space for the Displaced",
+      "population": 3.0,
+      "productivityUpgrade": 0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 98692,
+      "iconPath": "data/ui/fhd/base/icon_content/attributes/icon_2d_population.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Espaço para os Deslocados",
+        "english": "Space for the Displaced",
+        "french": "De la place pour les déportés",
+        "german": "Raum für die Vertriebenen",
+        "italian": "Folla di sfollati",
+        "japanese": "​難民​の​ため​の​場所",
+        "korean": "​난민을 ​위한 ​공간",
+        "polish": "Miejsce dla wysiedlonych",
+        "russian": "Приют для лишившихся крова",
+        "simplified_chinese": "​安置​难民",
+        "spanish": "Lugar para los desplazados",
+        "traditional_chinese": "​安置​流離失所​者"
+      },
+      "name": "Buff Workforce DQ 150 Space for the Displaced",
+      "population": 6.0,
+      "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
         "newWorkforce": 0,
@@ -718,6 +1455,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​麵包​哨兵"
       },
       "name": "Buff Warehouses DQ 210 Bread Sentries",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -753,6 +1491,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​貿易​流動"
       },
       "name": "Debuff Upkeep DQ 250 The Flow of Trade",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -788,6 +1527,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​戰神​的​恩惠：\n​軍備"
       },
       "name": "Buff Mars Production",
+      "population": 0.0,
       "productivityUpgrade": 1.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -823,7 +1563,44 @@ if(window.params == null)window.params={
         "traditional_chinese": "​豐收​女神​的​恩惠：\n​豐收​女神​奧​古​斯​塔"
       },
       "name": "Ceres Buff Production",
+      "population": 0.0,
       "productivityUpgrade": 1.0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 43601,
+      "iconPath": "data/ui/fhd/base/icon_content/religion/icon_2d_deity_ceres.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Bênção de Ceres:\nConfarreatio",
+        "english": "Boon of Ceres:\nConfarreatio",
+        "french": "Don de Cérès :\nConfarreatio",
+        "german": "Ceres‘ Segen:\nConfarreatio",
+        "italian": "Dono di Cerere:\nConfarreatio",
+        "japanese": "​ケレース​の​恵み:\n​コンファレツィオ",
+        "korean": "​세레스의 ​은총:\n​콘파레아티오",
+        "polish": "Łaska Ceres:\nConfarreatio",
+        "russian": "Дар Цереры:\nКонфарреация",
+        "simplified_chinese": "​刻​瑞​斯​的​恩惠：\n​共​食​婚",
+        "spanish": "Don de Ceres:\nConfarreatio",
+        "traditional_chinese": "​豐收​女神​的​恩惠：\n​貴族​婚禮"
+      },
+      "name": "CeresPopulationBuff",
+      "population": 1.0,
+      "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
         "newWorkforce": 0,
@@ -858,6 +1635,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​豐收​女神​的​恩惠：\n​犁田​神​的​犁"
       },
       "name": "Buff CeresMoreFields",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -893,6 +1671,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​海神​的​恩惠：\n​深海​女神​的​果實"
       },
       "name": "Neptune Buff Production",
+      "population": 0.0,
       "productivityUpgrade": 1.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -928,7 +1707,44 @@ if(window.params == null)window.params={
         "traditional_chinese": "​馬​之​女神​的​恩惠：\n​百獸​女王"
       },
       "name": "Buff Epona Production",
+      "population": 0.0,
       "productivityUpgrade": 1.0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 108018,
+      "iconPath": "data/ui/fhd/base/icon_content/religion/icon_2d_deity_epona.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Bênção de Epona:\nRédeas da Prosperidade",
+        "english": "Boon of Epona:\nReins of Prosperity",
+        "french": "Don d'Epona :\nRênes de la Prospérité",
+        "german": "Eponas Segen:\nZügel des Wohlstands",
+        "italian": "Dono di Epona:\nRedini della prosperità",
+        "japanese": "​エポナ​の​恵み：\n​繁栄​の​手綱",
+        "korean": "​에포나의 ​은총:\n​번영의 ​고삐",
+        "polish": "Łaska Epony:\nWodze dobrobytu",
+        "russian": "Дар Эпоны:\nБразды процветания",
+        "simplified_chinese": "​艾​波​娜​的​恩惠：\n​繁荣​之​缰",
+        "spanish": "Don de Epona:\nLas riendas de la fortuna",
+        "traditional_chinese": "​馬​之​女神​的​恩惠：\n​繁榮​島​的​韁繩"
+      },
+      "name": "Buff Epona ExtraPopulation",
+      "population": 1.0,
+      "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
         "newWorkforce": 0,
@@ -963,6 +1779,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​自然​之​神​的​恩惠：\n​野性​本質"
       },
       "name": "Cernnunos Buff Production",
+      "population": 0.0,
       "productivityUpgrade": 1.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1017,6 +1834,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​自然​之​神​的​恩惠：\n​樹​棲​根莖"
       },
       "name": "Buff CernunnosExtraGoods",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1052,6 +1870,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​智慧​女神​的​恩惠：\n​阿拉​克​妮​的​紡錘"
       },
       "name": "Minerva Buff Production",
+      "population": 0.0,
       "productivityUpgrade": 1.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1089,6 +1908,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「泛​希臘​之友」​多里​安"
       },
       "name": "Specialist Rival 01 Dorian Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1126,6 +1946,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「泛​希臘​之友」​多里​安"
       },
       "name": "Specialist Rival 01 Dorian Buff Boosted",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1163,6 +1984,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​航程​已​終​的​塔​拉​貢"
       },
       "name": "Specialist Rival 02 Tarragon Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1200,6 +2022,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​航程​已​終​的​塔​拉​貢"
       },
       "name": "Specialist Rival 02 Tarragon Buff Boosted",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1237,6 +2060,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「絲綢​與​祕密​的​商人」​馬​麗​霞"
       },
       "name": "Specialist Rival 03 Licia Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1274,6 +2098,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「絲綢​與​祕密​的​商人」​馬​麗​霞"
       },
       "name": "Specialist Rival 03 Licia Buff Boosted",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1311,6 +2136,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「曾經​的​國王」​亞瑟．​約​格​溫"
       },
       "name": "Specialist Rival 04 Athr Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1348,6 +2174,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「曾經​的​國王」​亞瑟．​約​格​溫"
       },
       "name": "Specialist Rival 04 Athr Buff Boosted",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1385,6 +2212,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「美​索​不​達​米​亞​女王」​扎​拉．​尼​圖"
       },
       "name": "Specialist Rival 05 Zarai Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1422,6 +2250,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「美​索​不​達​米​亞​女王」​扎​拉．​尼​圖"
       },
       "name": "Specialist Rival 05 Zarai Buff Boosted",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1459,6 +2288,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「灰燼​貞女​祭司」​肯​寇​迪​亞"
       },
       "name": "Specialist Rival 06 Concordia Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1496,6 +2326,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「灰燼​貞女​祭司」​肯​寇​迪​亞"
       },
       "name": "Specialist Rival 06 Concordia Buff Boosted",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1533,6 +2364,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「潛伏​等候​的​獅子」​奈​斐​涅​魯"
       },
       "name": "Specialist Rival 07 Nefeneru Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1570,6 +2402,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「潛伏​等候​的​獅子」​奈​斐​涅​魯"
       },
       "name": "Specialist Rival 07 Nefeneru Buff Boosted",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1605,6 +2438,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​大象​飼養​員"
       },
       "name": "Specialist Campaign Elephant Handler Buff",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1640,6 +2474,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「海岸​莉莉」​塞爾維亞．​貝​利亞"
       },
       "name": "Specialist Quest Valeria Buff",
+      "population": 0.0,
       "productivityUpgrade": 25.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1675,6 +2510,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「雙​機​禁衛軍」​普​布​利​烏​斯．​昆​圖​斯"
       },
       "name": "Specialist Colosseum Quintus Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1710,6 +2546,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​高尚​志願者"
       },
       "name": "Specialist Colosseum Volunteer Buff",
+      "population": 0.0,
       "productivityUpgrade": 15.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1745,6 +2582,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​法​維​勒​斯，​黃沙​與​涼鞋​的​倖存者"
       },
       "name": "Specialist Colosseum Hero Favillus Buff",
+      "population": 0.0,
       "productivityUpgrade": 35.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1780,6 +2618,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​法​維​勒​斯，​黃沙​與​涼鞋​的​倖存者"
       },
       "name": "Specialist Colosseum Hero Favillus Boosted",
+      "population": 0.0,
       "productivityUpgrade": 45.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1815,6 +2654,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「浪跡​美食​家」​阿​皮​安．​莫​克​托​斯．​阿​庇​修​斯"
       },
       "name": "Specialist Colosseum Cook Apicius Buff",
+      "population": 0.0,
       "productivityUpgrade": 25.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1857,6 +2697,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​搖​麥​人"
       },
       "name": "Specialist WL SPQL W 009 Barley Farmer Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1899,6 +2740,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「忠心​獵犬」​費​德​烏​斯"
       },
       "name": "Specialist Wish Dog Buff",
+      "population": 0.0,
       "productivityUpgrade": 35.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1934,6 +2776,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​拾取​者"
       },
       "name": "Specialist Maintenance C Gatherers Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -1969,6 +2812,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​盛裝​者"
       },
       "name": "Specialist Maintenance C Coopers Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2004,6 +2848,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​本質​主義​者"
       },
       "name": "Specialist Maintenance C Extractors Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2039,6 +2884,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​融合​專家"
       },
       "name": "Specialist Maintenance C Smelters Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2074,6 +2920,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​測量​師"
       },
       "name": "Specialist Maintenance C Dressers Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2109,6 +2956,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​建構​主義​者"
       },
       "name": "Specialist Maintenance C Material Producers Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2144,6 +2992,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​阿​提​米​絲​的​獵人"
       },
       "name": "Specialist Maintenance R Hunters & Fisheries Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2179,6 +3028,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​遊牧​人"
       },
       "name": "Specialist Maintenance R Pastures Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2214,6 +3064,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​爐火​烹飪​專家"
       },
       "name": "Specialist Maintenance R Cookhouses Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2249,6 +3100,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​全能​鐵匠"
       },
       "name": "Specialist Maintenance R Arms Producers Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2284,6 +3136,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「農​神祭​兄弟​會​成員」​圖​盧​斯．​凱​西​利​烏​斯．​科​努​圖​斯"
       },
       "name": "Specialist Maintenance E Farms Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2319,6 +3172,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「冥界​女王」​瑞​亞．​波​瑟​芬​妮"
       },
       "name": "Specialist Maintenance E Mines & Pits Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2354,6 +3208,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「熱門​組合​專家」​艾​蘇​佩​拉​塔"
       },
       "name": "Specialist Maintenance E Workshops Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2389,6 +3244,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「不倦​耕耘​者」​蒂​雷​坎．​烏​厄．​艾​爾​高"
       },
       "name": "Specialist Maintenance E Plantations Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2424,6 +3280,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「巧手​造物​師」​帕​蕾​菲​絲​塔"
       },
       "name": "Specialist Maintenance E Artisans Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2459,6 +3316,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「礦坑​監工」​拉​爾．​敘​拉​古"
       },
       "name": "Specialist AreaPools L Mines Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2494,6 +3352,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「礦坑​監工」​拉​爾．​敘​拉​古"
       },
       "name": "Specialist AreaPools L Mines Boosted",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2529,6 +3388,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「皈依​戰神​盧​塞​提​烏​斯​之​人」​奧​恩"
       },
       "name": "Specialist AreaPools L Smelters Buff",
+      "population": 0.0,
       "productivityUpgrade": 10.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2571,6 +3431,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「皈依​戰神​盧​塞​提​烏​斯​之​人」​奧​恩"
       },
       "name": "Specialist AreaPools L Smelters Boosted",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2606,6 +3467,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​織​網​匠"
       },
       "name": "Specialist Productivity C SardineChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 10.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2641,6 +3503,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​燕麥​碾碎​工"
       },
       "name": "Specialist Productivity C PorridgeChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 10.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2676,6 +3539,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​河灘​尋​寶​人"
       },
       "name": "Specialist Productivity C EelChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 10.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2711,6 +3575,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​帆​匠"
       },
       "name": "Specialist Productivity C SailsChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 10.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2746,6 +3611,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​搓​繩​人"
       },
       "name": "Specialist Productivity C RopesChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 10.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2781,6 +3647,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​麵團​占卜​師"
       },
       "name": "Specialist Productivity C BreadChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 10.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2816,6 +3683,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​縫​衣​匠"
       },
       "name": "Specialist Productivity C TunicsChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 10.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2851,6 +3719,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​魚群​導師"
       },
       "name": "Specialist Productivity C GarumChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 10.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2886,6 +3755,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​皮匠"
       },
       "name": "Specialist Productivity C SandalsChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 10.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2921,6 +3791,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​蜜語​匠"
       },
       "name": "Specialist Productivity C WritingTabletsChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 10.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2956,6 +3827,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​強大​環​匠"
       },
       "name": "Specialist Productivity C TorcsChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 10.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -2991,6 +3863,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​搬運​工"
       },
       "name": "Specialist Productivity C AmphoraeChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 10.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3026,6 +3899,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​紡織​匠"
       },
       "name": "Specialist Productivity C ReedShoesChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 10.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3061,6 +3935,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​冷​壓​初​榨​者"
       },
       "name": "Specialist Productivity C OliveOilChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 10.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3096,6 +3971,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​苛​鹼​煉製​匠"
       },
       "name": "Specialist Productivity C SoapChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 10.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3131,6 +4007,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​帽​飾​匠"
       },
       "name": "Specialist Productivity C HatsChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 10.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3166,6 +4043,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​拾​貝​人"
       },
       "name": "Specialist Productivity C CocklesChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 10.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3201,6 +4079,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​忙碌​芽​菜"
       },
       "name": "Specialist Productivity C BeerChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 10.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3236,6 +4115,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​牛群​長官"
       },
       "name": "Specialist Productivity R BeefChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3271,6 +4151,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​乳​清​學徒"
       },
       "name": "Specialist Productivity R CheeseChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3306,6 +4187,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​縫​褲​匠"
       },
       "name": "Specialist Productivity R TrousersChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3341,6 +4223,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​車軸​輪​匠"
       },
       "name": "Specialist Productivity R ChariotsChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3376,6 +4259,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​葡萄​碾碎​工"
       },
       "name": "Specialist Productivity R WineChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3411,6 +4295,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​陰鬱​冶煉​工"
       },
       "name": "Specialist Productivity R BroochesChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3446,6 +4331,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​首席​制​袍​匠"
       },
       "name": "Specialist Productivity R TogasChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3481,6 +4367,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​髮根​造型​師"
       },
       "name": "Specialist Productivity R WigsChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3516,6 +4403,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​工藝​冶煉​匠"
       },
       "name": "Specialist Productivity R FineGlassChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3551,6 +4439,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​務實​庇佑"
       },
       "name": "Specialist Productivity R ClanShieldsChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3586,6 +4475,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​海岸​學生"
       },
       "name": "Specialist Productivity R OystersChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3621,6 +4511,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​高效​陷阱​師"
       },
       "name": "Specialist Productivity R PeltHatsChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3656,6 +4547,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​首席​斗篷​商"
       },
       "name": "Specialist Productivity R CloakChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3691,6 +4583,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​寡言​鑄​劍​師"
       },
       "name": "Specialist Productivity R WeaponsChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3726,6 +4619,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​扎​甲​工匠"
       },
       "name": "Specialist Productivity R ArmorChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3761,6 +4655,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​金石​學徒"
       },
       "name": "Specialist Productivity E NecklacesChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 35.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3796,6 +4691,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​風​之音​調​專家"
       },
       "name": "Specialist Productivity E LyresChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 35.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3831,6 +4727,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​豬​語​者"
       },
       "name": "Specialist Productivity E SausagesChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 35.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3866,6 +4763,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「熟識​人魚​者」​馬​里​克斯 "
       },
       "name": "Specialist Productivity E MirrorsChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 35.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3901,6 +4799,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「歌聲​消滅​者」​霍​思​達．​沃​爾​皮​烏​斯"
       },
       "name": "Specialist Productivity E TonguesChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 35.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3936,6 +4835,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「填​飾​工匠」​麥克​西​瑪．​科​蒂​烏​斯"
       },
       "name": "Specialist Productivity E LoungersChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 35.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -3971,6 +4871,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「馬術​大師」​菲​利​普​波​利​斯​的​外來​者"
       },
       "name": "Specialist Productivity E HorseChain Buff",
+      "population": 0.0,
       "productivityUpgrade": 35.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4006,6 +4907,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「微觀​宇宙​學者」​馬克​羅​比​烏​斯．​米​努​西亞​努​斯"
       },
       "name": "Specialist ProdPools L All Buff",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4041,6 +4943,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「微觀​宇宙​學者」​馬克​羅​比​烏​斯．​米​努​西亞​努​斯"
       },
       "name": "Specialist ProdPools L All Buff Boosted",
+      "population": 0.0,
       "productivityUpgrade": 35.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4083,6 +4986,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「隱士​極​簡​主義​者」​施​伊​爾​格"
       },
       "name": "Specialist ProdPools L Forestries Buff",
+      "population": 0.0,
       "productivityUpgrade": 30.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4125,6 +5029,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「隱士​極​簡​主義​者」​施​伊​爾​格"
       },
       "name": "Specialist ProdPools L Forestries Buff Boosted",
+      "population": 0.0,
       "productivityUpgrade": 40.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4167,6 +5072,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「鍍金​之​觸」​米​娜．​奧​爾​蘭"
       },
       "name": "Specialist ProdPools L Mines Buff",
+      "population": 0.0,
       "productivityUpgrade": 25.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4209,6 +5115,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「鍍金​之​觸」​米​娜．​奧​爾​蘭"
       },
       "name": "Specialist ProdPools L Mines Buff Boosted",
+      "population": 0.0,
       "productivityUpgrade": 35.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4251,6 +5158,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「鐵匠​守護者」​阿​內​林．​格​瓦​德​瑞​德"
       },
       "name": "Specialist ProdPools L Smelters Buff",
+      "population": 0.0,
       "productivityUpgrade": 25.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4293,6 +5201,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「鐵匠​守護者」​阿​內​林．​格​瓦​德​瑞​德"
       },
       "name": "Specialist ProdPools L Smelters Buff Boosted",
+      "population": 0.0,
       "productivityUpgrade": 35.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4335,6 +5244,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「薩​馬​提​鑄​劍​師」​佐​爾​西​內​斯"
       },
       "name": "Specialist ProdPools L Armouries Buff",
+      "population": 0.0,
       "productivityUpgrade": 30.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4377,6 +5287,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「薩​馬​提​鑄​劍​師」​佐​爾​西​內​斯"
       },
       "name": "Specialist ProdPools L Armouries Buff Boosted",
+      "population": 0.0,
       "productivityUpgrade": 40.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4419,6 +5330,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「豐收​貞女」​卡​斯波​尼亞．​卡​斯​塔"
       },
       "name": "Specialist ProdPools L Farms Buff",
+      "population": 0.0,
       "productivityUpgrade": 25.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4461,6 +5373,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「豐收​貞女」​卡​斯波​尼亞．​卡​斯​塔"
       },
       "name": "Specialist ProdPools L Farms Boosted",
+      "population": 0.0,
       "productivityUpgrade": 35.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4503,6 +5416,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「箴言​藥劑師」​卡​婷"
       },
       "name": "Specialist ProdPools L Plantations Buff",
+      "population": 0.0,
       "productivityUpgrade": 25.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4545,6 +5459,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「箴言​藥劑師」​卡​婷"
       },
       "name": "Specialist ProdPools L Plantations Boosted",
+      "population": 0.0,
       "productivityUpgrade": 35.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4587,6 +5502,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「瑞安​儂​的​馬車​夫」​普​威爾．​馬​納​維​丹"
       },
       "name": "Specialist ProdPools L Pastures Buff",
+      "population": 0.0,
       "productivityUpgrade": 30.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4629,6 +5545,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「瑞安​儂​的​馬車​夫」​普​威爾．​馬​納​維​丹"
       },
       "name": "Specialist ProdPools L Pastures Boosted",
+      "population": 0.0,
       "productivityUpgrade": 35.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4666,6 +5583,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「詮釋​學者」​艾​絲​琳．​烏​伊．​德​摩​克利​圖"
       },
       "name": "Specialist Residence L CoGen RC2 give C2 Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4703,6 +5621,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「詮釋​學者」​艾​絲​琳．​烏​伊．​德​摩​克利​圖"
       },
       "name": "Specialist Residence L CoGen RC2 give C2 Buff Boosted",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4740,6 +5659,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「快樂​主義​傳播​者」​雅典​的​巴西​里​奧​斯"
       },
       "name": "Specialist Residence L CoGen C2 give RC2 Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4777,6 +5697,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「快樂​主義​傳播​者」​雅典​的​巴西​里​奧​斯"
       },
       "name": "Specialist Residence L CoGen C2 give RC2 Buff Boosted",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4814,6 +5735,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「平民​女性​參政​提倡​者」​尤​芙​心​尼．​帕​度​利亞"
       },
       "name": "Specialist Residence L CoGen R1 give R2 Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4851,6 +5773,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「平民​女性​參政​提倡​者」​尤​芙​心​尼．​帕​度​利亞"
       },
       "name": "Specialist Residence L CoGen R1 give R2 Buff Boosted",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4886,6 +5809,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​重新​團結​者"
       },
       "name": "Specialist Workforce C Roman Farms Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4921,6 +5845,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​重新​自然​化​者"
       },
       "name": "Specialist Workforce C Celtic Farms Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4956,6 +5881,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​變​向​者"
       },
       "name": "Specialist Workforce C Roman Coast Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -4991,6 +5917,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​重新​領航員"
       },
       "name": "Specialist Workforce C Celtic Coast Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5026,6 +5953,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​偏離​常規​的​因素"
       },
       "name": "Specialist Workforce R Roman Institutions Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5061,6 +5989,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​鐵甲​分配​者"
       },
       "name": "Specialist Workforce R Celtic Institutions Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5096,6 +6025,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​反覆​審視​整理​規範​者"
       },
       "name": "Specialist Workforce R Roman Warehouses Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5131,6 +6061,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​進步​庫存​管理者"
       },
       "name": "Specialist Workforce R Celtic Warehouses Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5166,6 +6097,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「放牧​管理​牧師」​尼​祿．​維​利​烏​斯．​法​瑪"
       },
       "name": "Specialist Workforce E Roman Pastures Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5201,6 +6133,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「健康​牧羊​者」​凱​爾​布雷．​烏​伊．​穆爾​查​德"
       },
       "name": "Specialist Workforce E Celtic Pastures Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5236,6 +6169,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「高聳​象牙塔​之」​普​里​穆​斯．​特​雷​梅​利​烏​斯．​瓦​倫​斯"
       },
       "name": "Specialist Workforce E Roman Towers Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5271,6 +6205,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「橡樹​百歲​老人」​克​蘭​克里​歐姆​漢"
       },
       "name": "Specialist Workforce E Celtic Towers Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5306,6 +6241,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「推銷​高手」​迪​布里​克斯"
       },
       "name": "Specialist Military E Towers Happiness Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5348,6 +6284,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「尤​帕​里​尼亞​的​預備​役」​梅​加​利亞​的​吉​蓋​亞"
       },
       "name": "Specialist Aqueduct E WaterConsumption Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5383,6 +6320,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​大象​飼養​員"
       },
       "name": "Specialist Noble Albion Job Buff",
+      "population": 0.0,
       "productivityUpgrade": 25.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5418,6 +6356,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​大象​飼養​員"
       },
       "name": "Specialist Noble Latium Job Buff",
+      "population": 0.0,
       "productivityUpgrade": 25.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5453,6 +6392,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​大象​飼養​員"
       },
       "name": "Specialist Corrupt Income Buff",
+      "population": 0.0,
       "productivityUpgrade": 25.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5488,6 +6428,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​大象​飼養​員"
       },
       "name": "Specialist Corrupt Health Buff",
+      "population": 0.0,
       "productivityUpgrade": 25.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5509,6 +6450,7 @@ if(window.params == null)window.params={
       "iconPath": "data/ui/fhd/base/icon_content/items_specialist/unique/icon_3d_specialist_hooded_01.png",
       "isStackable": false,
       "name": "Specialist Onboarding Production Buff",
+      "population": 0.0,
       "productivityUpgrade": 25.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5530,6 +6472,7 @@ if(window.params == null)window.params={
       "iconPath": "data/ui/fhd/base/icon_content/items_specialist/unique/icon_3d_specialist_hooded_01.png",
       "isStackable": false,
       "name": "Specialist Onboarding Income Buff",
+      "population": 0.0,
       "productivityUpgrade": 25.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5558,6 +6501,7 @@ if(window.params == null)window.params={
       "iconPath": "data/ui/fhd/base/icon_content/icon_3d_removed.png",
       "isStackable": false,
       "name": "Buff Prydein Legendary Mines",
+      "population": 0.0,
       "productivityUpgrade": 100.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5579,11 +6523,34 @@ if(window.params == null)window.params={
       "iconPath": "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_roman_tier2_mercator.png",
       "isStackable": false,
       "name": "Buff Prydein Boulder Workforce",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
         "newWorkforce": 2198,
         "oldWorkforce": 2196
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 39787,
+      "iconPath": "data/ui/fhd/base/icon_content/icon_3d_removed.png",
+      "isStackable": false,
+      "name": "Buff Prydein Residence",
+      "population": 20.0,
+      "productivityUpgrade": 0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
       },
       "workforceMaintenanceFactorUpgrade": 0,
       "workforceModifierInPercent": 0.0
@@ -5614,6 +6581,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​奈​斯​特​的​聖心"
       },
       "name": "Potion Buff Full",
+      "population": 0.0,
       "productivityUpgrade": 50.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5649,6 +6617,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​維​恩​托​的​熾熱​活力"
       },
       "name": "Potion Buff Diminished",
+      "population": 0.0,
       "productivityUpgrade": 25.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5684,6 +6653,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​他們​必將​饗宴"
       },
       "name": "Improved productivity Pigs and Butcher Buff",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5719,6 +6689,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​他們​必將​茁壯"
       },
       "name": "Improved productivity Vineyard and Cellars Buff",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5756,7 +6727,46 @@ if(window.params == null)window.params={
         "traditional_chinese": "​火神​的​恩惠：\n​熔岩​鍛爐"
       },
       "name": "Vulcanus LocalEffect Productivty Buff",
+      "population": 0.0,
       "productivityUpgrade": 1.0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [
+        67902
+      ],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 148063,
+      "iconPath": "data/ui/fhd/dlc01/icon_content/religion/icon_2d_deity_vulcanus.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Bênção de Vulcano:\nIgnis Primigenii",
+        "english": "Boon of Vulcan:\nIgnis Primigenii",
+        "french": "Don de Vulcain :\nIgnis Primigenii",
+        "german": "Vulcanus’ Segen:\nIgnis Primigenii",
+        "italian": "Dono di Vulcano:\nIgnis Primigenii",
+        "japanese": "​ウルカヌス​の​恵み:\n​原初​の​火",
+        "korean": "​불카누스의 ​은총:\n​이그니스 ​프리미게니",
+        "polish": "Łaska Wulkana:\nIgnis Primigenii",
+        "russian": "Дар Вулкана:\nпервородный огонь",
+        "simplified_chinese": "​火神​恩赐：\n​原初​燃​火",
+        "spanish": "Don de Vulcano:\nIgnición Primigenia",
+        "traditional_chinese": "​火神​的​恩惠：\n​原初​之​火"
+      },
+      "name": "Vulcanus GlobalEffect FunctionalEffect Buff",
+      "population": 1.0,
+      "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
         "newWorkforce": 0,
@@ -5800,6 +6810,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​黑​曜​石​採集"
       },
       "name": "VolcanoEffect Phase03-01 ObsidianGathering Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5844,6 +6855,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​黑​曜​石​開採"
       },
       "name": "VolcanoEffect Phase03-01 ObsidianMining Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5881,7 +6893,44 @@ if(window.params == null)window.params={
         "traditional_chinese": "​肥沃​土壤"
       },
       "name": "VolcanoEffect Phase04 AshBloom Buff",
+      "population": 0.0,
       "productivityUpgrade": 10.0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 151418,
+      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_porridge_goods.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Thermopolia",
+        "english": "Thermopolia",
+        "french": "Thermopolia",
+        "german": "Thermopolia",
+        "italian": "Thermopolia",
+        "japanese": "​テルモポリウム",
+        "korean": "​테르모폴리아",
+        "polish": "Thermopolia",
+        "russian": "Термополии",
+        "simplified_chinese": "​热​食​店",
+        "spanish": "Termopolias",
+        "traditional_chinese": "​熱​食​攤"
+      },
+      "name": "TechEffect Porridge Population FunctionalEffect Buff",
+      "population": 1.0,
+      "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
         "newWorkforce": 0,
@@ -5918,6 +6967,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​火神​祭"
       },
       "name": "FestivalEffect Vulcan CoalEfficiency Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5955,6 +7005,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​葡萄​採​收​者"
       },
       "name": "Specialist Farming C Grapes Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -5992,6 +7043,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​亞麻​採​收​者"
       },
       "name": "Specialist Farming C Flax Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6029,6 +7081,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​海​蓬​子​採集​者"
       },
       "name": "Specialist Farming C Samphire Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6066,6 +7119,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​樹脂​採集​者"
       },
       "name": "Specialist Farming C Resin Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6103,6 +7157,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​橄欖​採​收​者"
       },
       "name": "Specialist Farming C Olives Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6140,6 +7195,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​薰​衣​草​專家"
       },
       "name": "Specialist Farming C Lavender Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6177,6 +7233,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​藥草​博​學者"
       },
       "name": "Specialist Farming R Herbs Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6214,6 +7271,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​尋​銀​者"
       },
       "name": "Specialist Farming R Silver Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6251,6 +7309,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​熟練​樹​藝​家"
       },
       "name": "Specialist Farming R Sandarac Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6288,6 +7347,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​輔助​勘測​員"
       },
       "name": "Specialist Farming R Minerals Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6325,6 +7385,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​漂泊​染​匠"
       },
       "name": "Specialist Farming R DyePlants Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6362,6 +7423,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​穀物​栽培​者"
       },
       "name": "Specialist Farming R Barley Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6399,6 +7461,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​猛擊​鎚​手"
       },
       "name": "Specialist Farming R IronOre Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6436,6 +7499,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​小小​礦工"
       },
       "name": "Specialist Farming R TinOre Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6473,6 +7537,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​宣講​的​礦脈​拾取​者"
       },
       "name": "Specialist Farming R CopperOre Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6510,6 +7575,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​幸運​的​洗衣​婦"
       },
       "name": "Specialist Farming R GoldOre Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6547,6 +7613,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「香氣​首領」​阿​比爾"
       },
       "name": "Specialist Farming E Lavender Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6584,6 +7651,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「葡萄酒​語​者」​吉​賽​拉"
       },
       "name": "Specialist Farming E Grapes Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6621,6 +7689,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「田地​監工」​梅​娜"
       },
       "name": "Specialist Farming E Flax Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6658,6 +7727,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「鹽​足​女王」​雷​爾 "
       },
       "name": "Specialist Farming E Samphire Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6695,6 +7765,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「知曉​過去​者」​布里"
       },
       "name": "Specialist Farming E Resin Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6732,6 +7803,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「橄欖​天賦​者」​奧林​皮​奧​多​羅斯"
       },
       "name": "Specialist Farming E Olives Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6769,6 +7841,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「傳說​藥草​師」​洛​拉​娜"
       },
       "name": "Specialist Farming L Herbs Buff",
+      "population": 0.0,
       "productivityUpgrade": 25.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6806,6 +7879,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「傳說​藥草​師」​洛​拉​娜"
       },
       "name": "Specialist Farming L Herbs Buff Boosted",
+      "population": 0.0,
       "productivityUpgrade": 50.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6843,6 +7917,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「彩虹​捕手」​科​伊​萊​恩．​普​卡​格"
       },
       "name": "Specialist Farming L Dyes Buff",
+      "population": 0.0,
       "productivityUpgrade": 25.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6880,6 +7955,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「彩虹​捕手」​科​伊​萊​恩．​普​卡​格"
       },
       "name": "Specialist Farming L Dyes Buff Boosted",
+      "population": 0.0,
       "productivityUpgrade": 50.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6917,6 +7993,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​金​釀​娜​娜"
       },
       "name": "Specialist Farming L Barley Buff",
+      "population": 0.0,
       "productivityUpgrade": 25.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6954,6 +8031,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​金​釀​娜​娜"
       },
       "name": "Specialist Farming L Barley Buff Boosted",
+      "population": 0.0,
       "productivityUpgrade": 50.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -6991,6 +8069,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「林地​守衛」​蓋​烏​斯．​克里​托​尼​烏​斯．​林​格​斯"
       },
       "name": "Specialist Farming L Sandarac Buff",
+      "population": 0.0,
       "productivityUpgrade": 25.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7028,6 +8107,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「林地​守衛」​蓋​烏​斯．​克里​托​尼​烏​斯．​林​格​斯"
       },
       "name": "Specialist Farming L Sandarac Buff Boosted",
+      "population": 0.0,
       "productivityUpgrade": 50.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7065,6 +8145,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「非凡​前景」​卡​德​琳​娜"
       },
       "name": "Specialist Farming L SilverOre Buff",
+      "population": 0.0,
       "productivityUpgrade": 25.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7102,6 +8183,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「非凡​前景」​卡​德​琳​娜"
       },
       "name": "Specialist Farming L SilverOre Buff Boosted",
+      "population": 0.0,
       "productivityUpgrade": 50.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7139,6 +8221,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「金色​海​雀」​奧​盧​斯．​奧​里​烏​斯．​奧​里​幣"
       },
       "name": "Specialist Farming L GoldOre Buff",
+      "population": 0.0,
       "productivityUpgrade": 25.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7176,6 +8259,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「金色​海​雀」​奧​盧​斯．​奧​里​烏​斯．​奧​里​幣"
       },
       "name": "Specialist Farming L GoldOre Buff Boosted",
+      "population": 0.0,
       "productivityUpgrade": 50.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7213,6 +8297,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​翠鳥​王"
       },
       "name": "Specialist Farming C Mackerel Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7250,6 +8335,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​潮汐​農夫"
       },
       "name": "Specialist Farming C SeaSnail Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7287,6 +8373,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​甲殼​採集​者"
       },
       "name": "Specialist Farming C Seashell Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7324,6 +8411,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​老練​擒​取​者"
       },
       "name": "Specialist Farming R Sturgeon Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7361,6 +8449,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​令人​想​抱抱​的​牧群​長"
       },
       "name": "Specialist Farming R Ponies Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7398,6 +8487,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​鹹味​啜飲​者"
       },
       "name": "Specialist Farming R Oysters Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7435,6 +8525,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​無情​的​鳥​禽​飼養​者"
       },
       "name": "Specialist Farming R SmallBirds Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7472,6 +8563,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​自我​懷疑​的​水壩​破壞​者"
       },
       "name": "Specialist Farming R Beavers Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7509,6 +8601,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​鑿​刻​的​切割​者"
       },
       "name": "Specialist Farming R Granite Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7546,6 +8639,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​神奇​雕塑家"
       },
       "name": "Specialist Farming R Marble Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7583,6 +8677,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「香​氛​女主人」​法​烏​斯​塔．​費​斯​蒂​尼亞．​福​蒂​達"
       },
       "name": "Specialist Farming E Mackerel Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7620,6 +8715,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「高盧​狂怒」​伊​拉​蘇．​馬​林"
       },
       "name": "Specialist Farming E SeaSnail Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7657,6 +8753,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「海​行者」​阿​舍​拉"
       },
       "name": "Specialist Farming E Seashell Buff",
+      "population": 0.0,
       "productivityUpgrade": 0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7694,6 +8791,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「羅馬​最快​的​刀」​庫​特​勒​拉"
       },
       "name": "Specialist Farming L Sturgeon Buff",
+      "population": 0.0,
       "productivityUpgrade": 25.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7731,6 +8829,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「羅馬​最快​的​刀」​庫​特​勒​拉"
       },
       "name": "Specialist Farming L Sturgeon Buff Boosted",
+      "population": 0.0,
       "productivityUpgrade": 50.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7768,6 +8867,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「小​馬​血統​之​翼」​科爾​姆​卡​派​爾 "
       },
       "name": "Specialist Farming L Ponies Buff",
+      "population": 0.0,
       "productivityUpgrade": 25.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7805,6 +8905,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「小​馬​血統​之​翼」​科爾​姆​卡​派​爾 "
       },
       "name": "Specialist Farming L Ponies Buff Boosted",
+      "population": 0.0,
       "productivityUpgrade": 50.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7842,6 +8943,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​隨侍​雕​工"
       },
       "name": "Specialist Volcano Storyline R Productivity Idols Buff",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7879,6 +8981,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​拼湊​遊戲​學者"
       },
       "name": "Specialist Volcano Storyline R Productivity Boardgames Buff",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7916,6 +9019,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「長夜​演說​家」​奧​菲​莉​亞"
       },
       "name": "Specialist Volcano Storyline L End Buff",
+      "population": 0.0,
       "productivityUpgrade": 50.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7953,6 +9057,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​「長夜​演說​家」​奧​菲​莉​亞"
       },
       "name": "Specialist Volcano Storyline L End Buff Boosted",
+      "population": 0.0,
       "productivityUpgrade": 70.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7967,6 +9072,82 @@ if(window.params == null)window.params={
       "additionalOutputs": [],
       "additionalWorkforces": [],
       "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [
+        67902
+      ],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 149293,
+      "iconPath": "data/ui/fhd/dlc01/icon_content/item_specialist/hall_of_fame/icon_3d_cdlc01_hof_nanny.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Ancharia, Querida dos Lares Compitales",
+        "english": "Ancharia, Darling of the Lares Compitales",
+        "french": "Ancharia, Bien-aimée des Lares Compitales",
+        "german": "Ancharia, Liebling der Lares compitales",
+        "italian": "Ancharia, preferita dei Lares Compitales",
+        "japanese": "​ラ​レス・​コンピタレス​神​の​寵児-​アンカ​リア",
+        "korean": "​안카리아, ​교차로 ​수호신의 ​총애를 ​받는 ​자",
+        "polish": "Ancharia, ulubienica wędrownych duchów",
+        "russian": "Анкария, любимица компитальных ларов",
+        "simplified_chinese": "​安​卡​利亚，​家宅​守​护​神​的​宠​儿",
+        "spanish": "Ancharia, favorita de los lares compitales",
+        "traditional_chinese": "​安​卡​里亞，​街坊​家​神​的​寵兒"
+      },
+      "name": "Specialist HallOfFame Nanny Buff",
+      "population": 2.0,
+      "productivityUpgrade": 0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
+      "dlcUnlocks": [
+        67902
+      ],
+      "fertilityPercent": 100,
+      "fuelDurationPercent": 0.0,
+      "guid": 149294,
+      "iconPath": "data/ui/fhd/dlc01/icon_content/item_specialist/hall_of_fame/icon_3d_cdlc01_hof_nanny.png",
+      "isStackable": false,
+      "locaText": {
+        "brazilian": "Ancharia, Querida dos Lares Compitales",
+        "english": "Ancharia, Darling of the Lares Compitales",
+        "french": "Ancharia, Bien-aimée des Lares Compitales",
+        "german": "Ancharia, Liebling der Lares compitales",
+        "italian": "Ancharia, preferita dei Lares Compitales",
+        "japanese": "​ラ​レス・​コンピタレス​神​の​寵児-​アンカ​リア",
+        "korean": "​안카리아, ​교차로 ​수호신의 ​총애를 ​받는 ​자",
+        "polish": "Ancharia, ulubienica wędrownych duchów",
+        "russian": "Анкария, любимица компитальных ларов",
+        "simplified_chinese": "​安​卡​利亚，​家宅​守​护​神​的​宠​儿",
+        "spanish": "Ancharia, favorita de los lares compitales",
+        "traditional_chinese": "​安​卡​里亞，​街坊​家​神​的​寵兒"
+      },
+      "name": "Specialist HallOfFame Nanny Buff Boosted",
+      "population": 3.0,
+      "productivityUpgrade": 0,
+      "replaceInputs": [],
+      "replaceWorkforce": {
+        "newWorkforce": 0,
+        "oldWorkforce": 0
+      },
+      "workforceMaintenanceFactorUpgrade": 0,
+      "workforceModifierInPercent": 0.0
+    },
+    {
+      "addedFertility": 0,
+      "additionalOutputs": [],
+      "additionalWorkforces": [],
+      "baseProductivityUpgrade": 0,
       "dlcUnlocks": [],
       "fertilityPercent": 100,
       "fuelDurationPercent": 0.0,
@@ -7974,6 +9155,7 @@ if(window.params == null)window.params={
       "iconPath": "data/ui/fhd/base/icon_content/generic/icon_2d_arrow_up.png",
       "isStackable": false,
       "name": "Buff Farm Productivity VD 040 The Literal Aftermath",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -7995,6 +9177,7 @@ if(window.params == null)window.params={
       "iconPath": "data/ui/fhd/base/icon_content/generic/icon_2d_arrow_up.png",
       "isStackable": false,
       "name": "Buff Farm Productivity VD 040 The Literal Aftermath",
+      "population": 0.0,
       "productivityUpgrade": 20.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -8016,6 +9199,7 @@ if(window.params == null)window.params={
       "iconPath": "data/ui/fhd/base/icon_content/generic/icon_2d_arrow_up.png",
       "isStackable": false,
       "name": "Buff Farm Productivity VD 040 The Literal Aftermath",
+      "population": 0.0,
       "productivityUpgrade": 30.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -8037,6 +9221,7 @@ if(window.params == null)window.params={
       "iconPath": "data/ui/fhd/base/icon_content/generic/icon_2d_arrow_up.png",
       "isStackable": false,
       "name": "Buff Farm Productivity VD 040 The Literal Aftermath",
+      "population": 0.0,
       "productivityUpgrade": 30.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -8058,6 +9243,7 @@ if(window.params == null)window.params={
       "iconPath": "data/ui/fhd/base/icon_content/generic/icon_2d_arrow_up.png",
       "isStackable": false,
       "name": "Buff Farm Productivity VD 040 The Literal Aftermath",
+      "population": 0.0,
       "productivityUpgrade": 50.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -8079,6 +9265,7 @@ if(window.params == null)window.params={
       "iconPath": "data/ui/fhd/base/icon_content/generic/icon_2d_arrow_up.png",
       "isStackable": false,
       "name": "Buff Farm Productivity VD 040 The Literal Aftermath",
+      "population": 0.0,
       "productivityUpgrade": 50.0,
       "replaceInputs": [],
       "replaceWorkforce": {
@@ -8493,6 +9680,620 @@ if(window.params == null)window.params={
     },
     {
       "buffs": [
+        32385
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 0,
+      "effectScope": "Radius",
+      "excludeEffectSourceGUID": true,
+      "guid": 99014,
+      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_oysters_and_caviar_goods.png",
+      "locaText": {
+        "brazilian": "Epicure da Água próximo",
+        "english": "Nearby Epicure of Water",
+        "french": "Épicurien de l'eau à proximité",
+        "german": "Meeresgourmet in der Nähe",
+        "italian": "Epicureo dell'acqua nelle vicinanze",
+        "japanese": "​付近​に​水​の​美食​家​あり",
+        "korean": "​주변 ​수질 ​감정사",
+        "polish": "Pobliskie owoce morza",
+        "russian": "Морские деликатесы поблизости",
+        "simplified_chinese": "​附近​有​水产​珍​馐​作坊",
+        "spanish": "Epicurería de agua cercana",
+        "traditional_chinese": "​附近​的​魚子醬​美食​坊"
+      },
+      "name": "Effect Oysters with Caviar Building",
+      "source": "island-event",
+      "targets": [
+        3087,
+        3141,
+        3142,
+        3145,
+        6414,
+        6471,
+        6472,
+        6475,
+        6514
+      ],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
+        32526
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 0,
+      "effectScope": "Radius",
+      "excludeEffectSourceGUID": true,
+      "guid": 99017,
+      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_roast_goods.png",
+      "locaText": {
+        "brazilian": "Forno de Terra próximo",
+        "english": "Nearby Earth Oven",
+        "french": "Four enterré à proximité",
+        "german": "Erdofen in der Nähe",
+        "italian": "Forno a terra nelle vicinanze",
+        "japanese": "​付近​に​地​窯​あり",
+        "korean": "​주변 ​땅속 ​화덕",
+        "polish": "Pobliski piec ziemny",
+        "russian": "Земляная печь поблизости",
+        "simplified_chinese": "​附近​有​炕​窑",
+        "spanish": "Horno de tierra cercano",
+        "traditional_chinese": "​附近​的​窯​烤爐"
+      },
+      "name": "Effect Roast Beef Building",
+      "source": "island-event",
+      "targets": [
+        3087,
+        3141,
+        3142,
+        3145,
+        6414,
+        6471,
+        6472,
+        6475,
+        6514
+      ],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
+        32538
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 0,
+      "effectScope": "Radius",
+      "excludeEffectSourceGUID": true,
+      "guid": 99018,
+      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_sausages_goods.png",
+      "locaText": {
+        "brazilian": "Salsicium próximo",
+        "english": "Nearby Salsicium",
+        "french": "Salsicium à proximité",
+        "german": "Salsicium in der Nähe",
+        "italian": "Salsicium nelle vicinanze",
+        "japanese": "​付近​に​ソーセージ​職人​あり",
+        "korean": "​주변 ​소시지 ​제작소",
+        "polish": "Pobliskie salsicium",
+        "russian": "Сальсиций поблизости",
+        "simplified_chinese": "​附近​有​香肠​作坊",
+        "spanish": "Salsicio cercano",
+        "traditional_chinese": "​附近​的​香腸​工​坊"
+      },
+      "name": "Effect Sausages Building",
+      "source": "island-event",
+      "targets": [
+        3087,
+        3141,
+        3142,
+        3145,
+        6414,
+        6471,
+        6472,
+        6475,
+        6514
+      ],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
+        32542
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 0,
+      "effectScope": "Radius",
+      "excludeEffectSourceGUID": true,
+      "guid": 99034,
+      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_brooch_goods.png",
+      "locaText": {
+        "brazilian": "Fibularium próximo",
+        "english": "Nearby Fibularium",
+        "french": "Fibularium à proximité",
+        "german": "Fibularium in der Nähe",
+        "italian": "Fibularium nelle vicinanze",
+        "japanese": "​付近​に​ブローチ​職人​あり",
+        "korean": "​주변 ​걸쇠 ​제작소",
+        "polish": "Pobliskie fibularium",
+        "russian": "Фибулария поблизости",
+        "simplified_chinese": "​附近​有​别针​作坊",
+        "spanish": "Fibulario cercano",
+        "traditional_chinese": "​附近​的​胸針​工​坊"
+      },
+      "name": "Effect Brooches Building",
+      "source": "island-event",
+      "targets": [
+        3087,
+        3141,
+        3142,
+        3145,
+        6414,
+        6471,
+        6472,
+        6475,
+        6514
+      ],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
+        80712
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 0,
+      "effectScope": "StreetDistance",
+      "excludeEffectSourceGUID": true,
+      "guid": 99057,
+      "iconPath": "data/ui/fhd/base/icon_content/ornaments/shrines/icon_3d_shrine_mars.png",
+      "locaText": {
+        "brazilian": "Sacrário de Marte",
+        "english": "Shrine of Mars",
+        "french": "Sanctuaire de Mars",
+        "german": "Mars‘ Schrein",
+        "italian": "Sacrario di Marte",
+        "japanese": "​マルス​の​祭壇",
+        "korean": "​마르스의 ​제단",
+        "polish": "Kapliczka Marsa",
+        "russian": "Святыня Марса",
+        "simplified_chinese": "​玛​尔​斯​的​圣坛",
+        "spanish": "Altar de Marte",
+        "traditional_chinese": "​戰神​聖壇"
+      },
+      "name": "Effect Mars Shrine Building",
+      "source": "street-distance",
+      "targets": [
+        3087,
+        3141,
+        3142,
+        3145,
+        6414,
+        6471,
+        6472,
+        6475,
+        6514
+      ],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
+        81023
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 0,
+      "effectScope": "StreetDistance",
+      "excludeEffectSourceGUID": true,
+      "guid": 99058,
+      "iconPath": "data/ui/fhd/base/icon_content/ornaments/shrines/icon_3d_shrine_ceres.png",
+      "locaText": {
+        "brazilian": "Sacrário de Ceres",
+        "english": "Shrine of Ceres",
+        "french": "Sanctuaire de Cérès",
+        "german": "Ceres‘ Schrein",
+        "italian": "Sacrario di Cerere",
+        "japanese": "​ケレース​の​祭壇",
+        "korean": "​세레스의 ​제단",
+        "polish": "Kapliczka Ceres",
+        "russian": "Святыня Цереры",
+        "simplified_chinese": "​刻​瑞​斯​的​圣坛",
+        "spanish": "Altar de Ceres",
+        "traditional_chinese": "​豐收​女神​聖壇"
+      },
+      "name": "Effect Ceres Shrine Building",
+      "source": "street-distance",
+      "targets": [
+        3087,
+        3141,
+        3142,
+        3145,
+        6414,
+        6471,
+        6472,
+        6475,
+        6514
+      ],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
+        81066
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 0,
+      "effectScope": "StreetDistance",
+      "excludeEffectSourceGUID": true,
+      "guid": 99062,
+      "iconPath": "data/ui/fhd/base/icon_content/ornaments/shrines/icon_3d_shrine_epona.png",
+      "locaText": {
+        "brazilian": "Sacrário de Epona",
+        "english": "Shrine of Epona",
+        "french": "Sanctuaire d'Epona",
+        "german": "Eponas Schrein",
+        "italian": "Sacrario di Epona",
+        "japanese": "​エポナ​の​祭壇",
+        "korean": "​에포나의 ​제단",
+        "polish": "Kapliczka Epony",
+        "russian": "Святыня Эпоны",
+        "simplified_chinese": "​艾​波​娜​的​圣坛",
+        "spanish": "Altar de Epona",
+        "traditional_chinese": "​馬​之​女神​聖壇"
+      },
+      "name": "Effect Epona Shrine Building",
+      "source": "street-distance",
+      "targets": [
+        3087,
+        3141,
+        3142,
+        3145,
+        6414,
+        6471,
+        6472,
+        6475,
+        6514
+      ],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
+        44532
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 0,
+      "effectScope": "StreetDistance",
+      "excludeEffectSourceGUID": true,
+      "guid": 99065,
+      "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_public_roman_marketplace.png",
+      "locaText": {
+        "brazilian": "Mercado próximo",
+        "english": "Nearby Market",
+        "french": "Marché à proximité",
+        "german": "Markt in der Nähe",
+        "italian": "Mercato nelle vicinanze",
+        "japanese": "​付近​に​市場​あり",
+        "korean": "​주변 ​시장",
+        "polish": "Pobliskie targowisko",
+        "russian": "Рынок поблизости",
+        "simplified_chinese": "​附近​有​市场",
+        "spanish": "Mercado cercano",
+        "traditional_chinese": "​附近​的​市場"
+      },
+      "name": "Effect Market Building",
+      "source": "street-distance",
+      "targets": [],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
+        44533
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 0,
+      "effectScope": "StreetDistance",
+      "excludeEffectSourceGUID": true,
+      "guid": 99066,
+      "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_public_roman_tavern.png",
+      "locaText": {
+        "brazilian": "Taverna próxima",
+        "english": "Nearby Tavern",
+        "french": "Taverne à proximité",
+        "german": "Taberna in der Nähe",
+        "italian": "Taverna nelle vicinanze",
+        "japanese": "​付近​に​酒場​あり",
+        "korean": "​주변 ​선술집",
+        "polish": "Pobliska karczma",
+        "russian": "Таберна поблизости",
+        "simplified_chinese": "​附近​有​酒馆",
+        "spanish": "Taberna cercana",
+        "traditional_chinese": "​附近​的​酒館"
+      },
+      "name": "Effect Tavern Building",
+      "source": "street-distance",
+      "targets": [],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
+        44538
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 0,
+      "effectScope": "StreetDistance",
+      "excludeEffectSourceGUID": true,
+      "guid": 99070,
+      "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_public_roman_gambling_house.png",
+      "locaText": {
+        "brazilian": "Casa de Apostas próxima",
+        "english": "Nearby Gambling House",
+        "french": "Maison de jeu à proximité",
+        "german": "Aleatorium in der Nähe",
+        "italian": "Casa da gioco nelle vicinanze",
+        "japanese": "​付近​に​賭博​場​あり",
+        "korean": "​주변 ​도박장",
+        "polish": "Pobliska szulernia",
+        "russian": "Игорный дом поблизости",
+        "simplified_chinese": "​附近​有​赌场",
+        "spanish": "Casa de apuestas cercana",
+        "traditional_chinese": "​附近​的​賭場"
+      },
+      "name": "Effect Gambling House Building",
+      "source": "street-distance",
+      "targets": [
+        3087,
+        3141,
+        6414,
+        6471,
+        6475
+      ],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
+        44540
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 0,
+      "effectScope": "StreetDistance",
+      "excludeEffectSourceGUID": true,
+      "guid": 99072,
+      "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_public_roman_temple.png",
+      "locaText": {
+        "brazilian": "Templo próximo",
+        "english": "Nearby Temple",
+        "french": "Temple à proximité",
+        "german": "Tempel in der Nähe",
+        "italian": "Tempio nelle vicinanze",
+        "japanese": "​付近​に​神殿​あり",
+        "korean": "​주변 ​사원",
+        "polish": "Pobliska świątynia",
+        "russian": "Храм поблизости",
+        "simplified_chinese": "​附近​有​神庙",
+        "spanish": "Templo cercano",
+        "traditional_chinese": "​附近​的​神廟"
+      },
+      "name": "Effect Temple Building",
+      "source": "street-distance",
+      "targets": [
+        3087,
+        3141,
+        3142,
+        6414,
+        6471,
+        6472,
+        6475,
+        6514
+      ],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
+        50432
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 0,
+      "effectScope": "StreetDistance",
+      "excludeEffectSourceGUID": true,
+      "guid": 99074,
+      "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_public_celtic_bardic_hall.png",
+      "locaText": {
+        "brazilian": "Casa Bárdica Próxima",
+        "english": "Nearby Bardic Hearth",
+        "french": "Théâtre bardique à proximité",
+        "german": "Sängerstube in der Nähe",
+        "italian": "Focolare del bardo nelle vicinanze",
+        "japanese": "​付近​に​吟遊詩人​の​暖炉​あり",
+        "korean": "​근처 ​음유시인의 ​화로",
+        "polish": "Pobliska scena barda",
+        "russian": "Подмостки барда поблизости",
+        "simplified_chinese": "​附近​的​吟游​诗人​火炉",
+        "spanish": "Corral bárdico cercano",
+        "traditional_chinese": "​附近​的​吟遊詩人​聚​所"
+      },
+      "name": "Effect Bardic Hall Building",
+      "source": "street-distance",
+      "targets": [],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
+        50434
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 0,
+      "effectScope": "StreetDistance",
+      "excludeEffectSourceGUID": true,
+      "guid": 99076,
+      "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_public_celtic_town_hall.png",
+      "locaText": {
+        "brazilian": "Conselho de Edis próximo",
+        "english": "Nearby Alder Council",
+        "french": "Conseil des anciens à proximité",
+        "german": "Ältestenrat in der Nähe",
+        "italian": "Consiglio degli aldermanni nelle vicinanze",
+        "japanese": "​付近​に​長老​の​集​会場​あり",
+        "korean": "​주변 ​의회",
+        "polish": "Pobliska Rada Starszych",
+        "russian": "Совет олдерменов поблизости",
+        "simplified_chinese": "​附近​有​桤​木​议会",
+        "spanish": "Concejo de álderes cercano",
+        "traditional_chinese": "​附近​的​長老​議會"
+      },
+      "name": "Effect Town Hall Building",
+      "source": "street-distance",
+      "targets": [
+        3087,
+        3141,
+        6414,
+        6471,
+        6475,
+        6514
+      ],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
+        44541
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 0,
+      "effectScope": "StreetDistance",
+      "excludeEffectSourceGUID": true,
+      "guid": 99094,
+      "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_wonder_roman_bathhouse.png",
+      "locaText": {
+        "brazilian": "Banhos próximos",
+        "english": "Nearby Baths",
+        "french": "Thermes à proximité",
+        "german": "Bäder in der Nähe",
+        "italian": "Bagni nelle vicinanze",
+        "japanese": "​付近​に​浴場​あり",
+        "korean": "​주변 ​목욕탕",
+        "polish": "Pobliskie łaźnie",
+        "russian": "Термы поблизости",
+        "simplified_chinese": "​附近​有​浴场",
+        "spanish": "Termas cercanas",
+        "traditional_chinese": "​附近​的​浴場"
+      },
+      "name": "Effect Baths Building",
+      "source": "street-distance",
+      "targets": [
+        3087,
+        3141,
+        6414,
+        6471,
+        6472,
+        6475
+      ],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
+        44542
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 0,
+      "effectScope": "StreetDistance",
+      "excludeEffectSourceGUID": true,
+      "guid": 99095,
+      "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_wonder_roman_forum.png",
+      "locaText": {
+        "brazilian": "Fórum próximo",
+        "english": "Nearby Forum",
+        "french": "Forum à proximité",
+        "german": "Forum in der Nähe",
+        "italian": "Foro nelle vicinanze",
+        "japanese": "​付近​に​広場​あり",
+        "korean": "​주변 ​포럼",
+        "polish": "Pobliskie forum",
+        "russian": "Форум поблизости",
+        "simplified_chinese": "​附近​有​广场",
+        "spanish": "Foro cercano",
+        "traditional_chinese": "​附近​的​廣場"
+      },
+      "name": "Effect Forum Building",
+      "source": "street-distance",
+      "targets": [
+        3087,
+        3141,
+        6414,
+        6471,
+        6475
+      ],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
+        44543
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 0,
+      "effectScope": "StreetDistance",
+      "excludeEffectSourceGUID": true,
+      "guid": 99096,
+      "iconPath": "data/ui/fhd/base/icon_content/colosseum/icon_3d_colosseum.png",
+      "locaText": {
+        "brazilian": "Anfiteatro próximo",
+        "english": "Nearby Amphitheatre",
+        "french": "Amphithéâtre à proximité",
+        "german": "Amphitheater in der Nähe",
+        "italian": "Anfiteatro nelle vicinanze",
+        "japanese": "​付近​に​円形​闘技​場​あり",
+        "korean": "​주변 ​원형 ​극장",
+        "polish": "Pobliski amfiteatr",
+        "russian": "Амфитеатр поблизости",
+        "simplified_chinese": "​附近​有​圆形​剧场",
+        "spanish": "Anfiteatro cercano",
+        "traditional_chinese": "​附近​的​圓形​劇場"
+      },
+      "name": "Effect Amphitheater Building",
+      "source": "street-distance",
+      "targets": [
+        3087,
+        3141,
+        3142,
+        6414,
+        6471,
+        6472,
+        6475,
+        6514
+      ],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
+        44540
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 0,
+      "effectScope": "StreetDistance",
+      "excludeEffectSourceGUID": true,
+      "guid": 124935,
+      "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_public_roman_temple.png",
+      "locaText": {
+        "brazilian": "Templo próximo",
+        "english": "Nearby Temple",
+        "french": "Temple à proximité",
+        "german": "Tempel in der Nähe",
+        "italian": "Tempio nelle vicinanze",
+        "japanese": "​付近​に​神殿​あり",
+        "korean": "​주변 ​사원",
+        "polish": "Pobliska świątynia",
+        "russian": "Храм поблизости",
+        "simplified_chinese": "​附近​有​神庙",
+        "spanish": "Templo cercano",
+        "traditional_chinese": "​附近​的​神廟"
+      },
+      "name": "Effect Roman Celtic Temple Building",
+      "source": "street-distance",
+      "targets": [
+        3087,
+        3141,
+        6414,
+        6471,
+        6472,
+        6475
+      ],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
         68756
       ],
       "dlcUnlocks": [],
@@ -8572,6 +10373,45 @@ if(window.params == null)window.params={
         13808,
         13810,
         13839
+      ],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
+        107936
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 0,
+      "effectScope": "ObjectsInArea",
+      "excludeEffectSourceGUID": true,
+      "guid": 107937,
+      "iconPath": "data/ui/fhd/base/icon_content/colosseum/icon_3d_buff_colosseum_medium_bronze.png",
+      "locaText": {
+        "brazilian": "Fama de Anfiteatro IV",
+        "english": "Amphitheatre Fame IV",
+        "french": "Prestige de l'amphithéâtre IV",
+        "german": "Amphitheater-Ruhm IV",
+        "italian": "Fama anfiteatro IV",
+        "japanese": "​円形​闘技​場​の​名声 ​IV",
+        "korean": "​원형 ​극장 ​명성 ​IV",
+        "polish": "Renoma amfiteatru IV",
+        "russian": "Слава амфитеатра IV",
+        "simplified_chinese": "​圆形​剧场​名望 ​IV",
+        "spanish": "Fama anfiteatral IV",
+        "traditional_chinese": "​圓形​劇場​名聲 ​IV"
+      },
+      "name": "Effect Colosseum Medium 04 FunctionalEffect",
+      "source": "island-event",
+      "targets": [
+        3087,
+        3141,
+        3142,
+        3145,
+        6414,
+        6471,
+        6472,
+        6475,
+        6514
       ],
       "targetsIsAllProduction": false
     },
@@ -8724,6 +10564,70 @@ if(window.params == null)window.params={
     },
     {
       "buffs": [
+        140764
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 14400,
+      "effectScope": "ObjectsInArea",
+      "excludeEffectSourceGUID": false,
+      "guid": 98651,
+      "iconPath": "data/ui/fhd/base/icon_content/generic/icon_2d_population_latinum.png",
+      "locaText": {
+        "brazilian": "Espaço para os Deslocados",
+        "english": "Space for the Displaced",
+        "french": "De la place pour les déportés",
+        "german": "Raum für die Vertriebenen",
+        "italian": "Folla di sfollati",
+        "japanese": "​難民​の​ため​の​場所",
+        "korean": "​난민을 ​위한 ​공간",
+        "polish": "Miejsce dla wysiedlonych",
+        "russian": "Приют для лишившихся крова",
+        "simplified_chinese": "​安置​难民",
+        "spanish": "Lugar para los desplazados",
+        "traditional_chinese": "​安置​流離失所​者"
+      },
+      "name": "Effect Option 0 DQ 150 Space for the Displaced",
+      "source": "island-event",
+      "targets": [
+        3087,
+        6414
+      ],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
+        98692
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 14400,
+      "effectScope": "ObjectsInArea",
+      "excludeEffectSourceGUID": false,
+      "guid": 98686,
+      "iconPath": "data/ui/fhd/base/icon_content/generic/icon_2d_population_latinum.png",
+      "locaText": {
+        "brazilian": "Espaço para os Deslocados",
+        "english": "Space for the Displaced",
+        "french": "De la place pour les déportés",
+        "german": "Raum für die Vertriebenen",
+        "italian": "Folla di sfollati",
+        "japanese": "​難民​の​ため​の​場所",
+        "korean": "​난민을 ​위한 ​공간",
+        "polish": "Miejsce dla wysiedlonych",
+        "russian": "Приют для лишившихся крова",
+        "simplified_chinese": "​安置​难民",
+        "spanish": "Lugar para los desplazados",
+        "traditional_chinese": "​安置​流離失所​者"
+      },
+      "name": "Effect Option 1 DQ 150 Space for the Displaced",
+      "source": "island-event",
+      "targets": [
+        3087,
+        6414
+      ],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
         80566
       ],
       "dlcUnlocks": [],
@@ -8813,6 +10717,45 @@ if(window.params == null)window.params={
         8427,
         23723,
         23753
+      ],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
+        43601
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 0,
+      "effectScope": "ObjectsInArea",
+      "excludeEffectSourceGUID": false,
+      "guid": 43600,
+      "iconPath": "data/ui/fhd/base/icon_content/religion/icon_2d_deity_ceres.png",
+      "locaText": {
+        "brazilian": "Confarreatio",
+        "english": "Confarreatio",
+        "french": "Confarreatio",
+        "german": "Confarreatio",
+        "italian": "Confarreatio",
+        "japanese": "​コンファレツィオ",
+        "korean": "​콘파레아티오",
+        "polish": "Confarreatio",
+        "russian": "Конфарреация",
+        "simplified_chinese": "​共​食​婚",
+        "spanish": "Confarreatio",
+        "traditional_chinese": "​貴族​婚禮"
+      },
+      "name": "CeresPopulationEffect",
+      "source": "island-event",
+      "targets": [
+        3087,
+        3141,
+        3142,
+        3145,
+        6414,
+        6471,
+        6472,
+        6475,
+        6514
       ],
       "targetsIsAllProduction": false
     },
@@ -8937,6 +10880,35 @@ if(window.params == null)window.params={
         15514
       ],
       "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
+        108018
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 0,
+      "effectScope": "ObjectsInArea",
+      "excludeEffectSourceGUID": false,
+      "guid": 80865,
+      "iconPath": "data/ui/fhd/base/icon_content/religion/icon_2d_deity_epona.png",
+      "locaText": {
+        "brazilian": "Rédeas da Prosperidade",
+        "english": "Reins of Prosperity",
+        "french": "Rênes de la Prospérité",
+        "german": "Zügel des Wohlstands",
+        "italian": "Redini della prosperità",
+        "japanese": "​繁栄​の​手綱",
+        "korean": "​번영의 ​번영",
+        "polish": "Wodze dobrobytu",
+        "russian": "Бразды процветания",
+        "simplified_chinese": "​繁荣​之​缰",
+        "spanish": "Las riendas de la fortuna",
+        "traditional_chinese": "​繁榮​島​的​韁繩"
+      },
+      "name": "Effect EponaExtraPopulation ",
+      "source": "island-event",
+      "targets": [],
+      "targetsIsAllProduction": true
     },
     {
       "buffs": [
@@ -9246,6 +11218,47 @@ if(window.params == null)window.params={
     },
     {
       "buffs": [
+        148063
+      ],
+      "dlcUnlocks": [
+        67902
+      ],
+      "effectDuration": 0,
+      "effectScope": "Radius",
+      "excludeEffectSourceGUID": true,
+      "guid": 148062,
+      "iconPath": "data/ui/fhd/dlc01/icon_content/religion/icon_2d_deity_vulcanus.png",
+      "locaText": {
+        "brazilian": "Bênção de Vulcano:\nIgnis Primigenii",
+        "english": "Boon of Vulcan:\nIgnis Primigenii",
+        "french": "Don de Vulcain :\nIgnis Primigenii",
+        "german": "Vulcanus’ Segen:\nIgnis Primigenii",
+        "italian": "Dono di Vulcano:\nIgnis Primigenii",
+        "japanese": "​ウルカヌス​の​恵み:\n​原初​の​火",
+        "korean": "​불카누스의 ​은총:\n​이그니스 ​프리미게니",
+        "polish": "Łaska Wulkana:\nIgnis Primigenii",
+        "russian": "Дар Вулкана:\nпервородный огонь",
+        "simplified_chinese": "​火神​恩赐：\n​原初​燃​火",
+        "spanish": "Don de Vulcano:\nIgnición Primigenia",
+        "traditional_chinese": "​火神​的​恩惠：\n​原初​之​火"
+      },
+      "name": "Vulcanus GlobalEffect FunctionalEffect",
+      "source": "island-event",
+      "targets": [
+        3087,
+        3141,
+        3142,
+        3145,
+        6414,
+        6471,
+        6472,
+        6475,
+        6514
+      ],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
         145096
       ],
       "dlcUnlocks": [
@@ -9357,6 +11370,45 @@ if(window.params == null)window.params={
         2793,
         2794,
         8580
+      ],
+      "targetsIsAllProduction": false
+    },
+    {
+      "buffs": [
+        151418
+      ],
+      "dlcUnlocks": [],
+      "effectDuration": 0,
+      "effectScope": "Radius",
+      "excludeEffectSourceGUID": true,
+      "guid": 151414,
+      "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_porridge_goods.png",
+      "locaText": {
+        "brazilian": "Thermopolia",
+        "english": "Thermopolia",
+        "french": "Thermopolia",
+        "german": "Thermopolia",
+        "italian": "Thermopolia",
+        "japanese": "​テルモポリウム",
+        "korean": "​테르모폴리아",
+        "polish": "Thermopolia",
+        "russian": "Термополии",
+        "simplified_chinese": "​热​食​店",
+        "spanish": "Termopolias",
+        "traditional_chinese": "​熱​食​攤"
+      },
+      "name": "TechEffect Porridge Population FunctionalEffect",
+      "source": "island-event",
+      "targets": [
+        3087,
+        3141,
+        3142,
+        3145,
+        6414,
+        6471,
+        6472,
+        6475,
+        6514
       ],
       "targetsIsAllProduction": false
     },
@@ -17302,6 +19354,7 @@ if(window.params == null)window.params={
     "data/ui/fhd/base/icon_content/building/icon_3d_wonder_celtic_forum.png": "data:image/webp;base64,UklGRi4QAABXRUJQVlA4WAoAAAAQAAAAfwAAfwAAQUxQSAgKAAAN8L3tt+JE27b9xpyzIsQgBHdrO93dXS65/b6X7v/O3e/T3TjPy9pd0W5oCA2EpOYYYwFIClJ121JETAD+PycBBCg0ociQMQRVUVFNHjLGOGt3ec8imjBEZJxzQTbrGpt1772IQBOCQGRgrHP5qftGcqQrP53c9p6VIarQfWgPbSvaDYWq6l5ERAbGGLLG2Pyr0wCQnXpi9b+qIqysIgJRVSUiQ6Siou1DRMYYQyq7FSBjjLVkiQyRDVLHC9g7/3b5x826Z1VVYWEWhTGGCMIi0jYgGxRCNQL2zKpkrHXWWLKpfKWvXMpUsb9988mgtr66vLJZZxFhL0q2a3Jl0XvPqu1ChN//g7NfbXauzW+HLLDWpQqdfSXkRwqe0aIdKPcP9ne6rbkN2rix4r1S8IfPNk59cr3B0jYge7zj/gccpxf+ZtEr2SA4+lrnjggiN/nK0NHuoJD69Tfb0JFx9L917K+/Y0H70j/0P1NKofBc5d/qYkxm/EEcQoP02JvmVwvhDABMFU6parsocOXLP84DwOv3blFm6uEMDmv69ceqZ9d2rc8NCtpXlC6tPrur9NDSxKMpHObyiWm/6+u+4TZSVdn44uUyADz9YAcOexoArl95LlCBtAmURedq9+/qHUR7blQCVWFRbQ9AdOfbR7vRxg88e+ls3YfMqm1Bhmz35vcT2TaiiXf5i9th6Fm0DYwxwfBLti5o69xbx78+X294Fj10hpwrPS9oe3r47Qvf1xqeRQ6ZIRekj+cQh4O/v/nZRthglUNFxgapkQcQj4Xfz364FjZY5RCRsamg8oLGBIL3Bz64GzZY9NCQsUHQ9ZogNu3bYx/cDRssekiIbBCU3mDEqHlz7IO10LPooSCyLpV73SNWzdv9H95rhKJ6KKxLpZ83iFn7fvrznTDkw0DGpoJHhhG7qT9Ym22EXvTAyJggmHwMMVz8g9MXQ8+iB2aDoOtVxPLwm5+vhCEfFBmbSr/M8YTHpz6thcx6IEQ2cCf6ENP03sbvwpBVD8S6oPw8Yrv47uyd0PNBENkg9SzHF+6f+GbHe9UDsM6NTiHGzTu3roWeoyOyqcyziPXeZ76phV41MuvsZHe84bnaBfYcFZENMk8h5kvPzW57rxoNrLPjnXGHJ3cus5eIjAmCxxD7pcd+Xfc+GiJn+wbjD0+tLDCLRmKtvZ8ToH/iJIdRudwxJCA9faUqLBGQsWbIJgGmzBx71UjcESRiYfqCZ4nCmo6xZMDDN7eYI7GVbEKM87KytETG0HCYEMW+m8KqrcAYN4qEtNM3vUhLZEy6khQYXaspozUqZBOjP6yKaktkunxilFJrqtKSoWIjMdLFNRVtDZ2aGK5UVYE2RwRTQHJWqqyKFokSpbgtrYFMKkHSXtASgWyCBKytAUQJYlQRoapJDiGKQMEuOdiQUisK4VRyNKwhRLCTS45aiohaUt3oSo5qzqIVhepW3iTGWpGoFajqvVyQFH4zTwYRbGZTSdHYKhJFcc/lk6JWL0QhuCflpFjTEkxLEKlv9iXF7WzWUEuqEq4PJMVyMYXWICKLwzYZ9Ea/ta2pKi+Xc8lQuzNABq2LYDUoJ8P6TreJQkU2NseSYS7dSRE1FqeT4XJv1kQBFp4bSSdBeH3EWopAlXW+UEmCtbsjZBCliK7VxpJgzpWNjUSFa3P3JcGZoQ5rIgGzXBnPxV/98oSzFIkqy3wwEn+LWyPGIFoR3rhzIv7OdZUpKmUJL55Ix50/OZNyFJWwXC8NxN3tlUljo4J6vrvyYNydLvVYi6hFuH7uoUy8hb8+mrUUGdjLpfxkvN1YmzYuOlXm9cvPUax9N1KxFtEre39ysj/OVs8dDxwdhLAs3X00zn6XGzYWByoSnrq/I77qv3kgTeYgCARc95PxdZOnAKhGRmQMUfk24tv2rzFYVCOzzmaem0CMT7638NWWZ46IyDiXea0Tsd79y/qHOw0vqhGQMS4IJo8g5lO/d+s8h55FWzLGBIFNHwcAIYonVQN0PnahxmEoIi0YskGQPfJQdZdBTBMBwMsPnjlb86FXaYrIBUHvWxUkYeHpZzb/czEMvWozxgTBwO8hKQtvzfzzXOhZmiAKXOnn2H/tTm6QYmhpo7t7D+DZR/55PfSiTVjnntVdq/fGCOuz7pls/NS/rT9Zht7K9AJ4OfdlGDZjrO1+FADml54BMCrfZXriZ3XrqTRAqdmuUcC9c3KZWfYja2caALbO/AkA2IdmF0fiZ777GQDoK/7dsSIwUTrPrLoXkbHHAOBa933Apsv087lK/KxO5lBvFDB07cYMEBy/6FmxL1FQ3lXtSANKcK6OGM56QAkmrJYB9FS9NgFADIDiDd+DAnCXHoihoQs7lXQaWJWjACAGzSr8ygCA0ZV/f7wAbM7+sj+Gpqp/83gR2Jp9fXTXSsnRfgrmm+MBUHroLz4b76refP3P0HQ4v8B9o5loeOVerhJEE95a0P7RdDMdz//Dv4yU168//ecAwFdHraF9ICLXS30A7pv54OO7/e+/iGbl7Kd3sqZWeukhF8HlTxaAnleOm9bk3CcrHaiVXn4g2A8Dz/74T3Odr7wvu1aXp6xBE8xL888BMEcezQoJml3+j5snjuSpdvn04Ps9rWx/eHJmumPn2rmZd4utVP/j8vGjHbR9+WTveyP7ofLEgNo69pztHrK2CZVw56tHhgEgXbRoUle+mx0/VjYE1fXv5956zDZ17Z/t/b0GqmvfVH9+rCk9/e9dJ7oNQaX60/kHX+wze4HyOey9/O1Mh6MmwN5f/ekPC2h6Y6m2cPFW5dhIylmjyj68+GX/26P7rX/+64cmO6wlFV8/+cOxN3r2W/rg6kMTaWutKnN485v5wSNDub5ONL31dw8MuqZUOax/NfdHPc1c/fclnxuaHs7awBIgLA2/+s2F6WeGc45rd379286jQ0FgDYF96Be+XLz/sYGs4+2FH8+OzvS6wBEgwiHvzJ+bu2d73p9uZu1vK6MZZ9Csig+3Pzv3yiPFPeT216cfm3GZlLHOGQKg6jn0jfkfLms+1dj2Q0dHOlxgCVBlbnDt6o+3kE81NjE2M5QOAkMAVJm9Z27Uw+vfH3+hz+6x+buPpsdygaXmlH24c+rz+sR4zoTrl5b7jw4ba62zRNhTVdiH7Ku3V2qZrp6ulHPOYLcqS+h9uH7nbi3T3dsZOGcJe6oqixdm5vkv53tnyk63b1wJjg5lUpbQvCr7ht+4emG5AZMdmxpKOWcNoWkVYfYsChBZ6wxhXxXx7FkVILLOGsL+ClERllDqC5eub6kGfTMjpSCwhFZVmb1nbogY56wNLKF1FRFhVSJjCE2rqoiwKpE1hJZVlcV7Zu/FWGdtYA2hdVVlZhYhGGMsESJVVSiiVVUooldl8SwCNcZaQ4hWVUVVlYgQvwpRFVUC4WAVca74v0lWUDggAAYAAJAmAJ0BKoAAgAA/OYa5Vi8oJSOtFY1x4CcJZgDNBJPXwMy/CMu2dHbXNZ6nYZlMlATpsoOkR3Fe6UgrXx7SKs9Gtx1xK/ChlQwgAqmKQZB+WKT+tgg503ni+A7DRuFXtozi1lRI9wVXYEbj7ij6Wc3RcS7MckTl7tooKqWslMIT6pifS2JJzOnPOOCYEOXHGGY0ICrDmNGXSQ6KiQYnn8OtbicB1xwQoxA4jAnbmklSzE/eIQPXG2loZNwRf0YpbxjrRbvoq7pwx7koVcN1owSTN1eHEnDsIr1dX+wD+uAexm2VtQHSLVW/XjFRxIV2BdjeEBVBnp68iT9GNa2GW2LmeDL8ByRFJ97X6Sxvng1xHr35MzvMI6ut9EKEzn2JXWblDxFkGGp9ftrkJmaBqutX9I2b0G5ntk6TT+YAAP72OlTRxqZwZx7E7yVLflNZiOVKbjTROCbVscXCwNlAmu5A17cmiBNTnKam3UpsnrfadmPxfNdqUFMQYKVFkoI5BduNB4tjMkIKcFQ4z0OM8DFOBmnV+EMx499210LfZ6Hdtd3XBlLDXgH+IdlDdvot3fgFe15fZMc2ZhB8D09yNoVMa0q2ieedKy1bQgswR5RhAEUWbr9SNb6tCWyQGobim+BGj7UAF5JXrdMZU9n7rcgeYr80IlOObZylXp2LAsWJ+A6ZzNMiAXf4n/PfTu5zmA2uiQOFI1OyA+C7MOLDSZ9A+4YtJfRztrCGUsB4bgp7ZykhFf44KBGAcTgNJHjVmXKNddl54vZ8DADBTbqlBehCEZ3vGLxCUpl0CdMFnaUzZM4O3+1hifx4llesXCTGcIGpiMQ1L4ph+O1IrGn0KD2J9yi7thvfN01wAkYZdXqyY1XprGwxuQvLtZWe3Bb7HzCjtFUeXHrIPzBn1kDbZXiuzEerDXK8dn5BQwnHGISjt1LBDLvitAltYrHgNTnG4Th/t5+JTl8zRZjrxqhmdkhyl/KqInUw7f44JDUbhTaUpugsxkJwR9vpdpBO9YTx4sZK+RxY5mbstaRh/1Uxd8LPe0EVpOMe2EV/uchvLPvkQZgS39seKiHdHZ356ba9LcfIq7KgkN1pAcYXXg+Q5K7dp2CUpVpaDYmuFl0mXJ5JiTfQLjDb/Eg1JbMONoPyU8EOhqwBwHQrdwf7XBr4JwfjKxFIjN5snLGjU9Ox8N/IZhvGdF7yaVQkPDYldRM3IM9mqbPg7iuVOo2d7cP0HJGaInEgVTvA+cZ4wiuXN0vfrPYnlz7ZO7t2ye+amCox1lJTfiwLNHs0b/C3LFVGUVEhLLCQTM8CeNW7xIAPPLzpfVhOPY/cg4CySUbaiTGqaC9t9rNxm42Bvajc+HjsFeGQmD8R3m9IQOLGH7N+jk9yamhpL/aea3KElOkjlzG5lwcyl+xM7J4nNE2gwH+38zJIPS35rTHF93Cqeykua2hdqk3+TtEHlfj0wpAxQYF5DJ4jGAzSeC8x8aYAmBqpIoCPZu5SUYc4Hjv+VmxQueBXulHOfV7E0EHnCsy8N2sEdPnUfy61GOzrbRoRfJPTXM456pJm/UjHxRhJsJiOpt96ntOiOKwsOhgcqTZizAQ6RSM5Ec8Tt9piWeS1FCyrrMvibWXVT0g3CbKxAsySlf/PvPCs1mJRVPNSrCB9pcQvzTNB3M9UOUsWGYgrsNgWfQbsSJiikZNL9oOncbEkNQs2zqYxZwMNIFd3/koXM8Eisi6s/n6AIM60mW144Bmr2sBZnFMdcEmlp/tzVurcmA1W8IVZ1DYLD7pyYKx90KnA4wVCWjMVcU+J3AcUGEk8Szwz5rpPEQ2BnmpIZj2e6ZI6XXQxBjlTQdmCW0/FSzY/wjQePUXwsVjwJIOBIJDWeNc3SStP0TCItncZLgQ68Iqo93rqSBhYnPk8xomY0FDlEpoa2CenLI9Z6hP06P6CK5YoYTxMbRsJOSalgqE1s44GJ9uC6L5HCojGbd7+7WGm38QtQKADdWYwaeElruMN0gEJyqyNWHLQ3CvQRxXdUvsI2/G1hJgXMAHtkOmm7AAAAA==",
     "data/ui/fhd/base/icon_content/building/icon_3d_wonder_roman_bathhouse.png": "data:image/webp;base64,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",
     "data/ui/fhd/base/icon_content/building/icon_3d_wonder_roman_forum.png": "data:image/webp;base64,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",
+    "data/ui/fhd/base/icon_content/colosseum/icon_3d_buff_colosseum_medium_bronze.png": "data:image/webp;base64,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",
     "data/ui/fhd/base/icon_content/colosseum/icon_3d_buff_colosseum_small_bronze.png": "data:image/webp;base64,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",
     "data/ui/fhd/base/icon_content/colosseum/icon_3d_buff_colosseum_small_silver.png": "data:image/webp;base64,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",
     "data/ui/fhd/base/icon_content/colosseum/icon_3d_colosseum.png": "data:image/webp;base64,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",
@@ -17318,6 +19371,7 @@ if(window.params == null)window.params={
     "data/ui/fhd/base/icon_content/generic/icon_2d_permit_depot.png": "data:image/webp;base64,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",
     "data/ui/fhd/base/icon_content/generic/icon_2d_permit_guesthouse.png": "data:image/webp;base64,UklGRsgFAABXRUJQVlA4WAoAAAAQAAAAfwAAfwAAQUxQSAcFAAANsIZtmyFJ1vNFZFV7PGvbtm3btm3bOLZta23btt1GRnw/MjarMjPy+EdETAD/n7jZCEyMx6LLBMbS8uy/kwPsr74bic6zl3OAv/Ku8iwyuwV44+VImOX6LGAe+6A83pD1xNJZgNTyb9fEmoBIxgCqxZmMD6lmlPHK7LivBkwOT/Ei4AlqSEY/qsz8C9OyleKyxgTEmEwlnQ1E1xXXue5cKI1mei9Rls3ml4kU0Scf9O2aeUafCpAQZ3vgsjQsap69bqJd3iLEXgA8/7VoakK0bZ98QwFJ7PrLRklveMJ7BT+7advwz14ANHWbbxIl9+3nKa3wb8KhT1Jl1u5qfdhvpDm9WZWfft1gzl27Unrlnw2dF69QlQ/6gVm6i3nhrWWmFcKHo6mOz91dFVEwnkIfPX904cu6CxEF4ym9CRlPwaPP3AB/fWOL+W0BQRuwXsvz8icOsLNS7Gt/v+lTYPjiB+bZfIOphfjnhh3gF6K83/6pBVxXMe9/8X2C/rXbblhvz+4ixs5+2AImKdHoKEWPPP3H+zvIOXbV/RtvOn/SNh10xDa97A5a7L//D88etEvb4tt//x9n0rq+9gO/zZIdtfDjn1va+9zP7p165Jrxe/fWl2j/+3c+s/pKk+L2yG8ebFLoX78u6283T7z0ua9R+MADv5/l4Fki9dn9v3vNFgd8/6erbr1UZ4Q+O+sNSjr29B/v3uxYic07t9/QQ4k/+vHz264yOSYj19/SpNzv/PbGib13lng0XvkEQLQsojD42HK9xDM56qE7AKWsCrDnGDFdaKG/GbQ8iGC3IK5b78LENU8G5llm/JEPPqdnuVmef8aHzBILv//IcGCbXbx/PTJLLws3v5vZ7pDxJL30wcCc582ZTvnHF8YzzWM2TntfP/+dzJLLGCKcWoCFDgaz8uaXfwbYU4BZDrz3hswmq0H3tjOuU8Ab4r2qB1ip/3lgtqUBelcPbEx2o4c/JvI9ZBuNYaBDMvQNKkhPoCudiF1+h83UuBepOVVTc566U6Tm6lkCidOMDRifMYHEaexeuA8QFgcY+euIgp1XMne97kC6phD7W74HqCH76WVvCzgB0O/cYkCF6KuSV5WcqvxH3thUayxZYaNFOwYeveH5uprrxEWAqcsveMPXh2ppnnMIL3BoevFwDXWezucnh4x/q4bWn5GDxiF/fbl2ZGtyLzTnbbXTN18+s8yjtdPRkY9pn/q6EVoU5f9gaj5FWtB8KlXr6srI6FA+6dUkhzJI/maP5nEp+aUvCQxMlOegPRxgfvqtfM3zV3Y55JPhFtY/xeQxb7TQedEKDkgvuaM88022AB+8nc8sMpkCZyxAXqFFWbjLAvblj8rjDVlPLJ0FcIbSK+BNxRTwhqCWb5apXuXtis3S3aD5aqiCux+qpCPVkpO3dDIyUZnuSVaEik/r5Z9ylZrq2XNhwNrkCaJsD1lcnQN/1598u6YcKMRcNlhCrAXz7o9du/AmajlV+G9FkxoFJGYKCKLtev/CfgPW+h03i5L/+kMmVUiXENo9dtebCi5llWXidNPrnrIa4mw8ZX/xGQlYEVSaIGmaR0LagjSMih8XUPA+YFaZEajgb38YUlWEFNSaPBqSFtSpqCSKACKBztOWropTH/AA6imnV4JK3oZU5V94EzI+FjaQOC3Pc285wM5DJP3D/Q7wy1Pe7/3GAq4Zi9GLHreASUo0PkFcRx3/xxAAVlA4IJoAAACwCwCdASqAAIAAPzmEuFOvKKUisX6YAeAnCWlu3koB9AAPnYKFM/mPs8J6kk/Xew2HrZczOidFtEZUHoGtf2dCPyVqHuhW67JGUQG/aUuabJfP0T+8ZYti3RkTDW94dQAQkqSSckAA/u92eDCiF/AUI1m1OJf0Ch3///OZAQsb5vPIykD7/4Nz9/30j7/4Oe///nNFGPjvTEAA",
     "data/ui/fhd/base/icon_content/generic/icon_2d_permit_shrine.png": "data:image/webp;base64,UklGRpwFAABXRUJQVlA4WAoAAAAQAAAAfwAAfwAAQUxQSOEEAAANoERr2yFJer4/MjKLbVtj27Zt2yvbtm3PrGzbtm3PlDIz/v9bZHQGMv7xIiImgP8lrSw9WAH77PdFMdtcCsjnL2leBh022YFUT3ujKNbdygHB4+fnhpAAkLorikACAFMn5yoUrEre/gTawnCmRcxcXUFMSQATAnWXXWhA6xrjbIz9lhatHLWgbRAL4CwQmOwiBUpIg0hMUG0VaSuR2JBPESHGxDSp2YWBIgYGYoo3aFenoDZKbYXdy4opmV96Cmr5/Yyrg/xw4sdpzT4HhiIfMyulMtD12A9p2QA/1gP+4RdNbaBWAoRSWFBatyhIrSO1Oy8sOZWAEUdMKqYnz46sQ6TcntrPbw+ARlSXGVJMn70GoI7sS5ZiFnH8uXavfmVd+7Kd2difR2b06StIOPv0Fqke/0bI6CNGZnPnDYfOlc0jF6vWNtiuRbSOQwPJ5J3reGS/oZloBLhyi+Sx93S44/M9JYtYIe9iYkrOZXZ9CO78+ZfJzMQFNjd9d/zhQGQusv7wDoDvr9qjO6vXXnBAMEly03PGF4CSuV5K7AO962d1160AlsJ984242tUbDcuosG9ips/9tqqXvnxxZrXb1q346MlwZjw1YjYPuYdo8rsPlvbQT581w7OLBP75gqbfGTfYQ+Wmvg2H++cHGqVcbeiNBvtnIGbShhf3A9aF/glsw2ZTn3gKEMG/Q/6wMG05triqH9pKHpryYw9sC6u5B2CM89AM9zGzLwqd21z/Bwv6aOTC98iOACt03NW2Cj7e+onBcze07XD9goGX5ti4h9jFlyrj5x1sXHlfPG0kjtBXf+17+iTRoIpfbrokUeWYhf1Ses0l6ZgHv07+sTfJCPHM6L4/kowa8MxwfkoyIfJMd+e3SSbi2bbhXyWZ5Bsz8bME4RjfMOkLba5zsHdG/Bo11xF6x6g2J/zvrtgEzninPLY51W+8s/RRQVPyY907nSOlqb/C79xuJU86eNORRTPy1rs1T+w9B0U7Yv8bXsvTppMp3jl2O+vT/Cy/Ji0ucdocy2948ld5WXwbEkqc5qdrvykOqJ/7ZnOss9YpH+djuW1IuvbGDgieuFzz0rFmhwH0wa8SsPam576QA7PxmiSeZwED8PXDuVEXAESGxEvtc9fNtayG7jWR5M7QaA2tqNIU0w6onfNhJrLUno4UVWLyL2VnnNSbo2ObtR685dv0Zt9hOkklFFRo0coR89b5ri8BzLHrjAfv+ETTKM+12TwkX2l3I+VPW8XMPTYwpGgW3GrOD+955ft6c20TF19tGGlOmo8ilumrrDj027fe+eKX3rqacvfwqXPNPjiiQKNAMgLapsw7//ShJXUqRqqWfKpmNmLuNsBQ+YJ8lru6uyqGHE9ZqF8V+PW1/rTW2j0CFEtBL7VPWQCpHfFuWpWQYpcgQIByf5SWN1X4pzLwRWhdWm+92e4wFRMu1F1MX7+FrTlM7xTSfvzimqB1N+TYycX02JkqoeAM6VsL6qAixeRqSr61L4oRQVAxgEuiIEnUCGARQFXjKm0x+a8e+VLQgBhAAsBqAlRIbAIVFwmNLs5usWOLuPd6bIM6p+DqpKqaKIpQUG2Y+ajJLYJxFKThT7fEiBaNaH6q4gDCwrDWASVncvP7sZ8KUBlVGLdeL4BdUHJTffoPivWDdwCU/ycFAFZQOCCUAAAAsAoAnQEqgACAAD8xgLVTrqglIrN/KAHQJglpbt/MAA4+AvHlNzBthgimcyavwsFsLi84BN42ljM0LEeE84mcN46F4s+tkJKC01xmdS4OAS5MWEoAcrfDqQE7RAz/+AD+75pc///PqZPlIbf/+fVFkFpsFc//UI1cajZRYKL1SL//+fX7/6gmpf/8+oXdRsFpvSvIAA==",
+    "data/ui/fhd/base/icon_content/generic/icon_2d_population_latinum.png": "data:image/webp;base64,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",
     "data/ui/fhd/base/icon_content/generic/icon_2d_region_heartlands.png": "data:image/webp;base64,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",
     "data/ui/fhd/base/icon_content/generic/icon_2d_region_wetlands.png": "data:image/webp;base64,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",
     "data/ui/fhd/base/icon_content/generic/icon_2d_ship_civilian.png": "data:image/webp;base64,UklGRgoGAABXRUJQVlA4WAoAAAAQAAAAfwAAfwAAQUxQSEwFAAABoEVb2/FIev+4MF1Odco22rZt27Zt27aNso22bZtlvxf15c9fX75/fBEREwD/ZyoTvU6BYrfosl9ZcTKFSqVSSJm1AC/5CsWZuNXtOWnV7pNBEZFh5w9vWTi8TUWNkj3zEVO8BeAsa43ek/I6owj55329d3FxZ3cVWxYgYoqPDpx9l63Xf6Lg+a9DplY1Ygym+vAxa7ntUT6W9beocR4SpmCKlxaHMcnZSGXJy621FSzBJM9STjPuFSO93w43lDMEk7zAesI9pPzHvmocOzC+b0ox0v9xqT078Cfq59VOcmYIWvDtcVrQwe2b1m/Zcyr21rssQTBjgw2jsh+ent2xol05pQQAgJMZWnk0HLE99UuJToiJtRmUmba0ma0chDSpOPLMe53w7UAZY15ubWIGZajwnZyaqwNmzTdiSNGdGZ4SKGvzrqHZ/LBwixkzitbbAJXGHaMKeGHJYTUrMMKZDgCTIfd4IZ6wYgVGOVMC4LYjmxcetmAFRrrQAoo+T3nd8WEGRrnQAlAxkseVqsAOjHSiBsrvLiTF+QBLMMyRGjBemlcqyBn0db5AGOZEDSjm5CIe14DeLhIKo92oAfncjB0WoL8dDh0Q+FA/GTVg2NIE9JgTXCKFf+OqpuzeSfHuBeXYY5yCVD9UMyiRrrv/Rkuh6yGDVPMTiwg54cdOCn4s6DfpyhpT9gC0yCEUXazESQXmPA/nEUoGAJObkxCf9FGAoJK2N5HMPMzebCeExeKfKBqIqQ11qxJegmKCnyYb81MOeYl8RQELT/rwcdqZi+LxKamoFOLDHjIS1/IqktNfisF9n/k/CJix2rqUyexvSMze4JUkBg/U0PYmATGuNkDA+SIkPuknN04RhfIArvvzCPhu3MAnSCw6FwBQTjTAYOQbAhbkIfHrDBMQFYCasQStV5pxIDagXvZDW9Y2RyCKCwTc0PasHoiQrPt95PlqmEp01CszkHfuLkeRqR2L5NuXCYiXW3AiYjjuHRLz97tq1mcS8NtcM7GwcjlUgMS3Iw0A5L0eE7D4or9xshg8GnQdybG1gBhwvqgU4pOR6WKQm4nE3yutQavpjM8EzMkWA613O0uBb5N0glYxKDzhBTo67MgVlY+TjUFn5aDnIpJUHwStFFLMuKZafm3QgMBm8z5r6c8i5YSgQtLDXZs2C7tl09brWmJm/8Ee4xSk+qGaQYl03f03WgpdDxikWhp8geKgTSbsAamcahn8Iy+VcILrk6qLHT1cxwNCH+qvR0aLc85YUwOaUyj0Tv0x3VSIeEpDDVgdEWq73qgPliAiBrtSA1bH2GJ/Fslp1agB9QmWeEeh9mfdpbSA+gQ71DHIN2NVeVpAfYIZ8kk5fBCTWkgpAfUJVoB8Rg4v/LHRkxKwOsEKkE/K4IX4dJYzHW5bC1kB0sFf+CE+XOArLSt5xeXPUHf9Aej4XAfEN3vbqMuAs+ly7CMKqU9QPUkXxJwbGzu6Gghh5Nlz+708FFavwHZ7ri6ImP8yYs3ght4aE0OlXK40NLPzazZyc9y7QhRcv0A56KlupUuyPjxIjwk6ezYo7srjzzlYtnoG4H8kRwga89kBBj2ulNBXGNPzHDsANJMfUFZ8dag52JxjCIDz7HvF9BRcGaMBALC5wBIAh9EJWXT8CO2rBrJdEFMATJtvuZdXVpnXltU2BJ72QWwB4GzarUv7WixUwYfYxU0sQUe7IMaUNq3cf334gy85xXyKsj7eOr+0m48xCGgXzJ7SBprAFv0mL924Y9eubesXjuvZyFetAKEdwphEt2PEDpEDl+4SkQMZJ3b/bwhWUDggmAAAAFAMAJ0BKoAAgAA/MYC1U66oJSKyaAHQJglpbt0KbD6AfgB9fvf4Ts+6nBgTsqgio+hdZr8PATaYETx2juNGUI9YJKpSTKR43hMziMKPT5RDKt/EjU7IfNRCHzjCMR29lOuexEVkxNylJw3QAP7vmSL7+V0cIa3//nhC1x/5dl1pvPEKpujrV9692yI1YwY1Y3hCtMKFwAAA",
@@ -17432,6 +19486,9 @@ if(window.params == null)window.params={
     "data/ui/fhd/base/icon_content/need_categories/icon_3d_need_category_fashion.png": "data:image/webp;base64,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",
     "data/ui/fhd/base/icon_content/need_categories/icon_3d_need_category_food.png": "data:image/webp;base64,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",
     "data/ui/fhd/base/icon_content/need_categories/icon_3d_need_category_household.png": "data:image/webp;base64,UklGRgIPAABXRUJQVlA4WAoAAAAQAAAAfwAAfwAAQUxQSPcKAAAN8LZt2/K2tbZt+yFZtmWmoMMNg5Myt4MZfuiYzDy7dDCXKR1p7UJgxIyydOwfJEuyfA38FBETwF+ZCrSHAf9hEQKBWmEM3kMYXGRCCIkAAQYbjAGBwYBxMQmEpCAQQsaWbSNaGpMY4yKS1TLU0mEwNgaDDBjbaYOLR0goFFJIoBQIYzBgYewk3YwLB0mhiJCkSnVosL/k2vraZh0ZA5kYkem0MS4YCSlCJcX46QtHq2pkI0qlXLrz/ue7IrMyfmi4/vDumknbaXChCEKhUmj66SsN9ixXJ05emP79r+7Uxy5fPeRaeXDz5z9etjNxUqhCoqSSKjdeqNNhzMxd3anN7ALE8CMv6+/vpJ22CwVJoVJUnr5KN8cvD7N3/0tzf7fQhF0gglBExGMX6MGnLv/Dhu2kSJAUETr5JD355dXfYDvl4hBBKKov05sjT/10mzSmMOUgFMwN7lNjvnGmBDB3/z7GBYIQweTT7O/OTz8rPXGmabr6CdgUqQji2d39yZ/W5ur3rjX1Dy3JFi4OIXP0Jvt7//a1AWpDAuwSYIpTBvmZxj59PDDmyizNO5uTCag4WsZ59nf3nVMVTbV6uHPMCBeHhZ1bI/vzztZlxbV6i/cnpyxQcYDtxo/Oz+7HZz9+fpKhGzTna5f6geCgyqjJ7Rjbv/zXx24crnZr4b9vXQ6d62+xePciSKjnBAJZMsLCYAwmSdd+/f9LY2evnJ6Izmqv/fzRm+Xou0XL24NHLURPCwQSAgkwwpAYW0na6Z2Hny783me/WO1k4ZWNZx8pKw6daPX62UFLRA9JIAkhAkAAlo1tk7YznTa5s7owe7aDrf8avjYaUYpr9RZr8xcFEj0qJJCERCCEQGBMq0zSzkwnQH3teAefb84SKql6jZYLOWshqReEEJIINYOELPZ04rSd6Uw7bQt2xjq4O1gVJelUtdW7R4dBiP0XSCLUGklgFBGlkrJRbySGTKcz3SCxLFXocH0gCEXcoOXuB+fKFto3ISShENGErPLg6OTk2Fi10ldW7u5uLN/79MGmycx0OsGIvplOhjdTIY+dabW4fNoQYp+FkKSQFJKs/oljxw+Px06D1n2D1fGZmbGt935zr0E20raR4fBQJ7Pr64F8qtZqfnAqhaR9kUBSKIiQXBo+dvrU6DZdrIyffezQr36+gdNpGVGeo9Mj4x8J4hytbx8dAIl9FYQUUiiEBk9ePYnpeunsV5Z+urLrNBbizFhHlcc/2AxXDrXanT8ZCLQPEhKhiJDom750qcI+D33rxuIrHzQA5NFH6fzi8Ad4PFutrR610D4IJIVUkqSB03PH6+x/Zfby3K9/vgty31ONLlSe+WjZ0/VWDzVhS3K3hJBCUZI0dOlWlV49+b2FV3dF3BigmyfPvFUfp/WDoUGL7gsUCkVIgxefDHp44nvzv0aXZumqbg7d29ljcTRAqEuCkBQRUTr+/Di9Pfb11+5ePEeX+28dauyxXg2D3B2BpChFaOTJy/T8ycvbR+l69LPnbp+FUXeQpGg+9XKNA/j0CXrUossCRUSocutxeruxO9DUr56oblnuFlJIEQPPn6bHH358eZCeHVtv0HUhRUTfc0fodd3dPtU7k2t1I9wNWQpF6fGz9Px4/PZwf8/MbK5LpruSCJ15ht7vO/ZebbRnRrUsQO4GkqLyJQ7iiZkVerZS3pCR6aaQfOTkgSgdpXedAULuBrJ8cudA9PTm7rhFszuSEQzWi+7j0SnRbIzbswysDfYVW/03c1UkYxvjtgBbn/bPFNuDpSshWbadBrdlbO59+LwKbf7QmCTZ6cQJbofErv378aeKbOPO9YGyMoUbTpOmTYMzufufT8wV2GcjX7hwqLK98O5nu85MG7wXOMn0/P/MPVUqrP6vjkLf9CPTH/7XZ5mZ2LRpnKT92aunX1RRzfbTXD72xSN/95GdTto2Tttavn2zWlTBnnrm4j+s2YnbMRiTaK08UlRtv7z+G2xwG2AZgzZqk38Ahq/8pmFMN63a8qFiqpfbYnwtAbcnQChzt1JQEW2tjAQdixCUzx6bp5gHaDvvnAqB2hKSKD3zGH8Q5xcvgEQHQXDiGf4gbv3bo7ME7clBEE/zB3HxXycul6VA7SACDZ3/Q/DJb989fXNIIak9RDBa/UPwxjsXzvZLCsmdiGruYRVY/4pQS9qXBSW3+njxWl9x5a6EFKD2LKBOucXte0PXS4W1Ug0kQG4Pg9Y82mKn9ubgjSioxt0jIYRluT2MV9dOtKgub70xcj2K6f7GI4DBmLZtzPZHV1scuVvbeG1krlxE+drZmUZgbOO2cPPbp8eajtcWYuO31cfKBVQ/+yUtvL5E2rbchsE2v9u92jTyzIcLDG3VKeDKhYmJS/W//YxMY9q2017/2cuDAOef6csdCrvy0tQ/79hO2raxnT+P55qoTlHoz3/4ACduC9tpVv/t+TNNbeZrd47PTvZHwcz03SPpwEo7zTuvfv9EW7VX7ow92OifmpicGyqSysCGsWnfpMnMn/7kmze1171/rn9psr6+uLw7+OhokSRlm46NG6Trv/33E18+2Qc0HvziF5eeGLYiIuoeKZL13Skbqz1jk6Tz8/96e+zspJfnHx6+fqlsiQiqfRTpp/3TlkWHBqedpnH3rQ9XNXLywuxAA0kKlR9vFMp7x4dM0Hni5rSUDYVIJIKACycp0u3fnS8hS50Y02QnpjmQpIDB5ynUzzdPW5LcCW3YYCQUBJJPTxfLe1PjSKKbxjitxEhIBEKcy0Kpv3+mDxFdwWBsLIyQkDBVCnXp4SkCoa6AAYNpLQNeHC8XyZ2BGStEj1rG/mD8SIH4zVODQooeATu18O5XozhWF85LgehVk2TtP6Zf7MhZOiifcMSSesik8/4/XHyp0lb97lvDT5UPyO2ZqkTQq5bT6Zz/x9LL50aiqbG1eOfdrbOV49cPxs7tcyVJqFcwdmZ68Se/9vRUVbsbK2uNyUuPjG+//vjRA3F/5TRq7hlsOzOdK/MLyzv0Vcdnpsf6MJ9+9JXBg/C7kQmQRM8aknRmWk4DMsbCv42X1Ht+91Qf0VMYkrTTaTchQDbbP756ofdW756WJHoJQ5K2E2MECIO599qXR3tuPo4gJHrakNjGplkAbn5t/SvRa28fHUZB9BYGY2yMALXI9M6rp2722NadcyFJHEBjmk1LY2fDD199aba37m6eoEkHoFNjpzP9/tvfHuupd6fHUCAOvrGz+ZcPv9PfQ7V3LpQlVAS4OTN3Xo1vlHvn/soptSwEyCav/dfRL6lnbo9M0kQx2nYj00v/fuGFAD+cKO1bvn1qQMVhcNqN9Gd/PzA3Vpvf/erUvj28ex4pREEa44YzffeV243h8xd0S/t1u3KECKSCwNhkOp21eqmvvnimvE9+/VRVzRSmsZ3es3SJ/V796HxESBSosck90mP79Ub/KUIhFQiGZI/G/4y8UAF2XlmbHh8dHuovdfL5q9dHIyRRqAabpvSHP+j/1tUyP3mvtLSxnX3D45NTk6ODA5U+AbV3/+PWuYgICgYDxrbTi6/+fObWytpzw41abWNlaXllbbOuqI6MVrW4ULt2rhIhqWha207befeHb45dOZMggV2vbW9trSwub9RHTlw4XFILitjYONPkjkoGGQxgAbIiUESoqMA47TQ2mNbGWJYlKYKQJIrZsnEzmJbGGDAgJCmC4sLYYGxkYYExYLAQkoREcRswBhDGNBvT0pKQKHjTqcHgpj9rAgBWUDgg5AMAAPAfAJ0BKoAAgAA/OZK+Vy8qpiOpleuJ4CcJYghwAkwFtk2WL5jzSeTjyGlkCT8onyzERLFX+iiwa2sYARhAy7ufAx5C4QFUi5FujbSZFXM3/76FqP2d1uXxnOT/b2tE1fcZclwsJLv5dEp4l6lQeCqqMDFVIXleTajKsP+LoW/FvZeeEKMHOyLXf7erkpTuQOcIrsGmgcBqJ3ZkDtv+V9yZdhwdx8CwxaEp7am+X2yAX/SKZQfS1+Nwirem9ng8mHDj6sWPrEFwJVGwCjZZUIv0Ail2hP3T1DtL03+DzvEUYQLUg7pm363SwgSffFMHF2WAbuTlfl1xlNspe16L3uTvARA8BjJOAAD+cOeCX+mTKgoQB4VaIQoeb03fDu5bUzK5kUuT4z3XmUJjoKM9wNmoN64fK//SNvAgolKSa4RtozfnJM5bwo/3Ahd7HYfiZnGCdu1tSr7BYr3RB0Qvl/dT/i5galgaodfiekQE8cjM31YW0ZWRI0wwteL6Is/gCljteTKab26OmgnsL0+SOd9WkZdehtZSyvueMJg7eeJA3t3K+jAP8DwrEwBIn73aceX0EkgeifMirqgv1uERgjuRfMQTxUH3/U3Rg8feZt1JEuNxXGeVNBPVnAuOnhNB25GZZ/9WfpPWzxlZXJb6xvJP1lV9xm1pffXIl/hl2ebYOoY+iz4DTSOiQ3ooXm0Y2jMD+XPemLKg1UZ/kxFgpSKL9H0vAPALTXyCfFn/2j2WvSPdLVNQIXbTpamHXC/Oy4nKBK2bZ0Pwjq+Dj+5T1pD74Gdq+Xq04Vvvuc9W0K9K/zZ4QNeObXmGQ9lTEF16joDCHteGnm3y6dt+EfoA5Lx8LJYBiITLno7OugsU117doxbezViYuE4NOXEd3pCsLN7k7qhc6UP4OruzPuLAd+B0gqSJeSJACjBsdz8/wpp4BGGoOiXumKp5iz6/by3F3Pp8kBf583YwyM0NAjaN2/Qo7qc1Ow6uhOFtSzqp6LDR1sfMbSCNEgSyoAjkgWINJQiS6v0+vSefiAlJGR7a8LsRm/DHdpfPawr01CC8BIgDRYkeWbnUmRVew7QteaqoSC5W0ESSJ/nNLaOXVVi+ETdvJONJq1RodTxFtZePxAkmwCHBZHRs24Ly/3kJt0s/oDS+dw8Gn/L8KvubWMTmz6T+xAQcAKwad3mPAJ+212/VeB2NfOHJQWIzmq9VoOIDrJ7wd6grKg1AEQ71fEBNL74FXHKHWIAQ5jTBeJDXjZ7Ra/UEuM258BjkYF2WCBQzLWw/SbGwggROMTyHXCvRj2Dslw5m35pu9hgRQW5kJiPW00AAAA==",
+    "data/ui/fhd/base/icon_content/ornaments/shrines/icon_3d_shrine_ceres.png": "data:image/webp;base64,UklGRpoIAABXRUJQVlA4WAoAAAAQAAAAfwAAfwAAQUxQSA8EAAABkIVt29lIX5WO1u2sbdu2bdu2bdu2bds2xvZirOQ7mc6f/Pm/69rDiJgA+L9rzZXTibRyJzx+3uhtocql5GJvRMS/jYnKfz4E055LVD90PJqotY4SWxC11ZFfYaJGyA4euBCV53tayloDUbk/p3XTBkQvVNLyG+pGU7VgdJh0uSRF0lFM7zkbQWVC04VHs9LTLSV9yhh6piPjQzdydrL860KN8zUWvGghxvUu0+fCxMBmptRO1MxhwknUrGC7IhEzWGFaDsQ2jGWRe1IzLpUlui4xbg+Q1SMvMYblTBclYmCgwrIMqB3EktyZOr/C1PkXoS60FHUBhckZzBJcnJz2SQzRdcmpFMWQ2p2cipEMcg9yKpFXPoK6nF+oy/ySOutFhrjG5MB2hqhK9MxlkCfQ0yM1fRg+1pmaCSyYtMZGilO/CGTfY6bD0uJCLKroXY0M07x/qO6XVgYiSnij2pHjXUgwbkX1k7fkpKBOsAaIV4sJzrVhy3wHUdsPDUVman7zb8KPMI0wZKgkroFRyGXcmqyiauCLnMoXiwrINmDJ5MvI7/tGwrFfS0WUOcLgYZJgykQi73Fb7WLpHccd4o2yIqn6C/X4pY0wci/yQX2GTbIKwX3UW9Rt4lab/qxNH8mo53NFdWasf/Iv6vxxTT0ZKmwMR/379DTrwFrMBQDyLQpCIcbMz8Sdy5LgzXb3aV9RlPKRQryNTEH54WMFBfqsNldSs7coXt9eZn7c10SjiGNmuPCS+QwKOml/bk6axIgK8XEVcDFrlnfqN0Vc6LHmzrYc2mTu8x6Fv82ogbXzg2QUv18tDSbEI4k+3U2qLUci/81xUivHCSIwvr1aYFuRQANeyK4WSPMSaVBuVVALpHlxJCB+66gWWPoG04Bho60qAXQOpgET17mrBZ0CaUDc76QW1H1DxJ0MqkH51xSk3KkGGpZ/Ij7/SZlB09zHBRdzqBxobT8mtCcdJdDeviNRWH7T3YFL6+wEMUXvKwu8WmbEC0h52N4C/FqGBggncJ4d+G7rL5b4E1WA+7Z+Innd0xl0WOe5MIIX5gF9lnoqhviT1Qyg19IPRfC5vzPoOPdBRW9hqwqAvrMe1Ffq9foG0Lttf7KOPMZkAQG6zk3Qy5/txUGM0uxEXci3W5hBlNKkMB34zsgKIu0YzFv0vnIg2I7BXKVcbSaBcJu94ejbsIwg4lL3eIlaXwgEXfg2F/L1RkYQdoFDqdp5Tc4CIs+4VdYoelcZEHzGLSlapN5rKYHw3ab8Vc9jQhag0Dj6n0rR20sBkaaR4WooTztZgExDCw82/5nZgdTGHgyxhysCtQ3fputZFyegt+gtRwGzcwDJBW+kkXyqClBd9BoifhnmBnTbt3xaWRhIt9iM8F8YAFZQOCBkBAAAEB0AnQEqgACAAD85hrpWryglo6ucirngJwlAGjhwr8Aa763H2KzA+JeogcKBfwdGz8Wr0XGvU1WTXmHghOPIntZIk/b+dmW33ohFqw7OHi19nGraBdakH0biofS5nsowgltJuqT5gnICbQz7SlXvN/jq34c7Q8mz7yjnsMfgDe+hLBG+f/g4v49YbHbUVLVUpdStdlRyDmfwU8jxjJjMYt8oRsjz0bTVDdPofKjIuluwhGt1g+ZgJW7Mf23UUfnCh1evCuYpdAsewsG/2Tf/onq1vm0u5NudxIH6TMD4eL9WToEaNHCHXq+ILGTWVIjPUAD+8UbrJGzgmwEwrj0ZnR+ceD60UYIIZsBohmSaNzgHSVmR/P9gM05U+u5etzPjleARuvnrIx9afXzKkg6XNi74t8mQM4wuvFgKGzBnVxBKCogJCBI7J9C8+UPLAZa56nf5/99PlOzjQ2qfw5jeU+excil5JWt+O804v3FbNW6oKd4Inc+1cSWbT6FlKFNboFSmB5Olg2zW0dlYT+tJxDdMh6n4aT7abwJA8HtoTgd8U6y+aumoXrCSbsxsj17+BwhqPPIYrKjRScZ2SOL63SzzPeVFh58ednHoyn4906qJK32ftwnckt8q3azn1gzJDprlk/5TOrOAqifpibp29Q1SvTLRrMZNYM557QjcwMrhNWOUo6EwUx8s9IfWONsqpEWYMQRpCShzIkBSP2UQCAEWw0ZQjhrUc1zwVSu+AvAZCq6gRRzKz5mnUQYzdWw79jVTGyqdJA2TzjiG1sBk1Yz9SfXEErnb5Y3AKsVKPiaD6oY9/tr0ROX2k3Af3ez11yjYq5COqgXCszNX4zTH2b3qSEBcmtwzSnqL01jSQsqJggJrHaNg/V8nPcVGgNpzVovQE2Cr79uLX1nzXH9WAss7eqKecBYHpuUnSn0xElpEeQalohFT4RB02pwKcQrcUB/zAysDT/HAhkt7zIOrpkUmITypEqsEOojsjLNidiMBEIQED3PzX0+9kr0aFnHVq651MshlcmJazu9snGSIOS0e59luozulA6yAYPe25RFb+aS5AGusjEIdIi3mFQWPNI3AaZn6C2pCqZ/jVI8ZUhl4CROucLv8jqwhLrfLqyCCXvYluq6xbzXDVSAndEQkt/GQOm+SjZ1SM+EbVPhyFhGMPRtL8Ng5m4De28BMf8yX1WSA25biFgGq1pP7MOASvaon/4zQfYjM3WFik0S6LvX5Bsl7GdzE7ddbU9u0z6mjqjryk1L40Y6ldU5YPTZYNYicwplbjX/Itu9LMsWzIIJiu8dOei/STFrVcAdm9YiYVQBy8vWjTqgLmG6m+WqpdrU6EF0Cix1oQMEx1YonQE0aDTVhQJhiTE32SneVbiICcgBWtT0rzWO4RHTEyhVI87pgk7higWSdRWfH5eKedZY5DNmQ61ogqV7oowLU1LYEakgtrI+b3GoDxOvWv3Ggw6E6grMBGlf4Zd846enbzvA+gAA=",
+    "data/ui/fhd/base/icon_content/ornaments/shrines/icon_3d_shrine_epona.png": "data:image/webp;base64,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",
+    "data/ui/fhd/base/icon_content/ornaments/shrines/icon_3d_shrine_mars.png": "data:image/webp;base64,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",
     "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_roman_tier2_mercator.png": "data:image/webp;base64,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",
     "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_roman_tier3_noble.png": "data:image/webp;base64,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",
     "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_tier1_wader.png": "data:image/webp;base64,UklGRgISAABXRUJQVlA4WAoAAAAQAAAA/wAA/wAAQUxQSJ0JAAAB8Mb/vyFH/v91VTXiSTYe27Zte2Zt27Z3uMh71rbt3bGRYTbzDjtOehppFs45rwtZddXp17m4ETEBtv/8/5///9u7lOESNzk1t8uwvu3Hzu0hK4osyYoiUo78YXNXXnrbvV9s/6LUv21pl9whl9x185VLRnbJECPX+Cd/LT5VUdniNxgwgOD3n5YGA2ca6spP/npPb0VwJNne8+mTp4sPHCw54aMGgb/PtFjs16lpIiMpSR3mvlZX1xTUKGOUAfsnMV9DzY57ejpERVKyxt7+fVXEYBBHtbns0JdX54qJlL36o0oV4m+UfP79+j4ikrzo0/K6IDEBQP0XLz8/Sjw6rz94uDxMqBkokJNF6+baxULq9fbnH9ZEgjozAwlHoPyZh+a5RELKfuiJDbXRsA7mpKEgcz973gCXQDjGnXfTcc1gYFrdiJZsmdHJKQxS/vJXqimYmURbWyrfHtEjRRRSrttXfgbMTUOVtb7Hu3cXhOyH9n5+mjBzAcT+f7R4SVayELR/5cN7TgE1GwNasfWH0XlOAXA+VrT2IBgETM9Y6Y6N3fJl/E39ePU2ouvMfED18tcWdExHX/Jzd3wYZpSCBUlMP3rvoHwJe4OK7gsYQJkVaDQU/nRZjoK9xfds18DQwZJGa9B9bUcZewsv3RVjYYuA2mLsGOvA3sDlByHqJxZhAb/6cDr2et4QId4wswYjehj29kKelPsy0LABFiWaDk1rJOTlbQNgYFVDNVjFrUm4s3U6ChamURUO3t4Bd1K3w8CsA6qPnLkiS0KdMq7OUro/RDadJWNOcl5LgFqIRXz6zmEK6jLeAmapmDfUtNouYa7bQWBgKZ9XvcOFullngFgJNI/bW5SOOeV2yqzFvH/8/m4B5tI+BEYtBWrl1qdzZcR1PQaUWYuFvj0/H3HyVA9YnGm0ZHGGgjfX5brlYqr6ZDtFwpqUthEAmLXUKC0da8db4VYORNTItak2tA0pB8asBXokzIqyJKRJyjwfZTHDWkbEo/1eiDU5+S4CoDFrsVhdbfkwG9ayPwEOqnXFjfMkpEnDKnig1x9oXCsjzTa/lQdG/d6WK9A20csD6jnqvUDC2qAqHrBYfek0G9a7HuUBsMMbL+qMtU77uQA1+4u/64Yzqf9RPgCAvhxn9ulufpyHM9ftMW4EZ+Gs4FfgZkUvlEmrA7xg1ZtSUZbxPjU4YWwdLKOs61GdF5rnRjvKBlfHKCeIr3giyvqXGYwT4C9/NRtj+b8DMD6w6Km9NygIS9oMvGR6w+5f+iFMulrnBdDWQ79dKeMr9UnGDVBL97ydi6/ee4Bxg3mObJ+LLmmVDyg3gLn33aVgK+8LTQdeMkZbt72bg6x2t3vK+AGUqL9/UIgqx4KPG77fDhwxtOL38jDVc5PH//7t5Twh4cqPshDVc6t+5NaFH1GOENZY9pwTT11e+uiyof2vbgKuuEsekdDUcf21Wa780e8ynjBWdeJ6G5Yzr5yd7EwpWFUGXKXVu+bISLJPnZ7ucrn6vanxRT39Vp6EpK4D0lJdSvJ1lcDX+h3XJdtwbO+blpSk2Cb8rvOFnnxlUBqSkrIUh92WWRQArurG0TUdspCkyJJksy2rAq7GWsl7HdpnI+lPU18xuMJqGkPnJBdiSppURQyeqPvrmycld0SUlPI8aSU8ie73VI1P6ZGHqH4legB4GjsRKJmc1gtPknxhLBrjitbg3TM3vQ+i0j8AlXLFCFR/f367Ie3xNMzNKHCVxk69eVvW8A5YkqQbjRhnmHZ889PZiMr8BgjjC8Dhp7YU9srHkm10A/C36rHNvToUYEm6hnBI+3XLiMIcJElJrwGPW4+u7dwNSbYOB7lEPJ+N7CMjaVwzj5jWWv70UAeSLtL/hPGFar7a/Zcl48ixHlgbzjKjtanqhyE4yvoOKANghC9AI57GI0tw1LUY2qpqG8YP0IPeiotdKBrqbsN8f8JTpoYjH89XECTN9bWhQYM3wFTNaLhYQY9kv0Jro0cpd4CoEeK/LRU7crt10DakAo8JgeATPbHT/as/UQ0uATOMk1tG48Y+/tCfUMon0LVYc5EdNY5LzvwJY5xiBmHuEahRHoc/A24zA95IwYx0vfEnlF9Add85mJGHl4FBABi/dKpq+zviRVKmHAXN4BpR9ah2HV5sXb+uJQBAwoxbQJiqb8tFS8pjR+pbAzpEA8BxYuit52FFXvDzsWBDiw6E8IwxBr/l4ETueP/Hh6vq/BT4H1mCk4yZL+yt9asEEuH/ZIzkn/OtO0wgQZ7qjA9p8a8+g0DCjF2KDse5tZBY6y514iLzYS8k2uC6fEz0eluFxEt/GYuHkdshMZ+cgoVpJyBRl8xEQdoFZZC4K67OSXipsz4OQiLXtl6Ul9CSZ3zkhUSv7npiWkqiSp72Vgug0PfpitxEVLDy/WZAY2z31d3lxCL3v/OACqgkJUVzshKHc/SGSkBocOdt/ewJIX3Bm42A1aqX52dz76xzvgkCZkP7HhqXzjPHjO81QK/3tyuzudVlkwdQrP94z7pLu3MoedUBQDTb2487Q98KAa43K3xJu7wcsO0ewJXh74UA3cb5HJHXlAPC2Y0c6XgQUP6YnR8z63HmfzyXF/32AtLpjyP40OVHwPv/V/Eg+wPAvHua9TJfJqiDvT2s5nqGAPLfzrCWfG0IsK/fKllquQfw37TQStPKQQRPDrFOl/0ght/lWeZ+EES2zmmRPqdFAbwzraGsA3H8OMUSI+sEwj/HCo6XQSQ/SrHAhGahaJ1vPudrIJZfpplumkcwQovNlvw+iOaXaSab6BWO1hkmexTEc4O5Cg8LyKE8Uy2OCkhsuZmkTSCir8gmytolJMcLTTS8SUhCU010GRUSuMM80hYQ0y+dpmm3U1BK2ptmcJOgtE4wzXlEUOgFpnkGRHWdWVK/F5ZvXCbpdlpYDmebZGSTsFR3N8nsoLD4RpnkCiIsgQkmeQjEZaI5nB+LS3CKOfKPCcw0c0z0i0toujluAIGZYQr5VZGZaYr0rQITnGqKPtUC4xlpiqVRgSnvbop7QWBPFJpBeVtkivPMkLlH9HpVikxZdzOM8oqMdpkZFsdEBnblmeAOEFr9gvjZ3xIb+DY1bjmHBKd1btwGNQgOvG2P1xpNdNwD4/UUCO+DcUr5VnwOF8Sn4x/io18Sn7Fe8YEvk+NykSFA7v5xeRIEmFwcj6RPRQjeVOLQ5ZQQlXaOwxSfEKkr4nClIUSwIQ7PgBjvzvzX0r4XJM/If61LqSCxS/+1MS2CBC/L/9aisCgdyP4HAFZQOCA+CAAAsE0AnQEqAAEAAT85lsBYrys/o6gzeyvwJwllbr5twMngkILklqHg9l89ucksS3/8Uo4xAPSxY+iIvskbHGIB6WLH0RF9kis7xfXZI2OMQDyBkP3XvZLpxVNM0sucj7B7niO2PmAqUusqL7JGxqvjadhMwyczLv86ufjEL3MoiKACS5TaY5QZjxFM2i+yRVJzTBst/bZNPmuHvUjjrns0zEqzx1v91cU/5CmbRfZItDFFm8ihjvUXLSTpL1Ft1uPzlDqvHhIJGdnbpYIG6/Enjhr3DvxY32NVpLA0j2q0bemy+BhG/Wqk+Zsys8uDRxFNHuKa8uyiRk81aiEvQX0zwZ5xmBcS7fWhXgl14LunVURxxi4ijxAB+zB6/1bmS++C/BJ2SkRtsNDcoelEcQsF2P278VcnNz2FTK7dNsiOLxznt/a23sF6mjYgHM6BaeQq36D3gmclOj55pLh34u0nsKimwi9qlmVmegZX38DsJO/PPVVAnCeUA/BZDCduyymNCBAEDNSeqNAxF2gpJI9/Xbf+6KTtJP80sJzMnrl6aq5nGtUZzyK8ODqKpOspIuj6tFAgi+IUz4JkHzebAcqzColfuUzzB6LgqEFRXKUH44IlGJzBgAHK0kkgE7VQCmtwV5tU3clVwKAUH8QAyJhQBiidgja8p7EiSfnMAf/yK29JiQTsS7c8nQmIIXjWp9MvOnZRahb5xo6OyqGl2oky90CTSedzqZ3ouIbZ8PBKvM3A0YBh8zRIExxoBO+8NOaoIdopAKW4Nr5eHJ2ZoudqN89tvKVQjHIVQCSms++jwyNbYC9Rqc9FoicoqEwi22wEZi01IRIAAP77xzAAAAAAAANU/AAAIPV1RA9LCkRZ1hpQAwn20yocsNOntlkiRCdGGax2a5AGwuZTTSxWhM0ezka+04whbscYAPhcZaPzEMjFuzUBJJ3LzVBFcV2X+kP50+JH6H72ZeX4w3J33E1UYFiKNzLjQpfdCi5K023OCEnT80v8yncr6ab00khHE71YAHQf3AHcgu5KYHnRYbJbCqBGlg5/C85P1Mj84O40fTfjhz2e4CJg+QHYtr1oeu7OAqaN+yK6NXn+Jpj6dZZvkHz/8Bi+Pf6NPkr9uMWMNpnwm7F9agJl7kvvOv9Qay6fV6D2GoqNE+Zp/g5tr4sZf79KLMfc4ApNxE2GPJsc2z1yDnlDzuAMQm4BLf7pMIK4oeMESf+oSAPc0ATqDwuWk0gvWy8wXyxZSrX2XaFgLTbxLX5f8wKReS+ChNqsigftfH/DX/oqMZSp0SUocYexKY9oWl6Rc3zKU+J8tVAfy5163j/kAM7gQvyGfa/OTkrG4MHlVI1ubsTOgrACvXwpQbEPQmWFUVS5dmv+Gd9NxEJEzrL/HawBKiARB1dU9yhWRR1Nuy8BFhUn74vzZ7ir3GsO5by4NBirm600xizNEbyRLQwfC6fw+Zd1BkTBYMy3QMVhogU9W0LH/BIqSs85p/Za2zs7r5MqxW4o4Y2f7ki/erh1adDhjWSbgfod0efOahwG5VId7S045m8CF5WQXDkFukqp8Q0D8fxjRqkcv0aa5P/Xa8EuJ3COeqrVep30/u6xP2S1TnFelfH3xkT1mm1uthmOYg/eDHwH88h2+905E8RbrSDRvPAE6PRIJ+CBdDCxJQGAy2qzf586dFYYQaJRIVppAiQw7O5icbOCiPG+CvzlT4r1fCPDeIlpvix2hkQWjedxI5guXwTvm+Fxg8VyRlcXofn6j+fWNuEkx+eZvxwb3+mzL9IRcFOZYMMhB/hS5Fs/4sRTUPGja9vhFpvBQyapJfbQVTt8VjFybxXXh0ic0dkm28lZlXwOAFeZYVviO4WQUBHps+B9rU9wa8rSWFl93HnVUeeZgrGoQwk+EOM+9nYawJ1UIVRvX1aQibrra54WpGdSojQ8guOuN9eHtW9R5eNo14yj4fq8uRqYizWVn7/POzMb69MKY92BfvyULN2iRlItyll8ZhKD/2Fo/AW7zBy1m0isKYzpimKkPklk+2qM8w+OznFNwSw2E/IiUjg7IkKu1TGPPc1z5rliMNi7FhEsf8k3EdGrGmPQVbNRVwnNhyFm/vB6CUQJ+MwvfYrHTZj24m+iWJav2ZDUsUWia3Ny9esSccSMO5RCYSOrE5nV+DAKZrTh63sKg9dV7LPylDVRKiwgjE+2O+PT66xY50TwkAs8nUtZFBcg1aB3xB/yPqGIWM8m80pyGejJzWcqL/iT9e48N+jWb3BVEzCZZxo1vs4AjNhtvP1abimhBu1T6vmmZekUd0e10Z/g2cn9BCN2JGw1QqRHfTSu4k0vw2eOyo3Jqq+CGvOph22liV16gBTinZfDj/aowP60l/GqWxYuBCe8AqyNYwOKTD9f12sO/nao/i3x0xQnHntKtq7KWhDE3uQ5ZG+fs5Sr9mZScB2SyQk5jtMdw4l2w4ryRzuazTcRgr7UIAQ7iQzWDuR+gCjqsNPa0HrHYj4k548udiS+cY9lYb8E1OhmYXprcaQpdFAKPpVyS3jan/owL0fl40SQhTuwXRKlcTIITi6t5GEqs8vtZbxTRhCXwayJBzsWvdljqfkkynRyUqcb+qwd/KrNGhxy/4WBbrQpxnFrFYHBTybr3qbH/4OnVb8ofUbw2q9lY0cokXoNgrZDNqAZ5fdcxguGIfgnWG2khqMDEw5jS0p39HehWBGUxl9M6fbb9+Nd7NllU1SfXeFLZtT7wpyegAC+1tkj9hTxJ7Wd39P66v1t33vPihOAGSDMzdeM6+rZ4jsdW2i8UY8nzvTvFlro72AAAA==",
@@ -17601,6 +19658,7 @@ if(window.params == null)window.params={
     "data/ui/fhd/dlc01/icon_content/item_specialist/female/icon_3d_dlc01_female_20.png": "data:image/webp;base64,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",
     "data/ui/fhd/dlc01/icon_content/item_specialist/female/icon_3d_dlc01_female_21.png": "data:image/webp;base64,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",
     "data/ui/fhd/dlc01/icon_content/item_specialist/female/icon_3d_dlc01_female_23.png": "data:image/webp;base64,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",
+    "data/ui/fhd/dlc01/icon_content/item_specialist/hall_of_fame/icon_3d_cdlc01_hof_nanny.png": "data:image/webp;base64,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",
     "data/ui/fhd/dlc01/icon_content/item_specialist/male/icon_3d_dlc01_male_01.png": "data:image/webp;base64,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",
     "data/ui/fhd/dlc01/icon_content/item_specialist/male/icon_3d_dlc01_male_02.png": "data:image/webp;base64,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",
     "data/ui/fhd/dlc01/icon_content/item_specialist/male/icon_3d_dlc01_male_03.png": "data:image/webp;base64,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",
@@ -22562,6 +24620,45 @@ if(window.params == null)window.params={
         144810,
         144811
       ]
+    },
+    {
+      "buffs": [
+        149293
+      ],
+      "dlcUnlocks": [
+        67902
+      ],
+      "effectScope": "Radius",
+      "excludeEffectSourceGUID": false,
+      "guid": 149292,
+      "iconPath": "data/ui/fhd/dlc01/icon_content/item_specialist/hall_of_fame/icon_3d_cdlc01_hof_nanny.png",
+      "locaText": {
+        "brazilian": "Ancharia, Querida dos Lares Compitales",
+        "english": "Ancharia, Darling of the Lares Compitales",
+        "french": "Ancharia, Bien-aimée des Lares Compitales",
+        "german": "Ancharia, Liebling der Lares compitales",
+        "italian": "Ancharia, preferita dei Lares Compitales",
+        "japanese": "​ラ​レス・​コンピタレス​神​の​寵児-​アンカ​リア",
+        "korean": "​안카리아, ​교차로 ​수호신의 ​총애를 ​받는 ​자",
+        "polish": "Ancharia, ulubienica wędrownych duchów",
+        "russian": "Анкария, любимица компитальных ларов",
+        "simplified_chinese": "​安​卡​利亚，​家宅​守​护​神​的​宠​儿",
+        "spanish": "Ancharia, favorita de los lares compitales",
+        "traditional_chinese": "​安​卡​里亞，​街坊​家​神​的​寵兒"
+      },
+      "name": "Specialist HallOfFame Nanny",
+      "rarity": "Legendary",
+      "targets": [
+        3087,
+        3141,
+        3142,
+        3145,
+        6414,
+        6471,
+        6472,
+        6475,
+        6514
+      ]
     }
   ],
   "languages": [
@@ -24845,6 +26942,39 @@ if(window.params == null)window.params={
               "devotion": 300000
             }
           ]
+        },
+        {
+          "effect": 43600,
+          "milestones": [
+            {
+              "buffScaling": 1,
+              "devotion": 250
+            },
+            {
+              "buffScaling": 2,
+              "devotion": 1500
+            },
+            {
+              "buffScaling": 3,
+              "devotion": 4500
+            },
+            {
+              "buffScaling": 4,
+              "devotion": 11000
+            },
+            {
+              "buffScaling": 5,
+              "devotion": 25000
+            },
+            {
+              "buffScaling": 6,
+              "devotion": 100000
+            },
+            {
+              "buffScaling": 7,
+              "devotion": 250000
+            }
+          ]
         }
       ],
       "name": "PatronCeres",
@@ -25041,6 +27171,39 @@ if(window.params == null)window.params={
             {
               "buffScaling": 150,
               "devotion": 300000
+            }
+          ]
+        },
+        {
+          "effect": 80865,
+          "milestones": [
+            {
+              "buffScaling": 1,
+              "devotion": 250
+            },
+            {
+              "buffScaling": 2,
+              "devotion": 1500
+            },
+            {
+              "buffScaling": 3,
+              "devotion": 4500
+            },
+            {
+              "buffScaling": 4,
+              "devotion": 11000
+            },
+            {
+              "buffScaling": 5,
+              "devotion": 25000
+            },
+            {
+              "buffScaling": 6,
+              "devotion": 100000
+            },
+            {
+              "buffScaling": 7,
+              "devotion": 250000
             }
           ]
         }
@@ -31642,6 +33805,24 @@ if(window.params == null)window.params={
         "traditional_chinese": "​城市​慶典"
       },
       "name": "festival"
+    },
+    {
+      "lineID": -6902480799995931355,
+      "locaText": {
+        "brazilian": "De Efeitos de Área e especialistas",
+        "english": "From Area Effects & Specialists",
+        "french": "Par effets de zone et spécialistes",
+        "german": "Aus „Bereichseffekte und Spezialisten“",
+        "italian": "Da effetti ad area e specialisti",
+        "japanese": "​「エリア​効果​と​専門​家」​から",
+        "korean": "​지역 ​효과 ​및 ​전문가",
+        "polish": "Od efektów obszarowych i specjalistów",
+        "russian": "От эффектов по области и специалистов",
+        "simplified_chinese": "​来自​范围​效果​与​专家",
+        "spanish": "Por efectos de área y especialistas",
+        "traditional_chinese": "​區域​效果​與​專家"
+      },
+      "name": "fromAreaEffectsAndSpecialists"
     },
     {
       "lineID": -6901428646395682482,
