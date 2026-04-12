@@ -347,10 +347,11 @@ export class ProductPresenter {
 
         // Determine region from factories
         this.region = ko.pureComputed(() => {
-            if(this.product.regions.length == 1)
-                return this.product.regions[0]
-            
-            const regions = new Set(this.visibleFactories().map(f => f.region()));
+            const regions = new Set(
+                this.factoryPresenters
+                    .map(f => f.factory.associatedRegions[0])
+                    .filter(r => r != null)
+            );
             if (regions.size == 1) {
                 return [...regions][0];
             }
