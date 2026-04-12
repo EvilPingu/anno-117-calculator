@@ -657,7 +657,7 @@ export class Island {
                         if (val == null || !isFinite(val) || isNaN(val))
                             return;
 
-                        localStorage.setItem(id, val.toString());
+                        localStorage.setItem(id, val);
                     });
 
                 }
@@ -676,7 +676,7 @@ export class Island {
                         if (val == null || !isFinite(val) || isNaN(val))
                             return;
 
-                        localStorage.setItem(id, val.toString());
+                        localStorage.setItem(id, val);
                     });
                 }
             }
@@ -936,22 +936,22 @@ export class Island {
         this.availablePatronEffects = ko.computed(() => {
             const patron = this.selectedPatron();
             const devotionLevel = this.devotion();
-            
+
             // Reset all patron effects scaling to 0 when no patron or no devotion
             for (const effect of this.patronEffects) {
                 effect.scaling(0);
             }
-            
+
             if (!patron || !patron.localEffects || devotionLevel <= 0) return [];
-            
+
             const effects: Effect[] = [];
             for (const localEffect of patron.localEffects) {
                 // Find the highest milestone that the devotion level meets (milestones are ordered ascending)
                 const achievedMilestones = localEffect.milestones.filter((m: any) => devotionLevel >= m.devotion);
                 if (achievedMilestones.length === 0) continue; // No milestone achieved
-                
+
                 const milestone = achievedMilestones[achievedMilestones.length - 1]; // Take the last (highest) one
-                
+
                 const effect = localEffect.effect;
                 // Set the effect scaling based on milestone
                 effect.scaling(milestone.buffScaling);
@@ -959,7 +959,7 @@ export class Island {
             }
             return effects;
         });
-
+        this.availablePatronEffects.subscribe(() => { }); // Ensure computed is active even if not bound in UI
 
         for (let item of (params.items || [])) {
             let i = new Item(item, assetsMap, this.region);
@@ -1105,6 +1105,12 @@ export class Island {
             var b = new ResidenceBuilding(building, assetsMap, this);
             assetsMap.set(b.guid, b);
             this.residenceBuildings.push(b);
+        }
+
+        // Apply population buffs from effects to residences.
+        // Residences are created after the initial applyBuffs pass, so we need a second pass here.
+        for (const effect of [...this.allEffects, ...this.patronEffects]) {
+            effect.applyBuffsToResidences(assetsMap);
         }
 
         for (let group of params.populationGroups) {

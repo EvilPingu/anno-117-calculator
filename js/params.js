@@ -6908,7 +6908,9 @@ if(window.params == null)window.params={
       "additionalOutputs": [],
       "additionalWorkforces": [],
       "baseProductivityUpgrade": 0,
-      "dlcUnlocks": [],
+      "dlcUnlocks": [
+        67902
+      ],
       "fertilityPercent": 100,
       "fuelDurationPercent": 0.0,
       "guid": 151418,
@@ -9148,7 +9150,9 @@ if(window.params == null)window.params={
       "additionalOutputs": [],
       "additionalWorkforces": [],
       "baseProductivityUpgrade": 0,
-      "dlcUnlocks": [],
+      "dlcUnlocks": [
+        67902
+      ],
       "fertilityPercent": 100,
       "fuelDurationPercent": 0.0,
       "guid": 148046,
@@ -9170,7 +9174,9 @@ if(window.params == null)window.params={
       "additionalOutputs": [],
       "additionalWorkforces": [],
       "baseProductivityUpgrade": 0,
-      "dlcUnlocks": [],
+      "dlcUnlocks": [
+        67902
+      ],
       "fertilityPercent": 100,
       "fuelDurationPercent": 0.0,
       "guid": 148079,
@@ -9192,7 +9198,9 @@ if(window.params == null)window.params={
       "additionalOutputs": [],
       "additionalWorkforces": [],
       "baseProductivityUpgrade": 0,
-      "dlcUnlocks": [],
+      "dlcUnlocks": [
+        67902
+      ],
       "fertilityPercent": 100,
       "fuelDurationPercent": 0.0,
       "guid": 148050,
@@ -9214,7 +9222,9 @@ if(window.params == null)window.params={
       "additionalOutputs": [],
       "additionalWorkforces": [],
       "baseProductivityUpgrade": 0,
-      "dlcUnlocks": [],
+      "dlcUnlocks": [
+        67902
+      ],
       "fertilityPercent": 100,
       "fuelDurationPercent": 0.0,
       "guid": 148054,
@@ -9236,7 +9246,9 @@ if(window.params == null)window.params={
       "additionalOutputs": [],
       "additionalWorkforces": [],
       "baseProductivityUpgrade": 0,
-      "dlcUnlocks": [],
+      "dlcUnlocks": [
+        67902
+      ],
       "fertilityPercent": 100,
       "fuelDurationPercent": 0.0,
       "guid": 148069,
@@ -9258,7 +9270,9 @@ if(window.params == null)window.params={
       "additionalOutputs": [],
       "additionalWorkforces": [],
       "baseProductivityUpgrade": 0,
-      "dlcUnlocks": [],
+      "dlcUnlocks": [
+        67902
+      ],
       "fertilityPercent": 100,
       "fuelDurationPercent": 0.0,
       "guid": 148073,
@@ -9703,17 +9717,12 @@ if(window.params == null)window.params={
         "traditional_chinese": "​附近​的​魚子醬​美食​坊"
       },
       "name": "Effect Oysters with Caviar Building",
-      "source": "island-event",
+      "source": "building",
       "targets": [
         3087,
         3141,
         3142,
-        3145,
-        6414,
-        6471,
-        6472,
-        6475,
-        6514
+        3145
       ],
       "targetsIsAllProduction": false
     },
@@ -9742,12 +9751,8 @@ if(window.params == null)window.params={
         "traditional_chinese": "​附近​的​窯​烤爐"
       },
       "name": "Effect Roast Beef Building",
-      "source": "island-event",
+      "source": "building",
       "targets": [
-        3087,
-        3141,
-        3142,
-        3145,
         6414,
         6471,
         6472,
@@ -9781,12 +9786,8 @@ if(window.params == null)window.params={
         "traditional_chinese": "​附近​的​香腸​工​坊"
       },
       "name": "Effect Sausages Building",
-      "source": "island-event",
+      "source": "building",
       "targets": [
-        3087,
-        3141,
-        3142,
-        3145,
         6414,
         6471,
         6472,
@@ -9820,12 +9821,8 @@ if(window.params == null)window.params={
         "traditional_chinese": "​附近​的​胸針​工​坊"
       },
       "name": "Effect Brooches Building",
-      "source": "island-event",
+      "source": "building",
       "targets": [
-        3087,
-        3141,
-        3142,
-        3145,
         6414,
         6471,
         6472,
@@ -9859,7 +9856,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​戰神​聖壇"
       },
       "name": "Effect Mars Shrine Building",
-      "source": "street-distance",
+      "source": "building",
       "targets": [
         3087,
         3141,
@@ -9898,7 +9895,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​豐收​女神​聖壇"
       },
       "name": "Effect Ceres Shrine Building",
-      "source": "street-distance",
+      "source": "building",
       "targets": [
         3087,
         3141,
@@ -9937,7 +9934,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​馬​之​女神​聖壇"
       },
       "name": "Effect Epona Shrine Building",
-      "source": "street-distance",
+      "source": "building",
       "targets": [
         3087,
         3141,
@@ -9976,7 +9973,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​附近​的​市場"
       },
       "name": "Effect Market Building",
-      "source": "street-distance",
+      "source": "building",
       "targets": [],
       "targetsIsAllProduction": false
     },
@@ -10005,7 +10002,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​附近​的​酒館"
       },
       "name": "Effect Tavern Building",
-      "source": "street-distance",
+      "source": "building",
       "targets": [],
       "targetsIsAllProduction": false
     },
@@ -10034,7 +10031,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​附近​的​賭場"
       },
       "name": "Effect Gambling House Building",
-      "source": "street-distance",
+      "source": "building",
       "targets": [
         3087,
         3141,
@@ -10069,16 +10066,11 @@ if(window.params == null)window.params={
         "traditional_chinese": "​附近​的​神廟"
       },
       "name": "Effect Temple Building",
-      "source": "street-distance",
+      "source": "building",
       "targets": [
         3087,
         3141,
-        3142,
-        6414,
-        6471,
-        6472,
-        6475,
-        6514
+        3142
       ],
       "targetsIsAllProduction": false
     },
@@ -10107,7 +10099,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​附近​的​吟遊詩人​聚​所"
       },
       "name": "Effect Bardic Hall Building",
-      "source": "street-distance",
+      "source": "building",
       "targets": [],
       "targetsIsAllProduction": false
     },
@@ -10136,10 +10128,8 @@ if(window.params == null)window.params={
         "traditional_chinese": "​附近​的​長老​議會"
       },
       "name": "Effect Town Hall Building",
-      "source": "street-distance",
+      "source": "building",
       "targets": [
-        3087,
-        3141,
         6414,
         6471,
         6475,
@@ -10172,7 +10162,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​附近​的​浴場"
       },
       "name": "Effect Baths Building",
-      "source": "street-distance",
+      "source": "building",
       "targets": [
         3087,
         3141,
@@ -10208,13 +10198,10 @@ if(window.params == null)window.params={
         "traditional_chinese": "​附近​的​廣場"
       },
       "name": "Effect Forum Building",
-      "source": "street-distance",
+      "source": "building",
       "targets": [
         3087,
-        3141,
-        6414,
-        6471,
-        6475
+        3141
       ],
       "targetsIsAllProduction": false
     },
@@ -10243,16 +10230,11 @@ if(window.params == null)window.params={
         "traditional_chinese": "​附近​的​圓形​劇場"
       },
       "name": "Effect Amphitheater Building",
-      "source": "street-distance",
+      "source": "building",
       "targets": [
         3087,
         3141,
-        3142,
-        6414,
-        6471,
-        6472,
-        6475,
-        6514
+        3142
       ],
       "targetsIsAllProduction": false
     },
@@ -10281,10 +10263,8 @@ if(window.params == null)window.params={
         "traditional_chinese": "​附近​的​神廟"
       },
       "name": "Effect Roman Celtic Temple Building",
-      "source": "street-distance",
+      "source": "building",
       "targets": [
-        3087,
-        3141,
         6414,
         6471,
         6472,
@@ -11243,7 +11223,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​火神​的​恩惠：\n​原初​之​火"
       },
       "name": "Vulcanus GlobalEffect FunctionalEffect",
-      "source": "island-event",
+      "source": "building",
       "targets": [
         3087,
         3141,
@@ -11377,7 +11357,9 @@ if(window.params == null)window.params={
       "buffs": [
         151418
       ],
-      "dlcUnlocks": [],
+      "dlcUnlocks": [
+        67902
+      ],
       "effectDuration": 0,
       "effectScope": "Radius",
       "excludeEffectSourceGUID": true,
@@ -11398,7 +11380,7 @@ if(window.params == null)window.params={
         "traditional_chinese": "​熱​食​攤"
       },
       "name": "TechEffect Porridge Population FunctionalEffect",
-      "source": "island-event",
+      "source": "building",
       "targets": [
         3087,
         3141,
@@ -26853,7 +26835,21 @@ if(window.params == null)window.params={
               "buffScaling": 150,
               "devotion": 300000
             }
-          ]
+          ],
+          "title": {
+            "brazilian": "Armamentum",
+            "english": "Armamentum",
+            "french": "Armamentum",
+            "german": "Armamentum",
+            "italian": "Armamentum",
+            "japanese": "​軍備",
+            "korean": "​아르마멘툼",
+            "polish": "Armamentum",
+            "russian": "Армаментарий",
+            "simplified_chinese": "​军械库",
+            "spanish": "Armamento",
+            "traditional_chinese": "​軍備"
+          }
         }
       ],
       "name": "PatronMars",
@@ -26941,7 +26937,21 @@ if(window.params == null)window.params={
               "buffScaling": 150,
               "devotion": 300000
             }
-          ]
+          ],
+          "title": {
+            "brazilian": "Ceres Augusta",
+            "english": "Ceres Augusta",
+            "french": "Ceres Augusta",
+            "german": "Ceres Augusta",
+            "italian": "Cerere Augusta",
+            "japanese": "​ケレース・​アウグスタ",
+            "korean": "​세레스 ​아우구스타",
+            "polish": "Ceres Augusta",
+            "russian": "Церера Августа",
+            "simplified_chinese": "​刻​瑞​斯​·​奥​古​斯​塔",
+            "spanish": "Ceres Augusta",
+            "traditional_chinese": "​豐收​女神​奧​古​斯​塔"
+          }
         },
         {
           "effect": 43600,
@@ -26974,7 +26984,21 @@ if(window.params == null)window.params={
               "buffScaling": 7,
               "devotion": 250000
             }
-          ]
+          ],
+          "title": {
+            "brazilian": "Confarreatio",
+            "english": "Confarreatio",
+            "french": "Confarreatio",
+            "german": "Confarreatio",
+            "italian": "Confarreatio",
+            "japanese": "​コンファレツィオ",
+            "korean": "​콘파레아티오",
+            "polish": "Confarreatio",
+            "russian": "Конфарреация",
+            "simplified_chinese": "​共​食​婚",
+            "spanish": "Confarreatio",
+            "traditional_chinese": "​貴族​婚禮"
+          }
         }
       ],
       "name": "PatronCeres",
@@ -27062,7 +27086,21 @@ if(window.params == null)window.params={
               "buffScaling": 150,
               "devotion": 300000
             }
-          ]
+          ],
+          "title": {
+            "brazilian": "Fruto de Salácia",
+            "english": "Salacia's Fruit",
+            "french": "Fruit de Salacie",
+            "german": "Salacias Früchte",
+            "italian": "Frutto di Salacia",
+            "japanese": "​サラーキア​の​果実",
+            "korean": "​살라키아의 ​열매",
+            "polish": "Owoc Salacii",
+            "russian": "Милость Салации",
+            "simplified_chinese": "​萨​拉​西亚​的​果实",
+            "spanish": "Fruta de Salacia",
+            "traditional_chinese": "​深海​女神​的​果實"
+          }
         }
       ],
       "name": "PatronNeptun",
@@ -27172,7 +27210,21 @@ if(window.params == null)window.params={
               "buffScaling": 150,
               "devotion": 300000
             }
-          ]
+          ],
+          "title": {
+            "brazilian": "Potnia Theron",
+            "english": "Potnia Theron",
+            "french": "Potnia Theron",
+            "german": "Potnia Theron",
+            "italian": "Potnia Theron",
+            "japanese": "​獣​の​女主人",
+            "korean": "​포트니아 ​테론",
+            "polish": "Potnia Theron",
+            "russian": "Госпожа зверей",
+            "simplified_chinese": "​万​兽​女神",
+            "spanish": "Potnia Theron",
+            "traditional_chinese": "​百獸​女王"
+          }
         },
         {
           "effect": 80865,
@@ -27205,7 +27257,21 @@ if(window.params == null)window.params={
               "buffScaling": 7,
               "devotion": 250000
             }
-          ]
+          ],
+          "title": {
+            "brazilian": "Rédeas da Prosperidade",
+            "english": "Reins of Prosperity",
+            "french": "Rênes de la Prospérité",
+            "german": "Zügel des Wohlstands",
+            "italian": "Redini della prosperità",
+            "japanese": "​繁栄​の​手綱",
+            "korean": "​번영의 ​번영",
+            "polish": "Wodze dobrobytu",
+            "russian": "Бразды процветания",
+            "simplified_chinese": "​繁荣​之​缰",
+            "spanish": "Las riendas de la fortuna",
+            "traditional_chinese": "​繁榮​島​的​韁繩"
+          }
         }
       ],
       "name": "PatronEpona",
@@ -27293,7 +27359,21 @@ if(window.params == null)window.params={
               "buffScaling": 150,
               "devotion": 300000
             }
-          ]
+          ],
+          "title": {
+            "brazilian": "Natureza Selvagem",
+            "english": "Wild Nature",
+            "french": "Nature sauvage",
+            "german": "Wilde Natur",
+            "italian": "Natura selvaggia",
+            "japanese": "​手つかず​の​自然",
+            "korean": "​원시의 ​자연",
+            "polish": "Dzika natura",
+            "russian": "Дикая природа",
+            "simplified_chinese": "​狂野​自然",
+            "spanish": "Naturaleza salvaje",
+            "traditional_chinese": "​野性​本質"
+          }
         }
       ],
       "name": "PatronCernunnos",
@@ -27381,7 +27461,21 @@ if(window.params == null)window.params={
               "buffScaling": 150,
               "devotion": 300000
             }
-          ]
+          ],
+          "title": {
+            "brazilian": "Fuso de Aracne",
+            "english": "Arachne's Spindle",
+            "french": "Fuseau d'Arachné",
+            "german": "Arachnes Spindel",
+            "italian": "Fuso di Aracne",
+            "japanese": "​アラクネ​の​紡錘",
+            "korean": "​아라크네의 ​물레",
+            "polish": "Wrzeciono Arachne",
+            "russian": "Веретено Арахны",
+            "simplified_chinese": "​阿拉​克​涅​的​纺锤",
+            "spanish": "Huso de Aracne",
+            "traditional_chinese": "​阿拉​克​妮​的​紡錘"
+          }
         }
       ],
       "name": "PatronMinerva",
@@ -27469,7 +27563,21 @@ if(window.params == null)window.params={
               "buffScaling": 150,
               "devotion": 300000
             }
-          ]
+          ],
+          "title": {
+            "brazilian": "Forja de Lava",
+            "english": "Lava Forge",
+            "french": "Forge ignée",
+            "german": "Lavaschmiede",
+            "italian": "Forgia di lava",
+            "japanese": "​溶岩​の​鍛冶​場",
+            "korean": "​용암 ​대장간",
+            "polish": "Kuźnia lawy",
+            "russian": "Лавовый горн",
+            "simplified_chinese": "​熔岩​锻​炉",
+            "spanish": "Forja volcánica",
+            "traditional_chinese": "​熔岩​鍛爐"
+          }
         }
       ],
       "name": "PatronVulcanus",

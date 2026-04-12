@@ -1,7 +1,8 @@
 import { ACCURACY, BuildingsCalc, formatNumber, ko, NamedElement } from './util';
 import { PopulationGroup, PopulationLevel, ResidenceBuilding, Workforce } from './population';
 import { ResidenceEffectCoverage, ResidenceEffect, ResidenceNeed, NeedCategory, Need, PopulationLevelNeed } from './consumption';
-import { ProductCategory, Product, Demand } from './production';
+import { ProductCategory, Product, Demand, Effect } from './production';
+import { AppliedBuff } from './buffs';
 import { Consumer, Factory, Module } from './factories';
 import { TradeRoute } from './trade';
 import { ExtraGoodSupplier, PassiveTradeSupplier } from './suppliers';
@@ -758,16 +759,52 @@ class NeedCategoryPresenter {
     }
 }
 
+/**
+ * Represents an effect that applies to a range of buildings (e.g. population buffs)
+ * Handles checked, visible and available state for the UI
+ */
+export class RangeEffect {
+    public appliedBuff: AppliedBuff;
+    public isPatronEffect: boolean;
+    public checked: KnockoutComputed<boolean>;
+    public available: KnockoutComputed<boolean>;
+    public visible: KnockoutComputed<boolean>;
+    public totalPopulation: KnockoutComputed<number>;
+
+    constructor(appliedBuff: AppliedBuff, isPatronEffect: boolean, buildings: KnockoutComputed<BuildingsCalc | null>) {
+        this.appliedBuff = appliedBuff;
+        this.isPatronEffect = isPatronEffect;
+
+        const effect = this.appliedBuff.parent as Effect;
+        this.checked = ko.pureComputed({
+            read: () => effect.scaling() > 0,
+            write: (val: boolean) => effect.scaling(val ? 1 : 0)
+        });
+
+        this.available = appliedBuff.available;
+        this.visible = appliedBuff.visible;
+
+        this.totalPopulation = ko.pureComputed(() => {
+            const b = buildings();
+            if (!b) return 0;
+            return b.constructed() * this.appliedBuff.populationBonus();
+        });
+    }
+}
+
 export class ResidencePresenter{
     public instance: KnockoutObservable<PopulationLevel>;
     public residence: KnockoutObservable<ResidenceBuilding>;
-    public buildings: KnockoutObservable<BuildingsCalc>;
+    public buildings: KnockoutComputed<BuildingsCalc | null>;
     public name: KnockoutObservable<string>;
     public residents: KnockoutObservable<string>;
     private populationLevelNeeds: PopulationLevelNeedPresenter[];
     public needCategories: NeedCategoryPresenter[];
     public visibleNeedCategories: KnockoutObservableArray<NeedCategoryPresenter>;
     public effectCoverage: KnockoutObservableArray<ResidenceEffectCoverage>;
+    public populationBuffs: KnockoutComputed<RangeEffect[]>;
+    public populationBuffsId: string;
+    public populationBuffsVisible: KnockoutComputed<boolean>;
 
 
     constructor(needCategories: NeedCategory[], populationLevel: PopulationLevel){
@@ -780,6 +817,28 @@ export class ResidencePresenter{
         this.populationLevelNeeds = [];
         this.needCategories = [];
         this.effectCoverage = ko.pureComputed(() => this.residence() ? this.residence().effectCoverage() : []);
+
+        this.populationBuffsId = "population-buffs-" + populationLevel.guid;
+
+        this.populationBuffs = ko.pureComputed(() => {
+            const residence = this.residence();
+            if (!residence) return [];
+            const patronEffects = residence.island.patronEffects;
+            const seen = new Set<Effect>();
+            const result: RangeEffect[] = [];
+            for (const b of residence.buffs()) {
+                if (b.buff.population === 0) continue;
+                if (!(b.parent instanceof Effect)) continue;
+                const effect = b.parent;
+                if (seen.has(effect)) continue;
+                seen.add(effect);
+                const isPatronEffect = patronEffects.indexOf(effect) !== -1;
+                result.push(new RangeEffect(b, isPatronEffect, this.buildings));
+            }
+            return result;
+        });
+
+        this.populationBuffsVisible = ko.pureComputed(() => this.populationBuffs().some(b => b.visible()));
 
         for (let category of needCategories){
             let presCat = new NeedCategoryPresenter(this, category);

@@ -321,6 +321,30 @@ const hasTargetsInSession = e.targets.some(target => {
 
 ## Need Categorization Architecture 
 
+### Storage Architecture (UPDATED)
+
+**SubStorage Pattern** (world.ts:34-152):
+- `calculatorSettings` - Settings JSON (e.g., `settings.showAllProducts`)
+- `sessionSettings` - Session config
+- `globalEffects` - Global effect scaling
+- Per-island: `new Storage(islandName)` - Island-specific JSON
+
+**Numeric Type Preservation**:
+- `persistInt` and `persistFloat` helper functions MUST save raw numeric values to `localStorage` (not `.toString()`).
+- This ensures `JSON.stringify` in `Storage.save()` preserves numbers as numeric types in the final JSON, preventing "1" vs 1 type mismatch in tests.
+
+### RangeEffect and Residence Buffs (NEW)
+
+**RangeEffect Class** (src/views.ts):
+- Encapsulates population buff logic: `appliedBuff`, `isPatronEffect`.
+- Reactive properties: `checked`, `available`, `visible`, `totalPopulation`.
+- `totalPopulation()`: Calculated as `buildings.constructed() * appliedBuff.populationBonus()`.
+
+**Patron Effects and Initialization**:
+- **Effect Class**: Added `targetsIsAllResidences: boolean` (e.g. for Ceres).
+- **Initialization**: `Island` constructor (world.ts) performs a second `applyBuffsToResidences` pass for BOTH `allEffects` and `patronEffects`.
+- **Reactivity**: `availablePatronEffects` computed in `Island` MUST have a subscription to stay active even if not bound to UI, ensuring effect scaling updates correctly.
+
 ### Category Identification Issue
 **Problem**: Need categories use `id` as unique identifier, NOT `guid`
 **Root Cause**: `NeedCategory` extends `NamedElement` which has optional `guid?: number`, but categories are identified by their `id: string` property

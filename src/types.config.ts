@@ -28,9 +28,9 @@ export interface ConstantsConfig {
 export interface DLCConfig {
   guid: number;
   name: string;
-  iconPath?: string;
-  locaText?: LocaTextConfig;
-  id?: string;
+  iconPath: string;
+  locaText: LocaTextConfig;
+  id: string;
 }
 
 // Language configuration interface
@@ -63,8 +63,7 @@ export interface FertilityConfig {
   name: string;
   iconPath: string;
   locaText: LocaTextConfig;
-  regions?: string[];
-  dlcUnlocks?: number[];
+  regions: string[];
 }
 
 // Session configuration interface
@@ -245,6 +244,7 @@ export interface BuildingBuffConfig {
     oldWorkforce: number;
   };
   workforceMaintenanceFactorUpgrade: number;
+  population: number;
   additionalOutputs?: {
     product: number;
     forceProductSameAsFactoryOutput: boolean;
@@ -274,9 +274,9 @@ export interface EffectConfig {
   guid: number;
   name: string;
   iconPath: string;
-  locaText?: LocaTextConfig;
+  locaText: LocaTextConfig;
   buffs: number[];
-  targets: number[];
+  targets?: number[];
   targetsIsAllProduction: boolean;
   effectScope: string;
   excludeEffectSourceGUID: boolean;
@@ -304,6 +304,7 @@ export interface PatronsConfig {
   localEffects?: {
     effect: number;
     milestones: any[];
+    title: Record<string, any>;
   }[];
   wonder?: number;
 }

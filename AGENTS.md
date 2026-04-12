@@ -23,13 +23,14 @@ Technical guidance for working with the Anno 117 Calculator codebase.
 ## Testing
 
 **Key Commands:**
+- `npm run build` - Build the project (MANDATORY before running tests)
 - `npm test` - Run all Playwright tests
 - `npm run test:computed` - Calculation tests
 - `npm run test:binding` - Template binding tests
 
 **Non-interactive execution:**
 Run tests with `--reporter=list` or set `CI=true` to prevent the browser from opening the HTML report at the end.
-Example: `npx playwright test --reporter=list`
+Example: `npm run build && npx playwright test --reporter=list`
 
 Always run type checking after making changes:
 ```bash

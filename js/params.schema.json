@@ -19,6 +19,8 @@
       },
       "required": [
         "fuelProductionTime",
+        "fuelProduct",
+        "fuelProductionTime",
         "fuelProduct"
       ]
     },
@@ -2200,11 +2202,67 @@
                       "buffScaling"
                     ]
                   }
+                },
+                "title": {
+                  "type": "object",
+                  "properties": {
+                    "english": {
+                      "type": "string"
+                    },
+                    "german": {
+                      "type": "string"
+                    },
+                    "spanish": {
+                      "type": "string"
+                    },
+                    "french": {
+                      "type": "string"
+                    },
+                    "italian": {
+                      "type": "string"
+                    },
+                    "japanese": {
+                      "type": "string"
+                    },
+                    "korean": {
+                      "type": "string"
+                    },
+                    "polish": {
+                      "type": "string"
+                    },
+                    "brazilian": {
+                      "type": "string"
+                    },
+                    "russian": {
+                      "type": "string"
+                    },
+                    "simplified_chinese": {
+                      "type": "string"
+                    },
+                    "traditional_chinese": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "english",
+                    "german",
+                    "spanish",
+                    "french",
+                    "italian",
+                    "japanese",
+                    "korean",
+                    "polish",
+                    "brazilian",
+                    "russian",
+                    "simplified_chinese",
+                    "traditional_chinese"
+                  ]
                 }
               },
               "required": [
                 "effect",
-                "milestones"
+                "milestones",
+                "title"
               ]
             }
           },
@@ -2439,6 +2497,38 @@
     "areaBuffs",
     "effects",
     "techs",
+    "patrons",
+    "items",
+    "icons",
+    "texts",
+    "techs",
+    "techs",
+    "effects",
+    "techs",
+    "languages",
+    "needConsumptions",
+    "regions",
+    "fertilities",
+    "sessions",
+    "needAttributes",
+    "needCategories",
+    "needs",
+    "populationGroups",
+    "residenceBuildings",
+    "populationLevels",
+    "products",
+    "workforce",
+    "productFilters",
+    "factories",
+    "modules",
+    "buildingBuffs",
+    "areaBuffs",
+    "effects",
+    "techs",
+    "patrons",
+    "items",
+    "icons",
+    "texts",
     "patrons",
     "items",
     "icons",

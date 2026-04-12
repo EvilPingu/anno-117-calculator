@@ -23,6 +23,7 @@ export class AppliedBuff {
     public fuelDurationPercent: KnockoutObservable<number>;
     public workforceMaintenanceFactorUpgrade: KnockoutObservable<number>;
     public fertilityPercent: KnockoutObservable<number>;
+    public populationBonus: KnockoutComputed<number>;
     public extraGoods?: ExtraGoodProduction[];
     public available: KnockoutComputed<boolean>;
     public visible: KnockoutComputed<boolean>;
@@ -102,6 +103,10 @@ export class AppliedBuff {
 
         this.fertilityPercent = ko.pureComputed(() => {
             return this.scaling() * this.buff.fertilityPercent;
+        });
+
+        this.populationBonus = ko.pureComputed(() => {
+            return this.scaling() * this.buff.population;
         });
 
         this.replacements = new Map();

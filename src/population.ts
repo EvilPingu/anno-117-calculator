@@ -35,6 +35,7 @@ export class ResidenceBuilding extends NamedElement implements Constructible{
     public effectCoverage: KnockoutObservableArray<ResidenceEffectCoverage>;
     public entryCoveragePerProduct: KnockoutComputed<Map<Product, ResidenceEffectEntryCoverage[]>>;
     public needsMap: Map<number, ResidenceNeed>;
+    public buffs: KnockoutObservableArray<AppliedBuff>;
     public residents: KnockoutComputed<number>;
     public visible: KnockoutComputed<boolean>;
 
@@ -79,6 +80,7 @@ export class ResidenceBuilding extends NamedElement implements Constructible{
         this.lockDLCIfSet(this.buildings.constructed);
         this.allEffects = new Map();
         this.effectCoverage = ko.observableArray([]);
+        this.buffs = ko.observableArray([]);
 
         this.needsMap = new Map();
         
@@ -96,6 +98,12 @@ export class ResidenceBuilding extends NamedElement implements Constructible{
                     console.log(n);
                 }
                 sum += n.residents();
+            }
+
+            for (const b of this.buffs()) {
+                if (b.buff.population !== 0) {
+                    sum += b.populationBonus() * this.buildings.constructed();
+                }
             }
 
             return sum;
@@ -221,8 +229,8 @@ export class ResidenceBuilding extends NamedElement implements Constructible{
         this.sortEffectCoverage();
     }
 
-    addBuff(_: AppliedBuff): void {
-        // TODO:Use appliedBuffs instead of ResidenceEffectCoverage
+    addBuff(appliedBuff: AppliedBuff): void {
+        this.buffs.push(appliedBuff);
     }
 
     /**

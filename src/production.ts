@@ -539,6 +539,7 @@ export class Buff extends NamedElement {
     public additionalWorkforces?: Workforce[];
     public addedFertility?: Fertility;
     public fertilityPercent: number;
+    public population: number;
 
     /**
      * Creates a new Buff instance
@@ -563,6 +564,7 @@ export class Buff extends NamedElement {
         this.fuelDurationPercent = config.fuelDurationPercent;
         this.workforceMaintenanceFactorUpgrade = config.workforceMaintenanceFactorUpgrade;
         this.fertilityPercent = config.fertilityPercent ?? 0;
+        this.population = config.population ?? 0;
 
         if (config.addedFertility) {
             const fertility = _assetsMap.get(config.addedFertility);
@@ -655,7 +657,8 @@ export class AreaBuff extends Buff {
             replaceWorkforce: { newWorkforce: 0, oldWorkforce: 0 },
             workforceMaintenanceFactorUpgrade: 0,
             fertilityPercent: config.fertilityPercent,
-            addedFertility: config.addedFertility
+            addedFertility: config.addedFertility,
+            population: 0
         };
         super(buffConfig, assetsMap);
         this.scaling = ko.observable(0);
@@ -688,16 +691,37 @@ export class IslandFertility {
     }
 }
 
+export class LocalPatronEffect {
+    public effect: Effect;
+    public milestones: any[];
+    public title: KnockoutComputed<string>;
+    public isPopulationBuff: boolean;
+
+    constructor(config: { effect: number; milestones: any[]; title: Record<string, any> }, assetsMap: AssetsMap) {
+        const effect = assetsMap.get(config.effect);
+        if (!effect) {
+            throw new Error(`Effect with GUID ${config.effect} not found in assetsMap`);
+        }
+        this.effect = effect as Effect;
+        this.milestones = config.milestones;
+        this.isPopulationBuff = this.effect.buffs.some(b => b.population > 0);
+        const locaText = config.title || {};
+        this.title = ko.computed(() => {
+            const view = window.view;
+            if (!view || !view.settings) return locaText["english"] || "";
+            const lang = view.settings.language() as string;
+            return locaText[lang] || locaText["english"] || "";
+        });
+    }
+}
+
 /**
  * Represents a patron that provides effects to buildings
  * Manages patron-specific bonuses and modifications
  */
 export class Patron extends NamedElement {
     public guid: number;
-    public localEffects?: {
-        effect: Effect;
-        milestones: any[];
-    }[];
+    public localEffects?: LocalPatronEffect[];
     public wonder?: Effect;
 
     /**
@@ -719,16 +743,7 @@ export class Patron extends NamedElement {
         
         // Look up effects for localEffects
         if (config.localEffects) {
-            this.localEffects = config.localEffects.map(localEffect => {
-                const effect = _assetsMap.get(localEffect.effect);
-                if (!effect) {
-                    throw new Error(`Effect with GUID ${localEffect.effect} not found in assetsMap`);
-                }
-                return {
-                    effect: effect as Effect,
-                    milestones: localEffect.milestones
-                };
-            });
+            this.localEffects = config.localEffects.map(le => new LocalPatronEffect(le, _assetsMap));
         }
         
         // Look up wonder object
@@ -754,6 +769,7 @@ export class Effect extends NamedElement {
     public targets: Constructible[];
     public targetGuids?: number[];
     public targetsIsAllProduction: boolean;
+    public targetsIsAllResidences: boolean;
     public effectScope: string;
     public excludeEffectSourceGUID: boolean;
     public isStackable: boolean;
@@ -784,6 +800,7 @@ export class Effect extends NamedElement {
         this.guid = config.guid;
         this.effectScope = config.effectScope;
         this.targetsIsAllProduction = config.targetsIsAllProduction;
+        this.targetsIsAllResidences = (config as any).targetsIsAllResidences || false;
         this.excludeEffectSourceGUID = config.excludeEffectSourceGUID;
         this.buffGuids = config.buffs;
         this.buffs = []; // only for displaying
@@ -869,6 +886,33 @@ export class Effect extends NamedElement {
         for (const target of targets)
             for (const buff of buffs)
                 new AppliedBuff(this, buff, target, assetsMap) // constructor stores created object in target
+    }
+
+    /**
+     * Applies buffs to residence targets only.
+     * Called after residences are added to assetsMap (they are created after the initial applyBuffs pass).
+     * Uses 'populationLevel' as a duck-type check to identify ResidenceBuilding without importing it.
+     */
+    applyBuffsToResidences(assetsMap: AssetsMap) {
+        let targets: any[] = [];
+        if (this.targetsIsAllResidences) {
+            targets = Array.from(assetsMap.values()).filter(t => isConstructible(t) && 'populationLevel' in t);
+        } else if (this.targetGuids) {
+            targets = this.targetGuids.map(targetId => assetsMap.get(targetId)).filter(t => isConstructible(t) && 'populationLevel' in t);
+        }
+
+        if (targets.length === 0) return;
+
+        const buffs = this.buffGuids.map(buffId => {
+            const buff = assetsMap.get(buffId);
+            if (!buff) throw new Error(`Buff with GUID ${buffId} not found in assetsMap`);
+            return buff as Buff;
+        });
+
+        for (const target of targets) {
+            for (const buff of buffs)
+                new AppliedBuff(this, buff, target, assetsMap);
+        }
     }
 }
 

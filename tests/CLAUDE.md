@@ -85,10 +85,16 @@
 - **Island-Specific Storage** (nested JSON under island name):
   - Each island (e.g., "Latium", "All Islands") has its own JSON string containing:
     - `session`: Session GUID the island belongs to
-    - `selectedPatron`: Currently selected patron
+    - `selectedPatron`: Currently selected patron GUID (must be INSIDE island JSON, not top-level)
+    - `devotion`: Patron devotion level (number)
     - `{guid}.buildings.constructed`: Building counts
     - `{guid}.buildings.fullyUtilizeConstructed`: Building utilization flags
     - Other island-specific data
+
+**Testing Population Buffs**:
+- **Section Headings**: When checking for "Area Effects" or "Specialists" sections in dialogs, look for both `h6` (original) and `legend` (new collapsible component).
+- **Aggregate Values**: UI now displays total population bonus across all buildings (`RangeEffect.totalPopulation`). Formula: `buildings.constructed() * appliedBuff.populationBonus()`.
+- **Numeric Coercion**: When asserting `localStorage` values directly, use `Number()` coercion as `persistInt`/`persistFloat` values might be stored as strings in some environments or JSON-stringified representations.
 
 **Critical Session GUIDs**:
 - 37135 = Global/Meta session (use for "All Islands")

@@ -22,14 +22,40 @@ When displaying resident counts in templates, follow these patterns:
 - Use `table-striped table-fixed` classes for consistent styling
 - Implement icon-based column identification instead of text headers
 
-### Layout Classes
+### Layout Classes (UPDATED)
+
 **Use Project-Specific Classes**:
 - `inline-list-centered`: For horizontally aligned content with icons and text
 - `inline-list`: For floating effect icons and similar elements  
 - `table-fixed`: For consistent table column widths
-- Avoid generic Bootstrap flex classes when project-specific classes exist
+- `collapsible`: Use `<collapsible>` component for grouping related fields in dialogs (e.g., "From Area Effects & Specialists").
 
-### Template Structure Patterns
+**Patron Effect Styling**:
+- **Visual Offset**: Patron effects (Veneration/Ritual) should use `padding-left: 24px` to align visually with their interactive checkbox counterparts.
+
+### Template Structure Patterns (UPDATED)
+
+**Collapsible Section**:
+```html
+<collapsible params="label: $root.texts.areaEffects.name(), id: $parent.populationBuffsId">
+    <table class="table table-sm table-striped table-fixed mb-0">
+        <tbody data-bind="foreach: populationBuffs">
+            <tr data-bind="visible: visible">
+                <td data-bind="style: {'padding-left': isPatronEffect ? '24px' : '0'}">
+                    <buff-display params="buff: appliedBuff"></buff-display>
+                </td>
+                <td class="text-right">
+                    <div class="inline-list-centered justify-content-end">
+                        <img class="icon-sm icon-light mr-2" src="../icons/icon_resource_population.png" />
+                        <span data-bind="text: formatNumber(totalPopulation())"></span>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</collapsible>
+```
+
 **Population Summary Section**:
 ```html
 <div class="d-flex justify-content-between align-items-center mb-3 p-3" style="background-color: rgba(0,0,0,0.05); border-radius: 8px;">
