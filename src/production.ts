@@ -182,11 +182,12 @@ export class Product extends NamedElement {
             // Create one ExtraGoodSupplier per factory
             this.extraGoodSuppliers = [];
             for (const [factory, entries] of entriesByFactory.entries()) {
-                if (factory.product.guid == this.guid)
-                    continue; // Skip self-effecting production
-
+                // Deduplicate entries to prevent double-counting if initSuppliers is called multiple times
+                // or if assets are shared between islands (e.g. All Islands vs regular island)
+                const uniqueEntries = Array.from(new Set(entries));
+                
                 const supplier = new ExtraGoodSupplier(factory, this, island);
-                supplier.productionList = entries;
+                supplier.productionList = uniqueEntries;
                 this.extraGoodSuppliers.push(supplier);
                 factory.addExtraGoodSupplier(supplier);
             }
@@ -723,6 +724,7 @@ export class Patron extends NamedElement {
     public guid: number;
     public localEffects?: LocalPatronEffect[];
     public wonder?: Effect;
+    public selected: KnockoutObservable<boolean>;
 
     /**
      * Creates a new Patron instance
@@ -741,6 +743,9 @@ export class Patron extends NamedElement {
         super(config);
         this.guid = config.guid;
         
+        this.selected = ko.observable(false);
+        this.lockDLCIfSet(this.selected);
+
         // Look up effects for localEffects
         if (config.localEffects) {
             this.localEffects = config.localEffects.map(le => new LocalPatronEffect(le, _assetsMap));
@@ -815,6 +820,7 @@ export class Effect extends NamedElement {
             this.source = config.source;
 
         this.scaling = ko.observable(0);
+        this.lockDLCIfSet(this.scaling);
         this.isStackable = false;
 
     }
@@ -836,7 +842,8 @@ export class Effect extends NamedElement {
             'festival': 'festival',
             'veneration-effect': 'venerationEffects',
             'session-event': 'sessionEvent',
-            'island-event': 'islandEvent'
+            'island-event': 'islandEvent',
+            'building': 'building'
         };
 
         const translationKey = sourceKeyMap[this.source];

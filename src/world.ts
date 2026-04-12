@@ -545,7 +545,8 @@ export class Island {
     public allEffects: Effect[];
     public availableEffects: KnockoutObservableArray<Effect>;
     
-    public availablePatrons: Patron[];
+    public allPatrons: Patron[];
+    public availablePatrons: KnockoutObservable<Patron[]>;
     public selectedPatron: KnockoutObservable<Patron | null>;
     public devotion: KnockoutObservable<number>;
     public availablePatronEffects: KnockoutComputed<Effect[]>;
@@ -746,8 +747,9 @@ export class Island {
         this.workforce = [];
         
         // Initialize patron-related properties
-        this.availablePatrons = [];
+        this.allPatrons = [];
         this.selectedPatron = ko.observable(null);
+        
         this.devotion = ko.observable(0);
 
         let products: Product[] = [];
@@ -894,7 +896,7 @@ export class Island {
         this.availableEffects = ko.pureComputed(() => {
             // For meta session (All Islands) or meta region islands, show all effects
             if (this.isAllIslands() || this.region.id === 'Meta') {
-                return this.allEffects.filter(e => e.available() && this.patronEffects.indexOf(e) == -1);
+                return this.allEffects.filter(e => e.source != 'building' && e.available() && this.patronEffects.indexOf(e) == -1);
             }
 
             // For regular islands, only show effects that have targets in this island's session
@@ -928,9 +930,17 @@ export class Island {
         for (let patron of (params.patrons || [])) {
             let p = new Patron(patron, assetsMap);
             assetsMap.set(p.guid, p);
-            this.availablePatrons.push(p);
+            this.allPatrons.push(p);
             p.localEffects?.forEach(group => this.patronEffects.push(group.effect))
         }
+
+        this.availablePatrons = ko.pureComputed(() => this.allPatrons.filter(p => p.available()))
+        
+        // Link island selection to per-patron selected observables for DLC locking
+        this.selectedPatron.subscribe((newPatron) => {
+            this.allPatrons.forEach(p => p.selected(p === newPatron));
+        });
+        this.allPatrons.forEach(p => p.selected(p === this.selectedPatron()));
         
         // Set up computed property for available patron effects based on current patron and devotion
         this.availablePatronEffects = ko.computed(() => {
@@ -1081,7 +1091,7 @@ export class Island {
             // Persist selected patron by GUID
             if (localStorage.getItem("selectedPatron") != null) {
                 const patronGuid = parseInt(localStorage.getItem("selectedPatron"));
-                const patron = this.availablePatrons.find(p => p.guid === patronGuid);
+                const patron = this.allPatrons.find(p => p.guid === patronGuid);
                 if (patron) {
                     this.selectedPatron(patron);
                 }
@@ -1109,7 +1119,8 @@ export class Island {
 
         // Apply population buffs from effects to residences.
         // Residences are created after the initial applyBuffs pass, so we need a second pass here.
-        for (const effect of [...this.allEffects, ...this.patronEffects]) {
+        const deduplicatedEffects = new Set([...this.allEffects, ...this.patronEffects]);
+        for (const effect of deduplicatedEffects) {
             effect.applyBuffsToResidences(assetsMap);
         }
 

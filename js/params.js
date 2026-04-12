@@ -26754,6 +26754,7 @@ if(window.params == null)window.params={
   ],
   "patrons": [
     {
+      "dlcUnlocks": [],
       "dominantEffects": [],
       "guid": 80562,
       "iconPath": "data/ui/fhd/base/icon_content/religion/icon_2d_deity_mars.png",
@@ -26856,6 +26857,7 @@ if(window.params == null)window.params={
       "wonder": null
     },
     {
+      "dlcUnlocks": [],
       "dominantEffects": [],
       "guid": 43594,
       "iconPath": "data/ui/fhd/base/icon_content/religion/icon_2d_deity_ceres.png",
@@ -27005,6 +27007,7 @@ if(window.params == null)window.params={
       "wonder": 43620
     },
     {
+      "dlcUnlocks": [],
       "dominantEffects": [],
       "guid": 27899,
       "iconPath": "data/ui/fhd/base/icon_content/religion/icon_2d_deity_neptune.png",
@@ -27107,6 +27110,7 @@ if(window.params == null)window.params={
       "wonder": null
     },
     {
+      "dlcUnlocks": [],
       "dominantEffects": [],
       "guid": 50311,
       "iconPath": "data/ui/fhd/base/icon_content/religion/icon_2d_deity_mercury.png",
@@ -27129,6 +27133,7 @@ if(window.params == null)window.params={
       "wonder": null
     },
     {
+      "dlcUnlocks": [],
       "dominantEffects": [],
       "guid": 80861,
       "iconPath": "data/ui/fhd/base/icon_content/religion/icon_2d_deity_epona.png",
@@ -27278,6 +27283,7 @@ if(window.params == null)window.params={
       "wonder": null
     },
     {
+      "dlcUnlocks": [],
       "dominantEffects": [],
       "guid": 50242,
       "iconPath": "data/ui/fhd/base/icon_content/religion/icon_2d_deity_cernunnos.png",
@@ -27380,6 +27386,7 @@ if(window.params == null)window.params={
       "wonder": 50262
     },
     {
+      "dlcUnlocks": [],
       "dominantEffects": [],
       "guid": 27900,
       "iconPath": "data/ui/fhd/base/icon_content/religion/icon_2d_deity_minerva.png",
@@ -27482,6 +27489,9 @@ if(window.params == null)window.params={
       "wonder": null
     },
     {
+      "dlcUnlocks": [
+        67902
+      ],
       "dominantEffects": [],
       "guid": 144800,
       "iconPath": "data/ui/fhd/dlc01/icon_content/religion/icon_2d_deity_vulcanus.png",

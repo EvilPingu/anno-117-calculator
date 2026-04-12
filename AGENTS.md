@@ -30,7 +30,7 @@ Technical guidance for working with the Anno 117 Calculator codebase.
 
 **Non-interactive execution:**
 Run tests with `--reporter=list` or set `CI=true` to prevent the browser from opening the HTML report at the end.
-Example: `npm run build && npx playwright test --reporter=list`
+Example: `npm run build ; npx playwright test --reporter=list`
 
 Always run type checking after making changes:
 ```bash
@@ -48,6 +48,7 @@ npm run build
 - Initialization order in island constructor is important. Buffs register in factories. Factories register in products. Therefore, initDemands and applyBuffs exist to establish the links after objects are created. Only after that values are loaded from localStorage (as part of calling the persist* method)
 - Most assets are created for each island. Only some (regions, seesions, buffs, need categories) only exist once globally.
 - Avoid to use `as any` casts when generating code. Do not use them to fix typescript errors.
+
 ### Initialization Order (world.ts:518)
 **MUST follow this sequence:**
 1. Create objects (factories, products, consumers)
@@ -57,6 +58,7 @@ npm run build
 
 ### Key Constraints
 - `types.config.ts` is auto-generated - never edit
+- Use `npm run generate-types` to generate `types.config.ts` from params.schema.json
 - Circular imports resolved: production.ts → buffs.ts ← factories.ts
 - Most assets per-island; regions/sessions/buffs are global
 - Observable arrays: Call `.buffs()` not `.buffs` for array access

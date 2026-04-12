@@ -134,10 +134,18 @@ export class ViewMode {
             effect.scaling(1);
         }
 
+        //Vulcano effects
         for (const session of (window.view.sessions as Session[])){
-            for (const effect of session.effects)
-                if (effect.effectDuration == null)
-                    effect.scaling(effect.guid == 145099 ? 5 : 1)
+            if (session.region.id != "Roman" && session.region.id != "Meta" )
+                continue;
+
+            for (const e of session.effects){
+                if (e.guid == 145095 || e.guid == 148043) // Obsidian mining
+                    e.scaling(1);
+
+                if (e.guid == 145099)
+                    e.scaling(5) // fertile soil
+            }
         }
     }
 }

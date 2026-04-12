@@ -307,6 +307,7 @@ export interface PatronsConfig {
     title: Record<string, any>;
   }[];
   wonder?: number;
+  dlcUnlocks?: number[];
 }
 
 // Item configuration interface

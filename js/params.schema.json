@@ -19,8 +19,6 @@
       },
       "required": [
         "fuelProductionTime",
-        "fuelProduct",
-        "fuelProductionTime",
         "fuelProduct"
       ]
     },
@@ -2015,7 +2013,7 @@
         ]
       },
       "title": "Effect",
-      "description": "Building buff combined with targets (pool of building GUIDs). Source is an enum with literals 'module', 'tech', 'festival', 'veneration-effect', 'session-event', 'island-event', 'street-distance'"
+      "description": "Building buff combined with targets (pool of building GUIDs). Source is an enum with literals 'module', 'tech', 'festival', 'veneration-effect', 'session-event', 'island-event', 'building'"
     },
     "techs": {
       "type": "array",
@@ -2268,6 +2266,12 @@
           },
           "wonder": {
             "type": "integer"
+          },
+          "dlcUnlocks": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
           }
         },
         "required": [
@@ -2497,38 +2501,6 @@
     "areaBuffs",
     "effects",
     "techs",
-    "patrons",
-    "items",
-    "icons",
-    "texts",
-    "techs",
-    "techs",
-    "effects",
-    "techs",
-    "languages",
-    "needConsumptions",
-    "regions",
-    "fertilities",
-    "sessions",
-    "needAttributes",
-    "needCategories",
-    "needs",
-    "populationGroups",
-    "residenceBuildings",
-    "populationLevels",
-    "products",
-    "workforce",
-    "productFilters",
-    "factories",
-    "modules",
-    "buildingBuffs",
-    "areaBuffs",
-    "effects",
-    "techs",
-    "patrons",
-    "items",
-    "icons",
-    "texts",
     "patrons",
     "items",
     "icons",

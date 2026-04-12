@@ -447,21 +447,6 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
         globalAreaBuffs.push(areaBuff);
     }
 
-    // Persist global area buff scaling
-    if (localStorage) {
-        const areaBuffsStorage = new SubStorage("areaBuffs");
-        for (const ab of globalAreaBuffs) {
-            const storageKey = `${ab.guid}.scaling`;
-            const savedValue = areaBuffsStorage.getItem(storageKey);
-            if (savedValue != null) {
-                ab.scaling(parseFloat(savedValue));
-            }
-            ab.scaling.subscribe((val: number) => {
-                areaBuffsStorage.setItem(storageKey, val.toString());
-            });
-        }
-    }
-
     // Set up regions
     window.view.regions = [];
     for (let region of (params.regions || [])) {

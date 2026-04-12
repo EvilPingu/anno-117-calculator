@@ -273,6 +273,7 @@ export class NamedElement {
     public locaText: LocaTextConfig | { [key: string]: string };
     public icon?: string;
     public dlcs?: DLC[];
+    public dlcUnlocks: number[];
     public available: KnockoutComputed<boolean>;
     public notes?: KnockoutObservable<string>;
     public dependentObjects?: KnockoutObservableArray<any>;
@@ -322,6 +323,7 @@ export class NamedElement {
 
         // Set up DLC management
         this.dlcLockingObservables = [];
+        this.dlcUnlocks = config.dlcUnlocks || [];
 
         if (config.dlcUnlocks && config.dlcUnlocks.length > 0) {
             const dlcsGuidMap: Map<number, DLC> | undefined = (window as any).view?.dlcsGuidMap;

@@ -205,4 +205,75 @@ test.describe('DLC Unlock Logic', () => {
 
     expect(producersInfo.found).toBe(true);
   });
+
+  test.describe('DLC Locking Logic', () => {
+    const DLC_67902 = 67902; // Prophecies of Ash
+    const FACTORY_COAL_MINE = 144810;
+    const NEED_BOARDGAMES = 145225;
+    const EFFECT_OBSIDIAN_GATHERING = 145095;
+    const PATRON_VULCAN = 144800;
+
+    test.beforeEach(async ({ page }) => {
+        const config = await getBasicConfig();
+        await configLoader.loadConfigObject(page, config);
+        await page.goto('http://localhost:8080/index.html');
+        await page.waitForLoadState('networkidle');
+
+        // Ensure DLC is unchecked initially
+        await page.evaluate((dlcGuid) => {
+            const dlc = window.view.dlcs.find((d: any) => d.guid === dlcGuid);
+            if (dlc) dlc.checked(false);
+        }, DLC_67902);
+    });
+
+    test('DLC is locked and checked when a factory has constructed buildings', async ({ page }) => {
+        const dlcState = await page.evaluate(({factoryGuid, dlcGuid}) => {
+            const factory = window.view.island().assetsMap.get(factoryGuid);
+            factory.buildings.constructed(1);
+            const dlc = window.view.dlcs.find((d: any) => d.guid === dlcGuid);
+            return {
+                checked: dlc.checked(),
+                used: dlc.used()
+            };
+        }, {factoryGuid: FACTORY_COAL_MINE, dlcGuid: DLC_67902});
+
+        expect(dlcState.checked).toBe(true);
+        expect(dlcState.used).toBe(true);
+    });
+
+    test('DLC is locked and checked when an effect has scaling > 0', async ({ page }) => {
+        const dlcState = await page.evaluate(({effectGuid, dlcGuid}) => {
+            const effect = window.view.island().allEffects.find((e: any) => e.guid === effectGuid);
+            if (effect) effect.scaling(0.5);
+            const dlc = window.view.dlcs.find((d: any) => d.guid === dlcGuid);
+            return {
+                checked: dlc.checked(),
+                used: dlc.used(),
+                hasEffect: !!effect
+            };
+        }, {effectGuid: EFFECT_OBSIDIAN_GATHERING, dlcGuid: DLC_67902});
+
+        expect(dlcState.hasEffect).toBe(true);
+        expect(dlcState.checked).toBe(true);
+        expect(dlcState.used).toBe(true);
+    });
+
+    test('DLC is locked and checked when a patron is selected', async ({ page }) => {
+        const dlcState = await page.evaluate(({patronGuid, dlcGuid}) => {
+            const island = window.view.island();
+            const patron = island.availablePatrons.find((p: any) => p.guid === patronGuid);
+            if (patron) island.selectedPatron(patron);
+            const dlc = window.view.dlcs.find((d: any) => d.guid === dlcGuid);
+            return {
+                checked: dlc.checked(),
+                used: dlc.used(),
+                hasPatron: !!patron
+            };
+        }, {patronGuid: PATRON_VULCAN, dlcGuid: DLC_67902});
+
+        expect(dlcState.hasPatron).toBe(true);
+        expect(dlcState.checked).toBe(true);
+        expect(dlcState.used).toBe(true);
+    });
+  });
 });

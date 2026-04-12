@@ -230,6 +230,13 @@ export class ResidenceBuilding extends NamedElement implements Constructible{
     }
 
     addBuff(appliedBuff: AppliedBuff): void {
+        // Prevent duplicate buffs from being added if they come from the same effect-buff pair
+        // This is necessary because 'All Islands' and regular islands might both apply shared effects.
+        const alreadyAdded = this.buffs().some(b => b.parent.guid === appliedBuff.parent.guid && b.buff.guid === appliedBuff.buff.guid);
+        if (alreadyAdded) {
+            return;
+        }
+
         this.buffs.push(appliedBuff);
     }
 
