@@ -892,8 +892,8 @@ export class Island {
             }
         }
         this.availableEffects = ko.pureComputed(() => {
-            // For meta session (All Islands), show all effects
-            if (this.isAllIslands()) {
+            // For meta session (All Islands) or meta region islands, show all effects
+            if (this.isAllIslands() || this.region.id === 'Meta') {
                 return this.allEffects.filter(e => e.available() && this.patronEffects.indexOf(e) == -1);
             }
 

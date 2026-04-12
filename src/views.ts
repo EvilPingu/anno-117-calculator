@@ -5,6 +5,7 @@ import { ProductCategory, Product, Demand } from './production';
 import { Consumer, Factory, Module } from './factories';
 import { TradeRoute } from './trade';
 import { ExtraGoodSupplier, PassiveTradeSupplier } from './suppliers';
+import { Session } from './world';
 
 
 declare const $: any;
@@ -103,13 +104,15 @@ export class ViewMode {
     plan(): void {
         view.settings.decimalsForBuildings.checked(true);
 
+        // activate DLCs first so that all effects are available
+        for (var dlc of view.dlcs.values()) {
+            dlc.checked(true);
+        }
+
         for (const effect of window.view.globalEffects) {
             effect.scaling(1);
         }
 
-        for (var dlc of view.dlcs.values()) {
-            dlc.checked(true);
-        }
     }
 
     /**
@@ -122,12 +125,18 @@ export class ViewMode {
 
         //view.settings.hideProductionBoost.checked(false);
 
+        for (var dlc of view.dlcs.values()) {
+            dlc.checked(true);
+        }
+
         for (const effect of window.view.globalEffects) {
             effect.scaling(1);
         }
 
-        for (var dlc of view.dlcs.values()) {
-            dlc.checked(true);
+        for (const session of (window.view.sessions as Session[])){
+            for (const effect of session.effects)
+                if (effect.effectDuration == null)
+                    effect.scaling(effect.guid == 145099 ? 5 : 1)
         }
     }
 }
