@@ -23,6 +23,7 @@ export class Product extends NamedElement {
     public guid: number;
     public isAbstract: boolean;
     public isConstructionMaterial: boolean;
+    public regions: Region[];
     public factories: Factory[];
     public availableFactories: KnockoutObservableArray<Factory>;
     public extraGoodProductionList?: ExtraGoodProductionList;
@@ -78,6 +79,8 @@ export class Product extends NamedElement {
 
         this.isAbstract = config.isAbstract || false;
         this.isConstructionMaterial = config.isConstructionMaterial || false;
+
+        this.regions = (config.associatedRegions || []).map(r => window.view.literalsMap.get(r));
 
         this.factories = [];
         this.availableFactories = dummyObservableArray("Product.availableFactories");

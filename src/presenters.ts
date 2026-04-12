@@ -346,9 +346,12 @@ export class ProductPresenter {
 
         // Determine region from factories
         this.region = ko.pureComputed(() => {
-            const factories = this.visibleFactories();
-            if (factories.length > 0) {
-                return factories[0].region();
+            if(this.product.regions.length == 1)
+                return this.product.regions[0]
+            
+            const regions = new Set(this.visibleFactories().map(f => f.region()));
+            if (regions.size == 1) {
+                return [...regions][0];
             }
             return undefined;
         });
@@ -401,7 +404,7 @@ export class ProductPresenter {
 
         this.consumerViewVisible = ko.pureComputed(() => this.instance().totalDemand() > ACCURACY);
 
-        this.regionIconVisible = ko.pureComputed(() => this.island().region.id == "Meta");
+        this.regionIconVisible = ko.pureComputed(() => this.region() != null && this.island().region != this.region());
 
         this.tradeListVisible = ko.pureComputed(() => this.tradeList()?.visible());
 

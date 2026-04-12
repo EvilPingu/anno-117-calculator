@@ -1,26 +1,6 @@
 // Generated TypeScript interfaces from params.schema.json
 // This file contains configuration interfaces for Anno 117 calculator parameters
 
-// Fertility configuration interface
-export interface FertilityConfig {
-  guid: number;
-  name: string;
-  iconPath: string;
-  locaText: LocaTextConfig;
-  dlcUnlocks?: number[];
-  regions?: string[];
-}
-
-export interface AreaBuffConfig {
-  guid: number;
-  name: string;
-  iconPath: string;
-  locaText: LocaTextConfig;
-  dlcUnlocks?: number[];
-  addedFertility: number;
-  fertilityPercent: number;
-}
-
 // Common interface for localized text
 export interface LocaTextConfig {
   english: string;
@@ -42,6 +22,15 @@ export interface LocaTextConfig {
 export interface ConstantsConfig {
   fuelProductionTime: number;
   fuelProduct: number;
+}
+
+// DLC configuration interface
+export interface DLCConfig {
+  guid: number;
+  name: string;
+  iconPath?: string;
+  locaText?: LocaTextConfig;
+  id?: string;
 }
 
 // Language configuration interface
@@ -68,13 +57,23 @@ export interface RegionConfig {
   id: string;
 }
 
+// Fertility configuration interface
+export interface FertilityConfig {
+  guid: number;
+  name: string;
+  iconPath: string;
+  locaText: LocaTextConfig;
+  regions?: string[];
+  dlcUnlocks?: number[];
+}
+
 // Session configuration interface
 export interface SessionConfig {
   guid: number;
   name: string;
   iconPath: string;
-  locaText: LocaTextConfig;
   region: number;
+  locaText?: LocaTextConfig;
 }
 
 // NeedAttribute configuration interface
@@ -150,7 +149,6 @@ export interface PopulationLevelConfig {
   connectedWorkforce: number;
   populationToWorkforceFactor: number;
   associatedRegions: string[];
-  dlcUnlocks?: number[];
 }
 
 // Product configuration interface
@@ -199,16 +197,16 @@ export interface FactoryConfig {
     amount: number;
   }[];
   cycleTime: number;
+  neededFertility: number;
   modulesLimit: number;
-  neededFertility?: number;
   inputs?: {
     product: number;
     amount: number;
   }[];
   buffs?: number[];
+  dlcUnlocks?: number[];
   aqueductProductivityBuff?: number;
   additionalModule?: number;
-  dlcUnlocks?: number[];
 }
 
 // Module configuration interface
@@ -224,6 +222,7 @@ export interface ModuleConfig {
   }[];
   needsFuelInput: boolean;
   cycleTime: number;
+  neededFertility: number;
   modulesLimit: number;
   buffs: number[];
 }
@@ -239,6 +238,8 @@ export interface BuildingBuffConfig {
   workforceModifierInPercent: number;
   productivityUpgrade: number;
   fuelDurationPercent: number;
+  addedFertility: number;
+  fertilityPercent: number;
   replaceWorkforce: {
     newWorkforce: number;
     oldWorkforce: number;
@@ -251,13 +252,21 @@ export interface BuildingBuffConfig {
     amount: number;
   }[];
   additionalWorkforces?: number[];
+  dlcUnlocks?: number[];
   replaceInputs?: {
     newInput: number;
     oldInput: number;
   }[];
-  addedFertility?: number;
-  fertilityPercent?: number;
-  dlcUnlocks?: number[];
+}
+
+// AreaBuff configuration interface
+export interface AreaBuffConfig {
+  guid: number;
+  name: string;
+  iconPath: string;
+  locaText: LocaTextConfig;
+  addedFertility: number;
+  fertilityPercent: number;
 }
 
 // Effect configuration interface
@@ -265,7 +274,7 @@ export interface EffectConfig {
   guid: number;
   name: string;
   iconPath: string;
-  locaText: LocaTextConfig;
+  locaText?: LocaTextConfig;
   buffs: number[];
   targets: number[];
   targetsIsAllProduction: boolean;
@@ -284,7 +293,6 @@ export interface TechConfig {
   locaText: LocaTextConfig;
   effects: number[];
   isRepeatable: boolean;
-  dlcUnlocks?: number[];
 }
 
 // Patrons configuration interface
@@ -327,19 +335,14 @@ export interface TextConfig {
   locaText: LocaTextConfig;
 }
 
-export interface DLCParamConfig {
-  guid: number;
-  name: string;
-  iconPath: string;
-  id: string;
-}
-
 // Root configuration interface combining all parameter types
 export interface ParamsConfig {
   constants: ConstantsConfig;
+  dlcs: DLCConfig[];
   languages: string[];
   needConsumptions: NeedConsumptionConfig[];
   regions: RegionConfig[];
+  fertilities: FertilityConfig[];
   sessions: SessionConfig[];
   needAttributes: NeedAttributeConfig[];
   needCategories: NeedCategoryConfig[];
@@ -352,14 +355,12 @@ export interface ParamsConfig {
   productFilters: ProductFilterConfig[];
   factories: FactoryConfig[];
   modules: ModuleConfig[];
-  fertilities?: FertilityConfig[];
-  areaBuffs?: AreaBuffConfig[];
   buildingBuffs: BuildingBuffConfig[];
+  areaBuffs: AreaBuffConfig[];
   effects: EffectConfig[];
   techs: TechConfig[];
   patrons: PatronsConfig[];
   items: ItemConfig[];
   icons: IconConfig;
   texts: TextConfig[];
-  dlcs?: DLCParamConfig[];
 }
