@@ -416,21 +416,6 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
         globalEffects.push(r);
     }
 
-    // Set up persistence for global effects
-    if (localStorage) {
-        const globalEffectsStorage = new SubStorage("globalEffects");
-        for (const effect of globalEffects) {
-            const storageKey = `${effect.guid}.scaling`;
-
-            // Load saved scaling value
-            const savedValue = globalEffectsStorage.getItem(storageKey);
-            if (savedValue != null) {
-                effect.scaling(parseFloat(savedValue));
-            }
-
-        }
-    }
-
     // Create fertilities globally so AreaBuffs can resolve addedFertility references
     for (let f of (params.fertilities || [])) {
         if (!window.view.assetsMap.has(f.guid)) {
@@ -445,6 +430,41 @@ function init(_isFirstRun: boolean, configVersion: string | null): void {
         const areaBuff = new AreaBuff(ab, window.view.assetsMap);
         window.view.assetsMap.set(areaBuff.guid, areaBuff);
         globalAreaBuffs.push(areaBuff);
+    }
+
+    // Set up persistence for global effects
+    if (localStorage) {
+        const globalEffectsStorage = new SubStorage("globalEffects");
+        for (const effect of globalEffects) {
+            const storageKey = `${effect.guid}.scaling`;
+
+            // Load saved scaling value
+            const savedValue = globalEffectsStorage.getItem(storageKey);
+            if (savedValue != null) {
+                effect.scaling(parseFloat(savedValue));
+            }
+
+            // Subscribe to changes for automatic saving
+            effect.scaling.subscribe(val => {
+                globalEffectsStorage.setItem(storageKey, val);
+            });
+
+        }
+
+        for (const areaBuff of globalAreaBuffs) {
+            const storageKey = `${areaBuff.guid}.scaling`;
+
+            // Load saved scaling value
+            const savedValue = globalEffectsStorage.getItem(storageKey);
+            if (savedValue != null) {
+                areaBuff.scaling(parseFloat(savedValue));
+            }
+
+            // Subscribe to changes for automatic saving
+            areaBuff.scaling.subscribe(val => {
+                globalEffectsStorage.setItem(storageKey, val);
+            });
+        }
     }
 
     // Set up regions
