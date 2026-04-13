@@ -1282,6 +1282,10 @@ export class Island {
     getIslandFertility(guid: number): IslandFertility | undefined {
         return this.islandFertilities?.get(guid);
     }
+
+    getVisibleIslandFertility(guid: number): IslandFertility | undefined {
+        return this.visibleIslandFertilities.find(f => f.fertility.guid === guid);
+    }
 } 
 
 export interface Constructible extends NamedElement{

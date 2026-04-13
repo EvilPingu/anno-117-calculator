@@ -37,6 +37,7 @@
 | **Factory**   | 3187 | Spinner |
 | **Factory**   | 2694 | Latium Vineyard |
 | **Factory**   | 23723 | Albion Vineyard |
+| **Factory**   | 2916 | Limestone Quarry |
 | **Product**   | 2153 | Cheese |
 | **Product**   | 2138 | Wine |
 | **Product**   | 2140 | Oysters with Caviar |
@@ -48,6 +49,10 @@
 | **Buff**      | 77960 | Silo Buff (+100% Prod) |
 | **Item**      | 51339 | Measurer (-25% Workforce) |
 | **Patron**    | 43594 | Ceres |
+| **Product**   | 145102 | Obsidian |
+| **DLC**       | 67902 | DLC01 |
+| **Effect**    | 145095 | Obsidian Gathering (Limestone) |
+| **Effect**    | 148043 | Obsidian Mining (Obsidian) |
 | **Effect**    | 99014 | Epicure of Water (Radius) |
 | **Effect**    | 43600 | CeresPopulationEffect |
 

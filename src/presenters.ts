@@ -1,5 +1,5 @@
 import { ACCURACY, BuildingsCalc, createFloatInput, EPSILON, formatNumber, ko } from './util';
-import { AppliedBuff, Product, ProductCategory } from './production';
+import { AppliedBuff, IslandFertility, Product, ProductCategory } from './production';
 import { Factory, Module } from './factories';
 import { Island, Region } from './world';
 import { ExtraGoodSupplier, Supplier } from './suppliers';
@@ -127,6 +127,19 @@ export class FactoryPresenter {
 
     isCapacityUtilizationVisible(): boolean {
         return this.buildings().constructed() >= 1 && !this.parentProduct.product.isConstructionMaterial
+    }
+
+    isProductivityVisible(): boolean {
+        const factory = this.instance();
+        if (!factory) return true;
+        if (!factory.neededFertility) return true;
+        return factory.fertilityFactor() > EPSILON;
+    }
+
+    showFertilityCheckbox(): IslandFertility | undefined {
+        const factory = this.instance();
+        if (!factory?.neededFertility) return undefined;
+        return this.island().getVisibleIslandFertility(factory.neededFertility.guid);
     }
 }
 

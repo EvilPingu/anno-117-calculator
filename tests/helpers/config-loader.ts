@@ -31,10 +31,13 @@ export class ConfigLoader {
    * @param config - Configuration object to load
    */
   async loadConfigObject(page: Page, config: Record<string, any>): Promise<void> {
-    // Use addInitScript to inject localStorage before page loads
     await page.addInitScript((configData) => {
       for (const [key, value] of Object.entries(configData)) {
-        localStorage.setItem(key, String(value));
+        if (typeof value === 'object' && value !== null) {
+          localStorage.setItem(key, JSON.stringify(value));
+        } else {
+          localStorage.setItem(key, String(value));
+        }
       }
     }, config);
   }
