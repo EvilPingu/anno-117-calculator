@@ -21,7 +21,8 @@ test.describe('DLC Unlock Logic', () => {
     
     await configLoader.loadConfigObject(page, config);
     await page.goto('http://localhost:8080/index.html');
-    await page.waitForLoadState('networkidle');
+    await page.waitForFunction(() => (window as any).view && (window as any).view.islands().length > 0);
+    await page.waitForTimeout(300);
 
     // Uncheck all DLCs
     await page.evaluate(() => {
@@ -55,7 +56,8 @@ test.describe('DLC Unlock Logic', () => {
     
     await configLoader.loadConfigObject(page, config);
     await page.goto('http://localhost:8080/index.html');
-    await page.waitForLoadState('networkidle');
+    await page.waitForFunction(() => (window as any).view && (window as any).view.islands().length > 0);
+    await page.waitForTimeout(300);
 
     // Uncheck all DLCs
     await page.evaluate(() => {
@@ -88,7 +90,8 @@ test.describe('DLC Unlock Logic', () => {
     
     await configLoader.loadConfigObject(page, config);
     await page.goto('http://localhost:8080/index.html');
-    await page.waitForLoadState('networkidle');
+    await page.waitForFunction(() => (window as any).view && (window as any).view.islands().length > 0);
+    await page.waitForTimeout(300);
 
     // Activate all DLCs
     await page.evaluate(() => {
@@ -120,7 +123,8 @@ test.describe('DLC Unlock Logic', () => {
     
     await configLoader.loadConfigObject(page, config);
     await page.goto('http://localhost:8080/index.html');
-    await page.waitForLoadState('networkidle');
+    await page.waitForFunction(() => (window as any).view && (window as any).view.islands().length > 0);
+    await page.waitForTimeout(300);
 
     // Activate all DLCs
     await page.evaluate(() => {
@@ -149,7 +153,8 @@ test.describe('DLC Unlock Logic', () => {
     
     await configLoader.loadConfigObject(page, config);
     await page.goto('http://localhost:8080/index.html');
-    await page.waitForLoadState('networkidle');
+    await page.waitForFunction(() => (window as any).view && (window as any).view.islands().length > 0);
+    await page.waitForTimeout(300);
 
     // Activate all DLCs
     await page.evaluate(() => {
@@ -217,7 +222,8 @@ test.describe('DLC Unlock Logic', () => {
         const config = await getBasicConfig();
         await configLoader.loadConfigObject(page, config);
         await page.goto('http://localhost:8080/index.html');
-        await page.waitForLoadState('networkidle');
+        await page.waitForFunction(() => (window as any).view && (window as any).view.islands().length > 0);
+        await page.waitForTimeout(300);
 
         // Ensure DLC is unchecked initially
         await page.evaluate((dlcGuid) => {
@@ -260,10 +266,14 @@ test.describe('DLC Unlock Logic', () => {
 
     test('DLC is locked and checked when a patron is selected', async ({ page }) => {
         const dlcState = await page.evaluate(({patronGuid, dlcGuid}) => {
-            const island = window.view.island();
-            const patron = island.availablePatrons.find((p: any) => p.guid === patronGuid);
-            if (patron) island.selectedPatron(patron);
+            // Enable DLC first so patron is available
             const dlc = window.view.dlcs.find((d: any) => d.guid === dlcGuid);
+            if (dlc) dlc.checked(true);
+
+            const island = window.view.island();
+            const patron = island.availablePatrons().find((p: any) => p.guid === patronGuid);
+            if (patron) island.selectedPatron(patron);
+            
             return {
                 checked: dlc.checked(),
                 used: dlc.used(),

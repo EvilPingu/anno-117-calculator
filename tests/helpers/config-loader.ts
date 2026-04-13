@@ -34,8 +34,10 @@ export class ConfigLoader {
     await page.addInitScript((configData) => {
       for (const [key, value] of Object.entries(configData)) {
         if (typeof value === 'object' && value !== null) {
+          // If it's an object (like All Islands or calculatorSettings in some fixtures), stringify it
           localStorage.setItem(key, JSON.stringify(value));
         } else {
+          // If it's already a string (like in most exported configs), use it as is
           localStorage.setItem(key, String(value));
         }
       }
@@ -56,25 +58,46 @@ export class ConfigLoader {
     islandData: Record<string, any> = {},
     calculatorSettings: Record<string, any> = {}
   ): Record<string, any> {
-    // Create nested island storage structure
-    const islandStorage = {
-      session: session,
-      selectedPatron: "",
-      ...islandData
-    };
+    return this.createFullConfig(
+        [{ name: islandName, session, data: islandData }],
+        calculatorSettings,
+        islandName
+    );
+  }
 
-    return {
-      islandName: islandName,
-      islandNames: JSON.stringify([islandName]),
+  /**
+   * Creates a full configuration with multiple islands
+   * @param islands - Array of island definitions
+   * @param calculatorSettings - Global calculator settings
+   * @param activeIsland - Name of the island to select initially
+   * @returns Full config object
+   */
+  createFullConfig(
+    islands: { name: string, session: number, data?: Record<string, any> }[],
+    calculatorSettings: Record<string, any> = {},
+    activeIsland?: string
+  ): Record<string, any> {
+    const config: Record<string, any> = {
+      islandName: activeIsland || (islands.length > 0 ? islands[0].name : ""),
+      islandNames: JSON.stringify(islands.map(i => i.name)),
       versionCalculator: "1.0",
       tradeRoutes: "[]",
       collapsibleStates: "{}",
       "debug.enabled": "false",
-      calculatorSettings: JSON.stringify(calculatorSettings, null, 4),
+      calculatorSettings: calculatorSettings,
       sessionSettings: "{}",
-      globalEffects: "{}",
-      [islandName]: JSON.stringify(islandStorage, null, 4)
+      globalEffects: "{}"
     };
+
+    for (const island of islands) {
+      config[island.name] = {
+        session: island.session,
+        selectedPatron: "",
+        ...(island.data || {})
+      };
+    }
+
+    return config;
   }
 
   /**

@@ -35,7 +35,8 @@
       "Bash(fi)",
       "Bash(git config:*)",
       "Bash(python -c ':*)",
-      "WebFetch(domain:)"
+      "WebFetch(domain:)",
+      "Bash(python:*)"
     ],
     "deny": []
   },

@@ -21,8 +21,7 @@ test.describe('New Requirements Tests', () => {
     configLoader = new ConfigLoader();
     await configLoader.loadConfig(page, 'tests/fixtures/with-data.json');
     await page.goto('/');
-    await page.waitForLoadState('networkidle');
-    // Ensure all islands are initialized
+    // Wait for islands to be initialized instead of networkidle
     await page.waitForFunction(() => (window as any).view && (window as any).view.islands().length >= 3);
   });
 
@@ -184,10 +183,6 @@ test.describe('New Requirements Tests', () => {
       const patrician = latium.assetsMap.get(RESIDENCE_PATRICIAN);
       if (patrician) patrician.buildings.constructed(1000);
       
-      // Add 20 concrete factories (they consume limestone)
-      const concreteMixer = latium.assetsMap.get(FACTORY_CONCRETE_MIXER_ROMAN);
-      if (concreteMixer) concreteMixer.buildings.constructed(20);
-      
       // Set supplier of obsidian to limestone quarry
       const obsidian = latium.assetsMap.get(PRODUCT_OBSIDIAN);
       const limestoneQuarry = latium.assetsMap.get(FACTORY_LIMESTONE_QUARRY);
@@ -201,13 +196,24 @@ test.describe('New Requirements Tests', () => {
       view.selectedProduct(productPresenter);
       (window as any).$ && (window as any).$('#product-config-dialog').modal('show');
 
-      return {
-          produced: obsidian.extraGoodProduction(),
-          consumed: obsidian.totalDemandNoRoutes(),
+      // Add 20 concrete factories AFTER setting the default supplier
+      const concreteMixer = latium.assetsMap.get(FACTORY_CONCRETE_MIXER_ROMAN);
+      if (concreteMixer) concreteMixer.buildings.constructed(20);
+
+      var result =  {
+          produced: productPresenter.extraGoodProduction(),
+          consumed: productPresenter.totalDemandNoRoutes(),
           obsidianOverproduction: obsidian.excessProduction(),
           limestoneQuarryThroughput: limestoneQuarry.throughput(),
           limestoneQuarryOutput: limestoneQuarry.outputAmount()
       };
+
+      // Check that reset is also correct
+      if (concreteMixer) concreteMixer.buildings.constructed(0);
+      result["producedReset"] = productPresenter.extraGoodProduction();
+      result["consumedReset"] = productPresenter.totalDemandNoRoutes();
+
+      return result;
     }, { 
         DLC01, EFFECT_OBSIDIAN_GATHERING, EFFECT_OBSIDIAN_MINING, 
         RESIDENCE_PATRICIAN, PRODUCT_OBSIDIAN, FACTORY_LIMESTONE_QUARRY,
@@ -220,5 +226,6 @@ test.describe('New Requirements Tests', () => {
     // (This implies that ExtraGoodSupplier logic should cap production at demand if it's the default supplier)
     expect(results.produced).toBeCloseTo(results.consumed, 5);
     expect(results.produced).not.toBeGreaterThan(results.consumed + 0.001);
+    expect(results.producedReset).toBeCloseTo(results.consumedReset, 5);
   });
 });

@@ -40,7 +40,8 @@ test.describe('Population Buffs from Area Effects', () => {
         await configLoader.loadConfigObject(page, config);
 
         await page.goto('/');
-        await page.waitForLoadState('networkidle');
+        // Wait for islands to be initialized AND an island to be selected
+        await page.waitForFunction(() => (window as any).view && (window as any).view.island());
         await page.waitForTimeout(300);
 
         // Verify effect is active (scaling = 1)
@@ -73,7 +74,8 @@ test.describe('Population Buffs from Area Effects', () => {
         await configLoader.loadConfigObject(page, config);
 
         await page.goto('/');
-        await page.waitForLoadState('networkidle');
+        // Wait for islands to be initialized AND an island to be selected
+        await page.waitForFunction(() => (window as any).view && (window as any).view.island());
         await page.waitForTimeout(300);
 
         // Activate the effect
@@ -107,7 +109,8 @@ test.describe('Population Buffs from Area Effects', () => {
         await configLoader.loadConfigObject(page, config);
 
         await page.goto('/');
-        await page.waitForLoadState('networkidle');
+        // Wait for islands to be initialized AND an island to be selected
+        await page.waitForFunction(() => (window as any).view && (window as any).view.island());
         await page.waitForTimeout(300);
 
         // Check the buff array on the residence (Latium island context)
@@ -177,7 +180,8 @@ test.describe('Population Buffs from Area Effects', () => {
         await configLoader.loadConfigObject(page, config);
 
         await page.goto('/');
-        await page.waitForLoadState('networkidle');
+        // Wait for islands to be initialized AND an island to be selected
+        await page.waitForFunction(() => (window as any).view && (window as any).view.island());
         await page.waitForTimeout(300);
 
         const presenterInfo = await page.evaluate((libertiGuid) => {
@@ -217,7 +221,8 @@ test.describe('Population Buffs from Area Effects', () => {
         await configLoader.loadConfigObject(page, config);
 
         await page.goto('/');
-        await page.waitForLoadState('networkidle');
+        // Wait for islands to be initialized AND an island to be selected
+        await page.waitForFunction(() => (window as any).view && (window as any).view.island());
         await page.waitForTimeout(500); // allow patron effects to compute
 
         const ceresData = await page.evaluate((libertiGuid) => {
@@ -261,7 +266,8 @@ test.describe('Population Buffs from Area Effects', () => {
         await configLoader.loadConfigObject(page, configBaseline);
 
         await page.goto('/');
-        await page.waitForLoadState('networkidle');
+        // Wait for islands to be initialized AND an island to be selected
+        await page.waitForFunction(() => (window as any).view && (window as any).view.island());
         await page.waitForTimeout(300);
 
         const baseResidents = await page.evaluate((libertiGuid) => {
@@ -279,15 +285,12 @@ test.describe('Population Buffs from Area Effects', () => {
             devotion: '1500',
             selectedPatron: String(CERES_PATRON_GUID),
         });
-
-        await page2.addInitScript((configData) => {
-            for (const [key, value] of Object.entries(configData)) {
-                localStorage.setItem(key, String(value));
-            }
-        }, configCeres);
+        await configLoader.loadConfigObject(page2, configCeres);
 
         await page2.goto('/');
-        await page2.waitForLoadState('networkidle');
+        // Wait for islands to be initialized AND an island to be selected
+        await page2.waitForFunction(() => (window as any).view && (window as any).view.island());
+
         await page2.waitForTimeout(500);
 
         const ceresResidents = await page2.evaluate((libertiGuid) => {
@@ -315,7 +318,8 @@ test.describe('Population Buffs from Area Effects', () => {
         await configLoader.loadConfigObject(page, config);
 
         await page.goto('/');
-        await page.waitForLoadState('networkidle');
+        // Wait for islands to be initialized AND an island to be selected
+        await page.waitForFunction(() => (window as any).view && (window as any).view.island());
         await page.waitForTimeout(300);
 
         const before = await page.evaluate((args) => {
