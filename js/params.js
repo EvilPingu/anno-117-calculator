@@ -1365,78 +1365,6 @@ if(window.params == null)window.params={
       "dlcUnlocks": [],
       "fertilityPercent": 100,
       "fuelDurationPercent": 0.0,
-      "guid": 140764,
-      "iconPath": "data/ui/fhd/base/icon_content/attributes/icon_2d_population.png",
-      "isStackable": false,
-      "locaText": {
-        "brazilian": "Espaço para os Deslocados",
-        "english": "Space for the Displaced",
-        "french": "De la place pour les déportés",
-        "german": "Raum für die Vertriebenen",
-        "italian": "Folla di sfollati",
-        "japanese": "​難民​の​ため​の​場所",
-        "korean": "​난민을 ​위한 ​공간",
-        "polish": "Miejsce dla wysiedlonych",
-        "russian": "Приют для лишившихся крова",
-        "simplified_chinese": "​安置​难民",
-        "spanish": "Lugar para los desplazados",
-        "traditional_chinese": "​安置​流離失所​者"
-      },
-      "name": "Buff Population DQ 150 Space for the Displaced",
-      "population": 3.0,
-      "productivityUpgrade": 0,
-      "replaceInputs": [],
-      "replaceWorkforce": {
-        "newWorkforce": 0,
-        "oldWorkforce": 0
-      },
-      "workforceMaintenanceFactorUpgrade": 0,
-      "workforceModifierInPercent": 0.0
-    },
-    {
-      "addedFertility": 0,
-      "additionalOutputs": [],
-      "additionalWorkforces": [],
-      "baseProductivityUpgrade": 0,
-      "dlcUnlocks": [],
-      "fertilityPercent": 100,
-      "fuelDurationPercent": 0.0,
-      "guid": 98692,
-      "iconPath": "data/ui/fhd/base/icon_content/attributes/icon_2d_population.png",
-      "isStackable": false,
-      "locaText": {
-        "brazilian": "Espaço para os Deslocados",
-        "english": "Space for the Displaced",
-        "french": "De la place pour les déportés",
-        "german": "Raum für die Vertriebenen",
-        "italian": "Folla di sfollati",
-        "japanese": "​難民​の​ため​の​場所",
-        "korean": "​난민을 ​위한 ​공간",
-        "polish": "Miejsce dla wysiedlonych",
-        "russian": "Приют для лишившихся крова",
-        "simplified_chinese": "​安置​难民",
-        "spanish": "Lugar para los desplazados",
-        "traditional_chinese": "​安置​流離失所​者"
-      },
-      "name": "Buff Workforce DQ 150 Space for the Displaced",
-      "population": 6.0,
-      "productivityUpgrade": 0,
-      "replaceInputs": [],
-      "replaceWorkforce": {
-        "newWorkforce": 0,
-        "oldWorkforce": 0
-      },
-      "workforceMaintenanceFactorUpgrade": 0,
-      "workforceModifierInPercent": 0.0
-    },
-    {
-      "addedFertility": 0,
-      "additionalOutputs": [],
-      "additionalWorkforces": [],
-      "baseProductivityUpgrade": 0,
-      "dlcUnlocks": [],
-      "fertilityPercent": 100,
-      "fuelDurationPercent": 0.0,
       "guid": 107479,
       "iconPath": "data/ui/fhd/base/icon_content/generic/icon_2d_ship_civilian.png",
       "isStackable": false,
@@ -6632,78 +6560,6 @@ if(window.params == null)window.params={
       "additionalOutputs": [],
       "additionalWorkforces": [],
       "baseProductivityUpgrade": 0,
-      "dlcUnlocks": [],
-      "fertilityPercent": 100,
-      "fuelDurationPercent": 0.0,
-      "guid": 106570,
-      "iconPath": "data/ui/fhd/base/icon_content/workforce/icon_2d_aldermen_workforce_albion.png",
-      "isStackable": false,
-      "locaText": {
-        "brazilian": "Ocus Iad Do-Fuithir",
-        "english": "Ocus Iad Do-Fuithir",
-        "french": "Ocus Iad Do-Fuithir",
-        "german": "Ocus Iad Do-Fuithir",
-        "italian": "Ocus Iad Do-Fuithir",
-        "japanese": "​健やか​な​命",
-        "korean": "​풍요가 ​있으리라",
-        "polish": "Ocus Iad Do-Fuithir",
-        "russian": "Ocus Iad Do-Fuithir",
-        "simplified_chinese": "​尽​享​盛宴",
-        "spanish": "Ocus Iad Do-Fuithir",
-        "traditional_chinese": "​他們​必將​饗宴"
-      },
-      "name": "Improved productivity Pigs and Butcher Buff",
-      "population": 0.0,
-      "productivityUpgrade": 20.0,
-      "replaceInputs": [],
-      "replaceWorkforce": {
-        "newWorkforce": 0,
-        "oldWorkforce": 0
-      },
-      "workforceMaintenanceFactorUpgrade": 0,
-      "workforceModifierInPercent": 0.0
-    },
-    {
-      "addedFertility": 0,
-      "additionalOutputs": [],
-      "additionalWorkforces": [],
-      "baseProductivityUpgrade": 0,
-      "dlcUnlocks": [],
-      "fertilityPercent": 100,
-      "fuelDurationPercent": 0.0,
-      "guid": 106572,
-      "iconPath": "data/ui/fhd/base/icon_content/workforce/icon_2d_walders_workforce_albion.png",
-      "isStackable": false,
-      "locaText": {
-        "brazilian": "Ocus Iad Erigfet",
-        "english": "Ocus Iad Erigfet",
-        "french": "Ocus Iad Erigfet",
-        "german": "Ocus Iad Erigfet",
-        "italian": "Ocus Iad Erigfet",
-        "japanese": "​果実​の​実り",
-        "korean": "​조화의 ​선물",
-        "polish": "Ocus Iad Erigfet",
-        "russian": "Ocus Iad Erigfet",
-        "simplified_chinese": "​生生不息",
-        "spanish": "Ocus Iad Erigfet",
-        "traditional_chinese": "​他們​必將​茁壯"
-      },
-      "name": "Improved productivity Vineyard and Cellars Buff",
-      "population": 0.0,
-      "productivityUpgrade": 20.0,
-      "replaceInputs": [],
-      "replaceWorkforce": {
-        "newWorkforce": 0,
-        "oldWorkforce": 0
-      },
-      "workforceMaintenanceFactorUpgrade": 0,
-      "workforceModifierInPercent": 0.0
-    },
-    {
-      "addedFertility": 0,
-      "additionalOutputs": [],
-      "additionalWorkforces": [],
-      "baseProductivityUpgrade": 0,
       "dlcUnlocks": [
         67902
       ],
@@ -10544,70 +10400,6 @@ if(window.params == null)window.params={
     },
     {
       "buffs": [
-        140764
-      ],
-      "dlcUnlocks": [],
-      "effectDuration": 14400,
-      "effectScope": "ObjectsInArea",
-      "excludeEffectSourceGUID": false,
-      "guid": 98651,
-      "iconPath": "data/ui/fhd/base/icon_content/generic/icon_2d_population_latinum.png",
-      "locaText": {
-        "brazilian": "Espaço para os Deslocados",
-        "english": "Space for the Displaced",
-        "french": "De la place pour les déportés",
-        "german": "Raum für die Vertriebenen",
-        "italian": "Folla di sfollati",
-        "japanese": "​難民​の​ため​の​場所",
-        "korean": "​난민을 ​위한 ​공간",
-        "polish": "Miejsce dla wysiedlonych",
-        "russian": "Приют для лишившихся крова",
-        "simplified_chinese": "​安置​难民",
-        "spanish": "Lugar para los desplazados",
-        "traditional_chinese": "​安置​流離失所​者"
-      },
-      "name": "Effect Option 0 DQ 150 Space for the Displaced",
-      "source": "island-event",
-      "targets": [
-        3087,
-        6414
-      ],
-      "targetsIsAllProduction": false
-    },
-    {
-      "buffs": [
-        98692
-      ],
-      "dlcUnlocks": [],
-      "effectDuration": 14400,
-      "effectScope": "ObjectsInArea",
-      "excludeEffectSourceGUID": false,
-      "guid": 98686,
-      "iconPath": "data/ui/fhd/base/icon_content/generic/icon_2d_population_latinum.png",
-      "locaText": {
-        "brazilian": "Espaço para os Deslocados",
-        "english": "Space for the Displaced",
-        "french": "De la place pour les déportés",
-        "german": "Raum für die Vertriebenen",
-        "italian": "Folla di sfollati",
-        "japanese": "​難民​の​ため​の​場所",
-        "korean": "​난민을 ​위한 ​공간",
-        "polish": "Miejsce dla wysiedlonych",
-        "russian": "Приют для лишившихся крова",
-        "simplified_chinese": "​安置​难民",
-        "spanish": "Lugar para los desplazados",
-        "traditional_chinese": "​安置​流離失所​者"
-      },
-      "name": "Effect Option 1 DQ 150 Space for the Displaced",
-      "source": "island-event",
-      "targets": [
-        3087,
-        6414
-      ],
-      "targetsIsAllProduction": false
-    },
-    {
-      "buffs": [
         80566
       ],
       "dlcUnlocks": [],
@@ -11084,70 +10876,6 @@ if(window.params == null)window.params={
         5954,
         5969,
         5982
-      ],
-      "targetsIsAllProduction": false
-    },
-    {
-      "buffs": [
-        106570
-      ],
-      "dlcUnlocks": [],
-      "effectDuration": 0,
-      "effectScope": "ObjectsInArea",
-      "excludeEffectSourceGUID": false,
-      "guid": 106569,
-      "iconPath": "data/ui/fhd/base/icon_content/workforce/icon_2d_aldermen_workforce_albion.png",
-      "locaText": {
-        "brazilian": "Ocus Iad Do-Fuithir",
-        "english": "Ocus Iad Do-Fuithir",
-        "french": "Ocus Iad Do-Fuithir",
-        "german": "Ocus Iad Do-Fuithir",
-        "italian": "Ocus Iad Do-Fuithir",
-        "japanese": "​健やか​な​命",
-        "korean": "​풍요가 ​있으리라",
-        "polish": "Ocus Iad Do-Fuithir",
-        "russian": "Ocus Iad Do-Fuithir",
-        "simplified_chinese": "​尽​享​盛宴",
-        "spanish": "Ocus Iad Do-Fuithir",
-        "traditional_chinese": "​他們​必將​饗宴"
-      },
-      "name": "Improved productivity Pigs and Butcher Effect",
-      "source": "island-event",
-      "targets": [
-        5974,
-        5959
-      ],
-      "targetsIsAllProduction": false
-    },
-    {
-      "buffs": [
-        106572
-      ],
-      "dlcUnlocks": [],
-      "effectDuration": 0,
-      "effectScope": "ObjectsInArea",
-      "excludeEffectSourceGUID": false,
-      "guid": 106571,
-      "iconPath": "data/ui/fhd/base/icon_content/workforce/icon_2d_walders_workforce_albion.png",
-      "locaText": {
-        "brazilian": "Ocus Iad Erigfet",
-        "english": "Ocus Iad Erigfet",
-        "french": "Ocus Iad Erigfet",
-        "german": "Ocus Iad Erigfet",
-        "italian": "Ocus Iad Erigfet",
-        "japanese": "​果実​の​実り",
-        "korean": "​조화의 ​선물",
-        "polish": "Ocus Iad Erigfet",
-        "russian": "Ocus Iad Erigfet",
-        "simplified_chinese": "​生生不息",
-        "spanish": "Ocus Iad Erigfet",
-        "traditional_chinese": "​他們​必將​茁壯"
-      },
-      "name": "Improved productivity Vineyard and Cellars Effect",
-      "source": "island-event",
-      "targets": [
-        23723,
-        23753
       ],
       "targetsIsAllProduction": false
     },
@@ -19353,7 +19081,6 @@ if(window.params == null)window.params={
     "data/ui/fhd/base/icon_content/generic/icon_2d_permit_depot.png": "data:image/webp;base64,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",
     "data/ui/fhd/base/icon_content/generic/icon_2d_permit_guesthouse.png": "data:image/webp;base64,UklGRsgFAABXRUJQVlA4WAoAAAAQAAAAfwAAfwAAQUxQSAcFAAANsIZtmyFJ1vNFZFV7PGvbtm3btm3bOLZta23btt1GRnw/MjarMjPy+EdETAD/n7jZCEyMx6LLBMbS8uy/kwPsr74bic6zl3OAv/Ku8iwyuwV44+VImOX6LGAe+6A83pD1xNJZgNTyb9fEmoBIxgCqxZmMD6lmlPHK7LivBkwOT/Ei4AlqSEY/qsz8C9OyleKyxgTEmEwlnQ1E1xXXue5cKI1mei9Rls3ml4kU0Scf9O2aeUafCpAQZ3vgsjQsap69bqJd3iLEXgA8/7VoakK0bZ98QwFJ7PrLRklveMJ7BT+7advwz14ANHWbbxIl9+3nKa3wb8KhT1Jl1u5qfdhvpDm9WZWfft1gzl27Unrlnw2dF69QlQ/6gVm6i3nhrWWmFcKHo6mOz91dFVEwnkIfPX904cu6CxEF4ym9CRlPwaPP3AB/fWOL+W0BQRuwXsvz8icOsLNS7Gt/v+lTYPjiB+bZfIOphfjnhh3gF6K83/6pBVxXMe9/8X2C/rXbblhvz+4ixs5+2AImKdHoKEWPPP3H+zvIOXbV/RtvOn/SNh10xDa97A5a7L//D88etEvb4tt//x9n0rq+9gO/zZIdtfDjn1va+9zP7p165Jrxe/fWl2j/+3c+s/pKk+L2yG8ebFLoX78u6283T7z0ua9R+MADv5/l4Fki9dn9v3vNFgd8/6erbr1UZ4Q+O+sNSjr29B/v3uxYic07t9/QQ4k/+vHz264yOSYj19/SpNzv/PbGib13lng0XvkEQLQsojD42HK9xDM56qE7AKWsCrDnGDFdaKG/GbQ8iGC3IK5b78LENU8G5llm/JEPPqdnuVmef8aHzBILv//IcGCbXbx/PTJLLws3v5vZ7pDxJL30wcCc582ZTvnHF8YzzWM2TntfP/+dzJLLGCKcWoCFDgaz8uaXfwbYU4BZDrz3hswmq0H3tjOuU8Ab4r2qB1ip/3lgtqUBelcPbEx2o4c/JvI9ZBuNYaBDMvQNKkhPoCudiF1+h83UuBepOVVTc566U6Tm6lkCidOMDRifMYHEaexeuA8QFgcY+euIgp1XMne97kC6phD7W74HqCH76WVvCzgB0O/cYkCF6KuSV5WcqvxH3thUayxZYaNFOwYeveH5uprrxEWAqcsveMPXh2ppnnMIL3BoevFwDXWezucnh4x/q4bWn5GDxiF/fbl2ZGtyLzTnbbXTN18+s8yjtdPRkY9pn/q6EVoU5f9gaj5FWtB8KlXr6srI6FA+6dUkhzJI/maP5nEp+aUvCQxMlOegPRxgfvqtfM3zV3Y55JPhFtY/xeQxb7TQedEKDkgvuaM88022AB+8nc8sMpkCZyxAXqFFWbjLAvblj8rjDVlPLJ0FcIbSK+BNxRTwhqCWb5apXuXtis3S3aD5aqiCux+qpCPVkpO3dDIyUZnuSVaEik/r5Z9ylZrq2XNhwNrkCaJsD1lcnQN/1598u6YcKMRcNlhCrAXz7o9du/AmajlV+G9FkxoFJGYKCKLtev/CfgPW+h03i5L/+kMmVUiXENo9dtebCi5llWXidNPrnrIa4mw8ZX/xGQlYEVSaIGmaR0LagjSMih8XUPA+YFaZEajgb38YUlWEFNSaPBqSFtSpqCSKACKBztOWropTH/AA6imnV4JK3oZU5V94EzI+FjaQOC3Pc285wM5DJP3D/Q7wy1Pe7/3GAq4Zi9GLHreASUo0PkFcRx3/xxAAVlA4IJoAAACwCwCdASqAAIAAPzmEuFOvKKUisX6YAeAnCWlu3koB9AAPnYKFM/mPs8J6kk/Xew2HrZczOidFtEZUHoGtf2dCPyVqHuhW67JGUQG/aUuabJfP0T+8ZYti3RkTDW94dQAQkqSSckAA/u92eDCiF/AUI1m1OJf0Ch3///OZAQsb5vPIykD7/4Nz9/30j7/4Oe///nNFGPjvTEAA",
     "data/ui/fhd/base/icon_content/generic/icon_2d_permit_shrine.png": "data:image/webp;base64,UklGRpwFAABXRUJQVlA4WAoAAAAQAAAAfwAAfwAAQUxQSOEEAAANoERr2yFJer4/MjKLbVtj27Zt2yvbtm3PrGzbtm3PlDIz/v9bZHQGMv7xIiImgP8lrSw9WAH77PdFMdtcCsjnL2leBh022YFUT3ujKNbdygHB4+fnhpAAkLorikACAFMn5yoUrEre/gTawnCmRcxcXUFMSQATAnWXXWhA6xrjbIz9lhatHLWgbRAL4CwQmOwiBUpIg0hMUG0VaSuR2JBPESHGxDSp2YWBIgYGYoo3aFenoDZKbYXdy4opmV96Cmr5/Yyrg/xw4sdpzT4HhiIfMyulMtD12A9p2QA/1gP+4RdNbaBWAoRSWFBatyhIrSO1Oy8sOZWAEUdMKqYnz46sQ6TcntrPbw+ARlSXGVJMn70GoI7sS5ZiFnH8uXavfmVd+7Kd2difR2b06StIOPv0Fqke/0bI6CNGZnPnDYfOlc0jF6vWNtiuRbSOQwPJ5J3reGS/oZloBLhyi+Sx93S44/M9JYtYIe9iYkrOZXZ9CO78+ZfJzMQFNjd9d/zhQGQusv7wDoDvr9qjO6vXXnBAMEly03PGF4CSuV5K7AO962d1160AlsJ984242tUbDcuosG9ips/9tqqXvnxxZrXb1q346MlwZjw1YjYPuYdo8rsPlvbQT581w7OLBP75gqbfGTfYQ+Wmvg2H++cHGqVcbeiNBvtnIGbShhf3A9aF/glsw2ZTn3gKEMG/Q/6wMG05triqH9pKHpryYw9sC6u5B2CM89AM9zGzLwqd21z/Bwv6aOTC98iOACt03NW2Cj7e+onBcze07XD9goGX5ti4h9jFlyrj5x1sXHlfPG0kjtBXf+17+iTRoIpfbrokUeWYhf1Ses0l6ZgHv07+sTfJCPHM6L4/kowa8MxwfkoyIfJMd+e3SSbi2bbhXyWZ5Bsz8bME4RjfMOkLba5zsHdG/Bo11xF6x6g2J/zvrtgEzninPLY51W+8s/RRQVPyY907nSOlqb/C79xuJU86eNORRTPy1rs1T+w9B0U7Yv8bXsvTppMp3jl2O+vT/Cy/Ji0ucdocy2948ld5WXwbEkqc5qdrvykOqJ/7ZnOss9YpH+djuW1IuvbGDgieuFzz0rFmhwH0wa8SsPam576QA7PxmiSeZwED8PXDuVEXAESGxEvtc9fNtayG7jWR5M7QaA2tqNIU0w6onfNhJrLUno4UVWLyL2VnnNSbo2ObtR685dv0Zt9hOkklFFRo0coR89b5ri8BzLHrjAfv+ETTKM+12TwkX2l3I+VPW8XMPTYwpGgW3GrOD+955ft6c20TF19tGGlOmo8ilumrrDj027fe+eKX3rqacvfwqXPNPjiiQKNAMgLapsw7//ShJXUqRqqWfKpmNmLuNsBQ+YJ8lru6uyqGHE9ZqF8V+PW1/rTW2j0CFEtBL7VPWQCpHfFuWpWQYpcgQIByf5SWN1X4pzLwRWhdWm+92e4wFRMu1F1MX7+FrTlM7xTSfvzimqB1N+TYycX02JkqoeAM6VsL6qAixeRqSr61L4oRQVAxgEuiIEnUCGARQFXjKm0x+a8e+VLQgBhAAsBqAlRIbAIVFwmNLs5usWOLuPd6bIM6p+DqpKqaKIpQUG2Y+ajJLYJxFKThT7fEiBaNaH6q4gDCwrDWASVncvP7sZ8KUBlVGLdeL4BdUHJTffoPivWDdwCU/ycFAFZQOCCUAAAAsAoAnQEqgACAAD8xgLVTrqglIrN/KAHQJglpbt/MAA4+AvHlNzBthgimcyavwsFsLi84BN42ljM0LEeE84mcN46F4s+tkJKC01xmdS4OAS5MWEoAcrfDqQE7RAz/+AD+75pc///PqZPlIbf/+fVFkFpsFc//UI1cajZRYKL1SL//+fX7/6gmpf/8+oXdRsFpvSvIAA==",
-    "data/ui/fhd/base/icon_content/generic/icon_2d_population_latinum.png": "data:image/webp;base64,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",
     "data/ui/fhd/base/icon_content/generic/icon_2d_region_heartlands.png": "data:image/webp;base64,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",
     "data/ui/fhd/base/icon_content/generic/icon_2d_region_wetlands.png": "data:image/webp;base64,UklGRsIHAABXRUJQVlA4WAoAAAAQAAAAfwAAfwAAQUxQSA8HAAAB8Mb/nyHH/v9VjyczExur6NjnrI69OLaNt513tN44i9hr27aDtRGug9tuNOrpfl3IVHV3Tc3F9/sWEROA/o9DtSkkJjYudlCoWc15IVXIc5/8Z9b8NRvXLSpM/nxUuNrLGJ/8Y83RO1YH73K5eKetvWHB34abOe9hHJ51+J4I5GJP3eyXLV5CFZ9WbwM5HWezHlJ7A+Ob67tB7r6dH1nYF/D7OQHkFxuTwlgXnHwDlG3PjGJbQPJtULorK5xl+t9vgPLtSRZ2qcZcAsm8g5cEzZ+pmZW4RSRztDWsrymrWVvbYiODw0+yymdCD5DaTxZ//GBogH9ASMJ7ebVWIttsfzZxI88A6a3i0RYVcq8yPZ3fTAKNY1RMMs+wkZz/JRiR+31eJxDwcwOY9FQ9EF74VI+kasbUEcCFVzgGaf/TTXDrRx2Srvm4kcCeoWNQxBoQ3Iv9M/yRnMbJ/TjYNIhB0UllhW6LSqY9juR9bB/B5bcZpDYY8XqVTNr0Plzvnzn2UPnKOZyQo/dKkVtw4vwQr2SqEjGwZqhXMmbbcRtjWcKpTSHhYaFh4dggP+m+OjeGKf249cOYoQ0Z8VVywdxFCwgXzilzW16Br5w92l2mTYoqMkrnYean/rm0/pZdEBWG+z9zA4z5Tin6f65NHenLeY55VF7tPaCy81vkJk+SIZfvPVXyip+HqBInnbYCpR3fYBxS9JOtAI6LOY+oPcE4ZmMPUKvAFCsAQP/uTyz0BfzpggDMALEpKYy24OSbQLNyAO2ZUXQFJN8GxkBXVjhN+l+vA91d30nbECsJ7iZZ6FG9dQEkiy4BRPmh+xdOrskk0PSJmpr4jSKZs/nQmsrCsqqqSrmrqgtGIUmrBw8w5DpJ4ODjtBjS7gOpvWHGxw8HmXxMivpoJIlLIwfo0nuJ+vN8KRl+AkhvFYwycYhWsqgB3AMZTSIBXH6bo8KYbSM5/3MwolgGhHw/qxMJ+FJfKp48AoQXPtEjD1mGQZqx9W5EAICzL9Og+nM3wa2fdMjjkOazpgGCAAD2NC0FwVUizl7kjxiAfKb3AoAoAgCsHkLB8FrAnxyFCLWPf/Ce+/ef1FCGHjkA+CtvcIqpPr2LcxSaSPxyWprdtrQWmGjTT+7D9fymU8z0Hyuu7SMViX8V4BeYaUMvXsY5cgIVCy1w4uoSEKlfuYgRK03URe7C8QsHKRazkMetCyGr8CT/Gh4jbI5XLHatC8NX+zPDkmvF7XtIsfhNOEephHJPMk3rw4gHH1Ysdh2Or5ZQ4UnmbCtu/0OKDVrEY2B1MFk5ZUvJ/Kt4jLA1QbGwIifuaCxZBRW5ckVsByy/eJBi5hQbrnk8R5tPgQsDK2OIRp7HOfKDFFN/0YGz5RmJymkw5rR3drjtmhtNokvuxvX9Sa8YGnUcB8eeIiqjQf30199+4/a7F31I4ncCvnEMp1zYfBFnzTFTJrch+T7B+jikvPoffTho+ULDAPW484B3TtFTgIbXE0DDOI3HqV7aKxJcegvRaJrtJBBrP7Z4mHHsbh7w4twAKtDL5wlAvDo1kfMgbeJ/zwhA2PQ+R4cpo48AoD/DMMBXBrXBqKjBaIp8KWlrN5A6SgMQpQ/vIYIqnwFBNdIeTc/PzZM/e0pW5eYzPUDeMJyjRfVBI4lQaBwQvlDax228Q36nvd8ugtTr32sRtaZ/3aXhg1ag+960QERxaEantAXS3mumq6dkMKI6KquDMfeLhyLKw1NamXIrYxCi3u/LAzZmOBp+DUYeqH1idiMPIBR4nKu1coQeeWbAmDkXrFDpI6mKLvuVJR+GIo/lgl6duj3DTRgBYD65CaJkKaLQe2Vb9phQFfJoQ3yCZkAogVjubkTZ8mVLlxEvXbpqw4b1+I3rFuT/ZVysgUOMDCNwFfm4MYRHR0mNHBwbOwwfOzTMqEIMDV+EE8tNbrxtyHwcrAjwSuZigr1xXkmd7sQ1vuuVuO/acfZMvVxaPaGKPeiFkzg48rRMg/44fYr76X8dxqDQlQTWTLMs+n+326zuHTseYpA2tRcHLZ9rZFCPvwB450wTg9CIkwRQP1YjSfXSHoHg6hiORb5lDgKh9lOLBOO43TzgXUuCEYu5Vy8TgHgt81EDh9PHp54TgLD1AzWTkG9OPwFA3/7Jr8YEWEyWgKgXUnZ0A6mjMhgx+rH9RAB9V3bNzZuWW7PjYjeQHx/JsUr9cRMZALisfVYepN78UYuYbf73XSmy3s8IQgwPy+xSrKdkMGJ6VFa7QveKhyHGhyW3KHJj2iDEfN/P9lplc9T+FIi8oOaxmZd4WVyNZc/qkHf0e7v8jFWS/dLc94OQ1+T8X0lefbHbwbsEURB4R8+VDZPeDOaQV9UOef23nAWb9x3ct2VR3h/fitMj78vpA2PiH3r4oYRBQQYO/Q93AFZQOCCMAAAA0AsAnQEqgACAAD85hrlTryklorAIAeAnCWlu3QpuHoACw9mhfuRVLBlNGhywYuaUeZSiL4wkTO6gQwR/oyRix9y1XvnWKZkYInP9Z9Ppm9LHKRsP5Yz7bZi453iSEBHVJGftAlzUgAD+73JH/8TQ2/iaMJ///N0l9qkd9x4AEL7Zkf//OZaf0mAAAAA=",
     "data/ui/fhd/base/icon_content/generic/icon_2d_ship_civilian.png": "data:image/webp;base64,UklGRgoGAABXRUJQVlA4WAoAAAAQAAAAfwAAfwAAQUxQSEwFAAABoEVb2/FIev+4MF1Odco22rZt27Zt27aNso22bZtlvxf15c9fX75/fBEREwD/ZyoTvU6BYrfosl9ZcTKFSqVSSJm1AC/5CsWZuNXtOWnV7pNBEZFh5w9vWTi8TUWNkj3zEVO8BeAsa43ek/I6owj55329d3FxZ3cVWxYgYoqPDpx9l63Xf6Lg+a9DplY1Ygym+vAxa7ntUT6W9beocR4SpmCKlxaHMcnZSGXJy621FSzBJM9STjPuFSO93w43lDMEk7zAesI9pPzHvmocOzC+b0ox0v9xqT078Cfq59VOcmYIWvDtcVrQwe2b1m/Zcyr21rssQTBjgw2jsh+ent2xol05pQQAgJMZWnk0HLE99UuJToiJtRmUmba0ma0chDSpOPLMe53w7UAZY15ubWIGZajwnZyaqwNmzTdiSNGdGZ4SKGvzrqHZ/LBwixkzitbbAJXGHaMKeGHJYTUrMMKZDgCTIfd4IZ6wYgVGOVMC4LYjmxcetmAFRrrQAoo+T3nd8WEGRrnQAlAxkseVqsAOjHSiBsrvLiTF+QBLMMyRGjBemlcqyBn0db5AGOZEDSjm5CIe14DeLhIKo92oAfncjB0WoL8dDh0Q+FA/GTVg2NIE9JgTXCKFf+OqpuzeSfHuBeXYY5yCVD9UMyiRrrv/Rkuh6yGDVPMTiwg54cdOCn4s6DfpyhpT9gC0yCEUXazESQXmPA/nEUoGAJObkxCf9FGAoJK2N5HMPMzebCeExeKfKBqIqQ11qxJegmKCnyYb81MOeYl8RQELT/rwcdqZi+LxKamoFOLDHjIS1/IqktNfisF9n/k/CJix2rqUyexvSMze4JUkBg/U0PYmATGuNkDA+SIkPuknN04RhfIArvvzCPhu3MAnSCw6FwBQTjTAYOQbAhbkIfHrDBMQFYCasQStV5pxIDagXvZDW9Y2RyCKCwTc0PasHoiQrPt95PlqmEp01CszkHfuLkeRqR2L5NuXCYiXW3AiYjjuHRLz97tq1mcS8NtcM7GwcjlUgMS3Iw0A5L0eE7D4or9xshg8GnQdybG1gBhwvqgU4pOR6WKQm4nE3yutQavpjM8EzMkWA613O0uBb5N0glYxKDzhBTo67MgVlY+TjUFn5aDnIpJUHwStFFLMuKZafm3QgMBm8z5r6c8i5YSgQtLDXZs2C7tl09brWmJm/8Ee4xSk+qGaQYl03f03WgpdDxikWhp8geKgTSbsAamcahn8Iy+VcILrk6qLHT1cxwNCH+qvR0aLc85YUwOaUyj0Tv0x3VSIeEpDDVgdEWq73qgPliAiBrtSA1bH2GJ/Fslp1agB9QmWeEeh9mfdpbSA+gQ71DHIN2NVeVpAfYIZ8kk5fBCTWkgpAfUJVoB8Rg4v/LHRkxKwOsEKkE/K4IX4dJYzHW5bC1kB0sFf+CE+XOArLSt5xeXPUHf9Aej4XAfEN3vbqMuAs+ly7CMKqU9QPUkXxJwbGzu6Gghh5Nlz+708FFavwHZ7ri6ImP8yYs3ght4aE0OlXK40NLPzazZyc9y7QhRcv0A56KlupUuyPjxIjwk6ezYo7srjzzlYtnoG4H8kRwga89kBBj2ulNBXGNPzHDsANJMfUFZ8dag52JxjCIDz7HvF9BRcGaMBALC5wBIAh9EJWXT8CO2rBrJdEFMATJtvuZdXVpnXltU2BJ72QWwB4GzarUv7WixUwYfYxU0sQUe7IMaUNq3cf334gy85xXyKsj7eOr+0m48xCGgXzJ7SBprAFv0mL924Y9eubesXjuvZyFetAKEdwphEt2PEDpEDl+4SkQMZJ3b/bwhWUDggmAAAAFAMAJ0BKoAAgAA/MYC1U66oJSKyaAHQJglpbt0KbD6AfgB9fvf4Ts+6nBgTsqgio+hdZr8PATaYETx2juNGUI9YJKpSTKR43hMziMKPT5RDKt/EjU7IfNRCHzjCMR29lOuexEVkxNylJw3QAP7vmSL7+V0cIa3//nhC1x/5dl1pvPEKpujrV9692yI1YwY1Y3hCtMKFwAAA",
