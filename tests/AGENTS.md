@@ -9,6 +9,22 @@
 - **BindingDetector**: `listenForErrors(page)`, `hasBindingError()`. Captures Knockout errors. *Note: `error.text()` is a function.*
 - **ComputedAsserter**: `assertEquals(page, path, expected, tolerance)`. Safely evaluates observables in page context.
 - **FixtureManager**: `loadFixture(name)`, `generateFixture(params)`. Manages test data in `tests/fixtures/`.
+- **LP Framework**: `tests/minimization/lp-framework.ts`. Uses `javascript-lp-solver` to compute minimum throughputs given demands and active effects.
+
+## Minimization Tests
+
+**Location**: `tests/minimization/minimization.spec.ts`
+**Purpose**: Verifies that the calculator's reactive throughput logic matches a linear programming oracle.
+
+**Implementation Details**:
+- Decision variables: `t_f` (throughput of factory `f`).
+- Objective: `minimize sum(t_f)`.
+- Constraints: Net production of product `p` >= external demand `p`.
+- Supports: Base productivity, multiplicative percentage boosts, self-effecting extra goods, and non-self-effecting extra goods.
+
+**Common Pitfalls**:
+- **Region IDs vs GUIDs**: `Factory.associatedRegions` typically contains string IDs (e.g. `"Roman"`). `Session.region` is a numeric GUID. To filter factories by session, first resolve the Session's region GUID to its corresponding Region ID via `params.regions`.
+- **Build Synchronization**: Playwright tests load `dist/calculator.bundle.js`. Always run `npm run build` after modifying `src`. If the bundle doesn't update, use `rm -r -Force dist ; npm run build` (PowerShell) to force emission.
 
 ## Critical Constraints
 - **Robust Initialization**: `networkidle` is unstable. Always wait for the view and island to be ready:

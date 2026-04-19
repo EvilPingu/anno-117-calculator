@@ -6,6 +6,7 @@ Technical guidance for working with the Anno 117 Calculator codebase.
 
 ### Commands
 - `npm run build` - Production build
+- `npx ts-node scripts/analyze-demand-graph.ts` - Structural graph analysis (cycles, SCCs, hubs)
 - `npm run dev` - Development with watch
 - `npm run type-check` - TypeScript validation
 - `npm test` - Run Playwright tests (Non-interactive)

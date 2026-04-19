@@ -35,6 +35,25 @@ const LANGUAGES = ['en', 'de', 'fr', 'es', 'it', 'pl', 'pt-BR', 'ru', 'zh-CN', '
 
 ## Translation Scripts
 
+### analyze-demand-graph.ts
+
+**Purpose**: Analyzes the structural properties of the production/demand graph.
+**Usage**: `npx ts-node scripts/analyze-demand-graph.ts`
+**Features**:
+- Loads `js/params.js` by mocking `window` and `global.window`.
+- Detects Strongly Connected Components (SCCs) to find production cycles.
+- Identifies "Diamond" patterns (products with multiple converging supply paths).
+- Reports hub nodes by degree.
+- Output: `dist/demand-graph.json`.
+
+**Mocking Pattern**:
+```typescript
+const mockWindow = { params: null };
+global.window = mockWindow;
+require('../js/params.js');
+const params = mockWindow.params;
+```
+
 ### check-translations.js
 
 **Purpose**: Validates that all translation keys in `src/i18n.ts` have complete translations for all 12 languages.
