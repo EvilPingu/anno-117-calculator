@@ -1,4 +1,4 @@
-import { createFloatInput, EPSILON, ko } from './util';
+import { createFloatInput, ko } from './util';
 import { ExtraGoodProduction, Product } from './production';
 import { Island } from './world';
 import { Factory } from './factories';
@@ -167,17 +167,9 @@ export class ExtraGoodSupplier implements Supplier {
     }
 
     defaultProduction(): number {
-        // other demands determine the throughput of the factory
-        if (this.throughput() + EPSILON < this.factory.throughput())
-            return this.currentProduction();
-
-        var otherThroughput = Math.max(this.factory.throughputByExistingBuildings(), this.factory.throughputByOutput());
-        
-        if (otherThroughput < EPSILON)
-            return 0;
-        
-        return this.factory.throughput() / otherThroughput * this.currentProduction();
-
+        // if this is the default supplier, defaultProduction must not include extra goods the factory produces anyway (e.g. due to existing buildings)
+        // if we included that, the calculated throughput for this supplier would be too low 
+        return this.isDefaultSupplier() ? 0 : this.currentProduction();
     }
 
     /**
@@ -218,7 +210,12 @@ export class ExtraGoodSupplier implements Supplier {
      * @param amount - Requested extra good production amount
      */
     setDemand(amount: number): void {
-        if (amount <= 0 || this.productionList.length === 0) return;
+        if (this.productionList.length === 0) return;
+
+        if (amount <= 0) {
+            this.throughput(0);
+            return;
+        }
 
         // Calculate the production ratio: extra_good_amount per factory_input_amount
         // For each entry: entry.amount() = item.scaling() * defaultAmount * factory.inputAmount / additionalOutputCycle
