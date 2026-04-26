@@ -351,6 +351,12 @@
             "items": {
               "type": "string"
             }
+          },
+          "dlcUnlocks": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
           }
         },
         "required": [
@@ -377,9 +383,6 @@
           },
           "iconPath": {
             "type": "string"
-          },
-          "region": {
-            "type": "integer"
           },
           "locaText": {
             "type": "object",
@@ -422,25 +425,18 @@
               }
             },
             "required": [
-              "english",
-              "german",
-              "spanish",
-              "french",
-              "italian",
-              "japanese",
-              "korean",
-              "polish",
-              "brazilian",
-              "russian",
-              "simplified_chinese",
-              "traditional_chinese"
+              "english"
             ]
+          },
+          "region": {
+            "type": "integer"
           }
         },
         "required": [
           "guid",
           "name",
           "iconPath",
+          "locaText",
           "region"
         ]
       },
@@ -1479,7 +1475,6 @@
           "guid",
           "name",
           "iconPath",
-          "locaText",
           "associatedRegions",
           "needsFuelInput",
           "outputs",
@@ -1598,6 +1593,12 @@
             "type": "integer"
           },
           "buffs": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "dlcUnlocks": {
             "type": "array",
             "items": {
               "type": "integer"
@@ -2003,7 +2004,6 @@
           "guid",
           "name",
           "iconPath",
-          "locaText",
           "buffs",
           "targetsIsAllProduction",
           "effectScope",
@@ -2092,6 +2092,12 @@
           },
           "isRepeatable": {
             "type": "boolean"
+          },
+          "dlcUnlocks": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
           }
         },
         "required": [
