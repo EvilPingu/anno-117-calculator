@@ -430,6 +430,12 @@
           },
           "region": {
             "type": "integer"
+          },
+          "dlcUnlocks": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
           }
         },
         "required": [
@@ -818,6 +824,12 @@
           },
           "region": {
             "type": "string"
+          },
+          "dlcUnlocks": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
           }
         },
         "required": [
@@ -931,6 +943,12 @@
                 "need"
               ]
             }
+          },
+          "dlcUnlocks": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
           }
         },
         "required": [
@@ -1025,6 +1043,12 @@
             "type": "array",
             "items": {
               "type": "string"
+            }
+          },
+          "dlcUnlocks": {
+            "type": "array",
+            "items": {
+              "type": "integer"
             }
           }
         },
@@ -1214,6 +1238,12 @@
             "type": "array",
             "items": {
               "type": "string"
+            }
+          },
+          "dlcUnlocks": {
+            "type": "array",
+            "items": {
+              "type": "integer"
             }
           }
         },

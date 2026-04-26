@@ -9174,9 +9174,7 @@ if(window.params == null)window.params={
       "additionalOutputs": [],
       "additionalWorkforces": [],
       "baseProductivityUpgrade": 0,
-      "dlcUnlocks": [
-        67903
-      ],
+      "dlcUnlocks": [],
       "fertilityPercent": 100,
       "fuelDurationPercent": 0.0,
       "guid": 157071,
@@ -11940,9 +11938,7 @@ if(window.params == null)window.params={
       "buffs": [
         157071
       ],
-      "dlcUnlocks": [
-        67903
-      ],
+      "dlcUnlocks": [],
       "effectDuration": 0,
       "effectScope": "StreetDistance",
       "excludeEffectSourceGUID": false,
@@ -32696,9 +32692,7 @@ if(window.params == null)window.params={
       "supplyWeight": 4.0
     },
     {
-      "dlcUnlocks": [
-        67903
-      ],
+      "dlcUnlocks": [],
       "guid": 152717,
       "iconPath": "data/ui/fhd/base/icon_content/icon_2d_placeholder.png",
       "isBuilding": true,
@@ -32754,7 +32748,9 @@ if(window.params == null)window.params={
       "supplyWeight": 1.0
     },
     {
-      "dlcUnlocks": [],
+      "dlcUnlocks": [
+        67904
+      ],
       "guid": 151715,
       "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_porridge_goods.png",
       "isBuilding": false,
@@ -32796,7 +32792,9 @@ if(window.params == null)window.params={
       "supplyWeight": 2.0
     },
     {
-      "dlcUnlocks": [],
+      "dlcUnlocks": [
+        67904
+      ],
       "guid": 151717,
       "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_beer_goods.png",
       "isBuilding": false,
@@ -32860,7 +32858,9 @@ if(window.params == null)window.params={
       "supplyWeight": 4.0
     },
     {
-      "dlcUnlocks": [],
+      "dlcUnlocks": [
+        67904
+      ],
       "guid": 149797,
       "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_public_roman_marketplace.png",
       "isBuilding": true,
@@ -32990,7 +32990,9 @@ if(window.params == null)window.params={
       "supplyWeight": 1.0
     },
     {
-      "dlcUnlocks": [],
+      "dlcUnlocks": [
+        67904
+      ],
       "guid": 151726,
       "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_tunics_goods.png",
       "isBuilding": false,
@@ -33098,7 +33100,9 @@ if(window.params == null)window.params={
       "supplyWeight": 4.0
     },
     {
-      "dlcUnlocks": [],
+      "dlcUnlocks": [
+        67904
+      ],
       "guid": 157055,
       "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_cloak_goods.png",
       "isBuilding": false,
@@ -33162,7 +33166,9 @@ if(window.params == null)window.params={
       "supplyWeight": 2.0
     },
     {
-      "dlcUnlocks": [],
+      "dlcUnlocks": [
+        67904
+      ],
       "guid": 157054,
       "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_drinkhorns_goods.png",
       "isBuilding": false,
@@ -33183,7 +33189,8 @@ if(window.params == null)window.params={
     },
     {
       "dlcUnlocks": [
-        67902
+        67902,
+        67904
       ],
       "guid": 151753,
       "iconPath": "data/ui/fhd/dlc01/icon_content/production_goods/icon_3d_idol_goods.png",
@@ -33226,7 +33233,9 @@ if(window.params == null)window.params={
       "supplyWeight": 4.0
     },
     {
-      "dlcUnlocks": [],
+      "dlcUnlocks": [
+        67904
+      ],
       "guid": 151735,
       "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_fine_glass_goods.png",
       "isBuilding": false,
@@ -33246,7 +33255,9 @@ if(window.params == null)window.params={
       "supplyWeight": 4.0
     },
     {
-      "dlcUnlocks": [],
+      "dlcUnlocks": [
+        67904
+      ],
       "guid": 151736,
       "iconPath": "data/ui/fhd/base/icon_content/production_goods/icon_3d_handmirros_goods.png",
       "isBuilding": false,
@@ -33266,7 +33277,9 @@ if(window.params == null)window.params={
       "supplyWeight": 4.0
     },
     {
-      "dlcUnlocks": [],
+      "dlcUnlocks": [
+        67904
+      ],
       "guid": 151754,
       "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_public_roman_temple.png",
       "isBuilding": true,
@@ -35183,6 +35196,7 @@ if(window.params == null)window.params={
   ],
   "populationGroups": [
     {
+      "dlcUnlocks": [],
       "guid": 1494,
       "locaText": {
         "brazilian": "Romanos",
@@ -35208,6 +35222,7 @@ if(window.params == null)window.params={
       "region": "Roman"
     },
     {
+      "dlcUnlocks": [],
       "guid": 1495,
       "locaText": {
         "brazilian": "Celtas",
@@ -35234,6 +35249,9 @@ if(window.params == null)window.params={
       "region": "Celtic"
     },
     {
+      "dlcUnlocks": [
+        67904
+      ],
       "guid": 149680,
       "locaText": {
         "brazilian": null,
@@ -35266,6 +35284,7 @@ if(window.params == null)window.params={
         "Roman"
       ],
       "connectedWorkforce": 2181,
+      "dlcUnlocks": [],
       "guid": 1499,
       "iconPath": "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier1_libertus.png",
       "locaText": {
@@ -35290,6 +35309,7 @@ if(window.params == null)window.params={
         "Roman"
       ],
       "connectedWorkforce": 2184,
+      "dlcUnlocks": [],
       "guid": 1496,
       "iconPath": "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier2_plebeian.png",
       "locaText": {
@@ -35314,6 +35334,7 @@ if(window.params == null)window.params={
         "Roman"
       ],
       "connectedWorkforce": 2185,
+      "dlcUnlocks": [],
       "guid": 1497,
       "iconPath": "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier3_eques.png",
       "locaText": {
@@ -35338,6 +35359,7 @@ if(window.params == null)window.params={
         "Roman"
       ],
       "connectedWorkforce": 2186,
+      "dlcUnlocks": [],
       "guid": 1498,
       "iconPath": "data/ui/fhd/base/icon_content/portraits/portrait_resident_roman_tier4_patrician.png",
       "locaText": {
@@ -35362,6 +35384,7 @@ if(window.params == null)window.params={
         "Celtic"
       ],
       "connectedWorkforce": 2198,
+      "dlcUnlocks": [],
       "guid": 1503,
       "iconPath": "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_roman_tier2_mercator.png",
       "locaText": {
@@ -35386,6 +35409,7 @@ if(window.params == null)window.params={
         "Celtic"
       ],
       "connectedWorkforce": 2199,
+      "dlcUnlocks": [],
       "guid": 1504,
       "iconPath": "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_roman_tier3_noble.png",
       "locaText": {
@@ -35410,6 +35434,7 @@ if(window.params == null)window.params={
         "Celtic"
       ],
       "connectedWorkforce": 2192,
+      "dlcUnlocks": [],
       "guid": 1500,
       "iconPath": "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_tier1_wader.png",
       "locaText": {
@@ -35434,6 +35459,7 @@ if(window.params == null)window.params={
         "Celtic"
       ],
       "connectedWorkforce": 2196,
+      "dlcUnlocks": [],
       "guid": 1501,
       "iconPath": "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_tier2_smith.png",
       "locaText": {
@@ -35458,6 +35484,7 @@ if(window.params == null)window.params={
         "Celtic"
       ],
       "connectedWorkforce": 2197,
+      "dlcUnlocks": [],
       "guid": 1502,
       "iconPath": "data/ui/fhd/base/icon_content/portraits/portrait_resident_celtic_tier3_alderman.png",
       "locaText": {
@@ -35482,6 +35509,9 @@ if(window.params == null)window.params={
         "Egyptian"
       ],
       "connectedWorkforce": 149685,
+      "dlcUnlocks": [
+        67904
+      ],
       "guid": 149681,
       "iconPath": "data/ui/fhd/dlc03/icon_content/portraits/portrait_dlc03_resident_tier1_thresher.png",
       "locaText": {
@@ -35506,6 +35536,9 @@ if(window.params == null)window.params={
         "Egyptian"
       ],
       "connectedWorkforce": 150543,
+      "dlcUnlocks": [
+        67904
+      ],
       "guid": 150510,
       "iconPath": "data/ui/fhd/dlc03/icon_content/portraits/portrait_dlc03_resident_tier2_potter.png",
       "locaText": {
@@ -35530,6 +35563,9 @@ if(window.params == null)window.params={
         "Egyptian"
       ],
       "connectedWorkforce": 150544,
+      "dlcUnlocks": [
+        67904
+      ],
       "guid": 150511,
       "iconPath": "data/ui/fhd/dlc03/icon_content/portraits/portrait_dlc03_resident_tier3_priestess.png",
       "locaText": {
@@ -35554,6 +35590,9 @@ if(window.params == null)window.params={
         "Egyptian"
       ],
       "connectedWorkforce": 150545,
+      "dlcUnlocks": [
+        67904
+      ],
       "guid": 150534,
       "iconPath": "data/ui/fhd/dlc03/icon_content/portraits/portrait_dlc03_resident_tier2_scribe.png",
       "locaText": {
@@ -35578,6 +35617,9 @@ if(window.params == null)window.params={
         "Egyptian"
       ],
       "connectedWorkforce": 150546,
+      "dlcUnlocks": [
+        67904
+      ],
       "guid": 150542,
       "iconPath": "data/ui/fhd/dlc03/icon_content/portraits/portrait_dlc03_resident_tier3_gymnasiarch.png",
       "locaText": {
@@ -39937,9 +39979,7 @@ if(window.params == null)window.params={
       "associatedRegions": [
         "Roman"
       ],
-      "dlcUnlocks": [
-        67903
-      ],
+      "dlcUnlocks": [],
       "guid": 152719,
       "iconPath": "data/ui/fhd/base/icon_content/icon_2d_placeholder.png",
       "isAbstract": true,
@@ -41070,6 +41110,7 @@ if(window.params == null)window.params={
       "associatedRegions": [
         "Roman"
       ],
+      "dlcUnlocks": [],
       "guid": 3087,
       "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_base_residence.png",
       "locaText": {
@@ -41126,6 +41167,7 @@ if(window.params == null)window.params={
       "associatedRegions": [
         "Roman"
       ],
+      "dlcUnlocks": [],
       "guid": 3141,
       "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_base_residence.png",
       "locaText": {
@@ -41214,6 +41256,7 @@ if(window.params == null)window.params={
       "associatedRegions": [
         "Roman"
       ],
+      "dlcUnlocks": [],
       "guid": 3142,
       "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_base_residence.png",
       "locaText": {
@@ -41362,6 +41405,7 @@ if(window.params == null)window.params={
       "associatedRegions": [
         "Roman"
       ],
+      "dlcUnlocks": [],
       "guid": 3145,
       "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_base_residence.png",
       "locaText": {
@@ -41576,6 +41620,7 @@ if(window.params == null)window.params={
       "associatedRegions": [
         "Celtic"
       ],
+      "dlcUnlocks": [],
       "guid": 6475,
       "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_base_residence.png",
       "locaText": {
@@ -41672,6 +41717,7 @@ if(window.params == null)window.params={
       "associatedRegions": [
         "Celtic"
       ],
+      "dlcUnlocks": [],
       "guid": 6514,
       "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_base_residence.png",
       "locaText": {
@@ -41818,6 +41864,7 @@ if(window.params == null)window.params={
       "associatedRegions": [
         "Celtic"
       ],
+      "dlcUnlocks": [],
       "guid": 6414,
       "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_base_residence.png",
       "locaText": {
@@ -41875,6 +41922,7 @@ if(window.params == null)window.params={
       "associatedRegions": [
         "Celtic"
       ],
+      "dlcUnlocks": [],
       "guid": 6471,
       "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_base_residence.png",
       "locaText": {
@@ -41971,6 +42019,7 @@ if(window.params == null)window.params={
       "associatedRegions": [
         "Celtic"
       ],
+      "dlcUnlocks": [],
       "guid": 6472,
       "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_base_residence.png",
       "locaText": {
@@ -42117,6 +42166,9 @@ if(window.params == null)window.params={
       "associatedRegions": [
         "Egyptian"
       ],
+      "dlcUnlocks": [
+        67904
+      ],
       "guid": 149684,
       "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_base_residence.png",
       "locaText": {
@@ -42169,6 +42221,9 @@ if(window.params == null)window.params={
     {
       "associatedRegions": [
         "Egyptian"
+      ],
+      "dlcUnlocks": [
+        67904
       ],
       "guid": 150584,
       "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_base_residence.png",
@@ -42261,6 +42316,9 @@ if(window.params == null)window.params={
     {
       "associatedRegions": [
         "Egyptian"
+      ],
+      "dlcUnlocks": [
+        67904
       ],
       "guid": 150585,
       "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_base_residence.png",
@@ -42404,6 +42462,9 @@ if(window.params == null)window.params={
       "associatedRegions": [
         "Egyptian"
       ],
+      "dlcUnlocks": [
+        67904
+      ],
       "guid": 150586,
       "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_base_residence.png",
       "locaText": {
@@ -42491,6 +42552,9 @@ if(window.params == null)window.params={
     {
       "associatedRegions": [
         "Egyptian"
+      ],
+      "dlcUnlocks": [
+        67904
       ],
       "guid": 150587,
       "iconPath": "data/ui/fhd/base/icon_content/building/icon_3d_base_residence.png",
@@ -42625,6 +42689,7 @@ if(window.params == null)window.params={
   ],
   "sessions": [
     {
+      "dlcUnlocks": [],
       "guid": 37135,
       "iconPath": "data/ui/fhd/base/icon_content/hud_minimap/icon_2d_minimap_world_map.png",
       "locaText": {
@@ -42645,6 +42710,7 @@ if(window.params == null)window.params={
       "region": 37136
     },
     {
+      "dlcUnlocks": [],
       "guid": 3245,
       "iconPath": "data/ui/fhd/base/icon_content/generic/icon_2d_region_heartlands.png",
       "locaText": {
@@ -42665,6 +42731,7 @@ if(window.params == null)window.params={
       "region": 3225
     },
     {
+      "dlcUnlocks": [],
       "guid": 6627,
       "iconPath": "data/ui/fhd/base/icon_content/generic/icon_2d_region_wetlands.png",
       "locaText": {
@@ -42683,6 +42750,29 @@ if(window.params == null)window.params={
       },
       "name": "Province Celtic Britannia",
       "region": 6626
+    },
+    {
+      "dlcUnlocks": [
+        67904
+      ],
+      "guid": 149679,
+      "iconPath": "data/ui/fhd/base/icon_content/logos/dlc/icon_2d_logo_dlc_03_128.png",
+      "locaText": {
+        "brazilian": null,
+        "english": "Aegyptus",
+        "french": null,
+        "german": null,
+        "italian": null,
+        "japanese": null,
+        "korean": null,
+        "polish": null,
+        "russian": null,
+        "simplified_chinese": null,
+        "spanish": null,
+        "traditional_chinese": null
+      },
+      "name": "Province Egyptian Aegyptus",
+      "region": 149678
     }
   ],
   "techs": [
@@ -44040,6 +44130,7 @@ if(window.params == null)window.params={
       "associatedRegions": [
         "Roman"
       ],
+      "dlcUnlocks": [],
       "guid": 2181,
       "iconPath": "data/ui/fhd/base/icon_content/workforce/icon_2d_libertus_workforce_roman.png",
       "locaText": {
@@ -44062,6 +44153,7 @@ if(window.params == null)window.params={
       "associatedRegions": [
         "Roman"
       ],
+      "dlcUnlocks": [],
       "guid": 2184,
       "iconPath": "data/ui/fhd/base/icon_content/workforce/icon_2d_plebeians_workforce_roman.png",
       "locaText": {
@@ -44084,6 +44176,7 @@ if(window.params == null)window.params={
       "associatedRegions": [
         "Roman"
       ],
+      "dlcUnlocks": [],
       "guid": 2185,
       "iconPath": "data/ui/fhd/base/icon_content/workforce/icon_2d_equites_workforce_roman.png",
       "locaText": {
@@ -44106,6 +44199,7 @@ if(window.params == null)window.params={
       "associatedRegions": [
         "Roman"
       ],
+      "dlcUnlocks": [],
       "guid": 2186,
       "iconPath": "data/ui/fhd/base/icon_content/workforce/icon_2d_patricians_workforce_roman.png",
       "locaText": {
@@ -44128,6 +44222,7 @@ if(window.params == null)window.params={
       "associatedRegions": [
         "Celtic"
       ],
+      "dlcUnlocks": [],
       "guid": 2198,
       "iconPath": "data/ui/fhd/base/icon_content/workforce/icon_2d_mercators_workforce_albion.png",
       "locaText": {
@@ -44150,6 +44245,7 @@ if(window.params == null)window.params={
       "associatedRegions": [
         "Celtic"
       ],
+      "dlcUnlocks": [],
       "guid": 2199,
       "iconPath": "data/ui/fhd/base/icon_content/workforce/icon_2d_nobles_workforce_albion.png",
       "locaText": {
@@ -44172,6 +44268,7 @@ if(window.params == null)window.params={
       "associatedRegions": [
         "Celtic"
       ],
+      "dlcUnlocks": [],
       "guid": 2192,
       "iconPath": "data/ui/fhd/base/icon_content/workforce/icon_2d_walders_workforce_albion.png",
       "locaText": {
@@ -44194,6 +44291,7 @@ if(window.params == null)window.params={
       "associatedRegions": [
         "Celtic"
       ],
+      "dlcUnlocks": [],
       "guid": 2196,
       "iconPath": "data/ui/fhd/base/icon_content/workforce/icon_2d_smiths_workforce_albion.png",
       "locaText": {
@@ -44216,6 +44314,7 @@ if(window.params == null)window.params={
       "associatedRegions": [
         "Celtic"
       ],
+      "dlcUnlocks": [],
       "guid": 2197,
       "iconPath": "data/ui/fhd/base/icon_content/workforce/icon_2d_aldermen_workforce_albion.png",
       "locaText": {
@@ -44237,6 +44336,9 @@ if(window.params == null)window.params={
     {
       "associatedRegions": [
         "Egyptian"
+      ],
+      "dlcUnlocks": [
+        67904
       ],
       "guid": 149685,
       "iconPath": "data/ui/fhd/dlc03/icon_content/portraits/portrait_dlc03_resident_tier1_thresher.png",
@@ -44260,6 +44362,9 @@ if(window.params == null)window.params={
       "associatedRegions": [
         "Egyptian"
       ],
+      "dlcUnlocks": [
+        67904
+      ],
       "guid": 150543,
       "iconPath": "data/ui/fhd/dlc03/icon_content/portraits/portrait_dlc03_resident_tier2_potter.png",
       "locaText": {
@@ -44281,6 +44386,9 @@ if(window.params == null)window.params={
     {
       "associatedRegions": [
         "Egyptian"
+      ],
+      "dlcUnlocks": [
+        67904
       ],
       "guid": 150544,
       "iconPath": "data/ui/fhd/dlc03/icon_content/portraits/portrait_dlc03_resident_tier3_priestess.png",
@@ -44304,6 +44412,9 @@ if(window.params == null)window.params={
       "associatedRegions": [
         "Egyptian"
       ],
+      "dlcUnlocks": [
+        67904
+      ],
       "guid": 150545,
       "iconPath": "data/ui/fhd/dlc03/icon_content/portraits/portrait_dlc03_resident_tier2_scribe.png",
       "locaText": {
@@ -44325,6 +44436,9 @@ if(window.params == null)window.params={
     {
       "associatedRegions": [
         "Egyptian"
+      ],
+      "dlcUnlocks": [
+        67904
       ],
       "guid": 150546,
       "iconPath": "data/ui/fhd/dlc03/icon_content/portraits/portrait_dlc03_resident_tier3_gymnasiarch.png",

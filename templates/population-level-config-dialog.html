@@ -105,7 +105,7 @@
                 <!-- Population Buffs from Area Effects & Specialists -->
                 <!-- ko if: $data.populationBuffsVisible() -->
                 <div class="mt-3">
-                    <collapsible params="id: $data.populationBuffsId, heading: $root.texts.fromAreaEffectsAndSpecialists.name, data: $data">
+                    <collapsible params="id: $data.populationBuffsId, heading: $root.texts.fromAreaEffectsAndSpecialists.name, data: $data, collapsed: true">
                         <table class="table table-fixed">
                             <tbody data-bind="foreach: $data.populationBuffs().filter(b => b.visible())">
                                 <tr>

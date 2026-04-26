@@ -693,7 +693,7 @@ class PopulationLevelNeedPresenter {
         this.residentsPerResidence = need.residents;
         this.instance = ko.observable();
         this.name = ko.pureComputed(() => need.product.name());
-        this.visible =  ko.pureComputed(() => !!this.instance());
+        this.visible =  ko.pureComputed(() => this.instance() == null ? false : this.instance().available());
         this.product = ko.pureComputed(() => need.product);
         this.amount = ko.pureComputed(() => {
             let inst = this.instance();
