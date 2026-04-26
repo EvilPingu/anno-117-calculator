@@ -9174,7 +9174,9 @@ if(window.params == null)window.params={
       "additionalOutputs": [],
       "additionalWorkforces": [],
       "baseProductivityUpgrade": 0,
-      "dlcUnlocks": [],
+      "dlcUnlocks": [
+        67903
+      ],
       "fertilityPercent": 100,
       "fuelDurationPercent": 0.0,
       "guid": 157071,
@@ -11938,7 +11940,9 @@ if(window.params == null)window.params={
       "buffs": [
         157071
       ],
-      "dlcUnlocks": [],
+      "dlcUnlocks": [
+        67903
+      ],
       "effectDuration": 0,
       "effectScope": "StreetDistance",
       "excludeEffectSourceGUID": false,
@@ -32692,7 +32696,9 @@ if(window.params == null)window.params={
       "supplyWeight": 4.0
     },
     {
-      "dlcUnlocks": [],
+      "dlcUnlocks": [
+        67903
+      ],
       "guid": 152717,
       "iconPath": "data/ui/fhd/base/icon_content/icon_2d_placeholder.png",
       "isBuilding": true,
@@ -39979,7 +39985,9 @@ if(window.params == null)window.params={
       "associatedRegions": [
         "Roman"
       ],
-      "dlcUnlocks": [],
+      "dlcUnlocks": [
+        67903
+      ],
       "guid": 152719,
       "iconPath": "data/ui/fhd/base/icon_content/icon_2d_placeholder.png",
       "isAbstract": true,
