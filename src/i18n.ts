@@ -467,6 +467,20 @@ export const texts: Record<string, Record<string, string>> = {
         "korean": "모든 요구 사항 활성화"
 
     },
+    activateNewDlcNeeds: {
+        english: "When activating a new DLC, activate new needs on existing islands.",
+        french: "Lors de l'activation d'un nouveau DLC, activer les nouveaux besoins sur les îles existantes.",
+        polish: "Podczas aktywacji nowego DLC aktywuj nowe potrzeby na istniejących wyspach.",
+        spanish: "Al activar un nuevo DLC, activar las nuevas necesidades en las islas existentes.",
+        italian: "Quando si attiva un nuovo DLC, attivare i nuovi bisogni sulle isole esistenti.",
+        german: "Beim Aktivieren eines neuen DLCs neue Bedürfnisse auf bestehenden Inseln aktivieren.",
+        brazilian: "Ao ativar um novo DLC, ativar as novas necessidades nas ilhas existentes.",
+        russian: "При активации нового DLC активировать новые потребности на существующих островах.",
+        simplified_chinese: "激活新DLC时，在现有岛屿上激活新需求。",
+        traditional_chinese: "啟用新DLC時，在現有島嶼上啟用新需求。",
+        japanese: "新しいDLCを有効にする際、既存の島で新しいニーズを有効にする。",
+        korean: "새 DLC를 활성화할 때 기존 섬에서 새 요구를 활성화합니다."
+    },
     import: { // good is imported on this trade route
         english: "Import",
         french: "Importer",
