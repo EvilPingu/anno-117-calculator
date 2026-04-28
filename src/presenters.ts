@@ -368,7 +368,7 @@ export class ProductPresenter {
             const regions = new Set(
                 this.factoryPresenters
                     .map(f => f.factory.associatedRegions[0])
-                    .filter(r => r != null)
+                    .filter(r => r != null && r.available())
             );
             if (regions.size == 1) {
                 return [...regions][0];

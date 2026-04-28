@@ -265,6 +265,12 @@
           },
           "id": {
             "type": "string"
+          },
+          "dlcUnlocks": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
           }
         },
         "required": [

@@ -40831,6 +40831,7 @@ if(window.params == null)window.params={
   ],
   "regions": [
     {
+      "dlcUnlocks": [],
       "guid": 3225,
       "iconPath": "data/ui/fhd/base/icon_content/generic/icon_2d_region_heartlands.png",
       "id": "Roman",
@@ -40851,6 +40852,7 @@ if(window.params == null)window.params={
       "name": "Region Roman"
     },
     {
+      "dlcUnlocks": [],
       "guid": 6626,
       "iconPath": "data/ui/fhd/base/icon_content/generic/icon_2d_region_wetlands.png",
       "id": "Celtic",
@@ -40871,12 +40873,16 @@ if(window.params == null)window.params={
       "name": "Region Celtic"
     },
     {
+      "dlcUnlocks": [],
       "guid": 37136,
       "iconPath": "data/ui/fhd/base/icon_content/hud_minimap/icon_2d_minimap_world_map.png",
       "id": "Meta",
       "name": "Region Worldmap"
     },
     {
+      "dlcUnlocks": [
+        67904
+      ],
       "guid": 149678,
       "iconPath": "data/ui/fhd/base/icon_content/logos/dlc/icon_2d_logo_dlc_03_128.png",
       "id": "Egyptian",
