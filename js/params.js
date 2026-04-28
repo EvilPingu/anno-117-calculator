@@ -11007,72 +11007,6 @@ if(window.params == null)window.params={
     },
     {
       "buffs": [
-        77960
-      ],
-      "dlcUnlocks": [],
-      "effectDuration": 0,
-      "effectScope": "ModuleOwner",
-      "excludeEffectSourceGUID": false,
-      "guid": 77958,
-      "iconPath": "data/ui/fhd/base/icon_content/infrastructure/icon_3d_silos.png",
-      "locaText": {
-        "brazilian": "Silo Funcional",
-        "english": "Functional Silo",
-        "french": "Silo fonctionnel",
-        "german": "Funktionierendes Silo",
-        "italian": "Silo funzionale",
-        "japanese": "​機能​的​な​サイロ",
-        "korean": "​기능성 ​저장고",
-        "polish": "Działający spichlerz",
-        "russian": "Работающий силосный амбар",
-        "simplified_chinese": "​功能​性​筒​仓",
-        "spanish": "Silo funcional",
-        "traditional_chinese": "​儲存​穀倉"
-      },
-      "name": "Effect Silo Roman",
-      "source": "module",
-      "targets": [
-        2786,
-        2793,
-        2794
-      ],
-      "targetsIsAllProduction": false
-    },
-    {
-      "buffs": [
-        77960
-      ],
-      "dlcUnlocks": [],
-      "effectDuration": 0,
-      "effectScope": "ModuleOwner",
-      "excludeEffectSourceGUID": false,
-      "guid": 77962,
-      "iconPath": "data/ui/fhd/base/icon_content/infrastructure/icon_3d_silos.png",
-      "locaText": {
-        "brazilian": "Silo Funcional",
-        "english": "Functional Silo",
-        "french": "Silo fonctionnel",
-        "german": "Funktionierendes Silo",
-        "italian": "Silo funzionale",
-        "japanese": "​機能​的​な​サイロ",
-        "korean": "​기능성 ​저장고",
-        "polish": "Działający spichlerz",
-        "russian": "Работающий силосный амбар",
-        "simplified_chinese": "​功能​性​筒​仓",
-        "spanish": "Silo funcional",
-        "traditional_chinese": "​儲存​穀倉"
-      },
-      "name": "Effect Silo Roman Celtic",
-      "source": "module",
-      "targets": [
-        5973,
-        5974,
-        15514
-      ],
-      "targetsIsAllProduction": false
-    },
-    {
-      "buffs": [
         118570
       ],
       "dlcUnlocks": [],
@@ -11406,35 +11340,6 @@ if(window.params == null)window.params={
         15514
       ],
       "targetsIsAllProduction": false
-    },
-    {
-      "buffs": [
-        108018
-      ],
-      "dlcUnlocks": [],
-      "effectDuration": 0,
-      "effectScope": "ObjectsInArea",
-      "excludeEffectSourceGUID": false,
-      "guid": 80865,
-      "iconPath": "data/ui/fhd/base/icon_content/religion/icon_2d_deity_epona.png",
-      "locaText": {
-        "brazilian": "Rédeas da Prosperidade",
-        "english": "Reins of Prosperity",
-        "french": "Rênes de la Prospérité",
-        "german": "Zügel des Wohlstands",
-        "italian": "Redini della prosperità",
-        "japanese": "​繁栄​の​手綱",
-        "korean": "​번영의 ​번영",
-        "polish": "Wodze dobrobytu",
-        "russian": "Бразды процветания",
-        "simplified_chinese": "​繁荣​之​缰",
-        "spanish": "Las riendas de la fortuna",
-        "traditional_chinese": "​繁榮​島​的​韁繩"
-      },
-      "name": "Effect EponaExtraPopulation ",
-      "source": "island-event",
-      "targets": [],
-      "targetsIsAllProduction": true
     },
     {
       "buffs": [
@@ -12149,80 +12054,6 @@ if(window.params == null)window.params={
       "name": "Effect Positive Egyptian Firepit",
       "source": "building",
       "targets": [],
-      "targetsIsAllProduction": false
-    },
-    {
-      "buffs": [
-        77960
-      ],
-      "dlcUnlocks": [
-        67904
-      ],
-      "effectDuration": 0,
-      "effectScope": "ModuleOwner",
-      "excludeEffectSourceGUID": false,
-      "guid": 153817,
-      "iconPath": "data/ui/fhd/base/icon_content/infrastructure/icon_3d_silos.png",
-      "locaText": {
-        "brazilian": "Silo Funcional",
-        "english": "Functional Silo",
-        "french": "Silo fonctionnel",
-        "german": "Funktionierendes Silo",
-        "italian": "Silo funzionale",
-        "japanese": "​機能​的​な​サイロ",
-        "korean": "​기능성 ​저장고",
-        "polish": "Działający spichlerz",
-        "russian": "Работающий силосный амбар",
-        "simplified_chinese": "​功能​性​筒​仓",
-        "spanish": "Silo funcional",
-        "traditional_chinese": "​儲存​穀倉"
-      },
-      "name": "Effect Silo Egyptian",
-      "source": "module",
-      "targets": [
-        152012,
-        152256,
-        152257,
-        152259
-      ],
-      "targetsIsAllProduction": false
-    },
-    {
-      "buffs": [
-        153822
-      ],
-      "dlcUnlocks": [
-        67904
-      ],
-      "effectDuration": 0,
-      "effectScope": "ModuleOwner",
-      "excludeEffectSourceGUID": false,
-      "guid": 153821,
-      "iconPath": "data/ui/fhd/base/icon_content/generic/icon_2d_warning.png",
-      "locaText": {
-        "brazilian": null,
-        "english": "Functional Dovecote",
-        "french": null,
-        "german": null,
-        "italian": null,
-        "japanese": null,
-        "korean": null,
-        "polish": null,
-        "russian": null,
-        "simplified_chinese": null,
-        "spanish": null,
-        "traditional_chinese": null
-      },
-      "name": "Effect Dovecote Egyptian",
-      "source": "module",
-      "targets": [
-        152107,
-        152141,
-        152145,
-        152152,
-        152153,
-        152272
-      ],
       "targetsIsAllProduction": false
     },
     {
@@ -34520,53 +34351,6 @@ if(window.params == null)window.params={
             "simplified_chinese": "​万​兽​女神",
             "spanish": "Potnia Theron",
             "traditional_chinese": "​百獸​女王"
-          }
-        },
-        {
-          "effect": 80865,
-          "milestones": [
-            {
-              "buffScaling": 1,
-              "devotion": 250
-            },
-            {
-              "buffScaling": 2,
-              "devotion": 1500
-            },
-            {
-              "buffScaling": 3,
-              "devotion": 4500
-            },
-            {
-              "buffScaling": 4,
-              "devotion": 11000
-            },
-            {
-              "buffScaling": 5,
-              "devotion": 25000
-            },
-            {
-              "buffScaling": 6,
-              "devotion": 100000
-            },
-            {
-              "buffScaling": 7,
-              "devotion": 250000
-            }
-          ],
-          "title": {
-            "brazilian": "Rédeas da Prosperidade",
-            "english": "Reins of Prosperity",
-            "french": "Rênes de la Prospérité",
-            "german": "Zügel des Wohlstands",
-            "italian": "Redini della prosperità",
-            "japanese": "​繁栄​の​手綱",
-            "korean": "​번영의 ​번영",
-            "polish": "Wodze dobrobytu",
-            "russian": "Бразды процветания",
-            "simplified_chinese": "​繁荣​之​缰",
-            "spanish": "Las riendas de la fortuna",
-            "traditional_chinese": "​繁榮​島​的​韁繩"
           }
         }
       ],

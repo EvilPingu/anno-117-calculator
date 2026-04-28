@@ -2011,14 +2011,14 @@
           "targetsIsAllProduction": {
             "type": "boolean"
           },
-          "effectScope": {
-            "type": "string"
-          },
           "excludeEffectSourceGUID": {
             "type": "boolean"
           },
           "effectDuration": {
             "type": "integer"
+          },
+          "effectScope": {
+            "type": "string"
           },
           "source": {
             "type": "string"
@@ -2036,9 +2036,9 @@
           "iconPath",
           "buffs",
           "targetsIsAllProduction",
-          "effectScope",
           "excludeEffectSourceGUID",
           "effectDuration",
+          "effectScope",
           "source"
         ]
       },
