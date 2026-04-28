@@ -6678,7 +6678,7 @@ if(window.params == null)window.params={
       "fuelDurationPercent": 0.0,
       "guid": 145096,
       "iconPath": "data/ui/fhd/dlc01/icon_content/generic/icon_2d_finding_obsidian.png",
-      "isStackable": false,
+      "isStackable": true,
       "locaText": {
         "brazilian": "Coleta de obsidiana",
         "english": "Obsidian Gathering",
@@ -6723,7 +6723,7 @@ if(window.params == null)window.params={
       "fuelDurationPercent": 0.0,
       "guid": 148044,
       "iconPath": "data/ui/fhd/dlc01/icon_content/generic/icon_2d_finding_obsidian.png",
-      "isStackable": false,
+      "isStackable": true,
       "locaText": {
         "brazilian": "Mineração de obsidiana",
         "english": "Obsidian Mining",

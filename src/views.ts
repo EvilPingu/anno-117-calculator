@@ -140,11 +140,8 @@ export class ViewMode {
                 continue;
 
             for (const e of session.effects){
-                if (e.guid == 145095 || e.guid == 148043) // Obsidian mining
-                    e.scaling(1);
-
-                if (e.guid == 145099)
-                    e.scaling(5) // fertile soil
+                if (e.guid == 145099 || e.guid == 145095 || e.guid == 148043)
+                    e.scaling(5) // fertile soil and obsidian gathering / mining
             }
         }
     }
@@ -693,7 +690,7 @@ class PopulationLevelNeedPresenter {
         this.residentsPerResidence = need.residents;
         this.instance = ko.observable();
         this.name = ko.pureComputed(() => need.product.name());
-        this.visible =  ko.pureComputed(() => this.instance() == null ? false : this.instance().available());
+        this.visible =  ko.pureComputed(() => this.instance()?.available() ?? false);
         this.product = ko.pureComputed(() => need.product);
         this.amount = ko.pureComputed(() => {
             let inst = this.instance();
@@ -703,11 +700,9 @@ class PopulationLevelNeedPresenter {
             return inst.amount();
         });
         this.checked = ko.pureComputed({
-            read: () => this.instance()?.checked(),
+            read: () => this.instance()?.checked() ?? false,
             write: (checked: boolean) => {
-                if(this.instance())
-                    this.instance()?.checked(checked);
-
+                this.instance()?.checked(checked);
             }
         });
         this.isInactive =  ko.pureComputed(() => false);
