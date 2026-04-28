@@ -611,7 +611,7 @@ window.view.presenter.productByGuid = new Map();  // Quick lookup
 ```typescript
 interface Supplier {
     type: 'factory' | 'trade_route' | 'passive_trade' | 'extra_good';
-    defaultProduction(): number;
+    currentProduction(): number;
     setDemand(amount: number): void;
 }
 ```

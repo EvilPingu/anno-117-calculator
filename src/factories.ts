@@ -722,14 +722,6 @@ export class Factory extends Consumer implements Supplier {
 
     // === SUPPLIER INTERFACE IMPLEMENTATION ===
 
-    /**
-     * Returns the the production amount (Supplier interface) if this factory would NOT be the default supplier
-     * Includes extra goods factor for accurate production calculation
-     */
-    defaultProduction(): number {
-        return Math.max(this.throughputByExistingBuildings(), this.throughputByExtraGoodSupplier()) * this.extraGoodFactor();
-    }
-
     currentProduction(): number {
         return this.outputAmount();
     }

@@ -13,7 +13,6 @@ export interface Supplier {
     readonly product: Product;
 
     // Production capabilities
-    defaultProduction(): number;           // Current/baseline production amount
     currentProduction(): number;
     canSupply(): boolean;    // Can this supplier fulfill amount?
 
@@ -66,16 +65,6 @@ export class PassiveTradeSupplier implements Supplier {
         this.island = island;
         this.amount = ko.observable(0);
         this.userSetAmount = createFloatInput(0, 0);
-    }
-
-    /**
-     * Only used if needed
-     */
-    defaultProduction(): number {
-        if (this.isDefaultSupplier())
-            return 0; // when set as default supplier, userSetAmount is ignored
-
-        return this.userSetAmount(); 
     }
 
     currentProduction(): number {
@@ -164,12 +153,6 @@ export class ExtraGoodSupplier implements Supplier {
             }
         }
         return totalRatio;
-    }
-
-    defaultProduction(): number {
-        // if this is the default supplier, defaultProduction must not include extra goods the factory produces anyway (e.g. due to existing buildings)
-        // if we included that, the calculated throughput for this supplier would be too low 
-        return this.isDefaultSupplier() ? 0 : this.currentProduction();
     }
 
     /**

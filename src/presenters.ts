@@ -164,12 +164,13 @@ export class ProductPresenter {
     public availableExtraGoodSuppliers: KnockoutComputed<ExtraGoodSupplier[]>;
     public defaultSupplier: KnockoutComputed<Supplier | null>;
     public selectedSupplierOption: KnockoutObservable<SupplierOption | null>;
+    
 
     // === ISLAND SELECTION FOR TRADE ROUTES ===
     public availableTradeIslands: KnockoutComputed<Island[]>;
     public selectedTradeIsland: KnockoutObservable<Island | null>;
     public tradeRouteAmount: KnockoutObservable<number>;
-    public excessProductionSubscription: KnockoutComputed<void>;
+    private excessProduction: KnockoutComputed<number>;
 
     // === AGGREGATE CALCULATIONS ===
     public extraGoodProduction: KnockoutComputed<number>;
@@ -297,13 +298,17 @@ export class ProductPresenter {
         // Selected supplier option (for binding to dropdown)
         this.selectedSupplierOption = ko.observable(null);
 
+        this.excessProduction = ko.pureComputed(() => this.instance().excessProduction());
+
         // Island selection for trade route creation
         this.selectedTradeIsland = ko.observable(null);
         this.tradeRouteAmount = createFloatInput(0, 0);
 
-        this.excessProductionSubscription = ko.pureComputed(() => { // pure Computed to avoid re-calculation when tradeRouteAmount is set
-            this.tradeRouteAmount(this.instance().excessProduction());
-        });
+        // We cannout use a computed here to get excess production and update tradeRouteAmount in one line
+        // because this would override user edits in the UI: after the user entered a value,
+        // the computed would be re-evaluated resulting in tradeRouteAmount being reset to excess amount
+        this.excessProduction.subscribe((amount: number) => this.tradeRouteAmount(amount));
+        this.tradeRouteAmount(this.excessProduction());
 
         this.availableTradeIslands = ko.pureComputed(() => {
             if (!this.instance().tradeList) return [];

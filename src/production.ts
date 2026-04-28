@@ -33,8 +33,8 @@ export class Product extends NamedElement {
     public demands: KnockoutObservableArray<Demand>; // All consumers demanding this product
     public totalDemand: KnockoutComputed<number>; // Total demand from all consumers and trade routes
     public totalDemandNoRoutes: KnockoutComputed<number>; // Total demand from all consumers
-    public totalDefaultProduction: KnockoutComputed<number>; // Production from non-default suppliers
     public totalCurrentProduction: KnockoutComputed<number>; // Production from all suppliers
+    private totalProductionWithoutDefaultSupplier: KnockoutComputed<number>; // Production from all suppliers except the default one
     public excessProduction: KnockoutObservable<number>; // Excess when non-default suppliers exceed demand
     public demandCalculationSubscription!: KnockoutComputed<void>; // Updates supplier demands based on total demand
 
@@ -95,8 +95,8 @@ export class Product extends NamedElement {
         // Will be initialized properly in initSuppliers after suppliers are created
         this.totalDemand = dummyComputed("product.totalDemand");
         this.totalDemandNoRoutes = dummyComputed("product.totalDemandNoRoutes");
-        this.totalDefaultProduction = dummyComputed("product.nonDefaultSupplierProduction");
         this.totalCurrentProduction = dummyComputed("product.currentSupplierProduction");
+        this.totalProductionWithoutDefaultSupplier = dummyComputed("product.totalProductionWithoutDefaultSupplier");
 
         // Initialize supplier management (will be fully set up in initSuppliers)
         this.defaultSupplier = ko.observable(null);
@@ -250,17 +250,6 @@ export class Product extends NamedElement {
             return sum;
         });
 
-        this.totalDefaultProduction = ko.pureComputed(() => {
-            let sum = 0;
-
-            // Sum production from all suppliers except the default one
-            for (const supplier of this.availableSuppliers()) {
-                sum += supplier.defaultProduction();
-            }
-
-            return sum;
-        });
-
         this.totalCurrentProduction = ko.pureComputed(() => {
             let sum = 0;
 
@@ -273,22 +262,28 @@ export class Product extends NamedElement {
             return sum;
         });
 
+        // extra observable for demandCalculationSubscription; without it demandCalculationSubscription could read the unupdated value from totalCurrentProduction when switching suppliers and then not get called again when totalCurrentProduction is updated
+        this.totalProductionWithoutDefaultSupplier = ko.pureComputed(() => {
+            let sum = 0;
+
+            for (const supplier of this.availableSuppliers()) {
+                if (!supplier.isDefaultSupplier())
+                    sum += supplier.currentProduction();
+            }
+
+            return sum;
+        });
+
         // Update supplier demands when total demand or supplier production changes
         this.demandCalculationSubscription = ko.computed(() => {
-            const total = this.totalDemand();
-            const defaultProd = this.totalDefaultProduction();
+            const demand = this.totalDemand();
+            const prod = this.totalCurrentProduction();
             const defaultSupp = this.defaultSupplier();
             
-            if (defaultSupp === null) {
-                this.excessProduction(0);
-            } else if (defaultProd >= total) {
-                // Non-default suppliers produce more than needed
-                this.excessProduction(defaultProd - total);
-                defaultSupp.setDemand(0);
-            } else {
-                // Default supplier needs to fill the gap
-                this.excessProduction(0);
-                const remaining = total - defaultProd + defaultSupp.defaultProduction();
+            this.excessProduction(Math.max(0, prod - demand));
+
+            if (defaultSupp != null) {
+                const remaining = Math.max(0, demand - this.totalProductionWithoutDefaultSupplier());
                 defaultSupp.setDemand(remaining);
             }
         });
