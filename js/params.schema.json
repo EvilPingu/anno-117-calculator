@@ -265,12 +265,6 @@
           },
           "id": {
             "type": "string"
-          },
-          "dlcUnlocks": {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            }
           }
         },
         "required": [
@@ -357,12 +351,6 @@
             "items": {
               "type": "string"
             }
-          },
-          "dlcUnlocks": {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            }
           }
         },
         "required": [
@@ -389,6 +377,9 @@
           },
           "iconPath": {
             "type": "string"
+          },
+          "region": {
+            "type": "integer"
           },
           "locaText": {
             "type": "object",
@@ -431,24 +422,25 @@
               }
             },
             "required": [
-              "english"
+              "english",
+              "german",
+              "spanish",
+              "french",
+              "italian",
+              "japanese",
+              "korean",
+              "polish",
+              "brazilian",
+              "russian",
+              "simplified_chinese",
+              "traditional_chinese"
             ]
-          },
-          "region": {
-            "type": "integer"
-          },
-          "dlcUnlocks": {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            }
           }
         },
         "required": [
           "guid",
           "name",
           "iconPath",
-          "locaText",
           "region"
         ]
       },
@@ -830,12 +822,6 @@
           },
           "region": {
             "type": "string"
-          },
-          "dlcUnlocks": {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            }
           }
         },
         "required": [
@@ -949,12 +935,6 @@
                 "need"
               ]
             }
-          },
-          "dlcUnlocks": {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            }
           }
         },
         "required": [
@@ -1049,12 +1029,6 @@
             "type": "array",
             "items": {
               "type": "string"
-            }
-          },
-          "dlcUnlocks": {
-            "type": "array",
-            "items": {
-              "type": "integer"
             }
           }
         },
@@ -1244,12 +1218,6 @@
             "type": "array",
             "items": {
               "type": "string"
-            }
-          },
-          "dlcUnlocks": {
-            "type": "array",
-            "items": {
-              "type": "integer"
             }
           }
         },
@@ -1511,6 +1479,7 @@
           "guid",
           "name",
           "iconPath",
+          "locaText",
           "associatedRegions",
           "needsFuelInput",
           "outputs",
@@ -1629,12 +1598,6 @@
             "type": "integer"
           },
           "buffs": {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            }
-          },
-          "dlcUnlocks": {
             "type": "array",
             "items": {
               "type": "integer"
@@ -2040,6 +2003,7 @@
           "guid",
           "name",
           "iconPath",
+          "locaText",
           "buffs",
           "targetsIsAllProduction",
           "excludeEffectSourceGUID",
@@ -2128,12 +2092,6 @@
           },
           "isRepeatable": {
             "type": "boolean"
-          },
-          "dlcUnlocks": {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            }
           }
         },
         "required": [
