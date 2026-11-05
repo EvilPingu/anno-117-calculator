@@ -1,0 +1,17 @@
+# Keep the build context (and thus the image) free of repository internals
+.git
+.github
+.claude
+.cursor
+.gitattributes
+.gitignore
+.dockerignore
+Dockerfile
+docker
+package.json
+package-lock.json
+node_modules
+logs
+tests
+test-results
+playwright-report
