@@ -7,7 +7,6 @@
 .gitignore
 .dockerignore
 Dockerfile
-docker
 package.json
 package-lock.json
 node_modules
