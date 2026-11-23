@@ -46,8 +46,12 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          platforms: linux/arm64
+          # Multi-Arch: ein Tag, die Registry liefert jedem Node seine Architektur.
+          # amd64 baut nativ, arm64 über QEMU (wegen des RUN im Dockerfile).
+          platforms: linux/amd64,linux/arm64
           push: true
+          # Ohne Provenance-Attestation, sonst listet GHCR zusätzlich unknown/unknown.
+          provenance: false
           tags: |
             ${{ env.IMAGE_NAME }}:v${{ env.VERSION }}
             ${{ env.IMAGE_NAME }}:${{ github.sha }}
